@@ -22,6 +22,8 @@ import { HttpRouter } from './http-router';
 // import DataUpdateOne from './routers/data-update-one';
 // import DataUpsertAll from './routers/data-upsert-all';
 
+import RouterHeartbeat from '../routers/heartbeat';
+
 export type HttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE';
 
 export interface HttpServerRoute {
@@ -55,10 +57,15 @@ export class HttpServer {
         // this.use(DataUpdateAll, 'PATCH', '/api/data/:schema');
         // this.use(DataDeleteAll, 'DELETE', '/api/data/:schema');
 
+        // Ping route for testing
+        this.use(RouterHeartbeat, 'GET', '/heartbeat');
+
         // Create the listening server
         let server = Http.createServer((req, res) => this.run(req, res));
         server.setTimeout(1000);
-        server.listen(port);
+        server.listen(port, () => {
+            console.warn('HttpServer: started server %j', server.address());
+        });
 
         // Done
     }
@@ -70,6 +77,8 @@ export class HttpServer {
             path_regexp: pathToRegexp(path),
             router_type: router_type,
         });
+
+        console.debug('HttpServer: added route: %s %s', method, path);
     }
 
 
@@ -124,7 +133,7 @@ export class HttpServer {
             let result_json = JSON.stringify(result);
 
             // Return the data
-            res.statusCode = result.code;
+            res.statusCode = result.status;
             res.write(result_json);
             return res.end();
         }

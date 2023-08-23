@@ -12,9 +12,8 @@ export interface RouterResult {
 }
 
 export interface HttpRouterResult {
-    code: number;
-    text: string | null;
-    data: any;
+    status: number;
+    result: any;
 }
 
 export class HttpRouter {
@@ -27,31 +26,37 @@ export class HttpRouter {
 
     async runsafe() {
         let result: HttpRouterResult = {
-            code: 0,
-            text: null,
-            data: null,
+            status: 0,
+            result: undefined,
         }
 
         try {
             // // Run the router validation, followed by the implementation
             // let data = await this.system.knex.transact(() => this.run());
+            let data = await this.run();
+
+            if (data === undefined) {
+                data = null;
+            }
 
             // Save the results
-            result.code = 200;
-            result.data = { status: "unprocessed" };
+            result.status = 200;
+            result.result = data;
         }
 
         catch (error) {
+            console.warn('HttpRouter#Error:', error);
+
             // Save the result error
-            result.code = error.code || 500;
-            result.text = error.message;
+            result.status = error.code || 500;
+            result.result = JSON.stringify(error);
         }
 
         return result;
     }
 
     async run(): Promise<any> {
-        // no default implementation
+        throw new Error('No default implementation!');
     }
 
     //
