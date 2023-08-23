@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { HttpRouter } from '../classes/http-router';
 
 // Implementation
-export default class extends HttpRouter {
+export class RouterHeartbeat extends HttpRouter {
     async run() {
         return { 
             ping: this.params.ping || undefined,

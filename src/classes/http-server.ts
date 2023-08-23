@@ -11,6 +11,15 @@ const formBody = Util.promisify(require('body/form'));
 // Routers
 import { HttpRouter } from './http-router';
 
+// Heartbeat router
+import { RouterHeartbeat } from '../routers/heartbeat';
+
+// Data routers, single record
+import { RouterDataCreateOne } from '../routers/data-create-one';
+import { RouterDataSelectOne } from '../routers/data-select-one';
+import { RouterDataUpdateOne } from '../routers/data-update-one';
+import { RouterDataDeleteOne } from '../routers/data-delete-one';
+
 // import DataCreateAll from './routers/data-create-all';
 // import DataCreateOne from './routers/data-create-one';
 // import DataDeleteAll from './routers/data-delete-all';
@@ -22,9 +31,8 @@ import { HttpRouter } from './http-router';
 // import DataUpdateOne from './routers/data-update-one';
 // import DataUpsertAll from './routers/data-upsert-all';
 
-import RouterHeartbeat from '../routers/heartbeat';
-
 export type HttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE';
+
 
 export interface HttpServerRoute {
     method: HttpMethod;
@@ -59,6 +67,12 @@ export class HttpServer {
 
         // Ping route for testing
         this.use(RouterHeartbeat, 'GET', '/heartbeat');
+
+        // Data routers
+        this.use(RouterDataCreateOne, 'POST', '/api/data/:schema/new');
+        this.use(RouterDataSelectOne, 'GET', '/api/data/:schema/:record');
+        this.use(RouterDataUpdateOne, 'PATCH', '/api/data/:schema/:record');
+        this.use(RouterDataDeleteOne, 'DELETE', '/api/data/:schema/:record');
 
         // Create the listening server
         let server = Http.createServer((req, res) => this.run(req, res));

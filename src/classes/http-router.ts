@@ -13,6 +13,8 @@ export interface RouterResult {
 
 export interface HttpRouterResult {
     status: number;
+    schema: string | undefined;
+    record: string | undefined;
     result: any;
 }
 
@@ -27,6 +29,8 @@ export class HttpRouter {
     async runsafe() {
         let result: HttpRouterResult = {
             status: 0,
+            schema: this.params.schema,
+            record: this.params.record,
             result: undefined,
         }
 
