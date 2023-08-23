@@ -1,8 +1,10 @@
 import _ from 'lodash';
 
 // Subsystems
+import { SystemData } from '../classes/system-data';
+import { SystemMeta } from '../classes/system-meta';
+
 // import { BulkSystem } from '../classes/bulk-system';
-// import { DataSystem } from '../classes/data-system';
 // import { KnexSystem } from '../classes/knex-system';
 // import { LogsSystem } from '../classes/logs-system';
 // import { MetaSystem } from '../classes/meta-system';
@@ -13,8 +15,10 @@ export class System {
     static NOW = new Date();
 
     // Services
+    public readonly data = new SystemData(this);
+    public readonly meta = new SystemMeta(this);
+
     // public readonly bulk = new BulkSystem(this);
-    // public readonly data = new DataSystem(this);
     // public readonly logs = new LogsSystem(this);
     // public readonly knex = new KnexSystem(this);
     // public readonly meta = new MetaSystem(this);

@@ -14,11 +14,13 @@
   "license": "ISC",
   "dependencies": {
     "body": "^5.1.0",
+    "chai": "^4.3.7",
     "lodash": "^4.17.21",
     "path-to-regexp": "^6.2.1",
     "util": "^0.12.5"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.5",
     "@types/lodash": "^4.14.197",
     "@types/node": "^20.5.3",
     "nodemon": "^3.0.1"
