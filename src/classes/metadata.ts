@@ -3,9 +3,9 @@ import fs from 'fs';
 import path from 'path';
 
 // API
-import { RecordInfo } from '../types/record';
-import { SchemaInfo } from '../types/schema';
-import { ColumnInfo } from '../types/column';
+import { RecordJson } from '../classes/record';
+import { SchemaJson } from '../classes/schema';
+import { ColumnJson } from '../classes/column';
 
 // Function to read in metadata from a file
 function readJson(category: string) {
@@ -26,9 +26,9 @@ function readJson(category: string) {
 }
 
 // Preload all metadata
-export const MetadataSchemas = readJson('schemas') as _.Dictionary<SchemaInfo>;
-export const MetadataColumns = readJson('columns') as _.Dictionary<ColumnInfo>;
-export const MetadataRecords = readJson('records') as _.Dictionary<RecordInfo>;
+export const MetadataSchemas = readJson('schemas') as _.Dictionary<SchemaJson>;
+export const MetadataColumns = readJson('columns') as _.Dictionary<ColumnJson>;
+export const MetadataRecords = readJson('records') as _.Dictionary<RecordJson>;
 
 console.debug('Schemas: %j', MetadataSchemas);
 console.debug('Columns: %j', MetadataColumns);

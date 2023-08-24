@@ -22,10 +22,10 @@
 import _ from 'lodash';
 
 // API
-import { ChangeData } from '../types/record';
-import { FilterJson } from '../types/filter';
-import { SchemaName } from '../types/schema';
-import { RecordInfo } from '../types/record';
+import { FilterJson } from '../classes/filter';
+import { SchemaName } from '../classes/schema';
+import { Record } from '../classes/record';
+import { RecordJson } from '../classes/record';
 
 // Classes
 // import { Flow } from '../classes/flow';
@@ -33,11 +33,11 @@ import { RecordInfo } from '../types/record';
 import { System } from '../classes/system';
 // import { SystemError } from '../classes/system-error';
 
-function __head_one(result: RecordInfo[]): RecordInfo | undefined {
+function __head_one(result: Record[]): Record | undefined {
     return _.head(result);
 }
 
-function __head_404(result: RecordInfo[]): RecordInfo {
+function __head_404(result: Record[]): Record {
     let result_item = _.head(result);
 
     if (result_item === undefined) {
@@ -64,49 +64,49 @@ export class SystemData {
         return this._run(schema_name, [], filter_data, SystemData.OP_SELECT);
     }
 
-    async createAll(schema_name: SchemaName, change_data: ChangeData[]) {
+    async createAll(schema_name: SchemaName, change_data: RecordJson[]) {
         return this._run(schema_name, change_data, {}, SystemData.OP_CREATE);
     }
 
-    async updateAll(schema_name: SchemaName, change_data: ChangeData[]) {
+    async updateAll(schema_name: SchemaName, change_data: RecordJson[]) {
         return this._run(schema_name, change_data, {}, SystemData.OP_UPDATE);
     }
 
-    async upsertAll(schema_name: SchemaName, change_data: ChangeData[]) {
+    async upsertAll(schema_name: SchemaName, change_data: RecordJson[]) {
         return this._run(schema_name, change_data, {}, SystemData.OP_UPSERT);
     }
 
-    async deleteAll(schema_name: SchemaName, change_data: ChangeData[]) {
+    async deleteAll(schema_name: SchemaName, change_data: RecordJson[]) {
         return this._run(schema_name, change_data, {}, SystemData.OP_DELETE);
     }
 
-    async selectOne(schema_name: SchemaName, filter_data: FilterJson): Promise<RecordInfo | undefined> {
+    async selectOne(schema_name: SchemaName, filter_data: FilterJson): Promise<Record | undefined> {
         return this.selectAll(schema_name, filter_data).then(__head_one);
     }
 
-    async select404(schema_name: SchemaName, change_data: FilterJson): Promise<RecordInfo> {
+    async select404(schema_name: SchemaName, change_data: FilterJson): Promise<Record> {
         return this.selectAll(schema_name, change_data).then(__head_404);
     }
 
-    async selectIds(schema_name: SchemaName, filter_data: string[]): Promise<RecordInfo[]> {
+    async selectIds(schema_name: SchemaName, filter_data: string[]): Promise<Record[]> {
         return this.selectAll(schema_name, {
             where: { id: { $in: filter_data } }
         });
     }
 
-    async createOne(schema_name: SchemaName, change_data: ChangeData) {
+    async createOne(schema_name: SchemaName, change_data: RecordJson) {
         return this.createAll(schema_name, Array(change_data)).then(__head_one);
     }
 
-    async updateOne(schema_name: SchemaName, change_data: ChangeData) {
+    async updateOne(schema_name: SchemaName, change_data: RecordJson) {
         return this.updateAll(schema_name, Array(change_data)).then(__head_one);
     }
 
-    async upsertOne(schema_name: SchemaName, change_data: ChangeData) {
+    async upsertOne(schema_name: SchemaName, change_data: RecordJson) {
         return this.upsertAll(schema_name, Array(change_data)).then(__head_one);
     }
 
-    async deleteOne(schema_name: SchemaName, change_data: ChangeData) {
+    async deleteOne(schema_name: SchemaName, change_data: RecordJson) {
         return this.deleteAll(schema_name, Array(change_data)).then(__head_one);
     }
 
@@ -114,7 +114,7 @@ export class SystemData {
     // Filter + Change ops
     //
 
-    async updateAny(_schema_name: SchemaName, _filter_data: FilterJson, _change_data: ChangeData) {
+    async updateAny(_schema_name: SchemaName, _filter_data: FilterJson, _change_data: RecordJson) {
         throw "Unimplemented";
     }
 
@@ -126,10 +126,10 @@ export class SystemData {
     // Internal functions
     //
 
-    private async _run(schema_name: SchemaName, change_data: ChangeData[], filter_data: FilterJson, op: string): Promise<RecordInfo[]> {
-        // let schema = this.system.meta.toSchema(schema_name);
-        // let filter = schema.toFilter(filter_data);
-        // let change = schema.toChange(change_data);
+    private async _run(schema_name: SchemaName, change_data: RecordJson[], filter_data: FilterJson, op: string): Promise<Record[]> {
+        let schema = this.system.meta.toSchema(schema_name);
+        let filter = schema.toFilter(filter_data);
+        let change = schema.toRecordSet(change_data);
 
         // // Build a flow operation
         // let series = new FlowSeries(this.system, schema, change, filter, op);

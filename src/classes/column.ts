@@ -1,16 +1,16 @@
 import _ from 'lodash';
 import chai from 'chai';
 
-// API
-import { ColumnInfo } from '../types/column';
-import { ColumnName } from '../types/column';
+export interface ColumnJson {
+    name: string;
+    description: string;
+}
 
-// Classes
-export class Column implements ColumnInfo {
+export class Column implements ColumnJson {
     readonly name: string;
     readonly description: string;
 
-    constructor(source: ColumnInfo) {
+    constructor(source: ColumnJson) {
         chai.expect(source).property('name').contains('.');
         chai.expect(source).property('description');
 

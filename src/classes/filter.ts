@@ -1,21 +1,48 @@
 import _ from 'lodash';
 
-// API
-import { FilterWhereClause } from '../types/filter';
-import { FilterOrderClause } from '../types/filter';
-import { FilterJson } from '../types/filter';
-import { FilterInfo } from '../types/filter';
-import { SchemaInfo } from '../types/schema';
-
 // Classes
+import { Schema } from '../classes/schema';
 import { System } from '../classes/system';
 
-export class Filter implements FilterInfo {
+// Types
+
+export type FilterOp = '$eq' | '$ne' | '$gt' | '$gte' | '$lt' | '$lte' | '$like' | '$nlike' | '$in' | '$nin';
+export type FilterGroupingOp = '$and' | '$or' | '$not' | '$nor';
+export type FilterType = FilterJson | Filter;
+
+export type FilterWhereClause = {
+    [index: string]: FilterWhereCriteria | {
+        [key in FilterOp]?: FilterWhereCriteria
+    }
+} | {
+    [key in FilterGroupingOp]?: FilterWhereClause[]
+}
+
+export type FilterWhereCriteria = string | string[] | boolean | number | null;
+
+export type FilterOrderClause = {
+    [index: string]: 'asc' | 'desc';
+}
+
+export interface FilterJson {
+    where?: FilterWhereClause | FilterWhereClause[];
+    order?: FilterOrderClause | FilterOrderClause[];
+    limit?: number | 'max';
+}
+
+export interface FilterConcreteJson extends FilterJson {
+    where: FilterWhereClause[];
+    order: FilterOrderClause[];
+    limit: number;
+}
+
+// Implementation
+export class Filter {
     public readonly where: FilterWhereClause[] = [];
     public readonly order: FilterOrderClause[] = [];
     public limit: number = 0;
 
-    constructor(readonly schema: SchemaInfo, readonly source: FilterJson = {}) {
+    constructor(readonly schema: Schema, readonly source: FilterJson = {}) {
         // source.where
         if (source.where === undefined) {
             // do nothing

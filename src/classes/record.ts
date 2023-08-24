@@ -1,19 +1,70 @@
 import _ from 'lodash';
 import Chai from 'chai';
 
-// API
-import { RecordConcreteJson } from '../types/record';
-import { RecordData } from '../types/record';
-import { RecordFlat } from '../types/record';
-import { RecordInfo } from '../types/record';
-import { SchemaInfo } from '../types/schema';
-
-// Proxies
+// Record Data Proxies
 import { RecordProxyData } from '../classes/record-proxy-data';
 import { RecordProxyPrev } from '../classes/record-proxy-prev';
 import { RecordProxyDiff } from '../classes/record-proxy-diff';
 import { RecordProxyAcls } from '../classes/record-proxy-acls';
 import { RecordProxyMeta } from '../classes/record-proxy-meta';
+
+// Classes
+import { Schema } from '../classes/schema';
+
+// Types & Interfaces
+export type RecordData = _.Dictionary<any>;
+export type RecordFlat = _.Dictionary<any>;
+export type UUID = string;
+
+export interface RecordMeta {
+    /** Timestamp when the record was created */
+    created_at: Date | null;
+
+    /** User ID that created the record */
+    created_by: UUID;
+
+    /** Timestamp when the record was updated */
+    updated_at: Date | null;
+
+    /** User ID who created the record */
+    updated_by: UUID;
+
+    /** Timestamp when the record was trashed, or `null` if the record is not trashed */
+    trashed_at: Date | null;
+
+    /** User ID that trashed the record, or `null` if the record is not trashed */
+    trashed_by: UUID | null;
+}
+
+export interface RecordAcls {
+    /** List of security IDs that have unrestricted access to this record */
+    full: UUID[];
+
+    /** List of security IDs that can make record data changes */
+    edit: UUID[];
+
+    /** List of security IDs that can explicitly read record data */
+    read: UUID[];
+
+    /** List of security IDs that are explicitly blacklisted from even knowing the record exists */
+    deny: UUID[];
+}
+
+export interface RecordJson {
+    /** Returns the string name of the parent schema type */
+    type: string;
+
+    /** Accessor to the key/value mapping of record properties with their values */
+    data: RecordData;
+}
+
+export interface RecordConcreteJson extends RecordJson {
+    /** Accessor to the set of timestamp and access information describing this record */
+    meta: RecordMeta;
+
+    /** Accessor to the set of access control list data */
+    acls: RecordAcls;
+}
 
 // Type sugar for proxy stuff
 export function isRecordConcreteJson(something: any) {
@@ -36,7 +87,7 @@ export function isRecordFlat(something: any) {
     return pass;
 }
 
-export class Record implements RecordInfo {
+export class Record implements RecordConcreteJson {
     // Internals
     private readonly _source_data: RecordFlat = {};
     private readonly _source_prev: RecordFlat = {
@@ -62,7 +113,7 @@ export class Record implements RecordInfo {
     readonly type: string;
 
     // Related objects
-    constructor(readonly schema: SchemaInfo, source?: Record | RecordConcreteJson | RecordFlat | RecordData) {
+    constructor(readonly schema: Schema, source?: Record | RecordConcreteJson | RecordFlat | RecordData) {
         this.type = schema.name;
 
         // Import from record

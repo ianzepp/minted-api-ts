@@ -2,22 +2,12 @@ import _ from 'lodash';
 import chai from 'chai';
 import path from 'path';
 
-// API
-import { ChangeData } from '../types/record';
-import { FilterInfo } from '../types/filter';
-import { FilterJson } from '../types/filter';
-import { RecordInfo } from '../types/record';
-import { SchemaInfo } from '../types/schema';
-import { ColumnInfo } from '../types/column';
-import { SchemaName } from '../types/schema';
-import { SchemaType } from '../types/schema';
-
 // Classes
 import { Schema } from '../classes/schema';
+import { SchemaJson } from '../classes/schema';
 import { Column } from '../classes/column';
+import { ColumnJson } from '../classes/column';
 import { System } from '../classes/system';
-import { Record } from '../classes/record';
-import { Filter } from '../classes/filter';
 
 // Preloaded local metadata files
 import { MetadataSchemas } from '../classes/metadata';
@@ -33,8 +23,8 @@ const SCHEMAS_PROXY_HANDLER = {
 
 export class SystemMeta {
     // Cache known schema and column names
-    private readonly _schema_dict: _.Dictionary<SchemaInfo> = {};
-    private readonly _column_dict: _.Dictionary<ColumnInfo> = {};
+    private readonly _schema_dict: _.Dictionary<Schema> = {};
+    private readonly _column_dict: _.Dictionary<Column> = {};
 
     constructor(private readonly system: System) {
         // Insert all the defined metadata
@@ -70,7 +60,7 @@ export class SystemMeta {
      * @param schema_name - The name of the schema to retrieve.
      * @returns The schema associated with the given name.
      */
-    toSchema(schema_name: string): SchemaInfo {
+    toSchema(schema_name: string): Schema {
         return this._schema_dict[schema_name];
     }
 
@@ -79,7 +69,7 @@ export class SystemMeta {
      * @param column_name - The name of the column to retrieve.
      * @returns The column associated with the given name.
      */
-    toColumn(column_name: string): ColumnInfo {
+    toColumn(column_name: string): Column {
         return this._column_dict[column_name];
     }
 
@@ -88,34 +78,14 @@ export class SystemMeta {
      * @param schema_name - The name of the schema to retrieve columns for.
      * @returns An array of columns associated with the given schema name.
      */
-    toColumnsOf(schema_name: string): ColumnInfo[] {
+    toColumnsOf(schema_name: string): Column[] {
         let search = schema_name + '.';
 
         return _.transform(this._column_dict, (result, v, k) => {
             if (k.startsWith(search)) {
                 result.push(v);
             }
-        }, [] as ColumnInfo[]);
-    }
-
-    /**
-     * Creates a new filter for the given schema name and filter data.
-     * @param schema_name - The name of the schema to create a filter for.
-     * @param filter_data - The filter data to use when creating the filter.
-     * @returns The newly created filter.
-     */
-    toFilter(schema_name: string, filter_data?: FilterJson): FilterInfo {
-        return new Filter(this.toSchema(schema_name), filter_data);
-    }
-
-    /**
-     * Creates a new record for the given schema name and record data.
-     * @param schema_name - The name of the schema to create a record for.
-     * @param record_data - The record data to use when creating the record.
-     * @returns The newly created record.
-     */
-    toRecord(schema_name: string, record_data?: ChangeData): RecordInfo {
-        return new Record(this.toSchema(schema_name), record_data);
+        }, [] as Column[]);
     }
 
     /**
@@ -137,7 +107,7 @@ export class SystemMeta {
      * @param source_name - The name of the source schema.
      * @param source - The source schema to intake.
      */
-    private intakeSchema(source_name: string, source: SchemaInfo): void {
+    private intakeSchema(source_name: string, source: SchemaJson): void {
         chai.expect(source_name).string;
         chai.expect(source_name).not.includes('.');
         chai.expect(source).property('name').eq(source_name);
@@ -156,7 +126,7 @@ export class SystemMeta {
      * @param source_name - The name of the source column.
      * @param source - The source column to intake.
      */
-    private intakeColumn(source_name: string, source: ColumnInfo): void {
+    private intakeColumn(source_name: string, source: ColumnJson): void {
         chai.expect(source_name).string;
         chai.expect(source_name).includes('.');
         chai.expect(source).property('name').eq(source_name);

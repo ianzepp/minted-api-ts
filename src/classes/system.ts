@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { v4 as uuid } from 'uuid';
 
 // Subsystems
 import { SystemData } from '../classes/system-data';
@@ -38,5 +39,9 @@ export class System {
     /** Switches to a new root context and returns a new `System` reference */
     async toUser(user_id: string) {
         return new System({ user_id: user_id });
+    }
+
+    toId(): string {
+        return uuid();
     }
 }

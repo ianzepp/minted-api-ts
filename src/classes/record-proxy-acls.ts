@@ -2,7 +2,7 @@ import _ from 'lodash';
 import assert from 'assert';
 
 import { Record } from '../classes/record';
-import { RecordAcls } from '../types/record';
+import { RecordAcls } from '../classes/record';
 
 export class RecordProxyAcls implements RecordAcls {
     full: string[];

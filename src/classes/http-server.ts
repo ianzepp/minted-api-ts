@@ -49,22 +49,6 @@ export class HttpServer {
     listen(port: number) {
         console.warn('Starting http server..');
 
-        // // Data API - Searches
-        // this.use(DataSearchAll, 'POST', '/api/data/:schema/search');
-
-        // // Data API - Record-level operations
-        // this.use(DataCreateOne, 'POST', '/api/data/:schema/new');
-        // this.use(DataSelectOne, 'GET', '/api/data/:schema/:record');
-        // this.use(DataUpdateOne, 'PATCH', '/api/data/:schema/:record');
-        // this.use(DataDeleteOne, 'DELETE', '/api/data/:schema/:record');
-
-        // // Data API - Schema-level operationrs
-        // this.use(DataSelectAll, 'GET', '/api/data/:schema');
-        // this.use(DataCreateAll, 'POST', '/api/data/:schema');
-        // this.use(DataUpsertAll, 'PUT', '/api/data/:schema');
-        // this.use(DataUpdateAll, 'PATCH', '/api/data/:schema');
-        // this.use(DataDeleteAll, 'DELETE', '/api/data/:schema');
-
         // Ping route for testing
         this.use(RouterHeartbeat, 'GET', '/heartbeat');
 
@@ -113,11 +97,6 @@ export class HttpServer {
             let params_url = new URL('http://localhost' + req.url);
             let params_match = match(server_route.path)(params_url.pathname);
             let params = _.get(params_match, 'params');
-
-            // console.warn('params_url', params_url);
-            // console.warn('params_match', params_match);
-            // console.warn('search', params_url.searchParams);
-            // console.warn('headers', req.headers);
 
             // Extract search
             let search = params_url.searchParams as _.Dictionary<any>;

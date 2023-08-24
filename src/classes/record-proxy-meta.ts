@@ -2,7 +2,7 @@ import _ from 'lodash';
 import assert from 'assert';
 
 import { Record } from '../classes/record';
-import { RecordMeta } from '../types/record';
+import { RecordMeta } from '../classes/record';
 
 export class RecordProxyMeta implements RecordMeta {
     created_at: Date | null;
