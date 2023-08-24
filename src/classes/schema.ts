@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import chai from 'chai';
 
 // API
 import { ChangeData } from '../types/record';
@@ -15,13 +16,20 @@ import { Column } from '../classes/column';
 export class Schema implements SchemaInfo {
     readonly name: string;
     readonly description: string;
-    readonly columns: ColumnInfo[];
 
-    constructor(schema_source: SchemaInfo, column_list: ColumnInfo[] = []) {
-        this.name = schema_source.name;
-        this.description = schema_source.description;
+    constructor(source: SchemaInfo) {
+        chai.expect(source).property('name').not.contains('.');
+        chai.expect(source).property('description');
 
-        // Generate columns
-        this.columns = column_list.map(source => new Column(source));
+        // Set properties
+        this.name = source.name;
+        this.description = source.description;
+    }
+
+    toJSON() {
+        return {
+            name: this.name,
+            description: this.description
+        };
     }
 }

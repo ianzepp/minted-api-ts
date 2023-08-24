@@ -6,5 +6,8 @@ rm -rf ./dst
 # Rebuild
 tsc --build tsconfig.json
 
+# Copy all metadata to dst
+cp -a ./src/metadata ./dst
+
 # # Rename javascript files to modules (assumes they are ALL modules)
 # find ./dst -name '*.js' -exec sh -c 'mv "$0" "${0%.js}.mjs"' {} \;

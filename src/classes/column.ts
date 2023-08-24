@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import chai from 'chai';
 
 // API
 import { ColumnInfo } from '../types/column';
@@ -9,8 +10,19 @@ export class Column implements ColumnInfo {
     readonly name: string;
     readonly description: string;
 
-    constructor(column_source: ColumnInfo) {
-        this.name = column_source.name;
-        this.description = column_source.description;
+    constructor(source: ColumnInfo) {
+        chai.expect(source).property('name').contains('.');
+        chai.expect(source).property('description');
+
+        // Instantiate
+        this.name = source.name;
+        this.description = source.description;
+    }
+
+    toJSON() {
+        return {
+            name: this.name,
+            description: this.description
+        };
     }
 }
