@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { forEach } from 'lodash';
 
 // API
 import { FilterJson } from '../classes/filter';
@@ -100,6 +100,8 @@ export class SystemData {
     //
 
     private async _run(schema_name: SchemaName, change_data: Partial<RecordJson>[], filter_data: FilterJson, op: string): Promise<Record[]> {
+        console.debug('SystemData', schema_name, filter_data, change_data);
+
         let schema = this.system.meta.toSchema(schema_name);
         let filter = schema.toFilter(filter_data);
         let change = schema.toRecordSet(change_data);
@@ -107,15 +109,10 @@ export class SystemData {
         // Build the flow
         let flow = new ObserverFlow(this.system, schema, change, filter, op);
 
-        // Initialize missing data
-        await flow.initialize();
-
-        // Cycle through the rings
-        await flow.run(Observer.RING_INIT);
-        await flow.run(Observer.RING_PREP);
-        await flow.run(Observer.RING_WORK);
-        await flow.run(Observer.RING_POST);
-        await flow.run(Observer.RING_DONE);
+        // Cycle through rings 0 - 9
+        for (let ring = 0; ring <= 9; ring++) {
+            await flow.run(ring);
+        }
 
         // Done
         return flow.change;

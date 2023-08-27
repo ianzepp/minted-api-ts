@@ -20,21 +20,10 @@ export class Observer {
     static readonly PRIORITY_AVG = 5;
     static readonly PRIORITY_MIN = 9;
 
-    constructor(readonly system: System, readonly flow: ObserverFlow) {}
+    constructor() {}
 
-    get schema() {
-        return this.flow.schema;
-    }
 
-    get change() {
-        return this.flow.change;
-    }
-
-    get filter() {
-        return this.flow.filter;
-    }
-
-    async run(): Promise<any> {
+    async run(flow: ObserverFlow): Promise<any> {
         throw 500;
     }
 
@@ -103,25 +92,5 @@ export class Observer {
 
     isFailable() {
         return false;
-    }
-
-    isSelect() {
-        return this.flow.isSelect();
-    }
-
-    isCreate() {
-        return this.flow.isCreate();
-    }
-
-    isUpdate() {
-        return this.flow.isUpdate();
-    }
-
-    isUpsert() {
-        return this.flow.isUpsert();
-    }
-
-    isDelete() {
-        return this.flow.isDelete();
     }
 }

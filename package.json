@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "autoinstall": "bash ./scripts/autoinstall.sh",
     "compile": "bash ./scripts/compile.sh",
     "start": "bash ./scripts/start.sh",
     "start-dev": "bash ./scripts/start-dev.sh",
@@ -29,6 +30,7 @@
     "@types/lodash": "^4.14.197",
     "@types/node": "^20.5.3",
     "@types/uuid": "^9.0.2",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1"
   }
 }

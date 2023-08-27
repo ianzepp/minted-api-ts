@@ -24,11 +24,7 @@ export class HttpRouter {
     constructor(
         readonly params: _.Dictionary<string>,
         readonly search: _.Dictionary<string>,
-        readonly body: any) {
-            console.warn('params:', params);
-            console.warn('search:', params);
-            console.warn('body:', body);
-        }
+        readonly body: any) {}
 
     async runsafe() {
         let result: HttpRouterResult = {

@@ -20,22 +20,11 @@ import { RouterTest } from '../routers/test';
 // Data routers, single record
 import { RouterDataCreateOne } from '../routers/data-create-one';
 import { RouterDataSelectOne } from '../routers/data-select-one';
+import { RouterDataSelectAll } from '../routers/data-select-all';
 import { RouterDataUpdateOne } from '../routers/data-update-one';
 import { RouterDataDeleteOne } from '../routers/data-delete-one';
 
-// import DataCreateAll from './routers/data-create-all';
-// import DataCreateOne from './routers/data-create-one';
-// import DataDeleteAll from './routers/data-delete-all';
-// import DataDeleteOne from './routers/data-delete-one';
-// import DataSearchAll from './routers/data-search-all';
-// import DataSelectAll from './routers/data-select-all';
-// import DataSelectOne from './routers/data-select-one';
-// import DataUpdateAll from './routers/data-update-all';
-// import DataUpdateOne from './routers/data-update-one';
-// import DataUpsertAll from './routers/data-upsert-all';
-
 export type HttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE';
-
 
 export interface HttpServerRoute {
     method: HttpMethod;
@@ -56,11 +45,12 @@ export class HttpServer {
         this.use(RouterHeartbeat, 'GET', '/heartbeat');
 
         // Test router
-        this.use(RouterTest, 'GET', '/api/test/:method/:glob');
+        this.use(RouterTest, 'GET', '/api/test/:method');
 
         // Data routers
         this.use(RouterDataCreateOne, 'POST', '/api/data/:schema/new');
         this.use(RouterDataSelectOne, 'GET', '/api/data/:schema/:record');
+        this.use(RouterDataSelectAll, 'GET', '/api/data/:schema');
         this.use(RouterDataUpdateOne, 'PATCH', '/api/data/:schema/:record');
         this.use(RouterDataDeleteOne, 'DELETE', '/api/data/:schema/:record');
 
@@ -122,6 +112,9 @@ export class HttpServer {
             if (content_type.includes('multipart/form-data')) {
                 body = await formBody(req, res);
             }
+
+            // Log it
+            console.warn('HttpRouter: %j %j', params_url.href, params);
 
             // Generate router instance
             let Router = server_route.router_type;

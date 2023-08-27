@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import fs from 'fs';
+import path from 'path';
 
 // Classes
 import { Filter } from '../classes/filter';
@@ -7,11 +9,17 @@ import { Schema } from '../classes/schema';
 import { Observer } from '../classes/observer';
 import { System } from '../classes/system';
 
-// Hardcoded observers
-const OBSERVER_TYPES: Array<typeof Observer> = [
-    require('../observers/record.data-select').default,
-    require('../observers/record.data-create').default,
-];
+// Create the file list of observers
+const OBSERVER_BASE = path.join(__dirname, '../observers');
+const OBSERVER_LIST = fs.readdirSync(OBSERVER_BASE);
+
+// Instantiate all of the default observers, sort by ring priority and then group by ring
+const OBSERVERS = _.chain(OBSERVER_LIST)
+    .map(observerPath => require(path.join(OBSERVER_BASE, observerPath)).default)
+    .map(observerType => new observerType())
+    .sortBy(observer => observer.onRingPriority())
+    .groupBy(observer => observer.onRing())
+    .value();
 
 // Implementation
 export class ObserverFlow {
@@ -24,66 +32,37 @@ export class ObserverFlow {
         readonly filter: Filter,
         readonly op: string) {}
 
-    isSelect() {
-        return this.op === 'select';
-    }
-
-    isCreate() {
-        return this.op === 'create';
-    }
-
-    isUpdate() {
-        return this.op === 'update';
-    }
-
-    isUpsert() {
-        return this.op === 'upsert';
-    }
-
-    isDelete() {
-        return this.op === 'delete';
-    }
-
-    async initialize() {
-        OBSERVER_TYPES.forEach(ObserverType => {
-            this.observers.push(new ObserverType(this.system, this));
-        });
-
-        // Sort the observers by priority
-        // TODO
+    toObservers(ring: number) {
+        return _.get(OBSERVERS, ring) || [];
     }
 
     async run(ring: number) {
         // Filter down from the master observer list to only be the ones for this ring
-        let observers = this.observers.filter(observer => {
-            // Reject by ring
-            if (observer.onRing() !== ring) {
-                return false;
-            }
-
+        // Observers are already pre-sorted by rin priority
+        let observers = this.toObservers(ring).filter(observer => {
             // Reject by schema
             if (observer.onSchema() !== this.schema.name && observer.onSchema() !== 'record') {
                 return false;
             }
 
             // Anything that matched here returns `true`
-            if (observer.onSelect() && this.isSelect()) {
+            if (observer.onSelect() && this.op === 'select') {
                 return true;
             }
 
-            if (observer.onCreate() && this.isCreate()) {
+            if (observer.onCreate() && this.op === 'create') {
                 return true;
             }
 
-            if (observer.onUpdate() && this.isUpdate()) {
+            if (observer.onUpdate() && this.op === 'update') {
                 return true;
             }
 
-            if (observer.onUpsert() && this.isUpsert()) {
+            if (observer.onUpsert() && this.op === 'upsert') {
                 return true;
             }
 
-            if (observer.onDelete() && this.isDelete()) {
+            if (observer.onDelete() && this.op === 'delete') {
                 return true;
             }
 
@@ -96,20 +75,19 @@ export class ObserverFlow {
             return;
         }
 
-        // Sort by ring priority
-        // TODO
-
-        console.debug('ObserverFlow(): executing %j with %j', ring, observers.map(o => o.toName()));
+        console.debug('ObserverFlow: executing ring %j with %j', ring, observers.map(o => o.toName()));
 
         // Walk and run
         for(let observer of observers) {
+            console.debug('ObserverFlow: run %j', observer.toName());
+
             try {
-                await observer.run();
+                await observer.run(this);
             }
 
             catch (error) {
                 if (observer.isFailable()) {
-                    console.warn('ObserverFlow(), failable error:', error);
+                    console.warn('ObserverFlow, failable error:', error);
                 }
 
                 else {

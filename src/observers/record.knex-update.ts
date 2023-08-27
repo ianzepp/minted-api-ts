@@ -1,6 +1,7 @@
 
 // Classes
 import { Observer } from '../classes/observer';
+import { ObserverFlow } from '../classes/observer-flow';
 
 export default class extends Observer {
     toName() {
@@ -15,7 +16,7 @@ export default class extends Observer {
         return Observer.RING_KNEX;
     }
 
-    onSelect() {
+    onUpdate() {
         return true;
     }
 

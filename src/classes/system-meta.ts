@@ -20,7 +20,7 @@ const SCHEMAS_PROXY_HANDLER = {
             return t.toSchema(p);
         }
     }
-};
+}; 
 
 export class SystemMeta {
     // Cache known schema and column names

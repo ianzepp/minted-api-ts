@@ -9,16 +9,16 @@ export type UUID = string;
 
 export interface RecordAcls {
     /** List of security IDs that have unrestricted access to this record */
-    full: UUID[];
+    acls_full: UUID[];
 
     /** List of security IDs that can make record data changes */
-    edit: UUID[];
+    acls_edit: UUID[];
 
     /** List of security IDs that can explicitly read record data */
-    read: UUID[];
+    acls_read: UUID[];
 
     /** List of security IDs that are explicitly blacklisted from even knowing the record exists */
-    deny: UUID[];
+    acls_deny: UUID[];
 }
 
 // Type sugar for proxy stuff
@@ -48,6 +48,10 @@ export interface RecordInfo {
     created_by: string | null;
     updated_at: string | null;
     updated_by: string | null;
+    expired_at: string | null;
+    expired_by: string | null;
+    trashed_at: string | null;
+    trashed_by: string | null;
     deleted_at: string | null;
     deleted_by: string | null;
 }
@@ -56,6 +60,7 @@ export interface RecordJson {
     type: string;
     data: Partial<RecordData>;
     info: Partial<RecordInfo>;
+    acls: Partial<RecordAcls>;
 }
 
 export class Record implements RecordJson {
@@ -71,28 +76,35 @@ export class Record implements RecordJson {
         created_by: null,
         updated_at: null,
         updated_by: null,
+        expired_at: null,
+        expired_by: null,
+        trashed_at: null,
+        trashed_by: null,
         deleted_at: null,
         deleted_by: null,
+    };
+
+    readonly acls: RecordAcls = {
+        acls_full: null,
+        acls_edit: null,
+        acls_read: null,
+        acls_deny: null,
     };
 
     // Related objects
     constructor(readonly schema: Schema, source?: Partial<RecordJson>) {
         this.type = schema.name;
         
-        if (source) {
-            _.assign(this.data, source.data || {});
-            _.assign(this.info, source.info || {});
-
-        }
-
-        // Import from record
         if (source instanceof Record) {
             _.assign(this.data, source.data);
             _.assign(this.info, source.info);
+            _.assign(this.acls, source.acls);
         }
 
         else {
-            _.assign(this.data, source.data);
+            _.assign(this.data, source.data || {});
+            _.assign(this.info, source.info || {});
+            _.assign(this.acls, source.acls || {});
         }
     }
 
@@ -109,7 +121,16 @@ export class Record implements RecordJson {
             type: this.type,
             data: this.data,
             info: this.info,
+            acls: this.acls,
         }));
+    }
+
+    toData() {
+        return this.data;
+    }
+
+    toInfo() {
+        return this.info;
     }
 
     expect(path?: string) {

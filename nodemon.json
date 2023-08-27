@@ -1,9 +1,13 @@
 {
+    "watch": [
+        "src"
+    ],
     "ignore": [
         "*.test.ts", 
         "*.test.js", 
         "logs/"
     ],
-    "ext": "ts"
+    "ext": "ts",
+    "exec": "ts-node ./src/start.ts"
   }
   
