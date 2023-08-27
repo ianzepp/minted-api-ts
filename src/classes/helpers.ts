@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import fs from 'fs-extra';
 
 export function headOne<T>(result: T[]): T | undefined {
     return _.head(result);

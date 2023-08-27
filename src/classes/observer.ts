@@ -29,6 +29,7 @@ export class Observer {
 
     toJSON() {
         return {
+            'name': this.toName(),
             'on-schema': this.onSchema(),
             'on-ring': this.onRing(),
             'on-ring-priority': this.onRingPriority(),

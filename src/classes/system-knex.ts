@@ -4,7 +4,6 @@ import { Knex } from 'knex';
 // API
 import { KnexDriver } from '../classes/database';
 import { System } from '../classes/system';
-import { join } from 'path';
 
 export class SystemKnex {
     private _transaction: Knex.Transaction | undefined;
@@ -12,7 +11,7 @@ export class SystemKnex {
     constructor(private readonly system: System) {}
 
     async startup() {
-        
+        await KnexDriver.raw('SELECT 1'); // test connection at startup
     }
 
     async transaction(runFn: () => Promise<any>) {

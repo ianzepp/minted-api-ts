@@ -59,7 +59,6 @@ export default class extends Observer {
             knex = knex.whereNull('data.sc').orWhereIn('data.sc', flow.system.user.sc);
         }
         
-
         knex = knex.whereNull('data.ns').orWhereIn('data.ns', flow.system.user.ns);
         knex = knex.whereNull('data.sc').orWhereIn('data.sc', flow.system.user.sc);
 

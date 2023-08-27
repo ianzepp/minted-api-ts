@@ -19,21 +19,17 @@ export class SystemData {
     static readonly OP_UPSERT = 'upsert';
     static readonly OP_DELETE = 'delete';
 
-    // Knex transaction reference
-
-
-    // Reference for future database usages
     constructor(private readonly system: System) {}
 
     async startup() {
-        
+        // nothing to do here
     }
 
     //
     // Collection methods
     //
 
-    async selectAll(schema_name: SchemaName, filter_data: FilterJson) {
+    async selectAll(schema_name: SchemaName, filter_data: FilterJson = {}) {
         return this._run(schema_name, [], filter_data, SystemData.OP_SELECT);
     }
 
@@ -53,7 +49,7 @@ export class SystemData {
         return this._run(schema_name, change_data, {}, SystemData.OP_DELETE);
     }
 
-    async selectOne(schema_name: SchemaName, filter_data: FilterJson): Promise<Record | undefined> {
+    async selectOne(schema_name: SchemaName, filter_data: FilterJson = {}): Promise<Record | undefined> {
         return this.selectAll(schema_name, filter_data).then(headOne<Record>);
     }
 

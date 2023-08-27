@@ -1,37 +1,25 @@
 import _ from 'lodash';
 import chai from 'chai';
 
-export interface ColumnJson {
-    name: string;
-    description: string;
-}
+// Classes
+import { Record } from '../classes/record';
+import { RecordJson } from '../classes/record';
 
-export class Column implements ColumnJson {
-    readonly name: string;
-    readonly description: string;
-
-    constructor(source: ColumnJson) {
-        chai.expect(source).property('name').contains('.');
-        chai.expect(source).property('description');
-
-        // Instantiate
-        this.name = source.name;
-        this.description = source.description;
+export class Column {
+    constructor(readonly source: RecordJson) {
+        chai.expect(source.data).property('name').contains('.');
+        chai.expect(source.data).property('description');
     }
 
-
     get schema_name() {
-        return _.head(this.name.split('.'));
+        return _.head(this.source.data.name.split('.'));
     }
 
     get column_name() {
-        return _.last(this.name.split('.'));
+        return _.last(this.source.data.name.split('.'));
     }
     
     toJSON() {
-        return {
-            name: this.name,
-            description: this.description
-        };
+        return this.source.data;
     }
 }

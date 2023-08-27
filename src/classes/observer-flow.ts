@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 
 // Classes
@@ -13,13 +13,21 @@ import { System } from '../classes/system';
 const OBSERVER_BASE = path.join(__dirname, '../observers');
 const OBSERVER_LIST = fs.readdirSync(OBSERVER_BASE);
 
+// // Import all the observers
+// const OBSERVER_CODE = _.map(OBSERVER_LIST, observerPath => {
+//     return require(path.join(OBSERVER_BASE, observerPath)).default;
+// });
+
 // Instantiate all of the default observers, sort by ring priority and then group by ring
 const OBSERVERS = _.chain(OBSERVER_LIST)
+    .reject(observerPath => observerPath.endsWith('.map'))
     .map(observerPath => require(path.join(OBSERVER_BASE, observerPath)).default)
     .map(observerType => new observerType())
     .sortBy(observer => observer.onRingPriority())
     .groupBy(observer => observer.onRing())
     .value();
+
+console.warn('Observers: %j', OBSERVERS);
 
 // Implementation
 export class ObserverFlow {
@@ -32,8 +40,9 @@ export class ObserverFlow {
         readonly filter: Filter,
         readonly op: string) {}
 
-    toObservers(ring: number) {
-        return _.get(OBSERVERS, ring) || [];
+    toObservers(ring: number): Observer[] {
+        // return _.get(OBSERVERS, ring) || [];
+        return [];
     }
 
     async run(ring: number) {
@@ -98,41 +107,4 @@ export class ObserverFlow {
 
         // Done
     }
-
-    //
-    // Helpers
-    //
-
-    // private toObservers(): Observer[] {
-    //     return _.compact(FLOWS.map(FlowType => {
-    //         // Create the flow
-    //         let flow = new FlowType(this.system, this);
-
-    //         // Filter flows by schema type
-    //         if (this.onSchema() !== flow.onSchema() && flow.onSchema() !== 'system__record') {
-    //             return;
-    //         }
-
-    //         // Filter flows by operation
-    //         if (this.isSelect() && flow.onSelect()) {
-    //             return flow;
-    //         }
-
-    //         if (this.isCreate() && flow.onCreate()) {
-    //             return flow;
-    //         }
-
-    //         if (this.isUpdate() && flow.onUpdate()) {
-    //             return flow;
-    //         }
-
-    //         if (this.isUpsert() && flow.onUpsert()) {
-    //             return flow;
-    //         }
-
-    //         if (this.isDelete() && flow.onDelete()) {
-    //             return flow;
-    //         }
-    //     }));
-    // }
 }

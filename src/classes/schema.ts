@@ -9,28 +9,16 @@ import { RecordJson } from '../classes/record';
 
 export type SchemaName = string;
 
-export interface SchemaJson {
-    name: string;
-    description: string;
-}
-
-export class Schema implements SchemaJson {
-    constructor(source: SchemaJson) {
-        chai.expect(source).property('name').not.contains('.');
-        chai.expect(source).property('description');
-
-        // Set properties
-        this.name = source.name;
-        this.description = source.description;
-    }
-
-    // Properties
-    readonly name: string; 
+export class Schema {
+    readonly name: string;
     readonly description: string;
 
-    // Accessors
-    get schema_name() {
-        return this.name;
+    constructor(source: RecordJson) {
+        chai.expect(source.data).property('name').not.contains('.');
+        chai.expect(source.data).property('description');
+
+        this.name = source.data.name;
+        this.description = source.data.description;
     }
 
     toFilter(filter_data: FilterJson) {
@@ -46,9 +34,6 @@ export class Schema implements SchemaJson {
     }
 
     toJSON() {
-        return {
-            name: this.name,
-            description: this.description
-        };
+        return {};
     }
 }

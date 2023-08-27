@@ -1,18 +1,16 @@
 import _ from 'lodash';
 import chai from 'chai';
-import path from 'path';
-import fs from 'fs';
+import fs from 'fs-extra';
 
 // Classes
 import { Schema } from '../classes/schema';
-import { SchemaJson } from '../classes/schema';
 import { Column } from '../classes/column';
-import { ColumnJson } from '../classes/column';
+import { RecordJson } from '../classes/record';
 import { System } from '../classes/system';
 
-// Preloaded local metadata files
-import { MetadataSchemas } from '../classes/metadata';
-import { MetadataColumns } from '../classes/metadata';
+// Builtins
+const SchemaJson = fs.readJsonSync('src/classes/schema.json');
+const ColumnJson = fs.readJsonSync('src/classes/column.json');
 
 const SCHEMAS_PROXY_HANDLER = {
     get: (t: SystemMeta, p: string | number | symbol) => {
@@ -27,25 +25,19 @@ export class SystemMeta {
     private readonly _schema_dict: _.Dictionary<Schema> = {};
     private readonly _column_dict: _.Dictionary<Column> = {};
 
-    constructor(private readonly system: System) {
-        // Insert all the defined metadata
-        _.forEach(MetadataSchemas, (source, source_name) => this.intakeSchema(source_name, source));
-        _.forEach(MetadataColumns, (source, source_name) => this.intakeColumn(source_name, source));
-
-        // console.debug('SystemMeta.describe()', this.describe());
-        // console.debug('SystemMeta.toColumnsOf("schema")', this.toColumnsOf('schema'));
-        // console.debug('SystemMeta.toColumnsOf("column")', this.toColumnsOf('column'));
-        // console.debug('SystemMeta.toColumnsOf("record")', this.toColumnsOf('record'));
-    }
+    constructor(private readonly system: System) {}
 
     async startup() {
-        // // Create tables
-        // let schema_sql = fs.readFileSync('/Users/ianzepp/Projects/MGC/minted-api/src/database/create-table-schema.sql').toString();
-        // let column_sql = fs.readFileSync('/Users/ianzepp/Projects/MGC/minted-api/src/database/create-table-column.sql').toString();
+        this.intakeSchema(SchemaJson);
+        this.intakeSchema(ColumnJson);
 
-        // console.warn('sql', schema_sql);
+        // Select all available system schemas 
+        let schemas = await this.system.data.selectAll('schema', { where: { ns: 'system' }});
+        let columns = await this.system.data.selectAll('column', { where: { ns: 'system' }});
 
-        // this.system.database.one(schema_sql);
+        // Add to the known dict data
+        _.each(schemas, schema => this.intakeSchema(schema));
+        _.each(columns, column => this.intakeColumn(column));
     }
 
     /**
@@ -72,7 +64,13 @@ export class SystemMeta {
      * @returns The schema associated with the given name.
      */
     toSchema(schema_name: string): Schema {
-        return this._schema_dict[schema_name];
+        let schema = this._schema_dict[schema_name];
+
+        if (schema === undefined) {
+            throw `Schema '${schema_name}' not found/loaded`;
+        }
+
+        return schema;
     }
 
     /**
@@ -118,18 +116,8 @@ export class SystemMeta {
      * @param source_name - The name of the source schema.
      * @param source - The source schema to intake.
      */
-    private intakeSchema(source_name: string, source: SchemaJson): void {
-        chai.expect(source_name).string;
-        chai.expect(source_name).not.includes('.');
-        chai.expect(source).property('name').eq(source_name);
-
-        // Check the target doesn't already exist
-        chai.expect(this._schema_dict).not.has.key(source_name);
-
-        // Create new instance and add to the dict
-        this._schema_dict[source_name] = new Schema(source);
-
-        // console.debug("SystemMeta: intakeSchema():", source_name);
+    private intakeSchema(source: RecordJson): void {
+        this._schema_dict[source.data.name] = new Schema(source);
     }
 
     /**
@@ -137,17 +125,7 @@ export class SystemMeta {
      * @param source_name - The name of the source column.
      * @param source - The source column to intake.
      */
-    private intakeColumn(source_name: string, source: ColumnJson): void {
-        chai.expect(source_name).string;
-        chai.expect(source_name).includes('.');
-        chai.expect(source).property('name').eq(source_name);
-
-        // Check the target doesn't already exist
-        chai.expect(this._column_dict).not.has.key(source_name);
-
-        // Create new instance and add to the dict
-        this._column_dict[source_name] = new Column(source);
-
-        // console.debug("SystemMeta: intakeColumn():", source_name);
+    private intakeColumn(source: RecordJson): void {
+        this._column_dict[source.data.name] = new Column(source);
     }
 }

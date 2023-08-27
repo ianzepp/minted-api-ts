@@ -58,6 +58,25 @@ const createMetaInfoTable = async (knex: Knex) => {
     });
 };
 
+const insertSchemas = async (knex: Knex) => {
+    let created_at = new Date().toISOString();
+    let created_by = '00000000-0000-0000-0000-000000000000';
+
+    for(let schema_data of _.values(MetadataSchemas)) {
+        let schema = _.merge({ id: uuid() }, schema_data);
+
+        let insert_data = await knex('schema').insert(schema);
+        let insert_info = await knex('metainfo').insert({ 
+            id: schema.id, 
+            id_table: 'schema',
+            created_at: created_at,
+            created_by: created_by
+        });
+
+        console.warn('schema_data', schema.id, schema.name);
+    }
+}
+
 // Initialize the database by first entering a promise context
 KnexDriver.raw('SELECT 1').then(async () => {
     try {
@@ -69,23 +88,10 @@ KnexDriver.raw('SELECT 1').then(async () => {
         await createColumnTable(KnexDriver);
         await createMetaInfoTable(KnexDriver);
 
-        console.warn('AutoInstall: Finished database installation process.');
+        console.warn('AutoInstall: Finished core installation...');
 
-        // Insert the default metadata
-
-        // Loop over the imported schema json from metadata.ts, and insert into knex into the schema table.
-        let insert_schemas = _.map(_.values(MetadataSchemas), schema => {
-            return KnexDriver('schema').insert({
-                id: uuid(),
-                ns: null,
-                sc: null,
-                name: schema.name,
-                description: schema.description
-            });
-        });
-
-        await Promise.all(insert_schemas);
-
+        // Insert builtins
+        await insertSchemas(KnexDriver);
 
     } catch (error) {
         console.error("Error creating tables:", error);

@@ -1,11 +1,8 @@
 import _ from 'lodash';
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 
 // API
-import { RecordJson } from '../classes/record';
-import { SchemaJson } from '../classes/schema';
-import { ColumnJson } from '../classes/column';
 
 // Function to read in metadata from a file
 function readJson(category: string) {
@@ -26,6 +23,6 @@ function readJson(category: string) {
 }
 
 // Preload all metadata
-export const MetadataSchemas = readJson('schemas') as _.Dictionary<SchemaJson>;
-export const MetadataColumns = readJson('columns') as _.Dictionary<ColumnJson>;
-export const MetadataRecords = readJson('records') as _.Dictionary<RecordJson>;
+export const MetadataSchemas = readJson('schemas') as _.Dictionary<any>;
+export const MetadataColumns = readJson('columns') as _.Dictionary<any>;
+export const MetadataRecords = readJson('records') as _.Dictionary<any>;

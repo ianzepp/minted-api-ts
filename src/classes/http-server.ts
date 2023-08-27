@@ -14,8 +14,8 @@ import { System } from '../classes/system';
 // Routers
 import { HttpRouter } from './http-router';
 
-// Heartbeat router
-import { RouterHeartbeat } from '../routers/heartbeat';
+// Ping router
+import { RouterPing } from '../routers/ping';
 
 // Test router
 import { RouterTest } from '../routers/test';
@@ -45,7 +45,7 @@ export class HttpServer {
         console.warn('Starting http server..');
 
         // Heartbeat to check uptime
-        this.use(RouterHeartbeat, 'GET', '/heartbeat');
+        this.use(RouterPing, 'GET', '/api/ping');
 
         // Test router
         this.use(RouterTest, 'GET', '/api/test/:method');
