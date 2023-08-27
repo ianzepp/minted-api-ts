@@ -8,6 +8,9 @@ const textBody = Util.promisify(require('body'));
 const jsonBody = Util.promisify(require('body/json'));
 const formBody = Util.promisify(require('body/form'));
 
+// Classes
+import { System } from '../classes/system';
+
 // Routers
 import { HttpRouter } from './http-router';
 
@@ -116,9 +119,13 @@ export class HttpServer {
             // Log it
             console.warn('HttpRouter: %j %j', params_url.href, params);
 
+            // Generate system, based on the logged in user for this request
+            // TODO - for now assume root
+            let system = new System({ id: System.UUIDZERO, ns: ['*'], sc: ['*'] });
+
             // Generate router instance
             let Router = server_route.router_type;
-            let router = new Router(params, search, body);
+            let router = new Router(system, params, search, body);
 
             // Execute the router
             let result = await router.runsafe();

@@ -11,6 +11,7 @@ chai.expect(process.env).property('PGDATABASE').string;
 
 // Define DB options
 export const KnexDriverOptions = {
+    debug: process.env.PGHOST === 'localhost',
     client: 'pg',
     connection: {
         host: process.env.PGHOST,

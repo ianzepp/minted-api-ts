@@ -4,6 +4,7 @@ import { Knex } from 'knex';
 // API
 import { KnexDriver } from '../classes/database';
 import { System } from '../classes/system';
+import { join } from 'path';
 
 export class SystemKnex {
     private _transaction: Knex.Transaction | undefined;
@@ -15,7 +16,7 @@ export class SystemKnex {
     }
 
     async transaction(runFn: () => Promise<any>) {
-        return KnexDriver.transaction(tx => {
+        return KnexDriver.transaction(async tx => {
             this._transaction = tx;
             return runFn();
         }).finally(() => {
@@ -23,15 +24,17 @@ export class SystemKnex {
         });
     }
 
-    using(using: string) {
+    using(using: string, metainfo: boolean = false) {
+        let knex = KnexDriver(using + ' as data');
+
         if (this._transaction) {
-            return KnexDriver(using)
-                .transacting(this._transaction)
-                .join('metainfo', 'metainfo.id', using + '.id');
+            knex = knex.transacting(this._transaction);
         }
-        else {
-            return KnexDriver(using)
-                .join('metainfo', 'metainfo.id', using + '.id');
+
+        if (metainfo) {
+            knex = knex.join('metainfo as info', 'info.id', 'data.id');
         }
+
+        return knex;
     }
 }

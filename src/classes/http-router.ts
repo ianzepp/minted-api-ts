@@ -13,15 +13,15 @@ export interface RouterResult {
 
 export interface HttpRouterResult {
     status: number;
+    length: number;
     schema: string | undefined;
     record: string | undefined;
     result: any;
 }
 
 export class HttpRouter {
-    readonly system = new System();
-
     constructor(
+        readonly system: System,
         readonly params: _.Dictionary<string>,
         readonly search: _.Dictionary<string>,
         readonly body: any) {}
@@ -29,6 +29,7 @@ export class HttpRouter {
     async runsafe() {
         let result: HttpRouterResult = {
             status: 0,
+            length: 0,
             schema: this.params.schema,
             record: this.params.record,
             result: undefined,
@@ -50,6 +51,7 @@ export class HttpRouter {
 
             // Save the results
             result.status = 200;
+            result.length = _.isArray(data) ? _.size(data) : 1;
             result.result = data;
         }
 

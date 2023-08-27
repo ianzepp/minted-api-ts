@@ -6,6 +6,12 @@ import { SystemData } from '../classes/system-data';
 import { SystemMeta } from '../classes/system-meta';
 import { SystemKnex } from '../classes/system-knex';
 
+export interface SystemUser {
+    id: string;
+    ns: string[] | null;
+    sc: string[] | null;
+}
+
 export class System {
     static UUIDZERO = '00000000-0000-0000-0000-000000000000';
 
@@ -14,11 +20,13 @@ export class System {
     public readonly meta = new SystemMeta(this);
     public readonly knex = new SystemKnex(this);
 
-    // System contants
-    public readonly NOW = new Date();
+    // System constants
+    public readonly timestamp = new Date().toISOString();
 
     // Setup the user-specific system, or default to a root user.
-    constructor(readonly options: _.Dictionary<any> = {}) {}
+    constructor(readonly user: SystemUser) {
+        console.warn('System: id=%j ns=%j sc=%j', user.id, user.ns, user.sc);
+    }
 
     /** Startup the system */
     async startup() {
@@ -29,24 +37,10 @@ export class System {
 
     /** Authenticate a request */
     async authenticate() {
-        // await this.user.authenticate();
-    }
+        if (this.user.id === System.UUIDZERO) {
+            return;
+        }
 
-    /** Switches to a new root context and returns a new `System` reference */
-    async toRoot() {
-        return new System({ user_id: System.UUIDZERO });
-    }
-
-    /** Switches to a new root context and returns a new `System` reference */
-    async toUser(user_id: string) {
-        return new System({ user_id: user_id });
-    }
-
-    toId(): string {
-        return uuid();
-    }
-
-    now() {
-        return this.NOW.toISOString();
+        // TODO
     }
 }
