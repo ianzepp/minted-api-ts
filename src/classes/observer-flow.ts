@@ -5,7 +5,6 @@ import { Filter } from '../classes/filter';
 import { Record } from '../classes/record';
 import { Schema } from '../classes/schema';
 import { Observer } from '../classes/observer';
-import { ObserverRing } from '../classes/observer';
 import { System } from '../classes/system';
 
 // Hardcoded observers

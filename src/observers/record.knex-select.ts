@@ -1,11 +1,10 @@
-import chai from 'chai';
 
 // Classes
 import { Observer } from '../classes/observer';
 
 export default class extends Observer {
     toName() {
-        return 'record.data-create';
+        return 'record.knex-select';
     }
     
     onSchema() {
@@ -16,11 +15,15 @@ export default class extends Observer {
         return Observer.RING_KNEX;
     }
 
-    onCreate() {
+    onSelect() {
         return true;
     }
 
     async run() {
+        let result = await this.system.knex.tx(this.schema.name).limit(1);
+        
+        // convert to records
 
+        // this.change.push(... select);
     }
 }

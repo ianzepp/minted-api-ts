@@ -1,11 +1,10 @@
-import chai from 'chai';
 
 // Classes
 import { Observer } from '../classes/observer';
 
 export default class extends Observer {
     toName() {
-        return 'record.data-create';
+        return 'record.knex-update';
     }
     
     onSchema() {
@@ -16,11 +15,12 @@ export default class extends Observer {
         return Observer.RING_KNEX;
     }
 
-    onCreate() {
+    onSelect() {
         return true;
     }
 
     async run() {
 
+        
     }
 }

@@ -3,14 +3,17 @@
 import { ObserverFlow } from '../classes/observer-flow';
 import { System } from '../classes/system';
 
-export type ObserverRing = 'init' | 'prep' | 'work' | 'post' | 'done';
-
 export class Observer {
-    static readonly RING_INIT: ObserverRing = 'init';
-    static readonly RING_PREP: ObserverRing = 'prep';
-    static readonly RING_WORK: ObserverRing = 'work';
-    static readonly RING_POST: ObserverRing = 'post';
-    static readonly RING_DONE: ObserverRing = 'done';
+    static readonly RING_INIT = 0; // System init
+    static readonly RING_PREP = 1; // Logic prep
+    static readonly RING_LOAD = 2; // Load in any data dependencies
+    static readonly RING_WORK = 3; // Run logic
+    static readonly RING_TEST = 4; // Validations
+    static readonly RING_KNEX = 5; // Database changes
+    static readonly RING_POST = 6; // Post-db changes
+    static readonly RING_FLOW = 7; // Cascade down to more flow operations
+    static readonly RING_HTTP = 8; // External HTTP updates, non-blocking
+    static readonly RING_DONE = 9; // System cleanup
 
     static readonly PRIORITY_SYSTEM_MAX = 0;
     static readonly PRIORITY_MAX = 1;
@@ -59,7 +62,7 @@ export class Observer {
     }
 
     onRing() {
-        return Observer.RING_PREP;
+        return Observer.RING_WORK;
     }
 
     onRingPriority() {

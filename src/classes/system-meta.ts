@@ -10,9 +10,6 @@ import { Column } from '../classes/column';
 import { ColumnJson } from '../classes/column';
 import { System } from '../classes/system';
 
-import { Database } from '../database';
-import { DatabaseDriver } from '../database';
-
 // Preloaded local metadata files
 import { MetadataSchemas } from '../classes/metadata';
 import { MetadataColumns } from '../classes/metadata';

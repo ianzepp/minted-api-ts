@@ -1,6 +1,6 @@
 
 // Classes
-import { Observer, ObserverRing } from '../classes/observer';
+import { Observer } from '../classes/observer';
 
 export default class extends Observer {
     toName() {
@@ -12,7 +12,7 @@ export default class extends Observer {
     }
 
     onRing() {
-        return Observer.RING_WORK;
+        return Observer.RING_KNEX;
     }
 
     onSelect() {

@@ -45,9 +45,8 @@ export class HttpRouter {
             // Authentication
             await this.system.authenticate();
 
-            // // Run the router validation, followed by the implementation
-            // let data = await this.system.knex.transact(() => this.run());
-            let data = await this.run();
+            // Run the router validation, followed by the implementation
+            let data = await this.system.knex.transaction(() => this.run());
 
             if (data === undefined) {
                 data = null;

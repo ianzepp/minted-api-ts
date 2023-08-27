@@ -1,11 +1,10 @@
-import chai from 'chai';
 
 // Classes
 import { Observer } from '../classes/observer';
 
 export default class extends Observer {
     toName() {
-        return 'record.data-create';
+        return 'record.knex-create';
     }
     
     onSchema() {
@@ -22,5 +21,6 @@ export default class extends Observer {
 
     async run() {
 
+        
     }
 }
