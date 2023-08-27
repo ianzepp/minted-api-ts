@@ -19,6 +19,15 @@ export class Column implements ColumnJson {
         this.description = source.description;
     }
 
+
+    get schema_name() {
+        return _.head(this.name.split('.'));
+    }
+
+    get column_name() {
+        return _.last(this.name.split('.'));
+    }
+    
     toJSON() {
         return {
             name: this.name,

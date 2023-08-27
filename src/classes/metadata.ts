@@ -29,7 +29,3 @@ function readJson(category: string) {
 export const MetadataSchemas = readJson('schemas') as _.Dictionary<SchemaJson>;
 export const MetadataColumns = readJson('columns') as _.Dictionary<ColumnJson>;
 export const MetadataRecords = readJson('records') as _.Dictionary<RecordJson>;
-
-console.debug('Schemas: %j', MetadataSchemas);
-console.debug('Columns: %j', MetadataColumns);
-console.debug('Records: %j', MetadataRecords);

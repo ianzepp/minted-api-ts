@@ -11,6 +11,17 @@ import { SystemMeta } from '../classes/system-meta';
 // import { MetaSystem } from '../classes/meta-system';
 // import { UserSystem } from '../classes/user-system';
 
+// Default system startup options
+export const SYSTEM_OPTIONS = {
+    development: {
+        user_id: '00000000-0000-0000-0000-000000000000',
+        database: {
+            driver: 'sqlite3',
+            filename: 'database.db'
+        }
+    }
+}
+
 export class System {
     static UUIDZERO = '00000000-0000-0000-0000-000000000000';
     static NOW = new Date();
@@ -26,14 +37,22 @@ export class System {
     // public readonly user = new UserSystem(this);
 
     // Setup the user-specific system, or default to a root user.
-    constructor(readonly options: _.Dictionary<any> = {}) {}
+    constructor(readonly options: _.Dictionary<any> = SYSTEM_OPTIONS.development) {}
+
+    /** Startup the system */
+    async startup() {
+        await this.data.startup();
+        await this.meta.startup();
+    }
 
     /** Authenticate a request */
-    async authenticate() {}
+    async authenticate() {
+        // await this.user.authenticate();
+    }
 
     /** Switches to a new root context and returns a new `System` reference */
     async toRoot() {
-        return new System({ user_id: null });
+        return new System({ user_id: System.UUIDZERO });
     }
 
     /** Switches to a new root context and returns a new `System` reference */
@@ -43,5 +62,9 @@ export class System {
 
     toId(): string {
         return uuid();
+    }
+
+    now() {
+        return System.NOW.toISOString();
     }
 }

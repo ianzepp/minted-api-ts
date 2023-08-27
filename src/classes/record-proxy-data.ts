@@ -1,72 +1,86 @@
-import _ from 'lodash';
-import assert from 'assert';
+// import _ from 'lodash';
+// import assert from 'assert';
 
-import { Record } from '../classes/record';
-import { RecordData } from '../classes/record';
+// import { Record } from '../classes/record';
+// import { RecordData } from '../classes/record';
 
-export class RecordProxyData implements RecordData {
-    [index: string]: any;
+// const excludes_meta = [
+//     'created_at',
+//     'created_by',
+//     'updated_at',
+//     'updated_by',
+//     'expired_at',
+//     'expired_by',
+//     'trashed_at',
+//     'trashed_by',
+//     'deleted_at',
+//     'deleted_by',
+// ];
 
-    constructor(record: Record) {
-        return new Proxy(record, {
-            get: get,
-            set: set,
-            has: has,
-        });
-    }
-}
+// const excludes_acls = [
+//     'acls_full',
+//     'acls_edit',
+//     'acls_read',
+//     'acls_deny',
+// ];
 
-function get(record: Record, p: string | number | symbol) {
-    if (p === 'toJSON' || p === Symbol.toStringTag) {
-        return () => toJSON(record);
-    }
+// export class RecordProxyData implements RecordData {
+//     [index: string]: any;
 
-    assert(typeof p === 'string', String(p));
-    assert(p.startsWith('acls__') === false, p);
-    assert(p.startsWith('meta__') === false, p);
+//     constructor(record: Record) {
+//         return new Proxy(record, {
+//             get: get,
+//             set: set,
+//             has: has,
+//         });
+//     }
+// }
 
-    let data = record.__source_data[p];
-    let prev = record.__source_prev[p];
+// function get(record: Record, p: string | number | symbol) {
+//     if (p === 'toJSON' || p === Symbol.toStringTag) {
+//         return () => toJSON(record);
+//     }
 
-    if (data !== undefined) {
-        return data;
-    }
+//     assert(typeof p === 'string', String(p));
 
-    if (prev !== undefined) {
-        return prev;
-    }
+//     let data = record.__source_data[p];
+//     let prev = record.__source_prev[p];
 
-    return null;
-}
+//     if (data !== undefined) {
+//         return data;
+//     }
 
-function set(record: Record, p: string | number | symbol, v: any) {
-    assert(typeof p === 'string', String(p));
-    assert(p.startsWith('acls__') === false, p);
-    assert(p.startsWith('meta__') === false, p);
+//     if (prev !== undefined) {
+//         return prev;
+//     }
 
-    record.__source_data[p] = v;
-    return true;
-}
+//     return null;
+// }
 
-function has(record: Record, p: string | number | symbol) {
-    assert(typeof p === 'string', String(p));
-    assert(p.startsWith('acls__') === false, p);
-    assert(p.startsWith('meta__') === false, p);
-    return record.__source_data[p] !== undefined || record.__source_prev[p] !== undefined;
-}
+// function set(record: Record, p: string | number | symbol, v: any) {
+//     assert(typeof p === 'string', String(p));
 
-function toJSON(record: Record) {
-    let source = _.assign({}, record.__source_prev, record.__source_data);
+//     record.__source_data[p] = v;
+//     return true;
+// }
 
-    return _.transform(source, (result, v, p) => {
-        if (p.startsWith('meta__')) {
-            return result;
-        }
+// function has(record: Record, p: string | number | symbol) {
+//     assert(typeof p === 'string', String(p));
+//     return record.__source_data[p] !== undefined || record.__source_prev[p] !== undefined;
+// }
 
-        if (p.startsWith('acls__')) {
-            return result;
-        }
+// function toJSON(record: Record) {
+//     let source = _.assign({}, record.__source_prev, record.__source_data);
 
-        return _.set(result, p, v);
-    }, {});
-}
+//     return _.transform(source, (result, v, p) => {
+//         if (excludes_acls.includes(p)) {
+//             return result;
+//         }
+
+//         if (excludes_meta.includes(p)) {
+//             return result;
+//         }
+
+//         return _.set(result, p, v);
+//     }, {});
+// }

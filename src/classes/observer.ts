@@ -50,6 +50,10 @@ export class Observer {
         };
     }
 
+    toName() {
+        return __filename;
+    }
+
     onSchema(): string {
         throw 500;
     }
@@ -92,6 +96,10 @@ export class Observer {
 
     isRunnable() {
         return true;
+    }
+
+    isFailable() {
+        return false;
     }
 
     isSelect() {

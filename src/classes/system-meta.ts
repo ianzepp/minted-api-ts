@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import chai from 'chai';
 import path from 'path';
+import fs from 'fs';
 
 // Classes
 import { Schema } from '../classes/schema';
@@ -8,6 +9,9 @@ import { SchemaJson } from '../classes/schema';
 import { Column } from '../classes/column';
 import { ColumnJson } from '../classes/column';
 import { System } from '../classes/system';
+
+import { Database } from '../database';
+import { DatabaseDriver } from '../database';
 
 // Preloaded local metadata files
 import { MetadataSchemas } from '../classes/metadata';
@@ -35,6 +39,16 @@ export class SystemMeta {
         // console.debug('SystemMeta.toColumnsOf("schema")', this.toColumnsOf('schema'));
         // console.debug('SystemMeta.toColumnsOf("column")', this.toColumnsOf('column'));
         // console.debug('SystemMeta.toColumnsOf("record")', this.toColumnsOf('record'));
+    }
+
+    async startup() {
+        // // Create tables
+        // let schema_sql = fs.readFileSync('/Users/ianzepp/Projects/MGC/minted-api/src/database/create-table-schema.sql').toString();
+        // let column_sql = fs.readFileSync('/Users/ianzepp/Projects/MGC/minted-api/src/database/create-table-column.sql').toString();
+
+        // console.warn('sql', schema_sql);
+
+        // this.system.database.one(schema_sql);
     }
 
     /**

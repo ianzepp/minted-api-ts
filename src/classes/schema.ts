@@ -15,9 +15,6 @@ export interface SchemaJson {
 }
 
 export class Schema implements SchemaJson {
-    readonly name: string; 
-    readonly description: string;
-
     constructor(source: SchemaJson) {
         chai.expect(source).property('name').not.contains('.');
         chai.expect(source).property('description');
@@ -27,15 +24,24 @@ export class Schema implements SchemaJson {
         this.description = source.description;
     }
 
+    // Properties
+    readonly name: string; 
+    readonly description: string;
+
+    // Accessors
+    get schema_name() {
+        return this.name;
+    }
+
     toFilter(filter_data: FilterJson) {
         return new Filter(this, filter_data);
     }
 
-    toRecord(record_data: RecordJson) {
+    toRecord(record_data: Partial<RecordJson>) {
         return new Record(this, record_data);
     }
 
-    toRecordSet(record_list: RecordJson[]) {
+    toRecordSet(record_list: Partial<RecordJson>[]) {
         return record_list.map(record_data => new Record(this, record_data));
     }
 

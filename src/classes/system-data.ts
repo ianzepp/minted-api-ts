@@ -26,13 +26,11 @@ import { FilterJson } from '../classes/filter';
 import { SchemaName } from '../classes/schema';
 import { Record } from '../classes/record';
 import { RecordJson } from '../classes/record';
-
-// Classes
-// import { Flow } from '../classes/flow';
-// import { FlowSeries } from '../classes/flow-series';
+import { Observer } from '../classes/observer';
+import { ObserverFlow } from '../classes/observer-flow';
 import { System } from '../classes/system';
-// import { SystemError } from '../classes/system-error';
 
+// Helpers
 function __head_one(result: Record[]): Record | undefined {
     return _.head(result);
 }
@@ -47,6 +45,7 @@ function __head_404(result: Record[]): Record {
     return result_item;
 }
 
+
 export class SystemData {
     static readonly OP_SELECT = 'select';
     static readonly OP_CREATE = 'create';
@@ -54,7 +53,12 @@ export class SystemData {
     static readonly OP_UPSERT = 'upsert';
     static readonly OP_DELETE = 'delete';
 
+    // Reference for future database usages
     constructor(private readonly system: System) {}
+
+    async startup() {
+        
+    }
 
     //
     // Collection methods
@@ -64,19 +68,19 @@ export class SystemData {
         return this._run(schema_name, [], filter_data, SystemData.OP_SELECT);
     }
 
-    async createAll(schema_name: SchemaName, change_data: RecordJson[]) {
+    async createAll(schema_name: SchemaName, change_data: Partial<RecordJson>[]) {
         return this._run(schema_name, change_data, {}, SystemData.OP_CREATE);
     }
 
-    async updateAll(schema_name: SchemaName, change_data: RecordJson[]) {
+    async updateAll(schema_name: SchemaName, change_data: Partial<RecordJson>[]) {
         return this._run(schema_name, change_data, {}, SystemData.OP_UPDATE);
     }
 
-    async upsertAll(schema_name: SchemaName, change_data: RecordJson[]) {
+    async upsertAll(schema_name: SchemaName, change_data: Partial<RecordJson>[]) {
         return this._run(schema_name, change_data, {}, SystemData.OP_UPSERT);
     }
 
-    async deleteAll(schema_name: SchemaName, change_data: RecordJson[]) {
+    async deleteAll(schema_name: SchemaName, change_data: Partial<RecordJson>[]) {
         return this._run(schema_name, change_data, {}, SystemData.OP_DELETE);
     }
 
@@ -94,19 +98,19 @@ export class SystemData {
         });
     }
 
-    async createOne(schema_name: SchemaName, change_data: RecordJson) {
+    async createOne(schema_name: SchemaName, change_data: Partial<RecordJson>) {
         return this.createAll(schema_name, Array(change_data)).then(__head_one);
     }
 
-    async updateOne(schema_name: SchemaName, change_data: RecordJson) {
+    async updateOne(schema_name: SchemaName, change_data: Partial<RecordJson>) {
         return this.updateAll(schema_name, Array(change_data)).then(__head_one);
     }
 
-    async upsertOne(schema_name: SchemaName, change_data: RecordJson) {
+    async upsertOne(schema_name: SchemaName, change_data: Partial<RecordJson>) {
         return this.upsertAll(schema_name, Array(change_data)).then(__head_one);
     }
 
-    async deleteOne(schema_name: SchemaName, change_data: RecordJson) {
+    async deleteOne(schema_name: SchemaName, change_data: Partial<RecordJson>) {
         return this.deleteAll(schema_name, Array(change_data)).then(__head_one);
     }
 
@@ -114,7 +118,7 @@ export class SystemData {
     // Filter + Change ops
     //
 
-    async updateAny(_schema_name: SchemaName, _filter_data: FilterJson, _change_data: RecordJson) {
+    async updateAny(_schema_name: SchemaName, _filter_data: FilterJson, _change_data: Partial<RecordJson>) {
         throw "Unimplemented";
     }
 
@@ -126,27 +130,25 @@ export class SystemData {
     // Internal functions
     //
 
-    private async _run(schema_name: SchemaName, change_data: RecordJson[], filter_data: FilterJson, op: string): Promise<Record[]> {
+    private async _run(schema_name: SchemaName, change_data: Partial<RecordJson>[], filter_data: FilterJson, op: string): Promise<Record[]> {
         let schema = this.system.meta.toSchema(schema_name);
         let filter = schema.toFilter(filter_data);
         let change = schema.toRecordSet(change_data);
 
-        // // Build a flow operation
-        // let series = new FlowSeries(this.system, schema, change, filter, op);
+        // Build the flow
+        let flow = new ObserverFlow(this.system, schema, change, filter, op);
 
-        // // Initialize any missing data
-        // await series.initialize();
+        // Initialize missing data
+        await flow.initialize();
 
-        // // Cycle through the flow series rings
-        // await series.run(Flow.RING_INIT);
-        // await series.run(Flow.RING_PREP);
-        // await series.run(Flow.RING_WORK);
-        // await series.run(Flow.RING_POST);
-        // await series.run(Flow.RING_DONE);
+        // Cycle through the rings
+        await flow.run(Observer.RING_INIT);
+        await flow.run(Observer.RING_PREP);
+        await flow.run(Observer.RING_WORK);
+        await flow.run(Observer.RING_POST);
+        await flow.run(Observer.RING_DONE);
 
-        // // Done
-        // return series.change;
-
-        return [];
+        // Done
+        return flow.change;
     }
 }

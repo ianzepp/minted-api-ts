@@ -14,6 +14,9 @@ import { HttpRouter } from './http-router';
 // Heartbeat router
 import { RouterHeartbeat } from '../routers/heartbeat';
 
+// Test router
+import { RouterTest } from '../routers/test';
+
 // Data routers, single record
 import { RouterDataCreateOne } from '../routers/data-create-one';
 import { RouterDataSelectOne } from '../routers/data-select-one';
@@ -49,8 +52,11 @@ export class HttpServer {
     listen(port: number) {
         console.warn('Starting http server..');
 
-        // Ping route for testing
+        // Heartbeat to check uptime
         this.use(RouterHeartbeat, 'GET', '/heartbeat');
+
+        // Test router
+        this.use(RouterTest, 'GET', '/api/test/:method/:glob');
 
         // Data routers
         this.use(RouterDataCreateOne, 'POST', '/api/data/:schema/new');

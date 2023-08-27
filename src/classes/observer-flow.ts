@@ -8,14 +8,11 @@ import { Observer } from '../classes/observer';
 import { ObserverRing } from '../classes/observer';
 import { System } from '../classes/system';
 
-// Flow files
-// export const FLOWS: Array<typeof Observer> = [
-//     require('../flows/system__record/knex-create').default,
-//     require('../flows/system__record/knex-delete').default,
-//     require('../flows/system__record/knex-reload').default,
-//     require('../flows/system__record/knex-select').default,
-//     require('../flows/system__record/knex-update').default,
-// ];
+// Hardcoded observers
+const OBSERVER_TYPES: Array<typeof Observer> = [
+    require('../observers/record.data-select').default,
+    require('../observers/record.data-create').default,
+];
 
 // Implementation
 export class ObserverFlow {
@@ -48,21 +45,78 @@ export class ObserverFlow {
         return this.op === 'delete';
     }
 
-    onSchema() {
-        return this.schema.name;
-    }
-
     async initialize() {
+        OBSERVER_TYPES.forEach(ObserverType => {
+            this.observers.push(new ObserverType(this.system, this));
+        });
 
+        // Sort the observers by priority
+        // TODO
     }
 
     async run(ring: ObserverRing) {
         // Filter down from the master observer list to only be the ones for this ring
-        let observers = this.observers.filter(observer => observer.onRing() === ring);
+        let observers = this.observers.filter(observer => {
+            // Reject by ring
+            if (observer.onRing() !== ring) {
+                return false;
+            }
+
+            // Reject by schema
+            if (observer.onSchema() !== this.schema.name && observer.onSchema() !== 'record') {
+                return false;
+            }
+
+            // Anything that matched here returns `true`
+            if (observer.onSelect() && this.isSelect()) {
+                return true;
+            }
+
+            if (observer.onCreate() && this.isCreate()) {
+                return true;
+            }
+
+            if (observer.onUpdate() && this.isUpdate()) {
+                return true;
+            }
+
+            if (observer.onUpsert() && this.isUpsert()) {
+                return true;
+            }
+
+            if (observer.onDelete() && this.isDelete()) {
+                return true;
+            }
+
+            // Done, no match?
+            return false;
+        });
+
+        // Nothing to do?
+        if (observers.length === 0) {
+            return;
+        }
+
+        // Sort by ring priority
+        // TODO
+
+        console.debug('ObserverFlow(): executing %j with %j', ring, observers.map(o => o.toName()));
 
         // Walk and run
         for(let observer of observers) {
-            await observer.run();
+            try {
+                await observer.run();
+            }
+
+            catch (error) {
+                if (observer.isFailable()) {
+                    console.warn('ObserverFlow(), failable error:', error);
+                }
+
+                else {
+                    throw error;
+                }
+            }
         }
 
         // Done

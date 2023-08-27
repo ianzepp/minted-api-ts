@@ -1,7 +1,6 @@
 {
-    "schema": "user",
-    "data": {
-        "id": "00000000-0000-0000-0000-000000000000",
-        "username": "root"
-    }
+    "id": "00000000-0000-0000-0000-000000000000",
+    "ns": null,
+    "username": "root",
+    "email": "root@example.com"
 }

@@ -6,7 +6,8 @@ rm -rf ./dst
 # Rebuild
 tsc --build tsconfig.json
 
-# Copy all metadata to dst
+# Copy other files to dst
+cp -a ./src/database ./dst
 cp -a ./src/metadata ./dst
 
 # # Rename javascript files to modules (assumes they are ALL modules)
