@@ -53,7 +53,7 @@ export class ObserverFlow {
         // TODO
     }
 
-    async run(ring: ObserverRing) {
+    async run(ring: number) {
         // Filter down from the master observer list to only be the ones for this ring
         let observers = this.observers.filter(observer => {
             // Reject by ring
