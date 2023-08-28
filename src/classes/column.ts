@@ -6,20 +6,25 @@ import { Record } from '../classes/record';
 import { RecordJson } from '../classes/record';
 
 export class Column {
-    constructor(readonly source: RecordJson) {
-        chai.expect(source.data).property('name').contains('.');
-        chai.expect(source.data).property('description');
+    readonly schema_name: string;
+    readonly column_name: string;
+    readonly description: string;
+
+    constructor(source: RecordJson) {
+        this.schema_name = source.data.schema_name;
+        this.column_name = source.data.column_name;
+        this.description = source.data.description;
+
     }
 
-    get schema_name() {
-        return _.head(this.source.data.name.split('.'));
-    }
-
-    get column_name() {
-        return _.last(this.source.data.name.split('.'));
-    }
-    
-    toJSON() {
-        return this.source.data;
+    toJSON(): Partial<RecordJson> {
+        return {
+            type: 'column',
+            data: {
+                schema_name: this.schema_name,
+                column_name: this.column_name,
+                description: this.description
+            }
+        }
     }
 }

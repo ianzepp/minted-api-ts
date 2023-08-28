@@ -1,7 +1,8 @@
 import _ from 'lodash';
+import { pathToRegexp, match } from 'path-to-regexp';
 
 // Classes
-import { System } from './system';
+import { System } from '../classes/system';
 
 // API
 export interface RouterResult {
@@ -67,26 +68,18 @@ export class HttpRouter {
     }
 
     async run(): Promise<any> {
-        throw new Error('No default implementation!');
+        throw 'Unimplemented!';
     }
 
-    //
-    // Private helpers
-    //
+    onHttpVerb(): string {
+        throw 'Unimplemented!';
+    }
 
-    // private _parse_url() {
-    //     return new URL('http://localhost' + this.req.url);
-    // }
-    //
-    // private _to_params(): _.Dictionary<any> {
-    //     return _.get(match(this.onRouterPath())(this._parse_url().pathname), 'params') || {};
-    // }
-    //
-    // private _to_search(): _.Dictionary<any> {
-    //     return this._parse_url().searchParams;
-    // }
-    //
-    // private _to_change(): Array<_.Dictionary<any>> {
-    //     return []; // TODO - implement body data
-    // }
+    onHttpPath(): string {
+        throw 'Unimplemented!';
+    }
+
+    onHttpPathRegexp(): RegExp {
+        return pathToRegexp(this.onHttpPath());
+    }
 }

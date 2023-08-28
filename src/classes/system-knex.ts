@@ -47,7 +47,8 @@ export class SystemKnex {
         }
 
         // Inner join the timestamps and acls
-        knex = knex.join('metainfo as info', 'info.id', 'data.id');
+        knex = knex.join(schema.name + '_info as info', 'info.record_id', 'data.id');
+        knex = knex.join(schema.name + '_acls as acls', 'acls.record_id', 'data.id');
 
         // Apply all of the system restrictions in a single group
         knex = knex.where(function() {

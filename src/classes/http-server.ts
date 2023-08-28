@@ -27,10 +27,12 @@ import { RouterDataSelectAll } from '../routers/data-select-all';
 import { RouterDataUpdateOne } from '../routers/data-update-one';
 import { RouterDataDeleteOne } from '../routers/data-delete-one';
 
-export type HttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE';
+// Meta routers
+import { RouterMetaImport } from '../routers/meta-import';
+import { RouterMetaExport } from '../routers/meta-export';
 
 export interface HttpServerRoute {
-    method: HttpMethod;
+    verb: string;
     path: string;
     path_regexp: RegExp,
     router_type: typeof HttpRouter;
@@ -57,6 +59,10 @@ export class HttpServer {
         this.use(RouterDataUpdateOne, 'PATCH', '/api/data/:schema/:record');
         this.use(RouterDataDeleteOne, 'DELETE', '/api/data/:schema/:record');
 
+        // Meta routers
+        this.use(RouterMetaExport, 'GET', '/api/meta/export');
+        this.use(RouterMetaImport, 'PUT', '/api/meta/import');
+
         // Create the listening server
         let server = Http.createServer((req, res) => this.run(req, res));
         server.setTimeout(1000);
@@ -67,15 +73,15 @@ export class HttpServer {
         // Done
     }
 
-    use(router_type: typeof HttpRouter, method: HttpMethod, path: string) {
+    use(router_type: typeof HttpRouter, verb: string, path: string) {
         this._routes.push({
-            method: method,
+            verb: verb,
             path: path,
             path_regexp: pathToRegexp(path),
             router_type: router_type,
         });
 
-        console.debug('HttpServer: added route: %s %s', method, path);
+        console.debug('HttpServer: added route: %s %s', verb, path);
     }
 
 
@@ -83,7 +89,7 @@ export class HttpServer {
         try {
             // Find the first matching route
             let server_route = _.find(this._routes, server_route => {
-                return server_route.method === req.method
+                return server_route.verb === req.method
                     && server_route.path_regexp.exec(req.url ?? '/') !== null;
             });
 

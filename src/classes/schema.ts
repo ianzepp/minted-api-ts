@@ -14,10 +14,7 @@ export class Schema {
     readonly description: string;
 
     constructor(source: RecordJson) {
-        chai.expect(source.data).property('name').not.contains('.');
-        chai.expect(source.data).property('description');
-
-        this.name = source.data.name;
+        this.name = source.data.schema_name;
         this.description = source.data.description;
     }
 
@@ -33,7 +30,13 @@ export class Schema {
         return record_list.map(record_data => new Record(this, record_data));
     }
 
-    toJSON() {
-        return {};
+    toJSON(): Partial<RecordJson> {
+        return {
+            type: 'schema',
+            data: {
+                name: this.name,
+                description: this.description
+            }
+        }
     }
 }

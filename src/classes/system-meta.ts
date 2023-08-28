@@ -111,13 +111,24 @@ export class SystemMeta {
         return JSON.parse(JSON.stringify(result));
     }
 
+    async import(source: unknown) {
+        
+    }
+
+    async export() {
+        return {
+            schemas: _.map(this._schema_dict, schema => schema.toJSON()),
+            columns: _.map(this._column_dict, column => column.toJSON()),
+        };
+    }
+
     /**
      * Intakes a new schema into the system meta.
      * @param source_name - The name of the source schema.
      * @param source - The source schema to intake.
      */
     private intakeSchema(source: RecordJson): void {
-        this._schema_dict[source.data.name] = new Schema(source);
+        this._schema_dict[source.data.schema_name] = new Schema(source);
     }
 
     /**
@@ -126,6 +137,6 @@ export class SystemMeta {
      * @param source - The source column to intake.
      */
     private intakeColumn(source: RecordJson): void {
-        this._column_dict[source.data.name] = new Column(source);
+        this._column_dict[source.data.schema_name + '.' + source.data.column_name] = new Column(source);
     }
 }
