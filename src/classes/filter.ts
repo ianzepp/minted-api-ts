@@ -27,33 +27,51 @@ export type FilterOrderClause = {
 export interface FilterJson {
     where?: FilterWhereClause | FilterWhereClause[];
     order?: FilterOrderClause | FilterOrderClause[];
+    flags?: FilterFlags;
     limit?: number | 'max';
 }
 
 export interface FilterConcreteJson extends FilterJson {
     where: FilterWhereClause[];
     order: FilterOrderClause[];
+    flags: FilterFlags;
     limit: number;
+}
+
+export interface FilterFlags {
+    // Include expired records?
+    expired?: boolean;
+
+    // Include deleted records? Only applies to root
+    deleted?: boolean;
 }
 
 // Implementation
 export class Filter {
+    public static LIMIT_DEFAULT = 100;
+    public static LIMIT_MAX = 10000;
+
     public readonly where: FilterWhereClause[] = [];
     public readonly order: FilterOrderClause[] = [];
+    public readonly flags: FilterFlags = {};
     public limit: number = 0;
 
-    constructor(readonly schema: Schema, readonly source: FilterJson = {}) {
+    constructor(readonly schema: Schema, source: FilterJson = {}) {
+        this.fromJSON(source);
+    }
+
+    fromJSON(filter_json: FilterJson) {
         // source.where
-        if (source.where === undefined) {
+        if (filter_json.where === undefined) {
             // do nothing
         }
 
-        else if (_.isArray(source.where)) {
-            this.where.push(... source.where);
+        else if (_.isArray(filter_json.where)) {
+            this.where.push(... filter_json.where);
         }
 
-        else if (_.isPlainObject(source.where)) {
-            this.where.push(source.where);
+        else if (_.isPlainObject(filter_json.where)) {
+            this.where.push(filter_json.where);
         }
 
         else {
@@ -61,16 +79,16 @@ export class Filter {
         }
 
         // source.order
-        if (source.order === undefined) {
+        if (filter_json.order === undefined) {
             // do nothing
         }
 
-        else if (_.isArray(source.order)) {
-            this.order.push(... source.order);
+        else if (_.isArray(filter_json.order)) {
+            this.order.push(... filter_json.order);
         }
 
-        else if (_.isPlainObject(source.order)) {
-            this.order.push(source.order);
+        else if (_.isPlainObject(filter_json.order)) {
+            this.order.push(filter_json.order);
         }
 
         else {
@@ -78,16 +96,16 @@ export class Filter {
         }
 
         // source.limit
-        if (source.limit === undefined) {
+        if (filter_json.limit === undefined) {
 
         }
 
-        else if (source.limit === 'max') {
-            this.limit = 10000;
+        else if (filter_json.limit === 'max') {
+            this.limit = Filter.LIMIT_MAX;
         }
 
-        else if (_.isNumber(source.limit)) {
-            this.limit = source.limit || 0;
+        else if (_.isNumber(filter_json.limit)) {
+            this.limit = filter_json.limit || 0;
         }
 
         else {
@@ -97,9 +115,10 @@ export class Filter {
 
     toJSON(): FilterJson {
         return {
-            where: this.where.length ? this.where : undefined,
-            order: this.order.length ? this.order : undefined,
-            limit: this.limit > 0 ? this.limit : undefined,
+            where: this.where,
+            order: this.order,
+            flags: this.flags,
+            limit: this.limit,
         };
     }
 }

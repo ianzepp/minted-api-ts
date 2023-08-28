@@ -22,7 +22,6 @@ export class Observer {
 
     constructor() {}
 
-
     async run(flow: ObserverFlow): Promise<any> {
         throw 500;
     }
@@ -33,8 +32,6 @@ export class Observer {
             'on-schema': this.onSchema(),
             'on-ring': this.onRing(),
             'on-ring-priority': this.onRingPriority(),
-            'on-root': this.onRoot(),
-            'on-user': this.onUser(),
             'on-select': this.onSelect(),
             'on-create': this.onCreate(),
             'on-update': this.onUpdate(),
@@ -57,14 +54,6 @@ export class Observer {
 
     onRingPriority() {
         return Observer.PRIORITY_AVG;
-    }
-
-    onRoot() {
-        return true;
-    }
-
-    onUser() {
-        return true;
     }
 
     onSelect() {

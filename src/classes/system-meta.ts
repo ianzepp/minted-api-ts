@@ -32,8 +32,8 @@ export class SystemMeta {
         this.intakeSchema(ColumnJson);
 
         // Select all available system schemas 
-        let schemas = await this.system.data.selectAll('schema', { where: { ns: 'system' }});
-        let columns = await this.system.data.selectAll('column', { where: { ns: 'system' }});
+        let schemas = await this.system.data.selectAll('schema', {});
+        let columns = await this.system.data.selectAll('column', {});
 
         // Add to the known dict data
         _.each(schemas, schema => this.intakeSchema(schema));

@@ -5,7 +5,7 @@ import { FilterJson } from '../classes/filter';
 import { SchemaName } from '../classes/schema';
 import { Record } from '../classes/record';
 import { RecordJson } from '../classes/record';
-import { Observer } from '../classes/observer';
+import { ObserverRing } from '../classes/observer-flow';
 import { ObserverFlow } from '../classes/observer-flow';
 import { System } from '../classes/system';
 
@@ -96,7 +96,7 @@ export class SystemData {
     //
 
     private async _run(schema_name: SchemaName, change_data: Partial<RecordJson>[], filter_data: FilterJson, op: string): Promise<Record[]> {
-        console.debug('SystemData', schema_name, filter_data, change_data);
+        console.debug('SystemData: schema=%j filter=%j', schema_name, filter_data, change_data);
 
         let schema = this.system.meta.toSchema(schema_name);
         let filter = schema.toFilter(filter_data);
@@ -106,7 +106,7 @@ export class SystemData {
         let flow = new ObserverFlow(this.system, schema, change, filter, op);
 
         // Cycle through rings 0 - 9
-        for (let ring = 0; ring <= 9; ring++) {
+        for (let ring = 0 as ObserverRing; ring <= 9; ring++) {
             await flow.run(ring);
         }
 

@@ -13,26 +13,30 @@ import { System } from '../classes/system';
 const OBSERVER_BASE = path.join(__dirname, '../observers');
 const OBSERVER_LIST = fs.readdirSync(OBSERVER_BASE);
 
-// // Import all the observers
-// const OBSERVER_CODE = _.map(OBSERVER_LIST, observerPath => {
-//     return require(path.join(OBSERVER_BASE, observerPath)).default;
-// });
-
-// Instantiate all of the default observers, sort by ring priority and then group by ring
+// Instantiate all of the default observers, sort by ring priority and then group by schema
 const OBSERVERS = _.chain(OBSERVER_LIST)
+    // Ignore anything that ends in `.map`, which happens when the TS is compiled to JS
     .reject(observerPath => observerPath.endsWith('.map'))
+
+    // Load the observer code
     .map(observerPath => require(path.join(OBSERVER_BASE, observerPath)).default)
+
+    // Instantiate each observer
     .map(observerType => new observerType())
+
+    // Sort in ascending order by ring priority. Easier to do once here, then every time when executing
     .sortBy(observer => observer.onRingPriority())
-    .groupBy(observer => observer.onRing())
+
+    // Group the observers by their runtime schema
+    .groupBy(observer => observer.onSchema())
+
+    // Done, return the _.Dictionary<Observer[]>
     .value();
 
-console.warn('Observers: %j', OBSERVERS);
-
 // Implementation
-export class ObserverFlow {
-    private observers: Observer[] = [];
+export type ObserverRing = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
+export class ObserverFlow {
     constructor(
         readonly system: System,
         readonly schema: Schema,
@@ -40,21 +44,20 @@ export class ObserverFlow {
         readonly filter: Filter,
         readonly op: string) {}
 
-    toObservers(ring: number): Observer[] {
-        // return _.get(OBSERVERS, ring) || [];
-        return [];
-    }
+    async run(ring: ObserverRing) {
+        // Get the master list of observers for this execution context
+        let observers: Observer[] = []; 
+        observers.push(... _.get(OBSERVERS, 'record') || []);
+        observers.push(... _.get(OBSERVERS, this.schema.name) || []);
 
-    async run(ring: number) {
-        // Filter down from the master observer list to only be the ones for this ring
-        // Observers are already pre-sorted by rin priority
-        let observers = this.toObservers(ring).filter(observer => {
-            // Reject by schema
-            if (observer.onSchema() !== this.schema.name && observer.onSchema() !== 'record') {
+        // Filter in a single loop
+        observers = observers.filter(observer => {
+            // Wrong ring?
+            if (observer.onRing() !== ring) {
                 return false;
             }
 
-            // Anything that matched here returns `true`
+            // Accept if the operation matches
             if (observer.onSelect() && this.op === 'select') {
                 return true;
             }
@@ -75,20 +78,18 @@ export class ObserverFlow {
                 return true;
             }
 
-            // Done, no match?
+            // No acceptable matches.
             return false;
         });
 
-        // Nothing to do?
-        if (observers.length === 0) {
-            return;
-        }
-
-        console.debug('ObserverFlow: executing ring %j with %j', ring, observers.map(o => o.toName()));
-
-        // Walk and run
         for(let observer of observers) {
-            console.debug('ObserverFlow: run %j', observer.toName());
+            console.debug('ObserverFlow: schema=%j op=%j ring=%j ring-priority=%j observer=%j', 
+                this.schema.name, 
+                this.op, 
+                observer.onRing(),
+                observer.onRingPriority(),
+                observer.toName()
+            );
 
             try {
                 await observer.run(this);
@@ -104,7 +105,5 @@ export class ObserverFlow {
                 }
             }
         }
-
-        // Done
     }
 }

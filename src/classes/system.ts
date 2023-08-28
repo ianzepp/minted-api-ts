@@ -23,9 +23,16 @@ export class System {
     // System constants
     public readonly timestamp = new Date().toISOString();
 
+    // Root or not?
+    public readonly is_root: boolean;
+    public readonly is_user: boolean;
+
     // Setup the user-specific system, or default to a root user.
     constructor(readonly user: SystemUser) {
         console.warn('System: id=%j ns=%j sc=%j', user.id, user.ns, user.sc);
+
+        this.is_root = user.id === System.UUIDZERO;
+        this.is_user = user.id !== System.UUIDZERO;
     }
 
     /** Startup the system */

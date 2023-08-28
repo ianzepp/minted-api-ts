@@ -40,7 +40,7 @@ export default class extends Observer {
         }));
 
         // Insert data
-        await flow.system.knex.using(flow.schema.name).insert(insert_data);
-        await flow.system.knex.using('metainfo').insert(insert_info);
+        await flow.system.knex.toKnex(flow.schema.name).insert(insert_data);
+        await flow.system.knex.toKnex('metainfo').insert(insert_info);
     }
 }

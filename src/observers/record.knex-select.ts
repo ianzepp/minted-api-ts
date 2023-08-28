@@ -45,28 +45,8 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow) {
-        // Query the database
-        let acls = [] as string[];
-        let knex = flow.system.knex.using(flow.schema.name, true).select();
-
-        // Ignore rows that are outside our namespace (if applicable)
-        if (flow.system.user.ns.includes('*') === false) {
-            knex = knex.whereNull('data.ns').orWhereIn('data.ns', flow.system.user.ns);
-        }
-        
-        // Ignore rows that are outside our security classification (if applicable)
-        if (flow.system.user.sc.includes('*') === false) {
-            knex = knex.whereNull('data.sc').orWhereIn('data.sc', flow.system.user.sc);
-        }
-        
-        knex = knex.whereNull('data.ns').orWhereIn('data.ns', flow.system.user.ns);
-        knex = knex.whereNull('data.sc').orWhereIn('data.sc', flow.system.user.sc);
-
-        // Ignore expired files
-        knex = knex.whereNull('info.expired_at');
-        
-        // Ignore deleted files
-        knex = knex.whereNull('info.deleted_at');
+        // Build the request statement
+        let knex = flow.system.knex.toStatement(flow.schema, flow.filter).select();
 
         // Wait for the result
         let result = await knex;
