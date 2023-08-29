@@ -10,7 +10,8 @@ import { ObserverFlow } from '../classes/observer-flow';
 import { System } from '../classes/system';
 
 // Helpers
-import { headOne, head404 } from '../classes/helpers';
+import head404 from '../helpers/head404';
+import headOne from '../helpers/headOne';
 
 export class SystemData {
     static readonly OP_SELECT = 'select';

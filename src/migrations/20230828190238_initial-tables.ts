@@ -3,13 +3,13 @@ import { v4 as uuid } from 'uuid';
 import { Knex } from 'knex';
 
 import { migrationInsertAll } from '../classes/helpers';
-import { migrationTableUp } from '../classes/helpers';
-import { migrationTableDown } from '../classes/helpers';
+import tableUp from '../helpers/tableUp';
+import tableDown from '../helpers/tableDown';
 
 export async function up(knex: Knex): Promise<void> {
     // Create the core tables
-    await migrationTableUp(knex, 'schema');
-    await migrationTableUp(knex, 'column');
+    await tableUp(knex, 'schema');
+    await tableUp(knex, 'column');
 
     // Add custom columns
     await knex.schema.table('schema', (table) => {
@@ -41,7 +41,7 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-    await migrationTableDown(knex, 'column');
-    await migrationTableDown(knex, 'schema');
+    await tableDown(knex, 'column');
+    await tableDown(knex, 'schema');
 }
 
