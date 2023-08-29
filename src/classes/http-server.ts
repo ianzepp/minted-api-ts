@@ -14,22 +14,8 @@ import { System } from '../classes/system';
 // Routers
 import { HttpRouter } from './http-router';
 
-// Ping router
-import { RouterPing } from '../routers/ping';
-
-// Test router
-import { RouterTest } from '../routers/test';
-
-// Data routers, single record
-import { RouterDataCreateOne } from '../routers/data-create-one';
-import { RouterDataSelectOne } from '../routers/data-select-one';
-import { RouterDataSelectAll } from '../routers/data-select-all';
-import { RouterDataUpdateOne } from '../routers/data-update-one';
-import { RouterDataDeleteOne } from '../routers/data-delete-one';
-
-// Meta routers
-import { RouterMetaImport } from '../routers/meta-import';
-import { RouterMetaExport } from '../routers/meta-export';
+// Import pre-loaded routers
+import Routers from '../classes/routers';
 
 export interface HttpServerRoute {
     verb: string;
@@ -38,117 +24,108 @@ export interface HttpServerRoute {
     router_type: typeof HttpRouter;
 }
 
+export interface HttpReq {
+    verb: string;
+    path: string;
+    params: _.Dictionary<string>;
+    search: _.Dictionary<string>;
+    body: any;
+}
+
+export interface HttpRes {
+    status: number;
+    length: number;
+    schema: string | undefined;
+    record: string | undefined;
+    result: any;
+}
+
 export class HttpServer {
     // Track the router paths
     private readonly _routes: HttpServerRoute[] = [];
 
     // Start the server
     listen(port: number) {
-        console.warn('Starting http server..');
+        let server = Http.createServer((req, res) => {
+            try {
+                return this.run(req, res);
+            }
 
-        // Heartbeat to check uptime
-        this.use(RouterPing, 'GET', '/api/ping');
+            catch (error) {
+                console.error('HttpServer: FATAL REQUEST ERROR!');
+                console.error('HttpServer:', error);
+    
+                res.statusCode = 500;
+                res.write(JSON.stringify({
+                    status: 500,
+                    length: 0,
+                    result: error
+                }));
 
-        // Test router
-        this.use(RouterTest, 'GET', '/api/test/:method');
+                res.end();
+            }
+        });
 
-        // Data routers
-        this.use(RouterDataCreateOne, 'POST', '/api/data/:schema/new');
-        this.use(RouterDataSelectOne, 'GET', '/api/data/:schema/:record');
-        this.use(RouterDataSelectAll, 'GET', '/api/data/:schema');
-        this.use(RouterDataUpdateOne, 'PATCH', '/api/data/:schema/:record');
-        this.use(RouterDataDeleteOne, 'DELETE', '/api/data/:schema/:record');
-
-        // Meta routers
-        this.use(RouterMetaExport, 'GET', '/api/meta/export');
-        this.use(RouterMetaImport, 'PUT', '/api/meta/import');
-
-        // Create the listening server
-        let server = Http.createServer((req, res) => this.run(req, res));
         server.setTimeout(1000);
-        server.listen(port, () => {
+        server.listen(port, 'localhost', () => {
             console.warn('HttpServer: started server %j', server.address());
         });
 
         // Done
     }
 
-    use(router_type: typeof HttpRouter, verb: string, path: string) {
-        this._routes.push({
-            verb: verb,
-            path: path,
-            path_regexp: pathToRegexp(path),
-            router_type: router_type,
+    async run(req: Http.IncomingMessage, res: Http.ServerResponse) {
+        console.warn('req.headers.host', req.headers.host);
+
+        // Build the httpReq and httpRes to be passed into system-http
+        let httpReq: HttpReq = {
+            verb: req.method,
+            path: req.url,
+            params: undefined, // will be set once the matching router is found
+            search: undefined,
+            body: null,
+        };
+
+        let httpRes: HttpRes = {
+            status: 0,
+            length: 0,
+            schema: undefined,
+            record: undefined,
+            result: undefined,
+        }
+
+        // Extract the search k=v data from the URL
+        httpReq.search = new URL(req.headers.host + req.url).searchParams as _.Dictionary<any>;
+
+        // Extract the body data
+        let content_type = (req.headers['content-type'] || '').split(';');
+
+        if (content_type.includes('application/json')) {
+            httpReq.body = await jsonBody(req, res);
+        }
+
+        if (content_type.includes('text/plain')) {
+            httpReq.body = await textBody(req, res);
+        }
+
+        if (content_type.includes('multipart/form-data')) {
+            httpReq.body = await formBody(req, res);
+        }
+
+        // Generate system, based on the logged in user for this request
+        let system = new System({ id: System.UUIDZERO, ns: ['*'], sc: ['*'] });
+
+        // Initialize the system
+        await system.startup();
+
+        // Run the router validation, followed by the implementation
+        await system.knex.transaction(() => {
+            return system.http.run(httpReq, httpRes);
         });
 
-        console.debug('HttpServer: added route: %s %s', verb, path);
-    }
-
-
-    async run(req: Http.IncomingMessage, res: Http.ServerResponse) {
-        try {
-            // Find the first matching route
-            let server_route = _.find(this._routes, server_route => {
-                return server_route.verb === req.method
-                    && server_route.path_regexp.exec(req.url ?? '/') !== null;
-            });
-
-            if (server_route === undefined) {
-                res.statusCode = 404;
-                return res.end();
-            }
-
-            // Extract params
-            let params_url = new URL('http://localhost' + req.url);
-            let params_match = match(server_route.path)(params_url.pathname);
-            let params = _.get(params_match, 'params');
-
-            // Extract search
-            let search = params_url.searchParams as _.Dictionary<any>;
-
-            // Extract body data
-            let body = null;
-            let content_type = (req.headers['content-type'] || '').split(';');
-
-            if (content_type.includes('application/json')) {
-                body = await jsonBody(req, res);
-            }
-
-            if (content_type.includes('text/plain')) {
-                body = await textBody(req, res);
-            }
-
-            if (content_type.includes('multipart/form-data')) {
-                body = await formBody(req, res);
-            }
-
-            // Log it
-            console.warn('HttpRouter: %j %j', params_url.href, params);
-
-            // Generate system, based on the logged in user for this request
-            // TODO - for now assume root
-            let system = new System({ id: System.UUIDZERO, ns: ['*'], sc: ['*'] });
-
-            // Generate router instance
-            let Router = server_route.router_type;
-            let router = new Router(system, params, search, body);
-
-            // Execute the router
-            let result = await router.runsafe();
-            let result_json = JSON.stringify(result);
-
-            // Return the data
-            res.statusCode = result.status;
-            res.write(result_json);
-            return res.end();
-        }
-
-        catch (error) {
-            console.error('FATAL REQUEST ERROR!');
-            console.error(error);
-
-            res.statusCode = 500;
-            return res.end();
-        }
+        // Return the response
+        res.statusCode = httpRes.status;
+        res.write(JSON.stringify(httpRes));
+        return res.end();
     }
 }

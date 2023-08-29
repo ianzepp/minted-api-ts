@@ -4,14 +4,16 @@ import _ from 'lodash';
 import { HttpRouter } from '../classes/http-router';
 
 // Implementation
-export class RouterDataCreateOne extends HttpRouter {
+export default class extends HttpRouter {
     async run() {
-        // Insert a new record
-        let record = {};
 
-        // TODO
+    }
 
-        // Done
-        return record;
+    onHttpVerb() {
+        return HttpRouter.POST;
+    }
+
+    onHttpPath() {
+        return '/api/data/:schema/:record';
     }
 }

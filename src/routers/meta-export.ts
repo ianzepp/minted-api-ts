@@ -4,16 +4,16 @@ import _ from 'lodash';
 import { HttpRouter } from '../classes/http-router';
 
 // Implementation
-export class RouterMetaExport extends HttpRouter {
+export default class extends HttpRouter {
     async run() {
         return this.system.meta.export();
     }
 
-    onHttpPath() {
-        return '/api/meta/export';
+    onHttpVerb() {
+        return HttpRouter.GET;
     }
 
-    onHttpVerb() {
-        return 'GET';
+    onHttpPath() {
+        return '/api/meta/export';
     }
 }

@@ -4,8 +4,16 @@ import _ from 'lodash';
 import { HttpRouter } from '../classes/http-router';
 
 // Implementation
-export class RouterDataDeleteOne extends HttpRouter {
+export default class extends HttpRouter {
     async run() {
         return {}; // TODO
+    }
+
+    onHttpVerb() {
+        return HttpRouter.DELETE;
+    }
+
+    onHttpPath() {
+        return '/api/data/:schema/:record';
     }
 }

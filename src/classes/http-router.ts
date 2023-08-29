@@ -1,74 +1,58 @@
 import _ from 'lodash';
+import chai from 'chai';
 import { pathToRegexp, match } from 'path-to-regexp';
 
 // Classes
+import { HttpReq } from '../classes/http-server';
+import { HttpRes } from '../classes/http-server';
 import { System } from '../classes/system';
 
-// API
-export interface RouterResult {
-    method: string | undefined,
-    path: string | undefined,
-    code: number,
-    data: any
-}
-
-export interface HttpRouterResult {
-    status: number;
-    length: number;
-    schema: string | undefined;
-    record: string | undefined;
-    result: any;
+// Helper to assert a value is not undefined
+function assert<T>(v: T | undefined) {
+    chai.assert(v); return v;
 }
 
 export class HttpRouter {
-    constructor(
-        readonly system: System,
-        readonly params: _.Dictionary<string>,
-        readonly search: _.Dictionary<string>,
-        readonly body: any) {}
+    public static GET = 'GET';
+    public static POST = 'POST';
+    public static PUT = 'PUT';
+    public static PATCH = 'PATCH';
+    public static DELETE = 'DELETE';
 
-    async runsafe() {
-        let result: HttpRouterResult = {
-            status: 0,
-            length: 0,
-            schema: this.params.schema,
-            record: this.params.record,
-            result: undefined,
-        }
+    private _system: System | undefined;
+    private _req: HttpReq | undefined;
+    private _res: HttpRes | undefined;
 
-        try {
-            // Initialize the system
-            await this.system.startup();
+    get system() {
+        return assert<System>(this._system);
+    }
 
-            // Authentication
-            await this.system.authenticate();
+    get req() {
+        return assert<HttpReq>(this._req);
+    }
 
-            // Run the router validation, followed by the implementation
-            let data = await this.system.knex.transaction(() => this.run());
+    get res() {
+        return assert<HttpRes>(this._res);
+    }
 
-            if (data === undefined) {
-                data = null;
-            }
+    async runsafe(system: System, req: HttpReq, res: HttpRes) {
+        this._system = system;
+        this._req = req;
+        this._res = res;
 
-            // Save the results
-            result.status = 200;
-            result.length = _.isArray(data) ? _.size(data) : 1;
-            result.result = data;
-        }
+        // Set the params
+        this._req.params = _.get(match(this.onHttpPath())(req.path), 'params');
 
-        catch (error) {
-            console.warn('HttpRouter#Error:', error);
-
-            // Save the result error
-            result.status = error.code || 500;
-            result.result = JSON.stringify(error);
-        }
-
-        return result;
+        // Done
+        return this.run();
     }
 
     async run(): Promise<any> {
         throw 'Unimplemented!';
+    }
+
+    toName(): string {
+        return '<unknown>';
     }
 
     onHttpVerb(): string {
@@ -79,7 +63,15 @@ export class HttpRouter {
         throw 'Unimplemented!';
     }
 
-    onHttpPathRegexp(): RegExp {
-        return pathToRegexp(this.onHttpPath());
+    isHttpVerb(verb: string): boolean {
+        return verb === this.onHttpVerb();
+    }
+
+    isHttpPath(path: string): boolean {
+        return pathToRegexp(this.onHttpPath()).exec(path ?? '/') !== null;
+    }
+
+    is(verb: string, path: string) {
+        return this.isHttpVerb(verb) && this.isHttpPath(path);
     }
 }

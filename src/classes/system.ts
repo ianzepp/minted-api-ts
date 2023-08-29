@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { SystemData } from '../classes/system-data';
 import { SystemMeta } from '../classes/system-meta';
 import { SystemKnex } from '../classes/system-knex';
+import { SystemHttp } from '../classes/system-http';
 
 export interface SystemUser {
     id: string;
@@ -19,6 +20,7 @@ export class System {
     public readonly data = new SystemData(this);
     public readonly meta = new SystemMeta(this);
     public readonly knex = new SystemKnex(this);
+    public readonly http = new SystemHttp(this);
 
     // System constants
     public readonly timestamp = new Date().toISOString();
@@ -40,15 +42,7 @@ export class System {
         await this.data.startup();
         await this.meta.startup();
         await this.knex.startup();
-    }
-
-    /** Authenticate a request */
-    async authenticate() {
-        if (this.user.id === System.UUIDZERO) {
-            return;
-        }
-
-        // TODO
+        await this.http.startup();
     }
 }
 

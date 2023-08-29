@@ -4,13 +4,21 @@ import _ from 'lodash';
 import { HttpRouter } from '../classes/http-router';
 
 // Implementation
-export class RouterDataSelectOne extends HttpRouter {
+export default class extends HttpRouter {
     async run() {
-        return this.system.data.select404(this.params.schema, {
+        return this.system.data.select404(this.req.params.schema, {
             limit: 1,
             where: {
-                id: this.params.record
+                id: this.req.params.record
             }
         });
+    }
+
+    onHttpVerb() {
+        return HttpRouter.GET;
+    }
+
+    onHttpPath() {
+        return '/api/data/:schema/:record';
     }
 }
