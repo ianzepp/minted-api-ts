@@ -8,10 +8,6 @@ import { Column } from '../classes/column';
 import { RecordJson } from '../classes/record';
 import { System } from '../classes/system';
 
-// Builtins
-const SchemaJson = fs.readJsonSync('src/classes/schema.json');
-const ColumnJson = fs.readJsonSync('src/classes/column.json');
-
 export class SystemMeta {
     // Cache known schema and column names
     private readonly _schema_dict: _.Dictionary<Schema> = {};

@@ -60,6 +60,14 @@ export class Filter {
         this.fromJSON(source);
     }
 
+    public static isFilter(something: unknown): boolean {
+        return something instanceof Filter;
+    }
+
+    public static isFilterJson(something: unknown): boolean {
+        return _.isPlainObject(something) && (<_.Dictionary<any>> something).where;
+    }
+
     fromJSON(filter_json: FilterJson) {
         // source.where
         if (filter_json.where === undefined) {

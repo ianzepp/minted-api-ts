@@ -1,12 +1,13 @@
 import _ from 'lodash';
 
 // API
+import { Filter } from '../classes/filter';
 import { HttpRouter } from '../classes/http-router';
 
 // Implementation
 export default class extends HttpRouter {
     async run() {
-        return {}; // TODO
+        return this.system.data.deleteAll(this.req.params.schema, this.req.body);
     }
 
     onHttpVerb() {
@@ -14,6 +15,6 @@ export default class extends HttpRouter {
     }
 
     onHttpPath() {
-        return '/api/data/:schema/:record';
+        return '/api/data/:schema';
     }
 }

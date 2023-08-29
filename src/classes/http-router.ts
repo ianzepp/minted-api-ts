@@ -36,6 +36,16 @@ export class HttpRouter {
     }
 
     async runsafe(system: System, req: HttpReq, res: HttpRes) {
+        // Default body values
+        if (['GET'].includes(req.verb)) {
+            req.body = req.body || {};
+        }
+
+        if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(req.verb)) {
+            req.body = req.body || [];
+        }
+
+        // Import references
         this._system = system;
         this._req = req;
         this._res = res;

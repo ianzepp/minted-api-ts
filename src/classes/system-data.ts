@@ -27,12 +27,8 @@ export class SystemData {
     }
 
     //
-    // Collection methods
+    // Collection record methods
     //
-
-    async selectAll(schema_name: SchemaName, filter_data: FilterJson = {}) {
-        return this._run(schema_name, [], filter_data, SystemData.OP_SELECT);
-    }
 
     async createAll(schema_name: SchemaName, change_data: Partial<RecordJson>[]) {
         return this._run(schema_name, change_data, {}, SystemData.OP_CREATE);
@@ -50,46 +46,56 @@ export class SystemData {
         return this._run(schema_name, change_data, {}, SystemData.OP_DELETE);
     }
 
-    async selectOne(schema_name: SchemaName, filter_data: FilterJson = {}): Promise<Record | undefined> {
-        return this.selectAll(schema_name, filter_data).then(headOne<Record>);
-    }
-
-    async select404(schema_name: SchemaName, change_data: FilterJson): Promise<Record> {
-        return this.selectAll(schema_name, change_data).then(head404<Record>);
-    }
-
-    async selectIds(schema_name: SchemaName, filter_data: string[]): Promise<Record[]> {
-        return this.selectAll(schema_name, {
-            where: { id: { $in: filter_data } }
-        });
-    }
+    //
+    // Single record methods
+    //
 
     async createOne(schema_name: SchemaName, change_data: Partial<RecordJson>) {
-        return this.createAll(schema_name, Array(change_data)).then(headOne<Record>);
+        return this._run(schema_name, Array(change_data), {}, SystemData.OP_CREATE).then(headOne<Record>);
     }
 
     async updateOne(schema_name: SchemaName, change_data: Partial<RecordJson>) {
-        return this.updateAll(schema_name, Array(change_data)).then(headOne<Record>);
+        return this._run(schema_name, Array(change_data), {}, SystemData.OP_UPDATE).then(headOne<Record>);
     }
 
     async upsertOne(schema_name: SchemaName, change_data: Partial<RecordJson>) {
-        return this.upsertAll(schema_name, Array(change_data)).then(headOne<Record>);
+        return this._run(schema_name, Array(change_data), {}, SystemData.OP_UPSERT).then(headOne<Record>);
     }
 
     async deleteOne(schema_name: SchemaName, change_data: Partial<RecordJson>) {
-        return this.deleteAll(schema_name, Array(change_data)).then(headOne<Record>);
+        return this._run(schema_name, Array(change_data), {}, SystemData.OP_DELETE).then(headOne<Record>);
+    }
+
+    //
+    // By ID or IDs
+    //
+
+    async select404(schema_name: SchemaName, record_id: string): Promise<Record> {
+        return this._run(schema_name, [], { where: { id: record_id }}, SystemData.OP_SELECT).then(head404<Record>);
+    }
+
+    async selectIds(schema_name: SchemaName, record_ids: string[]): Promise<Record[]> {
+        return this._run(schema_name, [], { where: { id: record_ids }}, SystemData.OP_SELECT);
+    }
+
+    async deleteIds(schema_name: SchemaName, record_ids: string[]): Promise<Record[]> {
+        return this._run(schema_name, [], { where: { id: record_ids }}, SystemData.OP_DELETE);
     }
 
     //
     // Filter + Change ops
     //
 
-    async updateAny(_schema_name: SchemaName, _filter_data: FilterJson, _change_data: Partial<RecordJson>) {
-        throw "Unimplemented";
+    async selectAny(schema_name: SchemaName, filter_data: FilterJson): Promise<Record[]> {
+        return this._run(schema_name, [], filter_data, SystemData.OP_SELECT);
     }
 
-    async deleteAny(_schema_name: SchemaName, _filter_data: FilterJson) {
-        throw "Unimplemented";
+    async updateAny(schema_name: SchemaName, filter_data: FilterJson, change_data: Partial<RecordJson>): Promise<Record[]> {
+        throw 500; // TODO
+    }
+
+    async deleteAny(schema_name: SchemaName, filter_data: FilterJson): Promise<Record[]> {
+        return this._run(schema_name, [], filter_data, SystemData.OP_DELETE);
     }
 
     //

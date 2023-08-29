@@ -6,7 +6,7 @@ import { HttpRouter } from '../classes/http-router';
 // Implementation
 export default class extends HttpRouter {
     async run() {
-        return this.system.data.updateOne(this.req.params.schema, this.req.body);
+        return this.system.data.updateAll(this.req.params.schema, this.req.body);
     }
 
     onHttpVerb() {
@@ -14,6 +14,6 @@ export default class extends HttpRouter {
     }
 
     onHttpPath() {
-        return '/api/data/:schema/:record';
+        return '/api/data/:schema';
     }
 }
