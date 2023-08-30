@@ -15,7 +15,7 @@ import { System } from '../classes/system';
 import { HttpRouter } from './http-router';
 
 // Import pre-loaded routers
-import Routers from '../preloads/routers';
+import Routers from '../preloader/routers';
 
 export interface HttpServerRoute {
     verb: string;

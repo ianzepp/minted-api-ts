@@ -10,7 +10,7 @@ import { Observer } from '../classes/observer';
 import { System } from '../classes/system';
 
 // Import pre-loaded routers
-import Observers from '../preloads/observers';
+import Observers from '../preloader/observers';
 
 // Implementation
 export type ObserverRing = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
