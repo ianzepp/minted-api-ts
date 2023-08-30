@@ -127,7 +127,9 @@ export class Record implements RecordJson {
     };
 
     // Related objects
-    constructor(readonly schema_name: string) {}
+    constructor(readonly schema_name: string) {
+        this.type = schema_name;
+    }
 
     get diff(): Partial<RecordData> {
         // diff = the accumulated difference between objects
