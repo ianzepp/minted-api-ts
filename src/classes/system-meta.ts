@@ -84,16 +84,6 @@ export class SystemMeta {
         return change_data.map(change => new Record(schema_name).fromRecordJson(change));
     }
 
-    toColumnsOf(schema_name: string): Column[] {
-        let search = schema_name + '.';
-
-        return _.transform(this._column_dict, (result, v, k) => {
-            if (k.startsWith(search)) {
-                result.push(v);
-            }
-        }, [] as Column[]);
-    }
-
     describe(): Object {
         let result = {
             schemas: this._schema_dict,

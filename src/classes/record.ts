@@ -2,6 +2,8 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
+import { Column } from '../classes/column';
+import { ColumnType } from '../classes/column';
 import { Schema } from '../classes/schema';
 
 // Helpers
@@ -179,6 +181,14 @@ export class Record implements RecordJson {
         return this;
     }
 
+    // Used when imported prev data from knex
+    fromRecordPrev(source: RecordFlat) {
+        _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls, ['id_table', 'record_id']));
+        _.assign(this.info, _.pick(source, Record.ColumnsInfo));
+        _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
+        return this;
+    }
+
     toString() {
         return `${this.schema_name}#${this.data.id}`;
     }
@@ -200,5 +210,61 @@ export class Record implements RecordJson {
         else {
             return chai.expect(this).nested.property(path);
         }
+    }
+
+    //
+    // Column helpers
+    // 
+
+    has(column: Column) {
+        return !!this.data[column.column_name];
+    }
+
+    get<T = any>(column: Column): T {
+        return this.data[column.column_name];
+    }
+
+    set<T = any>(column: Column, data: T) {
+        // Setup test
+        let test = chai.expect(data, column.column_name);
+
+        if (data === undefined) {
+            return; // cannot unset a value
+        }
+
+        else if (column.type === ColumnType.Boolean) {
+            test.is('boolean');
+        }
+
+        else if (data === null && column.required === false) {
+            // null is allowable for the rest of the data types
+        }
+
+        else if (column.type === ColumnType.Decimal) {
+            test.is('number');
+        }
+
+        else if (column.type === ColumnType.Integer) {
+            test.is('number');
+        }
+
+        else if (column.type === ColumnType.Json) {
+            test.is('object');
+        }
+
+        else if (column.type === ColumnType.Number) {
+            test.is('number');
+        }
+
+        else if (column.type === ColumnType.Text) {
+            test.is('string');
+        }
+
+        else {
+            // unknown data type?
+        }
+
+        // Set data
+        this.data[column.column_name] = data;
     }
 }

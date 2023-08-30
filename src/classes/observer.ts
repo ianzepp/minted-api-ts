@@ -2,6 +2,19 @@
 // Classes
 import { ObserverFlow } from '../classes/observer-flow';
 
+export enum ObserverRing {
+    Init = 0, // System init
+    Prep = 1, // Logic prep
+    Load = 2, // Load in any data dependencies
+    Work = 3, // Run logic
+    Test = 4, // Validations
+    Knex = 5, // Database changes
+    Post = 6, // Post-db changes
+    Flow = 7, // Cascade down to more flow operations
+    Http = 8, // External HTTP updates, non-blocking
+    Done = 9, // System cleanup
+};
+
 export class Observer {
     static readonly RING_INIT = 0; // System init
     static readonly RING_PREP = 1; // Logic prep

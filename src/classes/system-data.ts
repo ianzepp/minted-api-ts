@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { FilterJson } from '../classes/filter';
 import { Record } from '../classes/record';
 import { RecordJson } from '../classes/record';
-import { ObserverRing } from '../classes/observer-flow';
+import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { System } from '../classes/system';
 

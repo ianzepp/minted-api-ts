@@ -5,6 +5,7 @@ import path from 'path';
 // Classes
 import { Filter } from '../classes/filter';
 import { Record } from '../classes/record';
+import { RecordJson } from '../classes/record';
 import { Schema } from '../classes/schema';
 import { Observer } from '../classes/observer';
 import { System } from '../classes/system';
@@ -13,9 +14,15 @@ import { System } from '../classes/system';
 import Observers from '../preloader/observers';
 
 // Implementation
-export type ObserverRing = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export interface ObserverFlowFailure {
+    code: number;
+    message: string;
+    record?: RecordJson;
+}
 
 export class ObserverFlow {
+    readonly failures: ObserverFlowFailure[] = [];
+
     constructor(
         readonly system: System,
         readonly schema: Schema,
@@ -39,7 +46,7 @@ export class ObserverFlow {
         return this.system.knex.toStatement(this.schema_name);
     }
 
-    async run(ring: ObserverRing) {
+    async run(ring: number) {
         // Get the master list of observers for this execution context
         let observers: Observer[] = []; 
         observers.push(... _.get(Observers, 'record') || []);
@@ -100,5 +107,13 @@ export class ObserverFlow {
                 }
             }
         }
+    }
+
+    fail(code: number, message: string, record?: Record) {
+        this.failures.push({
+            code: code,
+            message: message,
+            record: record
+        });
     }
 }

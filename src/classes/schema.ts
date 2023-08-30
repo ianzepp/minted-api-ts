@@ -11,10 +11,21 @@ import { RecordJson } from '../classes/record';
 // Helpers
 import toJSON from '../helpers/toJSON';
 
-export type SchemaName = string;
+export enum SchemaType {
+    Schema = 'schema',
+    Column = 'column',
+    Record = 'record',
+    Filter = 'filter',
+};
+
+export type SchemaName = SchemaType | string;
 
 export class Schema {
     private readonly _columns_map: _.Dictionary<Column> = {};
+
+    private readonly _caching = {
+
+    }
 
     constructor(private readonly source: Partial<RecordJson>) {
         chai.expect(source).property('type').eq('schema');
@@ -54,5 +65,4 @@ export class Schema {
     toJSON(): Partial<RecordJson> {
         return toJSON(_.omit(this.source, ['info', 'acls']));
     }
-
 }

@@ -9,6 +9,15 @@ import { Schema } from '../classes/schema';
 import assertReturn from '../helpers/assertReturn';
 import toJSON from '../helpers/toJSON';
 
+export enum ColumnType {
+    Boolean = 'boolean',
+    Decimal = 'decimal',
+    Integer = 'integer',
+    Json = 'json',
+    Number = 'number',
+    Text = 'text',
+};
+
 export class Column {
     private _schema: Schema;
 
@@ -36,8 +45,8 @@ export class Column {
         return this.source.data.description;
     }
 
-    get type(): string {
-        return this.source.data.type || 'text';
+    get type(): ColumnType {
+        return this.source.data.type || ColumnType.Text;
     }
 
     get required(): boolean {
