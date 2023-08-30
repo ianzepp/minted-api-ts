@@ -4,22 +4,11 @@ import chai from 'chai';
 // Classes
 import { Schema } from '../classes/schema';
 
+// Helpers
+import toJSON from '../helpers/toJSON';
+
 // Types & Interfaces
 export type UUID = string;
-
-export interface RecordAcls {
-    /** List of security IDs that have unrestricted access to this record */
-    acls_full: UUID[];
-
-    /** List of security IDs that can make record data changes */
-    acls_edit: UUID[];
-
-    /** List of security IDs that can explicitly read record data */
-    acls_read: UUID[];
-
-    /** List of security IDs that are explicitly blacklisted from even knowing the record exists */
-    acls_deny: UUID[];
-}
 
 // Type sugar for proxy stuff
 export function isRecordJson(schema_name: string, something: any) {
@@ -64,6 +53,20 @@ export interface RecordInfo {
     trashed_by: string | null;
     deleted_at: string | null;
     deleted_by: string | null;
+}
+
+export interface RecordAcls {
+    /** List of security IDs that have unrestricted access to this record */
+    acls_full: UUID[];
+
+    /** List of security IDs that can make record data changes */
+    acls_edit: UUID[];
+
+    /** List of security IDs that can explicitly read record data */
+    acls_read: UUID[];
+
+    /** List of security IDs that are explicitly blacklisted from even knowing the record exists */
+    acls_deny: UUID[];
 }
 
 export class Record implements RecordJson {
@@ -122,9 +125,7 @@ export class Record implements RecordJson {
     };
 
     // Related objects
-    constructor(readonly schema: Schema) {
-        this.type = schema.name;
-    }
+    constructor(readonly schema_name: string) {}
 
     get diff(): Partial<RecordData> {
         // diff = the accumulated difference between objects
@@ -133,6 +134,7 @@ export class Record implements RecordJson {
         // pv = the value of the column in the `.prev` property
         //
         // Note: the returned object will always contain the `id` value
+
         return _.transform(this.data, (diff, dv, k) => {
             let pv = this.prev[k];
 
@@ -149,13 +151,15 @@ export class Record implements RecordJson {
     // Used when importing from API-submitted http requests (partial representation with `.data` values only)
     fromRecordData(source: RecordData) {
         _.assign(this.data, source);
+        return this;
     }
 
     // Used when importing from API-submitted http requests
-    fromRecordJson(source: RecordJson) {
+    fromRecordJson(source: Partial<RecordJson>) {
         _.assign(this.data, source.data);
         _.assign(this.info, source.info);
         _.assign(this.acls, source.acls);
+        return this;
     }
 
     // Used for a internal record-to-record copy
@@ -164,6 +168,7 @@ export class Record implements RecordJson {
         _.assign(this.prev, source.prev);
         _.assign(this.info, source.info);
         _.assign(this.acls, source.acls);
+        return this;
     }
 
     // Used when converting from a flat knex data structure to a proper Record
@@ -171,27 +176,20 @@ export class Record implements RecordJson {
         _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls, ['id_table', 'record_id']));
         _.assign(this.info, _.pick(source, Record.ColumnsInfo));
         _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
+        return this;
     }
 
     toString() {
-        return `${this.schema.name}#${this.data.id}`;
+        return `${this.schema_name}#${this.data.id}`;
     }
 
     toJSON() {
-        return JSON.parse(JSON.stringify({
+        return toJSON<RecordJson>({
             type: this.type,
             data: this.data,
             info: this.info,
             acls: this.acls,
-        }));
-    }
-
-    toData() {
-        return this.data;
-    }
-
-    toInfo() {
-        return this.info;
+        });
     }
 
     expect(path?: string) {

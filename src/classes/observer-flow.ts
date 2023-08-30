@@ -44,6 +44,10 @@ export class ObserverFlow {
         readonly filter: Filter,
         readonly op: string) {}
 
+    get schema_name() {
+        return this.schema.schema_name;
+    }
+
     get change_map() {
         return _.keyBy(this.change, 'data.id');
     }
@@ -53,14 +57,14 @@ export class ObserverFlow {
     }
 
     get statement() {
-        return this.system.knex.toStatement(this.schema);
+        return this.system.knex.toStatement(this.schema_name);
     }
 
     async run(ring: ObserverRing) {
         // Get the master list of observers for this execution context
         let observers: Observer[] = []; 
         observers.push(... _.get(OBSERVERS, 'record') || []);
-        observers.push(... _.get(OBSERVERS, this.schema.name) || []);
+        observers.push(... _.get(OBSERVERS, this.schema.schema_name) || []);
 
         // Filter in a single loop
         observers = observers.filter(observer => {
@@ -96,7 +100,7 @@ export class ObserverFlow {
 
         for(let observer of observers) {
             console.debug('ObserverFlow: schema=%j op=%j ring=%j ring-priority=%j observer=%j', 
-                this.schema.name, 
+                this.schema.schema_name, 
                 this.op, 
                 observer.onRing(),
                 observer.onRingPriority(),

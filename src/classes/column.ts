@@ -5,26 +5,31 @@ import chai from 'chai';
 import { Record } from '../classes/record';
 import { RecordJson } from '../classes/record';
 
+// Helpers
+import toJSON from '../helpers/toJSON';
+
 export class Column {
-    readonly schema_name: string;
-    readonly column_name: string;
-    readonly description: string;
+    constructor(private readonly source: Partial<RecordJson>) {
+        chai.expect(source).property('type').eq('column');
+        chai.expect(source).property('data');
+        chai.expect(source).nested.property('data.schema_name').a('string');
+        chai.expect(source).nested.property('data.column_name').a('string');
+        chai.expect(source).nested.property('data.description');
+    }
 
-    constructor(source: RecordJson) {
-        this.schema_name = source.data.schema_name;
-        this.column_name = source.data.column_name;
-        this.description = source.data.description;
+    get schema_name() {
+        return this.source.data.schema_name;
+    }
 
+    get column_name() {
+        return this.source.data.column_name;
+    }
+
+    get description() {
+        return this.source.data.description;
     }
 
     toJSON(): Partial<RecordJson> {
-        return {
-            type: 'column',
-            data: {
-                schema_name: this.schema_name,
-                column_name: this.column_name,
-                description: this.description
-            }
-        }
+        return toJSON(_.omit(this.source, ['info', 'acls']));
     }
 }

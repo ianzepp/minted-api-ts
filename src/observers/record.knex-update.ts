@@ -24,7 +24,7 @@ export default class extends Observer {
     async run(flow: ObserverFlow) {
         // Updating rows requires multiple update calls. Run them async to improve response times
         let updates = flow.change.map((record, i) => {
-            return flow.system.knex.toStatement(flow.schema, flow.filter)
+            return flow.system.knex.toStatementFilter(flow.schema_name, flow.filter)
                 .where('id', record.data.id)
                 .update(record.data);
         });
@@ -38,7 +38,7 @@ export default class extends Observer {
         let record_ids = flow.change.map(record => record.data.id);
 
         // Write directly to the metadata table
-        await flow.system.knex.toKnex('metadata').whereIn('id', record_ids).update({
+        await flow.system.knex.toTx('metadata').whereIn('id', record_ids).update({
             updated_at: updated_at,
             updated_by: updated_by
         });

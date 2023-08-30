@@ -7,36 +7,28 @@ import { FilterJson } from '../classes/filter';
 import { Record } from '../classes/record';
 import { RecordJson } from '../classes/record';
 
+// Helpers
+import toJSON from '../helpers/toJSON';
+
 export type SchemaName = string;
 
 export class Schema {
-    readonly name: string;
-    readonly description: string;
-
-    constructor(source: RecordJson) {
-        this.name = source.data.schema_name;
-        this.description = source.data.description;
+    constructor(private readonly source: Partial<RecordJson>) {
+        chai.expect(source).property('type').eq('schema');
+        chai.expect(source).property('data');
+        chai.expect(source).nested.property('data.schema_name').a('string');
+        chai.expect(source).nested.property('data.description');
     }
 
-    toFilter(filter_data: FilterJson) {
-        return new Filter(this, filter_data);
+    get schema_name() {
+        return this.source.data.schema_name;
     }
 
-    toRecord(record_data: Partial<RecordJson>) {
-        return new Record(this, record_data);
-    }
-
-    toRecordSet(record_list: Partial<RecordJson>[]) {
-        return record_list.map(record_data => new Record(this, record_data));
+    get description() {
+        return this.source.data.description;
     }
 
     toJSON(): Partial<RecordJson> {
-        return {
-            type: 'schema',
-            data: {
-                name: this.name,
-                description: this.description
-            }
-        }
+        return toJSON(_.omit(this.source, ['info', 'acls']));
     }
 }

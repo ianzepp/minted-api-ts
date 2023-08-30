@@ -27,7 +27,7 @@ export default class extends Observer {
         let deleted_at = flow.system.timestamp;
         let deleted_by = flow.system.user.id;
 
-        await flow.system.knex.toKnex('metainfo')
+        await flow.system.knex.toTx('metainfo')
             .whereIn('id', record_ids)
             .whereNotNull('expired_at')
             .whereNull('deleted_at')
