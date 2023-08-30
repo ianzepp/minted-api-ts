@@ -27,12 +27,28 @@ export class SystemMeta {
             });
         }
 
+        // Load from DB
         let schemas = _.map(await select_data('schema'), source => new Schema(source));
         let columns = _.map(await select_data('column'), source => new Column(source));
 
         // Add to the known dict data
-        _.each(schemas, schema => this._schema_dict[schema.schema_name] = schema);
-        _.each(columns, column => this._column_dict[column.schema_name + '.' + column.column_name] = column);
+        _.each(schemas, schema => this._schema_dict[schema.toFullName()] = schema);
+        _.each(columns, column => this._column_dict[column.toFullName()] = column);
+
+        // Post-process columns
+        for(let column_name in this._column_dict) {
+            let column = this._column_dict[column_name];
+            let schema = this._schema_dict[column.schema_name];
+
+            // Orphaned column?
+            if (schema === undefined) {
+                continue;
+            }
+
+            // Bidirectional link
+            column.schema = schema;
+            schema.columns_map[column.column_name] = column;
+        }
     }
 
 
