@@ -37,29 +37,14 @@ export default class extends Observer {
     }
 
     onRing() {
-        return Observer.RING_KNEX;
+        return Observer.RING_TEST;
     }
 
-    onSelect() {
+    onCreate() {
         return true;
     }
 
     async run(flow: ObserverFlow) {
-        // Build the request statement
-        let knex = flow.system.knex.toStatement(flow.schema, flow.filter).select();
-
-        // Wait for the result
-        let result = await knex;
-
-        // Convert the raw results into records
-        let select = _.map(result, data => new Record(flow.schema, { 
-            data: _.omit(data, COLUMNS_INFO, COLUMNS_ACLS, ['id_table', 'record_id']),
-            info: _.pick(data, COLUMNS_INFO),
-            acls: _.pick(data, COLUMNS_ACLS)
-        }));
-
-        // Reset change list and add to results
-        flow.change.length = 0;
-        flow.change.push(... select);
+        
     }
 }

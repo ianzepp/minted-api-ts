@@ -38,9 +38,18 @@ export function isRecordFlat(something: any) {
     return pass;
 }
 
+export interface RecordFlat extends _.Dictionary<any> {}
+export interface RecordJson {
+    type: string;
+    data: RecordData;
+    info: RecordInfo;
+    acls: RecordAcls;
+}
+
 export interface RecordData extends _.Dictionary<any> {
     id: string | null;
     ns: string | null;
+    sc: string | null;
 }
 
 export interface RecordInfo {
@@ -56,22 +65,42 @@ export interface RecordInfo {
     deleted_by: string | null;
 }
 
-export interface RecordJson {
-    type: string;
-    data: Partial<RecordData>;
-    info: Partial<RecordInfo>;
-    acls: Partial<RecordAcls>;
-}
-
 export class Record implements RecordJson {
-    readonly type: string;
-
-    readonly data: RecordData = {
+    public static ColumnsInfo = [
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+        'expired_at',
+        'expired_by',
+        'trashed_at',
+        'trashed_by',
+        'deleted_at',
+        'deleted_by',
+    ];
+    
+    public static ColumnsAcls = [
+        'acls_full',
+        'acls_edit',
+        'acls_read',
+        'acls_deny',
+    ];
+    
+    public readonly type: string;
+    
+    public readonly data: RecordData = {
         id: null,
         ns: null,
+        sc: null,
+    };
+
+    public readonly prev: RecordData = {
+        id: null,
+        ns: null,
+        sc: null,
     };
     
-    readonly info: RecordInfo = {
+    public readonly info: RecordInfo = {
         created_at: null,
         created_by: null,
         updated_at: null,
@@ -84,7 +113,7 @@ export class Record implements RecordJson {
         deleted_by: null,
     };
 
-    readonly acls: RecordAcls = {
+    public readonly acls: RecordAcls = {
         acls_full: null,
         acls_edit: null,
         acls_read: null,
@@ -92,24 +121,42 @@ export class Record implements RecordJson {
     };
 
     // Related objects
-    constructor(readonly schema: Schema, source?: Partial<RecordJson>) {
+    constructor(readonly schema: Schema) {
         this.type = schema.name;
-        
-        if (source instanceof Record) {
-            _.assign(this.data, source.data);
-            _.assign(this.info, source.info);
-            _.assign(this.acls, source.acls);
-        }
-
-        else {
-            _.assign(this.data, source.data || {});
-            _.assign(this.info, source.info || {});
-            _.assign(this.acls, source.acls || {});
-        }
     }
 
-    get keys(): string[] {
-        return _.keys(this.data);
+    get diff(): Partial<RecordData> {
+        return _.transform(this.data, (diff, v, k) => {
+            // TODO            
+        }, {});
+    }
+
+
+    // Used when importing from API-submitted http requests (partial representation with `.data` values only)
+    fromRecordData(source: RecordData) {
+        _.assign(this.data, source);
+    }
+
+    // Used when importing from API-submitted http requests
+    fromRecordJson(source: RecordJson) {
+        _.assign(this.data, source.data);
+        _.assign(this.info, source.info);
+        _.assign(this.acls, source.acls);
+    }
+
+    // Used for a internal record-to-record copy
+    fromRecord(source: Record) {
+        _.assign(this.data, source.data);
+        _.assign(this.prev, source.prev);
+        _.assign(this.info, source.info);
+        _.assign(this.acls, source.acls);
+    }
+
+    // Used when converting from a flat knex data structure to a proper Record
+    fromRecordFlat(source: RecordFlat) {
+        _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls, ['id_table', 'record_id']));
+        _.assign(this.info, _.pick(source, Record.ColumnsInfo));
+        _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
     }
 
     toString() {

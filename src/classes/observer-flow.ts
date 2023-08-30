@@ -44,6 +44,18 @@ export class ObserverFlow {
         readonly filter: Filter,
         readonly op: string) {}
 
+    get change_map() {
+        return _.keyBy(this.change, 'data.id');
+    }
+
+    get change_ids() {
+        return _.compact(_.map(this.change, 'data.id'));
+    }
+
+    get statement() {
+        return this.system.knex.toStatement(this.schema);
+    }
+
     async run(ring: ObserverRing) {
         // Get the master list of observers for this execution context
         let observers: Observer[] = []; 

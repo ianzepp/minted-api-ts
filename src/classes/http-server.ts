@@ -47,27 +47,11 @@ export class HttpServer {
     // Start the server
     listen(port: number) {
         let server = Http.createServer((req, res) => {
-            try {
-                return this.run(req, res);
-            }
-
-            catch (error) {
-                console.error('HttpServer: FATAL REQUEST ERROR!');
-                console.error('HttpServer:', error);
-    
-                res.statusCode = 500;
-                res.write(JSON.stringify({
-                    status: 500,
-                    length: 0,
-                    result: error
-                }));
-
-                res.end();
-            }
+            return this.run(req, res); // This is internally wrapped in a try/catch/finally
         });
 
-        server.setTimeout(1000);
-        server.listen(port, 'localhost', () => {
+        // List for connections
+        server.listen(port, () => {
             console.warn('HttpServer: started server %j', server.address());
         });
 
@@ -75,9 +59,9 @@ export class HttpServer {
     }
 
     async run(req: Http.IncomingMessage, res: Http.ServerResponse) {
-        console.warn('req.headers.host', req.headers.host);
+        console.debug('HttpServer:', req.method, req.url);
 
-        // Build the httpReq and httpRes to be passed into system-http
+        // Build the structures of httpReq and httpRes to be passed into system-http
         let httpReq: HttpReq = {
             verb: req.method,
             path: req.url,
@@ -94,38 +78,55 @@ export class HttpServer {
             result: undefined,
         }
 
-        // Extract the search k=v data from the URL
-        httpReq.search = new URL(req.headers.host + req.url).searchParams as _.Dictionary<any>;
+        try {
+            // Extract the search k=v data from the URL
+            httpReq.search = new URL(req.headers.host + req.url).searchParams as _.Dictionary<any>;
 
-        // Extract the body data
-        let content_type = (req.headers['content-type'] || '').split(';');
+            // Extract the body data
+            let content_type = (req.headers['content-type'] || '').split(';');
 
-        if (content_type.includes('application/json')) {
-            httpReq.body = await jsonBody(req, res);
+            if (content_type.includes('application/json')) {
+                httpReq.body = await jsonBody(req, res);
+            }
+
+            if (content_type.includes('text/plain')) {
+                httpReq.body = await textBody(req, res);
+            }
+
+            if (content_type.includes('multipart/form-data')) {
+                httpReq.body = await formBody(req, res);
+            }
+
+            // Generate system, based on the logged in user for this request
+            let system = new System({ id: System.UUIDZERO, ns: ['*'], sc: ['*'] });
+
+            // Initialize the system
+            await system.startup();
+
+            // Run the router validation, followed by the implementation
+            await system.knex.transaction(() => {
+                return system.http.run(httpReq, httpRes);
+            });
         }
 
-        if (content_type.includes('text/plain')) {
-            httpReq.body = await textBody(req, res);
+        catch (error) {
+            console.error('HttpServer: **ERROR**', error);
+
+            httpRes.status = 500;
+            httpRes.length = 0;
+            httpRes.result = error;
         }
 
-        if (content_type.includes('multipart/form-data')) {
-            httpReq.body = await formBody(req, res);
+        finally {
+            // Define the response
+            let res_json =JSON.stringify(httpRes);
+
+            // Return the response
+            res.statusCode = httpRes.status;
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Content-Length', Buffer.byteLength(res_json, 'utf8').toString());
+            res.write(res_json);
+            return res.end();
         }
-
-        // Generate system, based on the logged in user for this request
-        let system = new System({ id: System.UUIDZERO, ns: ['*'], sc: ['*'] });
-
-        // Initialize the system
-        await system.startup();
-
-        // Run the router validation, followed by the implementation
-        await system.knex.transaction(() => {
-            return system.http.run(httpReq, httpRes);
-        });
-
-        // Return the response
-        res.statusCode = httpRes.status;
-        res.write(JSON.stringify(httpRes));
-        return res.end();
     }
 }
