@@ -39,6 +39,7 @@ export function isRecordFlat(something: any) {
 }
 
 export interface RecordFlat extends _.Dictionary<any> {}
+
 export interface RecordJson {
     type: string;
     data: RecordData;
@@ -126,9 +127,22 @@ export class Record implements RecordJson {
     }
 
     get diff(): Partial<RecordData> {
-        return _.transform(this.data, (diff, v, k) => {
-            // TODO            
-        }, {});
+        // diff = the accumulated difference between objects
+        // k = the column name / key value
+        // dv = the value of the column in the `.data` property
+        // pv = the value of the column in the `.prev` property
+        //
+        // Note: the returned object will always contain the `id` value
+        return _.transform(this.data, (diff, dv, k) => {
+            let pv = this.prev[k];
+
+            // No change in value or type
+            if (pv === dv) {
+                return diff;
+            }
+
+            return _.set(diff, k, dv);
+        }, { id: this.data.id } as Partial<RecordData>);
     }
 
 
