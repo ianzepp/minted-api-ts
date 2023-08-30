@@ -3,16 +3,16 @@ import fs from 'fs-extra';
 import path from 'path';
 
 // Import base router class definition
-import { HttpRouter } from './http-router';
+import { HttpRouter } from '../classes/http-router';
 
 // Build the list of routers
-let routers_base = path.join(__dirname, '../routers');
-let routers = _.chain(fs.readdirSync(routers_base))
+let preload_base = path.join(__dirname, '../routers');
+let preloads = _.chain(fs.readdirSync(preload_base))
     // Ignore anything that ends in `.map`, which happens when the TS is compiled to JS
     .reject(file => file.endsWith('.map'))
 
     // Load the file
-    .map(file => require(path.join(routers_base, file)).default)
+    .map(file => require(path.join(preload_base, file)).default)
 
     // Instantiate each observer
     .map(type => new type() as HttpRouter)
@@ -21,4 +21,4 @@ let routers = _.chain(fs.readdirSync(routers_base))
     .value();
 
 // Export the result as the default
-export default routers;
+export default preloads;

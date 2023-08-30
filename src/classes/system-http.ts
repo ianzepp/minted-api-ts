@@ -8,7 +8,7 @@ import { HttpRes } from '../classes/http-server';
 import { System } from '../classes/system';
 
 // Import pre-loaded routers
-import Routers from '../classes/routers';
+import Routers from '../preloads/routers';
 
 export class SystemHttp {
     constructor(private readonly system: System) {}
