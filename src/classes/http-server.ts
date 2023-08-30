@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import Util from 'util';
 import Http from 'http';
+import UrlParse from 'url-parse';
+
 import { pathToRegexp, match } from 'path-to-regexp';
 
 // HTTP reqeuest body parsers
@@ -16,6 +18,7 @@ import { HttpRouter } from './http-router';
 
 // Import pre-loaded routers
 import Routers from '../preloader/routers';
+import { URLSearchParams } from 'url';
 
 export interface HttpServerRoute {
     verb: string;
@@ -64,7 +67,7 @@ export class HttpServer {
         // Build the structures of httpReq and httpRes to be passed into system-http
         let httpReq: HttpReq = {
             verb: req.method,
-            path: req.url,
+            path: undefined,
             params: undefined, // will be set once the matching router is found
             search: undefined,
             body: null,
@@ -79,8 +82,13 @@ export class HttpServer {
         }
 
         try {
+            let request_url = new UrlParse(req.url, true);
+
+            console.warn('Parsed URL', request_url);
+
             // Extract the search k=v data from the URL
-            httpReq.search = new URL(req.headers.host + req.url).searchParams as _.Dictionary<any>;
+            httpReq.path = request_url.pathname;
+            httpReq.search = request_url.query;
 
             // Extract the body data
             let content_type = (req.headers['content-type'] || '').split(';');
@@ -118,8 +126,24 @@ export class HttpServer {
         }
 
         finally {
+            console.warn('httpReq.search', httpReq.search);
+
+            if (httpReq.search.transform) {
+                _.each(httpReq.search.transform.split(','), transform => {
+                    let [tn, td] = transform.split('=');
+
+                    if (tn === 'map') {
+                        httpRes.result = _.map(httpRes.result, td);
+                    }
+
+                    if (tn === 'uniq') {
+                        httpRes.result = _.uniq(httpRes.result);
+                    }
+                });
+            }
+
             // Define the response
-            let res_json =JSON.stringify(httpRes);
+            let res_json = JSON.stringify(httpRes);
 
             // Return the response
             res.statusCode = httpRes.status;
