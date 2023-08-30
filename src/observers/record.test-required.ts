@@ -3,29 +3,8 @@ import _ from 'lodash';
 // Classes
 import { Observer } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
-import { Record } from '../classes/record';
-
-// Predefined column names for the metainfo table
-const COLUMNS_INFO = [
-    'created_at',
-    'created_by',
-    'updated_at',
-    'updated_by',
-    'expired_at',
-    'expired_by',
-    'trashed_at',
-    'trashed_by',
-    'deleted_at',
-    'deleted_by',
-];
-
-const COLUMNS_ACLS = [
-    'acls_full',
-    'acls_edit',
-    'acls_read',
-    'acls_deny',
-
-];
+import { ObserverRing } from '../classes/observer';
+import { SchemaType } from '../classes/schema';
 
 export default class extends Observer {
     toName() {
@@ -33,11 +12,11 @@ export default class extends Observer {
     }
     
     onSchema() {
-        return 'record';
+        return SchemaType.Record;
     }
 
     onRing() {
-        return Observer.RING_TEST;
+        return ObserverRing.Test;
     }
 
     onCreate() {
@@ -45,6 +24,25 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow) {
-        
-    }
+        // Filter for 
+        let columns = _.filter(flow.schema.columns, 'required');
+
+        // Nothing to do
+        if (columns.length === 0) {
+            return;
+        }
+
+        // Loop records, and then inner loop columns. This minimizes the total
+        // number of passes that need to be made. 
+
+        _.each(flow.change, record => {
+            _.each(columns, column => {
+                if (record.has(column)) {
+                    return;
+                }
+
+                flow.fail(300, `"${column.column_name}" is required`, record);
+            });
+        });
+   }
 }
