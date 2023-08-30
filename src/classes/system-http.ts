@@ -22,7 +22,7 @@ export class SystemHttp {
         let router = _.find(Routers, router => router.is(httpReq.verb, httpReq.path));
 
         if (router === undefined) {
-            throw 404;
+            throw `Router not found: ${httpReq.path}`;
         }
 
         console.warn('SystemHttp: %s %j', router.onHttpVerb(), router.onHttpPath());
