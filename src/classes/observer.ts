@@ -1,7 +1,6 @@
 
 // Classes
 import { ObserverFlow } from '../classes/observer-flow';
-import { System } from '../classes/system';
 
 export class Observer {
     static readonly RING_INIT = 0; // System init

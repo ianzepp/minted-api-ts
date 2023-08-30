@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Knex } from 'knex';
 
 // API
-import { KnexDriver } from '../classes/database';
+import { KnexDriver } from './knex';
 import { Filter } from '../classes/filter';
 import { System } from '../classes/system';
 
