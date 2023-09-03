@@ -21,6 +21,11 @@ export enum SchemaType {
 export type SchemaName = SchemaType | string;
 
 export class Schema {
+    public static TypeSchema = 'schema';
+    public static TypeColumn = 'column';
+    public static TypeFilter = 'filter';
+    public static TypeCustom = 'custom';
+
     private readonly _columns_map: _.Dictionary<Column> = {};
 
     private readonly _caching = {
@@ -34,12 +39,16 @@ export class Schema {
         chai.expect(source).nested.property('data.description');
     }
 
-    get schema_name() {
+    get schema_name(): string {
         return this.source.data.schema_name;
     }
 
-    get description() {
-        return this.source.data.description;
+    get intern_name(): string {
+        return this.source.data.intern_name ?? this.schema_name;
+    }
+
+    get description(): string | null {
+        return this.source.data.description ?? null;
     }
 
     //
