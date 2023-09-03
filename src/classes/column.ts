@@ -9,16 +9,16 @@ import { Schema } from '../classes/schema';
 import assertReturn from '../helpers/assertReturn';
 import toJSON from '../helpers/toJSON';
 
-export enum ColumnType {
-    Boolean = 'boolean',
-    Decimal = 'decimal',
-    Integer = 'integer',
-    Json = 'json',
-    Number = 'number',
-    Text = 'text',
-};
+export type ColumnType = string;
 
 export class Column {
+    public static TypeBoolean: ColumnType = 'boolean';
+    public static TypeDecimal: ColumnType = 'decimal';
+    public static TypeInteger: ColumnType = 'integer';
+    public static TypeJson: ColumnType = 'json';
+    public static TypeText: ColumnType = 'text';
+    public static TypeEnum: ColumnType = 'enum';
+
     private _schema: Schema;
 
     constructor(private readonly source: Partial<RecordJson>) {
@@ -26,7 +26,6 @@ export class Column {
         chai.expect(source).property('data');
         chai.expect(source).nested.property('data.schema_name').a('string');
         chai.expect(source).nested.property('data.column_name').a('string');
-        chai.expect(source).nested.property('data.description');
     }
 
     //
@@ -41,24 +40,44 @@ export class Column {
         return this.source.data.column_name;
     }
 
+    get intern_name(): string {
+        return this.source.data.intern_name ?? this.column_name;
+    }
+
     get description(): string | null {
-        return this.source.data.description;
+        return this.source.data.description ?? null;
     }
 
     get type(): ColumnType {
-        return this.source.data.type || ColumnType.Text;
+        return this.source.data.type ?? Column.TypeText;
     }
 
     get required(): boolean {
-        return !!this.source.data.required;
+        return this.source.data.required ?? false;
     }
 
     get indexed(): boolean {
-        return !!this.source.data.indexed;
+        return this.source.data.indexed ?? false;
     }
 
     get searchable(): boolean {
-        return !!this.source.data.searchable;
+        return this.source.data.searchable ?? false;
+    }
+
+    get precision(): number | null {
+        return this.source.data.precision ?? null;
+    }
+
+    get min(): number {
+        return this.source.data.min ?? 0;
+    }
+
+    get max(): number {
+        return this.source.data.max ?? Number.MAX_SAFE_INTEGER;
+    }
+
+    get enums(): string[] {
+        return this.source.data.min ?? [];
     }
 
     //
