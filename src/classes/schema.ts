@@ -17,7 +17,7 @@ export enum SchemaType {
     Custom = 'custom',
     Record = 'record',
     Filter = 'filter',
-};
+}
 
 export type SchemaName = SchemaType | string;
 
