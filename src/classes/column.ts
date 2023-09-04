@@ -9,15 +9,18 @@ import { Schema } from '../classes/schema';
 import assertReturn from '../helpers/assertReturn';
 import toJSON from '../helpers/toJSON';
 
-export type ColumnType = string;
+export enum ColumnType {
+    Boolean = 'boolean',
+    Decimal = 'decimal',
+    Integer = 'integer',
+    Json = 'json',
+    Number = 'number',
+    Enum = 'enum',
+    Text = 'text',
+};
 
 export class Column {
-    public static TypeBoolean: ColumnType = 'boolean';
-    public static TypeDecimal: ColumnType = 'decimal';
-    public static TypeInteger: ColumnType = 'integer';
-    public static TypeJson: ColumnType = 'json';
-    public static TypeText: ColumnType = 'text';
-    public static TypeEnum: ColumnType = 'enum';
+    public static Type = ColumnType;
 
     private _schema: Schema;
 
@@ -49,7 +52,7 @@ export class Column {
     }
 
     get type(): ColumnType {
-        return this.source.data.type ?? Column.TypeText;
+        return this.source.data.type ?? Column.Type.Text;
     }
 
     get required(): boolean {

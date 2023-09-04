@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { Observer } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { ObserverRing } from '../classes/observer';
-import { SchemaType } from '../classes/schema';
+import { Schema } from '../classes/schema';
 
 export default class extends Observer {
     toName() {
@@ -12,7 +12,7 @@ export default class extends Observer {
     }
     
     onSchema() {
-        return SchemaType.Record;
+        return Schema.Type.Record;
     }
 
     onRing() {
