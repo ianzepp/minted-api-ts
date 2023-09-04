@@ -17,7 +17,7 @@ export enum ColumnType {
     Json = 'json',
     Number = 'number',
     Text = 'text',
-};
+}
 
 export class Column {
     // Re-export aliases
