@@ -14,17 +14,15 @@ import toJSON from '../helpers/toJSON';
 export enum SchemaType {
     Schema = 'schema',
     Column = 'column',
+    Custom = 'custom',
     Record = 'record',
     Filter = 'filter',
-};
+}
 
 export type SchemaName = SchemaType | string;
 
 export class Schema {
-    public static TypeSchema = 'schema';
-    public static TypeColumn = 'column';
-    public static TypeFilter = 'filter';
-    public static TypeCustom = 'custom';
+    public static Type = SchemaType;
 
     private readonly _columns_map: _.Dictionary<Column> = {};
 

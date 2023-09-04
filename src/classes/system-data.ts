@@ -12,12 +12,17 @@ import { System } from '../classes/system';
 import head404 from '../helpers/head404';
 import headOne from '../helpers/headOne';
 
+export enum SystemVerb {
+    Create = 'create',
+    Delete = 'delete',
+    Select = 'select',
+    Update = 'update',
+    Upsert = 'upsert',
+}
+
 export class SystemData {
-    static readonly OP_SELECT = 'select';
-    static readonly OP_CREATE = 'create';
-    static readonly OP_UPDATE = 'update';
-    static readonly OP_UPSERT = 'upsert';
-    static readonly OP_DELETE = 'delete';
+    // Re-export aliases
+    public static Verb = SystemVerb;
 
     constructor(private readonly system: System) {}
 
@@ -30,19 +35,19 @@ export class SystemData {
     //
 
     async createAll(schema_name: string, change_data: Partial<RecordJson>[]) {
-        return this._run(schema_name, change_data, {}, SystemData.OP_CREATE);
+        return this._run(schema_name, change_data, {}, SystemData.Verb.Create);
     }
 
     async updateAll(schema_name: string, change_data: Partial<RecordJson>[]) {
-        return this._run(schema_name, change_data, {}, SystemData.OP_UPDATE);
+        return this._run(schema_name, change_data, {}, SystemData.Verb.Update);
     }
 
     async upsertAll(schema_name: string, change_data: Partial<RecordJson>[]) {
-        return this._run(schema_name, change_data, {}, SystemData.OP_UPSERT);
+        return this._run(schema_name, change_data, {}, SystemData.Verb.Upsert);
     }
 
     async deleteAll(schema_name: string, change_data: Partial<RecordJson>[]) {
-        return this._run(schema_name, change_data, {}, SystemData.OP_DELETE);
+        return this._run(schema_name, change_data, {}, SystemData.Verb.Delete);
     }
 
     //
@@ -50,19 +55,19 @@ export class SystemData {
     //
 
     async createOne(schema_name: string, change_data: Partial<RecordJson>) {
-        return this._run(schema_name, Array(change_data), {}, SystemData.OP_CREATE).then(headOne<Record>);
+        return this._run(schema_name, Array(change_data), {}, SystemData.Verb.Create).then(headOne<Record>);
     }
 
     async updateOne(schema_name: string, change_data: Partial<RecordJson>) {
-        return this._run(schema_name, Array(change_data), {}, SystemData.OP_UPDATE).then(headOne<Record>);
+        return this._run(schema_name, Array(change_data), {}, SystemData.Verb.Update).then(headOne<Record>);
     }
 
     async upsertOne(schema_name: string, change_data: Partial<RecordJson>) {
-        return this._run(schema_name, Array(change_data), {}, SystemData.OP_UPSERT).then(headOne<Record>);
+        return this._run(schema_name, Array(change_data), {}, SystemData.Verb.Upsert).then(headOne<Record>);
     }
 
     async deleteOne(schema_name: string, change_data: Partial<RecordJson>) {
-        return this._run(schema_name, Array(change_data), {}, SystemData.OP_DELETE).then(headOne<Record>);
+        return this._run(schema_name, Array(change_data), {}, SystemData.Verb.Delete).then(headOne<Record>);
     }
 
     //
@@ -70,15 +75,15 @@ export class SystemData {
     //
 
     async select404(schema_name: string, record_id: string): Promise<Record> {
-        return this._run(schema_name, [], { where: { id: record_id }}, SystemData.OP_SELECT).then(head404<Record>);
+        return this._run(schema_name, [], { where: { id: record_id }}, SystemData.Verb.Select).then(head404<Record>);
     }
 
     async selectIds(schema_name: string, record_ids: string[]): Promise<Record[]> {
-        return this._run(schema_name, [], { where: { id: record_ids }}, SystemData.OP_SELECT);
+        return this._run(schema_name, [], { where: { id: record_ids }}, SystemData.Verb.Select);
     }
 
     async deleteIds(schema_name: string, record_ids: string[]): Promise<Record[]> {
-        return this._run(schema_name, [], { where: { id: record_ids }}, SystemData.OP_DELETE);
+        return this._run(schema_name, [], { where: { id: record_ids }}, SystemData.Verb.Delete);
     }
 
     //
@@ -86,7 +91,7 @@ export class SystemData {
     //
 
     async selectAny(schema_name: string, filter_data: Partial<FilterJson>): Promise<Record[]> {
-        return this._run(schema_name, [], filter_data, SystemData.OP_SELECT);
+        return this._run(schema_name, [], filter_data, SystemData.Verb.Select);
     }
 
     async updateAny(schema_name: string, filter_data: Partial<FilterJson>, change_data: Partial<RecordJson>): Promise<Record[]> {
@@ -94,7 +99,7 @@ export class SystemData {
     }
 
     async deleteAny(schema_name: string, filter_data: Partial<FilterJson>): Promise<Record[]> {
-        return this._run(schema_name, [], filter_data, SystemData.OP_DELETE);
+        return this._run(schema_name, [], filter_data, SystemData.Verb.Delete);
     }
 
     //

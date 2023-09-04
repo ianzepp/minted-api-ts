@@ -2,6 +2,13 @@
 // Classes
 import { ObserverFlow } from '../classes/observer-flow';
 
+export enum ObserverRank {
+    SystemMax = 0,
+    Max = 1,
+    Avg = 5,
+    Min = 9,
+}
+
 export enum ObserverRing {
     Init = 0, // System init
     Prep = 1, // Logic prep
@@ -13,24 +20,12 @@ export enum ObserverRing {
     Flow = 7, // Cascade down to more flow operations
     Http = 8, // External HTTP updates, non-blocking
     Done = 9, // System cleanup
-};
+}
 
 export class Observer {
-    static readonly RING_INIT = 0; // System init
-    static readonly RING_PREP = 1; // Logic prep
-    static readonly RING_LOAD = 2; // Load in any data dependencies
-    static readonly RING_WORK = 3; // Run logic
-    static readonly RING_TEST = 4; // Validations
-    static readonly RING_KNEX = 5; // Database changes
-    static readonly RING_POST = 6; // Post-db changes
-    static readonly RING_FLOW = 7; // Cascade down to more flow operations
-    static readonly RING_HTTP = 8; // External HTTP updates, non-blocking
-    static readonly RING_DONE = 9; // System cleanup
-
-    static readonly PRIORITY_SYSTEM_MAX = 0;
-    static readonly PRIORITY_MAX = 1;
-    static readonly PRIORITY_AVG = 5;
-    static readonly PRIORITY_MIN = 9;
+    // Re-export aliases
+    public static Rank = ObserverRank;
+    public static Ring = ObserverRing;
 
     constructor() {}
 
@@ -43,7 +38,7 @@ export class Observer {
             'name': this.toName(),
             'on-schema': this.onSchema(),
             'on-ring': this.onRing(),
-            'on-ring-priority': this.onRingPriority(),
+            'on-rank': this.onRank(),
             'on-select': this.onSelect(),
             'on-create': this.onCreate(),
             'on-update': this.onUpdate(),
@@ -61,11 +56,11 @@ export class Observer {
     }
 
     onRing() {
-        return Observer.RING_WORK;
+        return Observer.Ring.Work;
     }
 
-    onRingPriority() {
-        return Observer.PRIORITY_AVG;
+    onRank() {
+        return Observer.Rank.Avg;
     }
 
     onSelect() {

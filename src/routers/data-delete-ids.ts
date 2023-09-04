@@ -10,7 +10,7 @@ export default class extends HttpRouter {
     }
 
     onHttpVerb() {
-        return HttpRouter.DELETE;
+        return HttpRouter.Verb.Delete;
     }
 
     onHttpPath() {

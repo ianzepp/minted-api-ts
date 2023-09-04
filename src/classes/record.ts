@@ -3,7 +3,6 @@ import chai from 'chai';
 
 // Classes
 import { Column } from '../classes/column';
-import { ColumnType } from '../classes/column';
 import { Schema } from '../classes/schema';
 
 // Helpers
@@ -234,7 +233,7 @@ export class Record implements RecordJson {
             return; // cannot unset a value
         }
 
-        else if (column.type === ColumnType.Boolean) {
+        else if (column.type === Column.Type.Boolean) {
             test.is('boolean');
         }
 
@@ -242,23 +241,23 @@ export class Record implements RecordJson {
             // null is allowable for the rest of the data types
         }
 
-        else if (column.type === ColumnType.Decimal) {
+        else if (column.type === Column.Type.Decimal) {
             test.is('number');
         }
 
-        else if (column.type === ColumnType.Integer) {
+        else if (column.type === Column.Type.Integer) {
             test.is('number');
         }
 
-        else if (column.type === ColumnType.Json) {
+        else if (column.type === Column.Type.Json) {
             test.is('object');
         }
 
-        else if (column.type === ColumnType.Number) {
+        else if (column.type === Column.Type.Number) {
             test.is('number');
         }
 
-        else if (column.type === ColumnType.Text) {
+        else if (column.type === Column.Type.Text) {
             test.is('string');
         }
 

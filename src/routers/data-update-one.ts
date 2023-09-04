@@ -10,7 +10,7 @@ export default class extends HttpRouter {
     }
 
     onHttpVerb() {
-        return HttpRouter.PATCH;
+        return HttpRouter.Verb.Patch;
     }
 
     onHttpPath() {

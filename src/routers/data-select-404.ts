@@ -11,7 +11,7 @@ export default class extends HttpRouter {
     }
 
     onHttpVerb() {
-        return HttpRouter.GET;
+        return HttpRouter.Verb.Get;
     }
 
     onHttpPath() {

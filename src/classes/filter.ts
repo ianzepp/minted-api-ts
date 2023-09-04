@@ -52,6 +52,19 @@ import toJSON from '../helpers/toJSON';
 //     deleted?: boolean;
 // }
 
+export enum FilterOp {
+    And = '$and',
+    Eq = '$eq',
+    Gt = '$gt',
+    Gte = '$gte',
+    In = '$in',
+    Lt = '$lt',
+    Lte = '$lte',
+    NotEq = '$ne',
+    NotIn = '$nin',
+    Or = '$or',
+}
+
 export class FilterJson {
     where: _.Dictionary<any>;
     order: _.Dictionary<any>;
@@ -61,19 +74,10 @@ export class FilterJson {
 
 export class Filter implements FilterJson {
     public static LimitDefault = 100;
-    public static LimitMax = 10000;
+    public static LimitMaximum = 10000;
 
-    public static OpEq = '$eq';
-    public static OpNotEq = '$ne';
-    public static OpIn = '$in';
-    public static OpNotIn = '$nin';
-    public static OpGt = '$gt';
-    public static OpGte = '$gte';
-    public static OpLt = '$lt';
-    public static OpLte = '$lte';
-
-    public static GroupAnd = '$and';
-    public static GroupOr = '$or';
+    // Re-export aliases
+    public static Op = FilterOp;
 
     constructor(private readonly source: RecordJson) {
         chai.expect(source).property('type').eq('filter');
@@ -90,7 +94,7 @@ export class Filter implements FilterJson {
         chai.expect(source).nested.property('data.where').a('object');
         chai.expect(source).nested.property('data.order').a('object');
         chai.expect(source).nested.property('data.flags').a('object');
-        chai.expect(source).nested.property('data.limit').a('number').lte(Filter.LimitMax);
+        chai.expect(source).nested.property('data.limit').a('number').lte(Filter.LimitMaximum);
     }
 
     get schema_name(): string {
