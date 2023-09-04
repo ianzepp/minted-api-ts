@@ -52,7 +52,7 @@ import toJSON from '../helpers/toJSON';
 //     deleted?: boolean;
 // }
 
-export enum FilterOper {
+export enum FilterOp {
     And = '$and',
     Eq = '$eq',
     Gt = '$gt',
@@ -77,7 +77,7 @@ export class Filter implements FilterJson {
     public static LimitMaximum = 10000;
 
     // Re-export aliases
-    public static Oper = FilterOper;
+    public static Op = FilterOp;
 
     constructor(private readonly source: RecordJson) {
         chai.expect(source).property('type').eq('filter');
