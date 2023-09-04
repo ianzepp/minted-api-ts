@@ -38,7 +38,7 @@ export class Observer {
             'name': this.toName(),
             'on-schema': this.onSchema(),
             'on-ring': this.onRing(),
-            'on-ring-priority': this.onRingPriority(),
+            'on-rank': this.onRank(),
             'on-select': this.onSelect(),
             'on-create': this.onCreate(),
             'on-update': this.onUpdate(),
@@ -59,7 +59,7 @@ export class Observer {
         return Observer.Ring.Work;
     }
 
-    onRingPriority() {
+    onRank() {
         return Observer.Rank.Avg;
     }
 

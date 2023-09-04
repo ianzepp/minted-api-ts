@@ -17,7 +17,7 @@ let preloads = _.chain(fs.readdirSync(preload_base))
     .map(observerType => new observerType())
 
     // Sort in ascending order by ring priority. Easier to do once here, then every time when executing
-    .sortBy(observer => observer.onRingPriority())
+    .sortBy(observer => observer.onRank())
 
     // Group the observers by their runtime schema
     .groupBy(observer => observer.onSchema())
