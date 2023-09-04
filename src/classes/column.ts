@@ -12,14 +12,15 @@ import toJSON from '../helpers/toJSON';
 export enum ColumnType {
     Boolean = 'boolean',
     Decimal = 'decimal',
+    Enum = 'enum',
     Integer = 'integer',
     Json = 'json',
     Number = 'number',
-    Enum = 'enum',
     Text = 'text',
 };
 
 export class Column {
+    // Re-export aliases
     public static Type = ColumnType;
 
     private _schema: Schema;
