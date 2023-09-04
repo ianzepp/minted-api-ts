@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Util from 'util';
-import uuid from 'uuid';
 import Http from 'http';
 import UrlParse from 'url-parse';
 
@@ -107,7 +106,7 @@ export class HttpServer {
             }
 
             // Generate system, based on the logged in user for this request
-            let system = new System({ id: uuid.NIL, ns: ['*'], sc: ['*'] });
+            let system = new System({ id: System.RootId, ns: ['*'], sc: ['*'] });
 
             // Initialize the system
             await system.startup();

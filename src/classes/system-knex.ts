@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { Knex } from 'knex';
-import uuid from 'uuid';
 
 // API
 import { KnexDriver } from './knex';
@@ -83,7 +82,7 @@ export class SystemKnex {
             knex.whereNull('info.expired_at');            
         }
 
-        if (filter.flags.deleted !== true || this.system.user.id !== uuid.NIL) {
+        if (filter.flags.deleted !== true || this.system.user.id !== System.RootId) {
             knex.whereNull('info.deleted_at');            
         }
 
