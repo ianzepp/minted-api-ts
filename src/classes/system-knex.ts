@@ -82,7 +82,7 @@ export class SystemKnex {
             knex.whereNull('info.expired_at');            
         }
 
-        if (filter.flags.deleted !== true || this.system.user.id !== System.UUIDZERO) {
+        if (filter.flags.deleted !== true || this.system.user.id !== System.RootId) {
             knex.whereNull('info.deleted_at');            
         }
 

@@ -106,7 +106,7 @@ export class HttpServer {
             }
 
             // Generate system, based on the logged in user for this request
-            let system = new System({ id: System.UUIDZERO, ns: ['*'], sc: ['*'] });
+            let system = new System({ id: System.RootId, ns: ['*'], sc: ['*'] });
 
             // Initialize the system
             await system.startup();
