@@ -12,12 +12,17 @@ function assert<T>(v: T | undefined) {
     chai.assert(v); return v;
 }
 
+export enum HttpVerb {
+    Delete = 'DELETE',
+    Get = 'GET',
+    Patch = 'PATCH',
+    Post = 'POST',
+    Put = 'PUT',
+}
+
 export class HttpRouter {
-    public static GET = 'GET';
-    public static POST = 'POST';
-    public static PUT = 'PUT';
-    public static PATCH = 'PATCH';
-    public static DELETE = 'DELETE';
+    // Re-export aliases
+    public static Verb = HttpVerb;
 
     private _system: System | undefined;
     private _req: HttpReq | undefined;
