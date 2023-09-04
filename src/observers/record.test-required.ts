@@ -3,7 +3,6 @@ import _ from 'lodash';
 // Classes
 import { Observer } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
-import { ObserverRing } from '../classes/observer';
 import { Schema } from '../classes/schema';
 
 export default class extends Observer {
@@ -16,7 +15,7 @@ export default class extends Observer {
     }
 
     onRing() {
-        return ObserverRing.Test;
+        return Observer.Ring.Test;
     }
 
     onCreate() {

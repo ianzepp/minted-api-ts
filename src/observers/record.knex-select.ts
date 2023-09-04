@@ -15,7 +15,7 @@ export default class extends Observer {
     }
 
     onRing() {
-        return Observer.RING_KNEX;
+        return Observer.Ring.Knex;
     }
 
     onSelect() {
