@@ -10,9 +10,10 @@ import toJSON from '../helpers/toJSON';
 
 // Types & Interfaces
 export type UUID = string;
+export type RecordType = string;
 
 // Type sugar for proxy stuff
-export function isRecordJson(schema_name: string, something: any) {
+export function isRecordJson(schema_name: string, something: any): boolean {
     let pass = typeof something === 'object'
             && typeof something.data === 'object'
             && typeof something.type === 'string'
@@ -21,7 +22,7 @@ export function isRecordJson(schema_name: string, something: any) {
     return pass;
 }
 
-export function isRecordFlat(something: any) {
+export function isRecordFlat(something: any): boolean {
     let pass = typeof something === 'object'
             && typeof something.id === 'string';
 
@@ -31,7 +32,7 @@ export function isRecordFlat(something: any) {
 export interface RecordFlat extends _.Dictionary<any> {}
 
 export interface RecordJson {
-    type: string;
+    type: RecordType;
     data: RecordData;
     info: RecordInfo;
     acls: RecordAcls;
@@ -50,8 +51,6 @@ export interface RecordInfo {
     updated_by: string | null;
     expired_at: string | null;
     expired_by: string | null;
-    trashed_at: string | null;
-    trashed_by: string | null;
     deleted_at: string | null;
     deleted_by: string | null;
 }
@@ -78,8 +77,6 @@ export class Record implements RecordJson {
         'updated_by',
         'expired_at',
         'expired_by',
-        'trashed_at',
-        'trashed_by',
         'deleted_at',
         'deleted_by',
     ];
@@ -91,7 +88,7 @@ export class Record implements RecordJson {
         'acls_deny',
     ];
     
-    public readonly type: string;
+    public readonly type: RecordType;
     
     public readonly data: RecordData = {
         id: null,
@@ -112,8 +109,6 @@ export class Record implements RecordJson {
         updated_by: null,
         expired_at: null,
         expired_by: null,
-        trashed_at: null,
-        trashed_by: null,
         deleted_at: null,
         deleted_by: null,
     };
@@ -152,13 +147,13 @@ export class Record implements RecordJson {
 
 
     // Used when importing from API-submitted http requests (partial representation with `.data` values only)
-    fromRecordData(source: RecordData) {
+    fromRecordData(source: RecordData): this {
         _.assign(this.data, source);
         return this;
     }
 
     // Used when importing from API-submitted http requests
-    fromRecordJson(source: Partial<RecordJson>) {
+    fromRecordJson(source: Partial<RecordJson>): this {
         _.assign(this.data, source.data);
         _.assign(this.info, source.info);
         _.assign(this.acls, source.acls);
@@ -166,7 +161,7 @@ export class Record implements RecordJson {
     }
 
     // Used for a internal record-to-record copy
-    fromRecord(source: Record) {
+    fromRecord(source: Record): this {
         _.assign(this.data, source.data);
         _.assign(this.prev, source.prev);
         _.assign(this.info, source.info);
@@ -175,7 +170,7 @@ export class Record implements RecordJson {
     }
 
     // Used when converting from a flat knex data structure to a proper Record
-    fromRecordFlat(source: RecordFlat) {
+    fromRecordFlat(source: RecordFlat): this {
         _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls, ['id_table', 'record_id']));
         _.assign(this.info, _.pick(source, Record.ColumnsInfo));
         _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
@@ -183,14 +178,14 @@ export class Record implements RecordJson {
     }
 
     // Used when imported prev data from knex
-    fromRecordPrev(source: RecordFlat) {
+    fromRecordPrev(source: RecordFlat): this {
         _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls, ['id_table', 'record_id']));
         _.assign(this.info, _.pick(source, Record.ColumnsInfo));
         _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
         return this;
     }
 
-    toString() {
+    toString(): string {
         return `${this.schema_name}#${this.data.id}`;
     }
 
@@ -203,7 +198,7 @@ export class Record implements RecordJson {
         });
     }
 
-    expect(path?: string) {
+    expect(path?: string): Chai.Assertion {
         if (path === undefined) {
             return chai.expect(this);
         }
@@ -217,7 +212,7 @@ export class Record implements RecordJson {
     // Column helpers
     // 
 
-    has(column: Column) {
+    has(column: Column): boolean {
         return !!this.data[column.column_name];
     }
 
