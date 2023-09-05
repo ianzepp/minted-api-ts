@@ -32,8 +32,8 @@ export class System {
     constructor(readonly user: SystemUser) {
         console.warn('System: id=%j ns=%j sc=%j', user.id, user.ns, user.sc);
 
-        this.is_root = user.id === System.RootId;
-        this.is_user = user.id !== System.RootId;
+        this.is_root = user.id == System.RootId;
+        this.is_user = user.id != System.RootId;
     }
 
     /** Startup the system */
