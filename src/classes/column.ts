@@ -81,7 +81,7 @@ export class Column {
     }
 
     get enums(): string[] {
-        return this.source.data.min ?? [];
+        return this.source.data.enums ?? [];
     }
 
     //
@@ -107,7 +107,4 @@ export class Column {
     toJSON(): Partial<RecordJson> {
         return toJSON(_.omit(this.source, ['info', 'acls']));
     }
-
-
-
 }
