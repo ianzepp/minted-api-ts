@@ -12,13 +12,11 @@
         "target": "ES6"
     },
     "include": [
-        "tests/**/*.ts",
         "src/**/*.ts"
     ],
     "exclude": [
         "dst",
         "src/**/*.spec.ts",
-        "tests/**/*.spec.ts",
         "node_modules"
     ]
 }
