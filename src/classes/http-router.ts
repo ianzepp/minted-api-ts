@@ -24,23 +24,23 @@ export class HttpRouter {
     // Re-export aliases
     public static Verb = HttpVerb;
 
-    private _system: System | undefined;
-    private _req: HttpReq | undefined;
-    private _res: HttpRes | undefined;
+    private __system: System | undefined;
+    private __req: HttpReq | undefined;
+    private __res: HttpRes | undefined;
 
-    get system() {
-        return assert<System>(this._system);
+    get system(): System {
+        return assert<System>(this.__system);
     }
 
-    get req() {
-        return assert<HttpReq>(this._req);
+    get req(): HttpReq {
+        return assert<HttpReq>(this.__req);
     }
 
-    get res() {
-        return assert<HttpRes>(this._res);
+    get res(): HttpRes {
+        return assert<HttpRes>(this.__res);
     }
 
-    async runsafe(system: System, req: HttpReq, res: HttpRes) {
+    async runsafe(system: System, req: HttpReq, res: HttpRes): Promise<any> {
         // Default body values
         if (req.verb == HttpRouter.Verb.Get) {
             req.body = req.body || {};
@@ -63,12 +63,12 @@ export class HttpRouter {
         }
 
         // Import references
-        this._system = system;
-        this._req = req;
-        this._res = res;
+        this.__system = system;
+        this.__req = req;
+        this.__res = res;
 
         // Set the params
-        this._req.params = _.get(match(this.onHttpPath())(req.path), 'params');
+        this.__req.params = _.get(match(this.onHttpPath())(req.path), 'params');
 
         // Done
         return this.run();
