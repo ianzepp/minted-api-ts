@@ -11,13 +11,13 @@ import { System } from '../classes/system';
 import Routers from '../preloader/routers';
 
 export class SystemHttp {
-    constructor(private readonly system: System) {}
+    constructor(private readonly __system: System) {}
 
-    async startup() {
+    async startup(): Promise<void> {
         // TODO authentication
     }
 
-    async run(httpReq: HttpReq, httpRes: HttpRes) {
+    async run(httpReq: HttpReq, httpRes: HttpRes): Promise<HttpRes> {
         // Find the first matching router
         let router = _.find(Routers, router => router.is(httpReq.verb, httpReq.path));
 
@@ -28,7 +28,7 @@ export class SystemHttp {
         console.warn('SystemHttp: %s %j', router.onHttpVerb(), router.onHttpPath());
 
         // Run the router
-        let data = await router.runsafe(this.system, httpReq, httpRes);
+        let data = await router.runsafe(this.__system, httpReq, httpRes);
 
         if (data === undefined) {
             data = null;
