@@ -45,7 +45,7 @@ export interface HttpRes {
 
 export class HttpServer {
     // Track the router paths
-    private readonly _routes: HttpServerRoute[] = [];
+    private readonly __routes: HttpServerRoute[] = [];
 
     // Start the server
     listen(port: number) {
