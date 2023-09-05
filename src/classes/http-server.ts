@@ -48,7 +48,7 @@ export class HttpServer {
     private readonly __routes: HttpServerRoute[] = [];
 
     // Start the server
-    listen(port: number) {
+    listen(port: number): void {
         let server = Http.createServer((req, res) => {
             return this.run(req, res); // This is internally wrapped in a try/catch/finally
         });
@@ -61,7 +61,7 @@ export class HttpServer {
         // Done
     }
 
-    async run(req: Http.IncomingMessage, res: Http.ServerResponse) {
+    async run(req: Http.IncomingMessage, res: Http.ServerResponse): Promise<Http.ServerResponse<Http.IncomingMessage>> {
         console.debug('HttpServer:', req.method, req.url);
 
         // Build the structures of httpReq and httpRes to be passed into system-http
