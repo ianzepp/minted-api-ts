@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import uuid from 'uuid';
 
 // Subsystems
 import { SystemData } from '../classes/system-data';
@@ -14,7 +13,7 @@ export interface SystemUser {
 }
 
 export class System {
-    public static RootId = uuid.NIL;
+    public static RootId = "00000000-0000-0000-0000-000000000000";
 
     // Services
     public readonly data = new SystemData(this);

@@ -6,11 +6,7 @@
 module.exports = {
   development: {
     client: 'postgresql',
-    connection: {
-      database: 'mgc-minted-api-dev',
-      user:     null,
-      password: null
-    },
+    connection: process.env.DATABASE_URL,
     pool: {
       min: 2,
       max: 10
