@@ -8,7 +8,7 @@ import { HttpRes } from '../classes/http-server';
 import { System } from '../classes/system';
 
 // Helper to assert a value is not undefined
-function assert<T>(v: T | undefined) {
+function assert<T>(v: T | undefined): T {
     chai.assert(v); return v;
 }
 
@@ -42,11 +42,23 @@ export class HttpRouter {
 
     async runsafe(system: System, req: HttpReq, res: HttpRes) {
         // Default body values
-        if (['GET'].includes(req.verb)) {
+        if (req.verb == HttpRouter.Verb.Get) {
             req.body = req.body || {};
         }
 
-        if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(req.verb)) {
+        else if (req.verb == HttpRouter.Verb.Delete) {
+            req.body = req.body || [];
+        }
+
+        else if (req.verb == HttpRouter.Verb.Patch) {
+            req.body = req.body || [];
+        }
+
+        else if (req.verb == HttpRouter.Verb.Post) {
+            req.body = req.body || [];
+        }
+
+        else if (req.verb == HttpRouter.Verb.Put) {
             req.body = req.body || [];
         }
 
@@ -79,7 +91,7 @@ export class HttpRouter {
     }
 
     isHttpVerb(verb: string): boolean {
-        return verb === this.onHttpVerb();
+        return verb == this.onHttpVerb();
     }
 
     isHttpPath(path: string): boolean {
