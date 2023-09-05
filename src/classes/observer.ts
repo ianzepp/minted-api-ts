@@ -47,7 +47,7 @@ export class Observer {
         };
     }
 
-    toName() {
+    toName(): string {
         return __filename;
     }
 
@@ -55,39 +55,39 @@ export class Observer {
         throw 500;
     }
 
-    onRing() {
+    onRing(): ObserverRing {
         return Observer.Ring.Work;
     }
 
-    onRank() {
+    onRank(): ObserverRank {
         return Observer.Rank.Avg;
     }
 
-    onSelect() {
+    onSelect(): boolean {
         return false;
     }
 
-    onCreate() {
+    onCreate(): boolean {
         return false;
     }
 
-    onUpdate() {
+    onUpdate(): boolean {
         return false;
     }
 
-    onUpsert() {
+    onUpsert(): boolean {
         return false;
     }
 
-    onDelete() {
+    onDelete(): boolean {
         return false;
     }
 
-    isRunnable() {
+    isRunnable(): boolean {
         return true;
     }
 
-    isFailable() {
+    isFailable(): boolean {
         return false;
     }
 }
