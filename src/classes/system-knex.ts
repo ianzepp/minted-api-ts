@@ -7,20 +7,20 @@ import { Filter } from '../classes/filter';
 import { System } from '../classes/system';
 
 export class SystemKnex {
-    private _transaction: Knex.Transaction | undefined;
+    private __transaction: Knex.Transaction | undefined;
 
-    constructor(private readonly system: System) {}
+    constructor(private readonly __system: System) {}
 
-    async startup() {
+    async startup(): Promise<void> {
         await KnexDriver.raw('SELECT 1'); // test connection at startup
     }
 
-    async transaction(runFn: () => Promise<any>) {
+    async transaction(runFn: () => Promise<any>): Promise<any> {
         return KnexDriver.transaction(async tx => {
-            this._transaction = tx;
+            this.__transaction = tx;
             return runFn();
         }).finally(() => {
-            this._transaction = undefined;
+            this.__transaction = undefined;
         });
     }
 
@@ -28,7 +28,7 @@ export class SystemKnex {
     // Raw DB statements
     //
 
-    async select(schema_name: string, columns: string[] = ['*']) {
+    async select(schema_name: string, columns: string[] = ['*']): Promise<any[]> {
         return this.toTx(schema_name).select(columns);
     }
 
@@ -39,8 +39,8 @@ export class SystemKnex {
     toTx(schema_name: string) {
         let knex = KnexDriver(schema_name + ' as data');
 
-        if (this._transaction) {
-            knex = knex.transacting(this._transaction);
+        if (this.__transaction) {
+            knex = knex.transacting(this.__transaction);
         }
 
         return knex;
@@ -48,7 +48,7 @@ export class SystemKnex {
 
     toStatement(schema_name: string) {
         let knex = this.toTx(schema_name);
-        let user = this.system.user;
+        let user = this.__system.user;
         let self = this;
 
         // Inner join the timestamps and acls
@@ -82,13 +82,13 @@ export class SystemKnex {
             knex.whereNull('info.expired_at');            
         }
 
-        if (filter.flags.deleted !== true || this.system.user.id !== System.RootId) {
+        if (filter.flags.deleted !== true || this.__system.user.id != System.RootId) {
             knex.whereNull('info.deleted_at');            
         }
 
         // Iterate where clauses
         knex = knex.where(function() {
-            self.__where_one(this, filter.where);
+            self.onWhereOne(this, filter.where);
         });
 
         // Set limit
@@ -99,22 +99,22 @@ export class SystemKnex {
     }
 
     // Process where clause data
-    private __where_all(knex: Knex.QueryBuilder, clauses: _.Dictionary<any>[]) {
-        _.forEach(clauses, (clause) => this.__where_one(knex, clause));
+    private onWhereAll(knex: Knex.QueryBuilder, clauses: _.Dictionary<any>[]): void {
+        _.forEach(clauses, (clause) => this.onWhereOne(knex, clause));
     }
 
-    private __where_one(knex: Knex.QueryBuilder, clause: _.Dictionary<any>) {
-        _.forEach(clause, (data, name) => this.__where(knex, name, data));
+    private onWhereOne(knex: Knex.QueryBuilder, clause: _.Dictionary<any>): void {
+        _.forEach(clause, (data, name) => this.onWhereOps(knex, name, data));
     }
 
-    private __where(knex: Knex.QueryBuilder, name: string, data: any) {
+    private onWhereOps(knex: Knex.QueryBuilder, name: string, data: any): void {
         console.warn('SystemKnex.addFilterWhere: raw-name=%j raw-data=%j', name, data);
 
-        if (name === '$and') {
+        if (name == Filter.Op.And) {
             throw 'Unsupported filter where "$and" grouping';
         }
 
-        else if (name === '$or') {
+        else if (name == Filter.Op.Or) {
             throw 'Unsupported filter where "$or" grouping';
         }
 
@@ -134,7 +134,7 @@ export class SystemKnex {
             knex.where(name, data);
         }
 
-        else if (data === true || data === false) {
+        else if (typeof data === 'boolean') {
             knex.where(name, data);
         }
 
@@ -149,47 +149,47 @@ export class SystemKnex {
                 throw 'Invalid filter "where" operation type: ' + typeof op;
             }
 
-            else if (op === '$eq' && op_data === null) {
+            else if (op == Filter.Op.Eq && op_data === null) {
                 knex.whereNull(name);
             }
 
-            else if (op === '$eq') {
+            else if (op == Filter.Op.Eq) {
                 knex.where(name, '=', op_data);
             }
 
-            else if (op === '$ne' && op_data === null) {
+            else if (op == Filter.Op.NotEq && op_data === null) {
                 knex.whereNotNull(name);
             }
 
-            else if (op === '$ne') {
+            else if (op == Filter.Op.NotEq) {
                 knex.where(name, '<>', op_data);
             }
 
-            else if (op === '$in' && _.isArray(op_data)) {
+            else if (op == Filter.Op.In && _.isArray(op_data)) {
                 knex.whereIn(name, op_data);
             }
 
-            else if (op === '$nin' && _.isArray(op_data)) {
+            else if (op == Filter.Op.NotIn && _.isArray(op_data)) {
                 knex.whereNotIn(name, op_data);
             }
 
-            else if (op === '$gt') {
+            else if (op == Filter.Op.Gt) {
                 knex.where(name, '>', op_data);
             }
 
-            else if (op === '$gte' || op === '$min') {
+            else if (op == Filter.Op.Gte || op == Filter.Op.Min) {
                 knex.where(name, '>=', op_data);
             }
 
-            else if (op === '$lt') {
+            else if (op == Filter.Op.Lt) {
                 knex.where(name, '<', op_data);
             }
 
-            else if (op === '$lte' || op === '$max') {
+            else if (op == Filter.Op.Lte || op == Filter.Op.Max) {
                 knex.where(name, '<=', op_data);
             }
 
-            else if (op === '$find') {
+            else if (op == Filter.Op.Find) {
                 // todo pick a LIKE operation
             }
 
