@@ -12,6 +12,9 @@ export async function up(knex: Knex): Promise<void> {
         table.string('ns').primary().notNullable();
     });
 
+    // Insert system namespace
+    await knex('system').insert({ 'ns': 'system' });
+
     // Create the core tables
     await tableUp(knex, 'schema');
     await tableUp(knex, 'column');
@@ -30,18 +33,18 @@ export async function up(knex: Knex): Promise<void> {
 
     // Add core schemas
     let schemas = await migrationInsertAll(knex, 'schema', [
-        { schema_name: 'schema' },
-        { schema_name: 'column' },
+        { ns: 'system', schema_name: 'schema' },
+        { ns: 'system', schema_name: 'column' },
     ]);
 
     // Add core columns
     let columns = await migrationInsertAll(knex, 'column', [
-        { schema_name: 'schema', column_name: 'schema_name' },
-        { schema_name: 'schema', column_name: 'description' },
+        { ns: 'system', schema_name: 'schema', column_name: 'schema_name' },
+        { ns: 'system', schema_name: 'schema', column_name: 'description' },
 
-        { schema_name: 'column', column_name: 'schema_name' },
-        { schema_name: 'column', column_name: 'column_name' },
-        { schema_name: 'column', column_name: 'description' },
+        { ns: 'system', schema_name: 'column', column_name: 'schema_name' },
+        { ns: 'system', schema_name: 'column', column_name: 'column_name' },
+        { ns: 'system', schema_name: 'column', column_name: 'description' },
     ]);
 }
 

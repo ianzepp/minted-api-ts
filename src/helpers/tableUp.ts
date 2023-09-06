@@ -3,12 +3,12 @@ import { Knex } from 'knex';
 export default async function(knex: Knex, table_name: string): Promise<void> {
     await knex.schema.createTable(table_name, (table) => {
         table.uuid('id').primary().defaultTo(knex.fn.uuid());
-        table.string('ns').references('ns').inTable('system').onDelete('CASCADE');
+        table.string('ns').notNullable().references('ns').inTable('system').onDelete('CASCADE');
     });
 
     await knex.schema.createTable(table_name + '_info', (table) => {
         table.uuid('id').primary().references('id').inTable(table_name).onDelete('CASCADE');
-        table.string('ns').references('ns').inTable('system').onDelete('CASCADE');
+        table.string('ns').notNullable().references('ns').inTable('system').onDelete('CASCADE');
 
         table.timestamp('created_at').index();
         table.timestamp('updated_at').index();
@@ -23,7 +23,7 @@ export default async function(knex: Knex, table_name: string): Promise<void> {
 
     await knex.schema.createTable(table_name + '_acls', (table) => {
         table.uuid('id').primary().references('id').inTable(table_name).onDelete('CASCADE');
-        table.string('ns').references('ns').inTable('system').onDelete('CASCADE');
+        table.string('ns').notNullable().references('ns').inTable('system').onDelete('CASCADE');
 
         table.specificType('acls_full', 'uuid ARRAY').index();
         table.specificType('acls_edit', 'uuid ARRAY').index();
@@ -33,7 +33,7 @@ export default async function(knex: Knex, table_name: string): Promise<void> {
 
     await knex.schema.createTable(table_name + '_logs', (table) => {
         table.uuid('id').primary().references('id').inTable(table_name).onDelete('CASCADE');
-        table.string('ns').references('ns').inTable('system').onDelete('CASCADE');
+        table.string('ns').notNullable().references('ns').inTable('system').onDelete('CASCADE');
 
         table.timestamp('changed_at').index();
         table.uuid('changed_by').index();
