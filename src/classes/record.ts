@@ -189,7 +189,7 @@ export class Record implements RecordJson {
         return `${this.schema_name}#${this.data.id}`;
     }
 
-    toJSON() {
+    toJSON(): Object {
         return toJSON<RecordJson>({
             type: this.type,
             data: this.data,
