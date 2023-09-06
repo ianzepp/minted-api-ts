@@ -23,7 +23,7 @@ export class Column {
     // Re-export aliases
     public static Type = ColumnType;
 
-    private _schema: Schema;
+    private __schema: Schema;
 
     constructor(private readonly source: Partial<RecordJson>) {
         chai.expect(source).property('type').eq('column');
@@ -81,33 +81,30 @@ export class Column {
     }
 
     get enums(): string[] {
-        return this.source.data.min ?? [];
+        return this.source.data.enums ?? [];
     }
 
     //
     // Helper properties
     //
 
-    get schema() {
-        return assertReturn(this._schema);
+    get schema(): Schema {
+        return assertReturn(this.__schema);
     }
 
     set schema(schema: Schema) {
-        this._schema = schema;
+        this.__schema = schema;
     }
 
     //
     // Methods
     //
 
-    toFullName() {
+    toFullName(): string {
         return this.schema_name + '.' + this.column_name;
     }
 
     toJSON(): Partial<RecordJson> {
         return toJSON(_.omit(this.source, ['info', 'acls']));
     }
-
-
-
 }

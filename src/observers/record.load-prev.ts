@@ -2,28 +2,30 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '../classes/observer';
+import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Schema } from '../classes/schema';
+import { SchemaType } from '../classes/schema';
 import { RecordFlat } from '../classes/record';
 
 export default class extends Observer {
-    toName() {
+    toName(): string {
         return 'record.load-prev';
     }
     
-    onSchema() {
+    onSchema(): SchemaType {
         return Schema.Type.Record;
     }
 
-    onRing() {
+    onRing(): ObserverRing {
         return Observer.Ring.Init;
     }
 
-    onUpdate() {
+    onUpdate(): boolean {
         return true;
     }
 
-    async run(flow: ObserverFlow) {
+    async run(flow: ObserverFlow): Promise<void> {
         let result: RecordFlat[] = await flow.statement.whereIn('id', flow.change_ids).select();
         let result_map = _.keyBy(result, 'id');
 

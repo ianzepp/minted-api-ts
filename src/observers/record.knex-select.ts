@@ -2,27 +2,30 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '../classes/observer';
+import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Record } from '../classes/record';
+import { Schema } from '../classes/schema';
+import { SchemaType } from '../classes/schema';
 
 export default class extends Observer {
-    toName() {
+    toName(): string {
         return 'record.knex-select';
     }
     
-    onSchema() {
-        return 'record';
+    onSchema(): SchemaType {
+        return Schema.Type.Record;
     }
 
-    onRing() {
+    onRing(): ObserverRing {
         return Observer.Ring.Knex;
     }
 
-    onSelect() {
+    onSelect(): boolean {
         return true;
     }
 
-    async run(flow: ObserverFlow) {
+    async run(flow: ObserverFlow): Promise<void> {
         // Build the request statement
         let knex = flow.system.knex.toStatementFilter(flow.schema_name, flow.filter).select();
 

@@ -22,13 +22,12 @@ export enum SchemaType {
 export type SchemaName = SchemaType | string;
 
 export class Schema {
+    // Re-export aliases
     public static Type = SchemaType;
 
-    private readonly _columns_map: _.Dictionary<Column> = {};
+    private readonly __columns_map: _.Dictionary<Column> = {};
 
-    private readonly _caching = {
-
-    }
+    private readonly __caching = {};
 
     constructor(private readonly source: Partial<RecordJson>) {
         chai.expect(source).property('type').eq('schema');
@@ -53,19 +52,19 @@ export class Schema {
     // Helpers
     //
 
-    get columns_map() {
-        return this._columns_map;
+    get columns_map(): _.Dictionary<Column> {
+        return this.__columns_map;
     }
 
-    get columns() {
-        return _.values(this._columns_map);
+    get columns(): Column[] {
+        return _.values(this.__columns_map);
     }
 
     //
     // Method
     //
 
-    toFullName() {
+    toFullName(): string {
         return this.schema_name;
     }
 

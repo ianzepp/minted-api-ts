@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 
-export default async function(knex: Knex, table_name: string) {
+export default async function(knex: Knex, table_name: string): Promise<void> {
     await knex.schema.createTable(table_name, (table) => {
         table.uuid('id').primary().defaultTo(knex.fn.uuid());
         table.string('ns').references('ns').inTable('system').onDelete('CASCADE');
