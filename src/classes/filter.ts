@@ -78,6 +78,7 @@ export class FilterJson {
 export class Filter implements FilterJson {
     public static LimitDefault = 100;
     public static LimitMaximum = 10000;
+    public static LimitMinimum = 0;
 
     // Re-export aliases
     public static Op = FilterOp;
@@ -97,7 +98,7 @@ export class Filter implements FilterJson {
         chai.expect(source).nested.property('data.where').a('object');
         chai.expect(source).nested.property('data.order').a('object');
         chai.expect(source).nested.property('data.flags').a('object');
-        chai.expect(source).nested.property('data.limit').a('number').lte(Filter.LimitMaximum);
+        chai.expect(source).nested.property('data.limit').a('number').gte(Filter.LimitMinimum).lte(Filter.LimitMaximum);
     }
 
     get schema_name(): string {
