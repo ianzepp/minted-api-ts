@@ -2,26 +2,29 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '../classes/observer';
+import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
+import { Schema } from '../classes/schema';
+import { SchemaType } from '../classes/schema';
 
 export default class extends Observer {
-    toName() {
+    toName(): string {
         return 'record.knex-update';
     }
     
-    onSchema() {
-        return 'record';
+    onSchema(): SchemaType {
+        return Schema.Type.Record;
     }
 
-    onRing() {
+    onRing(): ObserverRing {
         return Observer.Ring.Knex;
     }
 
-    onUpdate() {
+    onUpdate(): boolean {
         return true;
     }
 
-    async run(flow: ObserverFlow) {
+    async run(flow: ObserverFlow): Promise<void> {
         // Updating rows requires multiple update calls. Run them async to improve response times
         let updates = flow.change.map((record, i) => {
             return flow.system.knex.toStatementFilter(flow.schema_name, flow.filter)

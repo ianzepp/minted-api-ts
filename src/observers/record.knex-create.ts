@@ -3,26 +3,29 @@ import { v4 as uuid } from 'uuid';
 
 // Classes
 import { Observer } from '../classes/observer';
+import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
+import { Schema } from '../classes/schema';
+import { SchemaType } from '../classes/schema';
 
 export default class extends Observer {
-    toName() {
+    toName(): string {
         return 'record.knex-create';
     }
     
-    onSchema() {
-        return 'record';
+    onSchema(): SchemaType {
+        return Schema.Type.Record;
     }
 
-    onRing() {
+    onRing(): ObserverRing {
         return Observer.Ring.Knex;
     }
 
-    onCreate() {
+    onCreate(): boolean {
         return true;
     }
 
-    async run(flow: ObserverFlow) {
+    async run(flow: ObserverFlow): Promise<void> {
         // Populate insertion data
         _.each(flow.change, record => {
             record.data.id = uuid();

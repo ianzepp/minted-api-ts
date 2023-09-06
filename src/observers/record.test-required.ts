@@ -2,27 +2,29 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '../classes/observer';
+import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Schema } from '../classes/schema';
+import { SchemaType } from '../classes/schema';
 
 export default class extends Observer {
-    toName() {
+    toName(): string {
         return 'record.knex-select';
     }
     
-    onSchema() {
+    onSchema(): SchemaType {
         return Schema.Type.Record;
     }
 
-    onRing() {
+    onRing(): ObserverRing {
         return Observer.Ring.Test;
     }
 
-    onCreate() {
+    onCreate(): boolean {
         return true;
     }
 
-    async run(flow: ObserverFlow) {
+    async run(flow: ObserverFlow): Promise<void> {
         // Filter for 
         let columns = _.filter(flow.schema.columns, 'required');
 
