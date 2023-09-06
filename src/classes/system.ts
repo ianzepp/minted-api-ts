@@ -37,7 +37,7 @@ export class System {
     }
 
     /** Startup the system */
-    async startup() {
+    async startup(): Promise<void> {
         await this.data.startup();
         await this.meta.startup();
         await this.knex.startup();
