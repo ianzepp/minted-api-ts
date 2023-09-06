@@ -170,7 +170,7 @@ export class Record implements RecordJson {
 
     // Used when converting from a flat knex data structure to a proper Record
     fromRecordFlat(source: RecordFlat) {
-        _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls, ['id_table', 'record_id']));
+        _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
         _.assign(this.info, _.pick(source, Record.ColumnsInfo));
         _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
         return this;
@@ -178,7 +178,7 @@ export class Record implements RecordJson {
 
     // Used when imported prev data from knex
     fromRecordPrev(source: RecordFlat) {
-        _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls, ['id_table', 'record_id']));
+        _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
         _.assign(this.info, _.pick(source, Record.ColumnsInfo));
         _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
         return this;

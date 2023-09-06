@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "autoinstall": "bash ./scripts/autoinstall.sh",
     "compile": "bash ./scripts/compile.sh",
+    "migrate:make": "bash ./scripts/migrate-make.sh",
+    "migrate:up": "bash ./scripts/migrate-up.sh",
+    "migrate:down": "bash ./scripts/migrate-down.sh",
     "start": "bash ./scripts/start.sh",
-    "start-dev": "bash ./scripts/start-dev.sh",
+    "start:dev": "bash ./scripts/start-dev.sh",
     "test": "bash ./scripts/test.sh"
   },
   "keywords": [],

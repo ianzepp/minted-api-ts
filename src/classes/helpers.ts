@@ -6,8 +6,8 @@ export async function migrationInsertAll(knex: Knex, table_name: string, record_
         console.warn('migrationInsert', record);
 
         let result = _.head(await knex(table_name).insert(record).returning('*'));
-        let record_info = await knex(table_name + '_info').insert({ record_id: result.id });
-        let record_acls = await knex(table_name + '_acls').insert({ record_id: result.id });
+        let record_info = await knex(table_name + '_info').insert({ id: result.id });
+        let record_acls = await knex(table_name + '_acls').insert({ id: result.id });
 
         _.assign(record, result);
     }

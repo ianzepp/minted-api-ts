@@ -35,12 +35,11 @@ export default class extends Observer {
         // Extract the insertion data
         let insert_data = _.map(flow.change, record => _.merge({}, record.data));
         let insert_info = _.map(flow.change, record => _.merge({}, record.info, { 
-            id: record.data.id,
-            id_table: flow.schema_name,
+            record_id: record.data.id,
         }));
 
         // Insert data
         await flow.system.knex.toTx(flow.schema_name).insert(insert_data);
-        await flow.system.knex.toTx('metainfo').insert(insert_info);
+        await flow.system.knex.toTx(flow.schema_name + '_info').insert(insert_info);
     }
 }
