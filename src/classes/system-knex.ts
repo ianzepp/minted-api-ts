@@ -88,7 +88,7 @@ export class SystemKnex {
 
         // Iterate where clauses
         knex = knex.where(function() {
-            self.__where_one(this, filter.where);
+            self.toWhereOne(this, filter.where);
         });
 
         // Set limit
@@ -99,15 +99,15 @@ export class SystemKnex {
     }
 
     // Process where clause data
-    private __where_all(knex: Knex.QueryBuilder, clauses: _.Dictionary<any>[]) {
-        _.forEach(clauses, (clause) => this.__where_one(knex, clause));
+    private toWhereAll(knex: Knex.QueryBuilder, clauses: _.Dictionary<any>[]) {
+        _.forEach(clauses, (clause) => this.toWhereOne(knex, clause));
     }
 
-    private __where_one(knex: Knex.QueryBuilder, clause: _.Dictionary<any>) {
-        _.forEach(clause, (data, name) => this.__where(knex, name, data));
+    private toWhereOne(knex: Knex.QueryBuilder, clause: _.Dictionary<any>) {
+        _.forEach(clause, (data, name) => this.toWhereOps(knex, name, data));
     }
 
-    private __where(knex: Knex.QueryBuilder, name: string, data: any) {
+    private toWhereOps(knex: Knex.QueryBuilder, name: string, data: any) {
         console.warn('SystemKnex.addFilterWhere: raw-name=%j raw-data=%j', name, data);
 
         if (name === '$and') {

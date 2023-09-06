@@ -50,8 +50,6 @@ export interface RecordInfo {
     updated_by: string | null;
     expired_at: string | null;
     expired_by: string | null;
-    trashed_at: string | null;
-    trashed_by: string | null;
     deleted_at: string | null;
     deleted_by: string | null;
 }
@@ -78,8 +76,6 @@ export class Record implements RecordJson {
         'updated_by',
         'expired_at',
         'expired_by',
-        'trashed_at',
-        'trashed_by',
         'deleted_at',
         'deleted_by',
     ];
@@ -112,8 +108,6 @@ export class Record implements RecordJson {
         updated_by: null,
         expired_at: null,
         expired_by: null,
-        trashed_at: null,
-        trashed_by: null,
         deleted_at: null,
         deleted_by: null,
     };
