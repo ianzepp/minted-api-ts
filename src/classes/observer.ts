@@ -33,7 +33,7 @@ export class Observer {
         throw 500;
     }
 
-    toJSON() {
+    toJSON(): Object {
         return {
             'name': this.toName(),
             'on-schema': this.onSchema(),
