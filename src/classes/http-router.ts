@@ -98,7 +98,7 @@ export class HttpRouter {
         return pathToRegexp(this.onHttpPath()).exec(path ?? '/') !== null;
     }
 
-    is(verb: string, path: string) {
+    is(verb: string, path: string): boolean {
         return this.isHttpVerb(verb) && this.isHttpPath(path);
     }
 }
