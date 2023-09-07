@@ -10,6 +10,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: minted-api-ci
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
@@ -22,19 +32,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     
-    - name: Setup PostgreSQL database
-      uses: harmon758/postgreSQL-action@v1
-      with:
-        postgresql version: '12'
-
-    - name: Start PostgreSQL
-      run: sudo service postgresql start        
-    
-    - name: Set NODE_ENV to CI
-      run: echo "NODE_ENV=CI" >> $GITHUB_ENV
-
-    - name: Build
-      run: |
+    - name: Install node dependencies
+      run:
         npm install
         npm install -D typescript
-        npm test
+
+    - name: Run the test suite
+      run: 
+        npm run test
+      env:
+        NODE_ENV: ci
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+        POSTGRES_DB: minted-api-ci
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
