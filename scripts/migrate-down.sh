@@ -7,7 +7,4 @@ if ! npm run compile; then
 fi
 
 # Run the migration
-knex migrate:down \
-    --client postgresql \
-    --connection $DATABASE_URL \
-    --migrations-directory=./dst/automigrate $1
+knex migrate:down
