@@ -7,7 +7,11 @@ This is the minted-api project. It is a Node.js project with a PostgreSQL databa
 ## Setup
 
 1. Install the dependencies by running `npm install`.
-2. Define your database endpoint by setting the `$DATABASE_URL` environment variable. This is your knex connection string. It should be in the following format: `postgres://USER:PASSWORD@HOST:PORT/DATABASE`
+2. Define your database connection by setting the following environment variables:
+   - `POSTGRES_HOST`: The host of your PostgreSQL database.
+   - `POSTGRES_DB`: The name of your PostgreSQL database.
+   - `POSTGRES_USER`: The user for your PostgreSQL database.
+   - `POSTGRES_PASSWORD`: The password for your PostgreSQL database.
 3. Set up the database by running the migrations with `npm run migrate:latest`.
 
 ## Scripts
