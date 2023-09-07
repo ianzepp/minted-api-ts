@@ -6,11 +6,13 @@ if ! npm run compile; then
     exit 1
 fi
 
+# Show PG vars
+echo "Using POSTGRES_HOST=$POSTGRES_HOST"
+echo "Using POSTGRES_DB=$POSTGRES_DB"
+echo "Using POSTGRES_USER=$POSTGRES_USER"
+
 # Run the migration
-knex migrate:latest \
-    --client postgresql \
-    --connection $DATABASE_URL \
-    --migrations-directory=./dst/automigrate
+knex migrate:latest
 
 # Start node
 jest
