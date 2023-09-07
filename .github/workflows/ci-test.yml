@@ -25,7 +25,7 @@ jobs:
     - name: Setup PostgreSQL database
       uses: harmon758/postgreSQL-action@v1
       with:
-        postgresql version: '11'
+        postgresql version: '12'
         postgresql db: 'test_db'
         postgresql user: 'postgres'
         postgresql password: 'postgres'
