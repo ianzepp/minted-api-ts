@@ -18,9 +18,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: postgres_db
-          POSTGRES_USER: postgres_user
-          POSTGRES_PASSWORD: postgres_pass
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
@@ -34,7 +32,8 @@ jobs:
         node-version: [14.x, 16.x, 18.x]
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Check out repository code
+      uses: actions/checkout@v3
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -44,11 +43,9 @@ jobs:
     - name: Set NODE_ENV to CI
       run: echo "NODE_ENV=CI" >> $GITHUB_ENV
 
-    - name: Install PostgreSQL client
-      run: |
-        apt-get update
-        apt-get install --yes postgresql-client
-  
+    - name: Install dependencies
+      run: npm ci
+
     - name: Set PostgreSQL configuration
       run: |
         echo "POSTGRES_VERSION=12" >> $GITHUB_ENV
@@ -56,14 +53,11 @@ jobs:
         echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
         echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
         echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
-    
-    - name: Setup database
-      run: psql -h postgres -U postgres_user -c 'CREATE DATABASE "postgres_db";'
-      env:
-        PGPASSWORD: postgres
 
-    - name: Build
+    - name: Run migrations and tests
       run: |
-        npm install
-        npm install -D typescript
+        npm run migrate:latest
         npm test
+      env:
+        POSTGRES_HOST: postgres
+        POSTGRES_PORT: 5432
