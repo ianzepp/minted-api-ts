@@ -10,6 +10,7 @@ describe('Column', () => {
             id: 'test_id',
             ns: 'test_ns',
             schema_name: 'test_schema',
+            schema_type: 'test_type',
             metadata: false,
         });
 
