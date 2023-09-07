@@ -32,7 +32,7 @@ export default class extends Observer {
         let result = await knex;
 
         // Convert the raw results into records
-        let select = _.map(result, data => new Record(flow.schema_name).fromRecordFlat(data));
+        let select = _.map(result, record_flat => flow.schema.toRecord(record_flat));
 
         // Reset change list and add to results
         flow.change.length = 0;

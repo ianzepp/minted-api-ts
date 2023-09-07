@@ -6,7 +6,7 @@ import fs from 'fs-extra';
 import { Schema } from '../classes/schema';
 import { Column } from '../classes/column';
 import { Record } from '../classes/record';
-import { RecordJson } from '../classes/record';
+import { ChangeData } from '../classes/record';
 import { Filter } from './filter';
 import { FilterJson } from './filter';
 import { System } from '../classes/system';
@@ -55,12 +55,12 @@ export class SystemMeta {
     }
 
     toFilter(schema_name: string, filter_data: _.Dictionary<any>): Filter {
-        let record_data = _.merge(filter_data, { schema_name: schema_name });
-        let record = new Record('filter').fromRecordFlat(record_data);
-        return new Filter(record);
-    }
+        let schema = this.schemas[schema_name];
 
-    toChange(schema_name: string, change_data: Partial<RecordJson>[]): Record[] {
-        return change_data.map(change => new Record(schema_name).fromRecordJson(change));
+        if (schema === undefined) {
+            throw `Schema '${schema_name}' not found/loaded`;
+        }
+
+        return new Filter(schema, filter_data);
     }
 }

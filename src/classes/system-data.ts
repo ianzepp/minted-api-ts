@@ -3,7 +3,7 @@ import _ from 'lodash';
 // API
 import { FilterJson } from '../classes/filter';
 import { Record } from '../classes/record';
-import { RecordJson } from '../classes/record';
+import { ChangeData } from '../classes/record';
 import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { System } from '../classes/system';
@@ -34,19 +34,19 @@ export class SystemData {
     // Collection record methods
     //
 
-    async createAll(schema_name: string, change_data: Partial<RecordJson>[]): Promise<Record[]> {
+    async createAll(schema_name: string, change_data: ChangeData[]): Promise<Record[]> {
         return this.onRun(schema_name, change_data, {}, SystemData.Verb.Create);
     }
 
-    async updateAll(schema_name: string, change_data: Partial<RecordJson>[]): Promise<Record[]> {
+    async updateAll(schema_name: string, change_data: ChangeData[]): Promise<Record[]> {
         return this.onRun(schema_name, change_data, {}, SystemData.Verb.Update);
     }
 
-    async upsertAll(schema_name: string, change_data: Partial<RecordJson>[]): Promise<Record[]> {
+    async upsertAll(schema_name: string, change_data: ChangeData[]): Promise<Record[]> {
         return this.onRun(schema_name, change_data, {}, SystemData.Verb.Upsert);
     }
 
-    async deleteAll(schema_name: string, change_data: Partial<RecordJson>[]): Promise<Record[]> {
+    async deleteAll(schema_name: string, change_data: ChangeData[]): Promise<Record[]> {
         return this.onRun(schema_name, change_data, {}, SystemData.Verb.Delete);
     }
 
@@ -54,19 +54,19 @@ export class SystemData {
     // Single record methods
     //
 
-    async createOne(schema_name: string, change_data: Partial<RecordJson>): Promise<Record> {
+    async createOne(schema_name: string, change_data: ChangeData): Promise<Record> {
         return this.onRun(schema_name, Array(change_data), {}, SystemData.Verb.Create).then(headOne<Record>);
     }
 
-    async updateOne(schema_name: string, change_data: Partial<RecordJson>): Promise<Record> {
+    async updateOne(schema_name: string, change_data: ChangeData): Promise<Record> {
         return this.onRun(schema_name, Array(change_data), {}, SystemData.Verb.Update).then(headOne<Record>);
     }
 
-    async upsertOne(schema_name: string, change_data: Partial<RecordJson>): Promise<Record> {
+    async upsertOne(schema_name: string, change_data: ChangeData): Promise<Record> {
         return this.onRun(schema_name, Array(change_data), {}, SystemData.Verb.Upsert).then(headOne<Record>);
     }
 
-    async deleteOne(schema_name: string, change_data: Partial<RecordJson>): Promise<Record> {
+    async deleteOne(schema_name: string, change_data: ChangeData): Promise<Record> {
         return this.onRun(schema_name, Array(change_data), {}, SystemData.Verb.Delete).then(headOne<Record>);
     }
 
@@ -94,7 +94,7 @@ export class SystemData {
         return this.onRun(schema_name, [], filter_data, SystemData.Verb.Select);
     }
 
-    async updateAny(schema_name: string, filter_data: Partial<FilterJson>, change_data: Partial<RecordJson>): Promise<Record[]> {
+    async updateAny(schema_name: string, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {
         throw 500; // TODO
     }
 
@@ -106,12 +106,14 @@ export class SystemData {
     // Internal functions
     //
 
-    private async onRun(schema_name: string, change_data: Partial<RecordJson>[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
+    private async onRun(schema_name: string, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
         console.debug('SystemData: schema=%j filter=%j', schema_name, filter_data, change_data);
 
         let schema = this.__system.meta.toSchema(schema_name);
-        let change = this.__system.meta.toChange(schema_name, change_data);
         let filter = this.__system.meta.toFilter(schema_name, filter_data);
+
+        // Convert the raw change data into records
+        let change = change_data.map(change => schema.toRecord(change));
 
         // Build the flow
         let flow = new ObserverFlow(this.__system, schema, change, filter, op);

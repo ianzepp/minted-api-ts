@@ -108,8 +108,6 @@ export class SystemKnex {
     }
 
     private toWhereOps(knex: Knex.QueryBuilder, name: string, data: any) {
-        console.warn('SystemKnex.addFilterWhere: raw-name=%j raw-data=%j', name, data);
-
         if (name == Filter.Op.And) {
             throw 'Unsupported filter where "$and" grouping';
         }
@@ -127,19 +125,19 @@ export class SystemKnex {
         }
 
         else if (typeof data === 'string') {
-            knex.where(name, data);
+            knex.where('data.' + name, data);
         }
 
         else if (typeof data === 'number') {
-            knex.where(name, data);
+            knex.where('data.' + name, data);
         }
 
         else if (typeof data === 'boolean') {
-            knex.where(name, data);
+            knex.where('data.' + name, data);
         }
 
         else if (_.isArray(data)) {
-            knex.whereIn(name, data);
+            knex.whereIn('data.' + name, data);
         }
 
         else if (_.isPlainObject(data)) {
@@ -150,43 +148,43 @@ export class SystemKnex {
             }
 
             else if (op == Filter.Op.Eq && op_data === null) {
-                knex.whereNull(name);
+                knex.whereNull('data.' + name);
             }
 
             else if (op == Filter.Op.Eq) {
-                knex.where(name, '=', op_data);
+                knex.where('data.' + name, '=', op_data);
             }
 
             else if (op == Filter.Op.NotEq && op_data === null) {
-                knex.whereNotNull(name);
+                knex.whereNotNull('data.' + name);
             }
 
             else if (op == Filter.Op.NotEq) {
-                knex.where(name, '<>', op_data);
+                knex.where('data.' + name, '<>', op_data);
             }
 
             else if (op == Filter.Op.In && _.isArray(op_data)) {
-                knex.whereIn(name, op_data);
+                knex.whereIn('data.' + name, op_data);
             }
 
             else if (op == Filter.Op.NotIn && _.isArray(op_data)) {
-                knex.whereNotIn(name, op_data);
+                knex.whereNotIn('data.' + name, op_data);
             }
 
             else if (op == Filter.Op.Gt) {
-                knex.where(name, '>', op_data);
+                knex.where('data.' + name, '>', op_data);
             }
 
             else if (op == Filter.Op.Gte || op == Filter.Op.Min) {
-                knex.where(name, '>=', op_data);
+                knex.where('data.' + name, '>=', op_data);
             }
 
             else if (op == Filter.Op.Lt) {
-                knex.where(name, '<', op_data);
+                knex.where('data.' + name, '<', op_data);
             }
 
             else if (op == Filter.Op.Lte || op == Filter.Op.Max) {
-                knex.where(name, '<=', op_data);
+                knex.where('data.' + name, '<=', op_data);
             }
 
             else if (op == Filter.Op.Find) {

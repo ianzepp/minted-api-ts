@@ -4,7 +4,7 @@ import chai from 'chai';
 // Classes
 import { Schema } from '../classes/schema';
 import { System } from '../classes/system';
-import { RecordJson } from './record';
+import { Record } from '../classes/record';
 
 // Helpers
 import toJSON from '../helpers/toJSON';
@@ -68,7 +68,7 @@ export enum FilterOp {
     Or = '$or',
 }
 
-export class FilterJson {
+export interface FilterJson {
     where: _.Dictionary<any>;
     order: _.Dictionary<any>;
     flags: _.Dictionary<any>;
@@ -83,53 +83,25 @@ export class Filter implements FilterJson {
     // Re-export aliases
     public static Op = FilterOp;
 
-    constructor(private readonly source: RecordJson) {
-        chai.expect(source).property('type').eq('filter');
-        chai.expect(source).property('data');
-        chai.expect(source).nested.property('data.schema_name');
+    // Default values
+    public readonly where: _.Dictionary<any> = {};
+    public readonly order: _.Dictionary<any> = {};
+    public readonly flags: _.Dictionary<any> = {};
+    public limit: number = Filter.LimitDefault;
 
-        _.defaults(source.data, {
-            where: {},
-            order: {},
-            flags: {},
-            limit: Filter.LimitDefault
+    constructor(public readonly schema: Schema, source?: Partial<FilterJson>) {
+        _.assign(this.where, source?.where);
+        _.assign(this.order, source?.order);
+        _.assign(this.flags, source?.flags);
+        _.assign(this.limit, source?.limit);
+    }
+
+    toJSON(): FilterJson {
+        return toJSON({
+            where: this.where,
+            order: this.order,
+            flags: this.flags,
+            limit: this.limit,
         });
-
-        chai.expect(source).nested.property('data.where').a('object');
-        chai.expect(source).nested.property('data.order').a('object');
-        chai.expect(source).nested.property('data.flags').a('object');
-        chai.expect(source).nested.property('data.limit').a('number').gte(Filter.LimitMinimum).lte(Filter.LimitMaximum);
-    }
-
-    get schema_name(): string {
-        return this.source.data.schema_name;
-    }
-
-    get where(): _.Dictionary<any> {
-        return this.source.data.where;
-    }
-
-    get order(): _.Dictionary<any> {
-        return this.source.data.order;
-    }
-
-    get flags(): _.Dictionary<any> {
-        return this.source.data.flags;
-    }
-
-    get limit(): number {
-        return this.source.data.limit;
-    }
-
-    public static isFilter(something: unknown): boolean {
-        return something instanceof Filter;
-    }
-
-    public static isFilterJson(something: unknown): boolean {
-        return _.isPlainObject(something) && (<_.Dictionary<any>> something).where;
-    }
-
-    toJSON(): Partial<RecordJson> {
-        return toJSON(_.omit(this.source, ['info', 'acls']));
     }
 }

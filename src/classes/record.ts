@@ -69,6 +69,8 @@ export interface RecordAcls {
     acls_deny: UUID[];
 }
 
+export type ChangeData = Record | RecordFlat;
+
 export class Record implements RecordJson {
     public static ColumnsInfo = [
         'created_at',
@@ -121,9 +123,7 @@ export class Record implements RecordJson {
     };
 
     // Related objects
-    constructor(readonly schema_name: string) {
-        this.type = schema_name;
-    }
+    constructor(public readonly schema: Schema) {}
 
     get diff(): Partial<RecordData> {
         // diff = the accumulated difference between objects
@@ -186,7 +186,7 @@ export class Record implements RecordJson {
     }
 
     toString(): string {
-        return `${this.schema_name}#${this.data.id}`;
+        return `${this.schema.schema_name}#${this.data.id}`;
     }
 
     toJSON(): RecordJson {
