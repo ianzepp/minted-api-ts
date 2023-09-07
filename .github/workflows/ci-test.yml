@@ -35,6 +35,9 @@ jobs:
     
     - name: Set NODE_ENV to CI
       run: echo "NODE_ENV=CI" >> $GITHUB_ENV
+
+    - name: Set PostgreSQL host
+      run: echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
   
     - name: Set PostgreSQL configuration
       run: |
