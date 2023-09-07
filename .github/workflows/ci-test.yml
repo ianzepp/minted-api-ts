@@ -32,10 +32,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     
-    - name: Install and run
+    - name: Install node dependencies and devDependencies
       run: |
         npm install
-        npm install -D typescript
+      env:
+        NODE_ENV: development
+
+    - name: Run test suite
+      run: |
         npm run test
       env:
         NODE_ENV: development
@@ -43,4 +47,4 @@ jobs:
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         POSTGRES_DB: minted-api-ci
         POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
+        POSTGRES_PASSWORD: postgres        
