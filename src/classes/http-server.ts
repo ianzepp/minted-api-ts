@@ -12,6 +12,7 @@ const formBody = Util.promisify(require('body/form'));
 
 // Classes
 import { System } from '../classes/system';
+import { SystemUser } from '../classes/system';
 
 // Routers
 import { HttpRouter } from './http-router';
@@ -82,6 +83,7 @@ export class HttpServer {
         }
 
         try {
+            // Process URL data
             let request_url = new UrlParse(req.url, true);
 
             console.warn('Parsed URL', request_url);
@@ -105,8 +107,12 @@ export class HttpServer {
                 httpReq.body = await formBody(req, res);
             }
 
-            // Generate system, based on the logged in user for this request
-            let system = new System({ id: System.RootId, ns: ['*'], sc: ['*'] });
+            // TODO generate actual user creds from CORS
+            let system = new System({
+                id: System.RootId,
+                ns: 'test',
+                scopes: null
+            });
 
             // Initialize the system
             await system.startup();

@@ -13,9 +13,7 @@ import Routers from '../preloader/routers';
 export class SystemHttp {
     constructor(private readonly __system: System) {}
 
-    async startup(): Promise<void> {
-        // TODO authentication
-    }
+    async startup(): Promise<void> {}
 
     async run(httpReq: HttpReq, httpRes: HttpRes): Promise<HttpRes> {
         // Find the first matching router

@@ -7,9 +7,14 @@ import { SystemKnex } from '../classes/system-knex';
 import { SystemHttp } from '../classes/system-http';
 
 export interface SystemUser {
+    // The UUID of the running user, or the System.RootId if the running user is root
     id: string;
-    ns: string[] | null;
-    sc: string[] | null;
+
+    // The Namespace of the running user. Used when creating new records and for visibility
+    ns: string;
+
+    // Any extra namespace visibility scopes to apply. Defaults to null
+    scopes: string[] | null;
 }
 
 export class System {
@@ -30,8 +35,6 @@ export class System {
 
     // Setup the user-specific system, or default to a root user.
     constructor(readonly user: SystemUser) {
-        console.warn('System: id=%j ns=%j sc=%j', user.id, user.ns, user.sc);
-
         this.is_root = user.id == System.RootId;
         this.is_user = user.id != System.RootId;
     }
@@ -44,4 +47,5 @@ export class System {
         await this.http.startup();
     }
 }
+
 

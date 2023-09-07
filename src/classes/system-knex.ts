@@ -9,7 +9,9 @@ import { System } from '../classes/system';
 export class SystemKnex {
     private __transaction: Knex.Transaction | undefined;
 
-    constructor(private readonly __system: System) {}
+    constructor(private readonly __system: System) {
+
+    }
 
     async startup(): Promise<void> {
         await KnexDriver.raw('SELECT 1'); // test connection at startup
@@ -50,23 +52,16 @@ export class SystemKnex {
         let knex = this.toTx(schema_name);
         let user = this.__system.user;
         let self = this;
+        let scopes = _.uniq(_.compact(['system', user.ns, ... user.scopes ?? []]));
 
         // Inner join the timestamps and acls
         knex = knex.join(schema_name + '_info as info', 'info.id', 'data.id');
         knex = knex.join(schema_name + '_acls as acls', 'acls.id', 'data.id');
 
-        // Apply all of the system restrictions in a single group
-        knex = knex.where(function() {
-            this.where(function() {
-                this.whereNull('data.ns').orWhereIn('data.ns', user.ns);
-            });
-    
-            this.where(function() {
-                this.whereNull('data.sc').orWhereIn('data.sc', user.sc);
-            });
+        // Apply namespace restrictions
+        knex = knex.whereIn('data.ns', scopes);
 
-        });
-
+        // Done
         return knex;
     }
 
