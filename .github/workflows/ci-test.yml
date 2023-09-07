@@ -37,12 +37,14 @@ jobs:
         npm install -g knex
         npm install -g typescript
         npm install
+      env:
+        NODE_ENV: development
 
     - name: Run the test suite
       run: 
         npm run test
       env:
-        NODE_ENV: ci
+        NODE_ENV: development
         POSTGRES_HOST: localhost
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         POSTGRES_DB: minted-api-ci
