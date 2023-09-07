@@ -29,10 +29,10 @@ export default class extends Observer {
         let expired_at = flow.system.timestamp;
         let expired_by = flow.system.user.id;
 
-        await flow.system.knex.toTx('metainfo')
-            .whereIn('id', record_ids)
-            .whereNull('expired_at')
-            .whereNull('deleted_at')
+        await flow.system.knex.toTx(flow.schema.schema_name + '_info')
+            .whereIn('info.id', record_ids)
+            .whereNull('info.expired_at')
+            .whereNull('info.deleted_at')
             .update({
                 expired_at: expired_at,
                 expired_by: expired_by
