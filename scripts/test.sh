@@ -7,13 +7,13 @@ if ! npm run compile:clean; then
 fi
 
 # Show PG vars
-# echo "Using NODE_ENV=$NODE_ENV"
-# echo "Using POSTGRES_HOST=$POSTGRES_HOST"
-# echo "Using POSTGRES_DB=$POSTGRES_DB"
-# echo "Using POSTGRES_USER=$POSTGRES_USER"
+echo "Using NODE_ENV=$NODE_ENV"
+echo "Using POSTGRES_HOST=$POSTGRES_HOST"
+echo "Using POSTGRES_DB=$POSTGRES_DB"
+echo "Using POSTGRES_USER=$POSTGRES_USER"
 
 # Run the migration
-knex --knexfile ./knexfile.js --client postgresql migrate:latest
+knex migrate:latest
 
 # Start node
 jest
