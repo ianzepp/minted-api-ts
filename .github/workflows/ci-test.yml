@@ -2,9 +2,13 @@ name: NodeJS-CI-Test
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: 
+      - "main"
+      - "develop"
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: 
+      - "main"
+      - "develop"
 
 jobs:
   build:
@@ -12,14 +16,18 @@ jobs:
 
     services:
       postgres:
-        image: postgres:12
+        image: postgres:latest
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
+          POSTGRES_DB: postgres_db
+          POSTGRES_USER: postgres_user
+          POSTGRES_PASSWORD: postgres_pass
         ports:
           - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: >-
+          --health-cmd pg_isready 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
 
     strategy:
       matrix:
@@ -35,6 +43,11 @@ jobs:
     
     - name: Set NODE_ENV to CI
       run: echo "NODE_ENV=CI" >> $GITHUB_ENV
+
+    - name: Install PostgreSQL client
+      run: |
+        apt-get update
+        apt-get install --yes postgresql-client
   
     - name: Set PostgreSQL configuration
       run: |
@@ -43,6 +56,11 @@ jobs:
         echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
         echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
         echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
+    
+    - name: Setup database
+      run: psql -h postgres -U postgres_user -c 'CREATE DATABASE "postgres_db";'
+      env:
+        PGPASSWORD: postgres
 
     - name: Build
       run: |
