@@ -7,6 +7,8 @@ import tableUp from '../helpers/tableUp';
 import tableDown from '../helpers/tableDown';
 
 export async function up(knex: Knex): Promise<void> {
+    await knex.raw('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
+
     // Create top-level system table
     await knex.schema.createTable('system', (table) => {
         table.string('ns').primary().notNullable();
