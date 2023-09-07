@@ -18,6 +18,10 @@ export class SystemKnex {
         await KnexDriver.raw('SELECT 1'); // test connection at startup
     }
 
+    async destroy(): Promise<void> {
+        await KnexDriver.destroy();
+    }
+
     async transaction(runFn: () => Promise<any>): Promise<any> {
         return KnexDriver.transaction(async tx => {
             this.__transaction = tx;

@@ -13,4 +13,4 @@ if ! npm run compile; then
 fi
 
 # Start node
-jest
+jest "$@"
