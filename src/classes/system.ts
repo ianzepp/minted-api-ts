@@ -39,6 +39,10 @@ export class System {
         this.is_user = user.id != System.RootId;
     }
 
+    get namespaces() {
+        return _.uniq(_.compact(['system', this.user.ns, ... this.user.scopes ?? []]));
+    }
+
     /** Startup the system */
     async startup(): Promise<this> {
         await this.data.startup();

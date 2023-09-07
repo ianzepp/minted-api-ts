@@ -92,6 +92,4 @@ export class Schema {
 
         return record;
     }
-
-
 }

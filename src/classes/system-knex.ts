@@ -10,9 +10,7 @@ import { RecordData } from '../classes/record';
 export class SystemKnex {
     private __transaction: Knex.Transaction | undefined;
 
-    constructor(private readonly __system: System) {
-
-    }
+    constructor(private readonly __system: System) {}
 
     async startup(): Promise<void> {
         await KnexDriver.raw('SELECT 1'); // test connection at startup
@@ -43,9 +41,17 @@ export class SystemKnex {
     // Build requests
     //
 
-    toTx(schema_name: string) {
-        let knex = KnexDriver(schema_name + ' as data');
+    toTx(schema_name: string, alias?: string) {
+        let knex;
+        
+        if (typeof alias === 'string') {
+            knex = KnexDriver(schema_name + ' as ' + alias);
+        }
 
+        else {
+            knex = KnexDriver(schema_name);
+        }
+        
         if (this.__transaction) {
             knex = knex.transacting(this.__transaction);
         }
@@ -54,18 +60,15 @@ export class SystemKnex {
     }
 
     toStatement(schema_name: string) {
-        let knex = this.toTx(schema_name);
-        let user = this.__system.user;
-        let self = this;
-        let scopes = _.uniq(_.compact(['system', user.ns, ... user.scopes ?? []]));
+        let knex = this.toTx(schema_name, 'data');
+
+        // Visibility
+        knex = knex.whereIn('data.ns', this.__system.namespaces);
 
         // Inner join the timestamps and acls
         knex = knex.join(schema_name + '_info as info', 'info.id', 'data.id');
         knex = knex.join(schema_name + '_acls as acls', 'acls.id', 'data.id');
-
-        // Apply namespace restrictions
-        knex = knex.whereIn('data.ns', scopes);
-
+                
         // Done
         return knex;
     }

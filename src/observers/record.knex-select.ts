@@ -26,7 +26,7 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         // Build the request statement
-        let knex = flow.system.knex.toStatementFilter(flow.schema_name, flow.filter).select();
+        let knex = flow.system.knex.toStatementFilter(flow.schema.schema_name, flow.filter).select();
 
         // Wait for the result
         let result = await knex;

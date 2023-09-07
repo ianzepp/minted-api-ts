@@ -25,7 +25,14 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        let result: RecordFlat[] = await flow.statement.whereIn('id', flow.change_ids).select();
+        let schema_name = flow.schema.schema_name;
+
+        let result = await flow.system.knex.toTx(schema_name, 'data')
+            .whereIn('data.ns', flow.system.namespaces)
+            .whereIn('data.id', flow.change.map(record => record.data.id))
+            .select();
+
+        // Convert the result list to a mapping by ID
         let result_map = _.keyBy(result, 'id');
 
         // Assign the raw knex data for previous values to the records
@@ -36,7 +43,7 @@ export default class extends Observer {
                 continue; // TODO Is this an error? We have an ID but no record found?
             }
 
-            record.fromRecordPrev(record_prev);
+            _.assign(record.prev, record_prev);
         }
     }
 }
