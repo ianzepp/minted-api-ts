@@ -29,6 +29,9 @@ jobs:
         postgresql db: 'test_db'
         postgresql user: 'postgres'
         postgresql password: 'postgres'
+
+    - name: Start PostgreSQL
+      run: sudo service postgresql start        
     
     - name: Set NODE_ENV to CI
       run: echo "NODE_ENV=CI" >> $GITHUB_ENV
