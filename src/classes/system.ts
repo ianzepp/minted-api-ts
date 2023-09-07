@@ -40,11 +40,14 @@ export class System {
     }
 
     /** Startup the system */
-    async startup(): Promise<void> {
+    async startup(): Promise<this> {
         await this.data.startup();
         await this.meta.startup();
         await this.knex.startup();
         await this.http.startup();
+
+        // Done
+        return this;
     }
 }
 
