@@ -13,7 +13,7 @@ echo "Using POSTGRES_DB=$POSTGRES_DB"
 echo "Using POSTGRES_USER=$POSTGRES_USER"
 
 # Run the migration
-knex --knexfile ./knexfile.js
+knex --knexfile ./knexfile.js migrate:latest
 
 # Start node
 jest
