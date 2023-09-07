@@ -10,6 +10,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
@@ -22,27 +33,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     
-    - name: Setup PostgreSQL database
-      uses: Harmon758/PostgreSQL-action@v1
-      with:
-        postgresql version: '12'
-        postgresql db: 'test_db'
-        postgresql user: 'postgres'
-        postgresql password: 'postgres'
-
-    - name: Start PostgreSQL
-      run: sudo service postgresql start        
-    
     - name: Set NODE_ENV to CI
       run: echo "NODE_ENV=CI" >> $GITHUB_ENV
-
-    - name: Set PostgreSQL host
-      run: echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
   
     - name: Set PostgreSQL configuration
       run: |
         echo "POSTGRES_VERSION=12" >> $GITHUB_ENV
         echo "POSTGRES_DB=test_db" >> $GITHUB_ENV
+        echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
         echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
         echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
 
