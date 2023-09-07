@@ -32,16 +32,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     
-    - name: Install node dependencies
+    - name: Install and run
       run:
         npm install
-        npm install -g knex
         npm install -D typescript
-      env:
-        NODE_ENV: development
-
-    - name: Run the test suite
-      run: 
         npm run test
       env:
         NODE_ENV: development
