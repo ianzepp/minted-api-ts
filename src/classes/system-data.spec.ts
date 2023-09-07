@@ -12,7 +12,7 @@ function expectStringOrNull(value: any) {
 
 function expectRecordSet(result_set: any[], length?: number) {
     chai.expect(result_set).an('array');
-    chai.expect(result_set).length(length || result_set.length);
+    chai.expect(result_set).length(length ?? result_set.length);
 
     for(let result of result_set) {
         expectRecord(result);
@@ -73,6 +73,10 @@ describe('Schema', () => {
         expectRecordSet(result_set, schema_ids.length);
     });
 
+    test.skip('runs createOne()', async () => {
+
+    });
+
     test('runs createAll()', async () => {
         let change_set = [
             schema.toRecord({ schema_name: 'system-data.spec/createAll.1' }), 
@@ -89,6 +93,10 @@ describe('Schema', () => {
         let select_set = await system.data.selectIds(schema, change_set.map(change => change.data.id as string));
 
         expectRecordSet(result_set, change_set.length);
+    });
+
+    test.skip('runs updateOne()', async () => {
+
     });
 
     test('runs updateAll()', async () => {
@@ -117,42 +125,52 @@ describe('Schema', () => {
         let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
 
         expectRecordSet(select_set, create_set.length);
+    });
+
+    test.skip('runs updateAny()', async () => {
 
     });
 
-    test('runs upsertAll()', async () => {
+    test.skip('runs upsertOne()', async () => {
+
+    });
+
+    test.skip('runs upsertAll()', async () => {
+
+    });
+
+    test.skip('runs deleteOne()', async () => {
 
     });
 
     test('runs deleteAll()', async () => {
+        let source_set = [
+            schema.toRecord({ schema_name: 'system-data.spec/updateAll.0' }), 
+            schema.toRecord({ schema_name: 'system-data.spec/updateAll.1' }), 
+            schema.toRecord({ schema_name: 'system-data.spec/updateAll.2' }), 
+        ];
+
+        // Test create
+        let create_set = await system.data.createAll(schema, source_set);
+
+        expectRecordSet(create_set, source_set.length);
+
+        // Test delete
+        let delete_set = await system.data.deleteAll(schema, create_set);
+
+        expectRecordSet(delete_set, create_set.length);
+
+        // Reselect to verify
+        let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
+
+        expectRecordSet(select_set, 0);
+    });
+
+    test.skip('runs deleteIds()', async () => {
 
     });
 
-    test('runs createOne()', async () => {
-
-    });
-
-    test('runs updateOne()', async () => {
-
-    });
-
-    test('runs upsertOne()', async () => {
-
-    });
-
-    test('runs deleteOne()', async () => {
-
-    });
-
-    test('runs deleteIds()', async () => {
-
-    });
-
-    test('runs updateAny()', async () => {
-
-    });
-
-    test('runs deleteAny()', async () => {
+    test.skip('runs deleteAny()', async () => {
 
     });
     
