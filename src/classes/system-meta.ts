@@ -3,6 +3,7 @@ import chai from 'chai';
 import fs from 'fs-extra';
 
 // Classes
+import { KnexDriver } from '../classes/knex';
 import { Schema } from '../classes/schema';
 import { Column } from '../classes/column';
 import { Record } from '../classes/record';
@@ -19,7 +20,7 @@ export class SystemMeta {
 
     async startup(): Promise<void> {
         let select_data = async (schema_name: string) => {
-            return this.__system.knex.select(schema_name, ['*']);
+            return KnexDriver(schema_name).where({ ns: 'system' }).select();
         };
 
         // Process system schemas
@@ -27,7 +28,7 @@ export class SystemMeta {
             let schema = new Schema(schema_data);
 
             // Add to local cache
-            _.set(this.schemas, schema.schema_name, schema);
+            this.schemas[schema.schema_name] = schema;
         }
 
         for(let column_data of await select_data('column')) {
@@ -35,7 +36,7 @@ export class SystemMeta {
             let column = new Column(column_data, schema);
 
             // Add to schema
-            _.set(schema.columns, column.column_name, column);
+            schema.columns[column.column_name] = column;
         }
     }
 
