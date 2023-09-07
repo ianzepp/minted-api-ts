@@ -44,8 +44,16 @@ export class SystemMeta {
         return _.has(this.schemas, schema_name);
     }
 
-    toSchema(schema_name: string): Schema {
-        let schema = this.schemas[schema_name];
+    toSchema(schema_name: Schema | string): Schema {
+        let schema: Schema | undefined;
+
+        if (schema_name instanceof Schema) {
+            schema = schema_name;
+        }
+
+        else {
+            schema = this.schemas[schema_name];
+        }
 
         if (schema === undefined) {
             throw `Schema '${schema_name}' not found/loaded`;
@@ -54,13 +62,7 @@ export class SystemMeta {
         return schema;
     }
 
-    toFilter(schema_name: string, filter_data: _.Dictionary<any>): Filter {
-        let schema = this.schemas[schema_name];
-
-        if (schema === undefined) {
-            throw `Schema '${schema_name}' not found/loaded`;
-        }
-
-        return new Filter(schema, filter_data);
+    toFilter(schema_name: Schema | string, filter_data: _.Dictionary<any>): Filter {
+        return new Filter(this.toSchema(schema_name), filter_data);
     }
 }

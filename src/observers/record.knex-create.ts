@@ -28,20 +28,26 @@ export default class extends Observer {
         // Populate insertion data
         _.each(flow.change, record => {
             record.data.id = uuid();
-            record.data.ns = null;
-            record.data.sc = null;
+            record.data.ns = flow.system.user.ns;
             record.info.created_at = new Date().toISOString();
-            record.info.created_by = null;
+            record.info.created_by = flow.system.user.id;
         });
 
         // Extract the insertion data
         let insert_data = _.map(flow.change, record => _.merge({}, record.data));
         let insert_info = _.map(flow.change, record => _.merge({}, record.info, { 
-            record_id: record.data.id,
+            id: record.data.id,
+            ns: record.data.ns,
+        }));
+        
+        let insert_acls = _.map(flow.change, record => _.merge({}, record.acls, { 
+            id: record.data.id,
+            ns: record.data.ns,
         }));
 
         // Insert data
         await flow.system.knex.toTx(flow.schema_name).insert(insert_data);
         await flow.system.knex.toTx(flow.schema_name + '_info').insert(insert_info);
+        await flow.system.knex.toTx(flow.schema_name + '_acls').insert(insert_acls);
     }
 }
