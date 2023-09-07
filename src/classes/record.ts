@@ -95,13 +95,11 @@ export class Record implements RecordJson {
     public readonly data: RecordData = {
         id: null,
         ns: null,
-        sc: null,
     };
 
     public readonly prev: RecordData = {
         id: null,
         ns: null,
-        sc: null,
     };
     
     public readonly info: RecordInfo = {
