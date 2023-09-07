@@ -5,6 +5,7 @@ import { Knex } from 'knex';
 import { KnexDriver } from './knex';
 import { Filter } from '../classes/filter';
 import { System } from '../classes/system';
+import { RecordData } from '../classes/record';
 
 export class SystemKnex {
     private __transaction: Knex.Transaction | undefined;
@@ -30,8 +31,8 @@ export class SystemKnex {
     // Raw DB statements
     //
 
-    async select(schema_name: string, columns: string[] = ['*']): Promise<any[]> {
-        return this.toTx(schema_name).select(columns);
+    async select(schema_name: string, columns: string[] = ['*']) {
+        return this.toTx(schema_name).select(columns) as Promise<RecordData[]>;
     }
 
     // 

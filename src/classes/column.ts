@@ -20,91 +20,83 @@ export enum ColumnType {
 }
 
 export class Column {
-    // Re-export aliases
-    public static Type = ColumnType;
+    public readonly system_name: string;
 
-    private __schema: Schema;
+    constructor(private readonly source: _.Dictionary<any>, public readonly schema: Schema) {
+        chai.expect(source).property('id').a('string');
+        chai.expect(source).property('ns').a('string');
 
-    constructor(private readonly source: Partial<RecordJson>) {
-        chai.expect(source).property('type').eq('column');
-        chai.expect(source).property('data');
-        chai.expect(source).nested.property('data.schema_name').a('string');
-        chai.expect(source).nested.property('data.column_name').a('string');
+        chai.expect(source).property('schema_name').a('string');
+        chai.expect(source).property('column_name').a('string');
+        chai.expect(source).property('column_type').a('string');
+        
+        chai.expect(source).property('audited').a('boolean');
+        chai.expect(source).property('immutable').a('boolean');
+        chai.expect(source).property('indexed').a('boolean');
+        chai.expect(source).property('internal').a('boolean');
+        chai.expect(source).property('required').a('boolean');
+        chai.expect(source).property('unique').a('boolean');
+        
+        chai.expect(source).property('minimum');
+        chai.expect(source).property('maximum');
+
+        // Set system name
+        this.system_name = `${ source.ns }__${ source.schema_name }`;
     }
 
-    //
-    // Properties from database
-    //
+    get id(): string {
+        return this.source.id;
+    }
+
+    get ns(): string {
+        return this.source.ns;
+    }
 
     get schema_name(): string {
-        return this.source.data.schema_name;
+        return this.source.schema_name;
     }
 
     get column_name(): string {
-        return this.source.data.column_name;
+        return this.source.column_name;
     }
 
-    get intern_name(): string {
-        return this.source.data.intern_name ?? this.column_name;
+    get column_type(): string {
+        return this.source.column_type;
     }
 
-    get description(): string | null {
-        return this.source.data.description ?? null;
+    get audited(): boolean {
+        return this.source.audited;
     }
 
-    get type(): ColumnType {
-        return this.source.data.type ?? Column.Type.Text;
-    }
-
-    get required(): boolean {
-        return this.source.data.required ?? false;
+    get immutable(): boolean {
+        return this.source.immutable;
     }
 
     get indexed(): boolean {
-        return this.source.data.indexed ?? false;
+        return this.source.indexed;
     }
 
-    get searchable(): boolean {
-        return this.source.data.searchable ?? false;
+    get internal(): boolean {
+        return this.source.internal;
     }
 
-    get precision(): number | null {
-        return this.source.data.precision ?? null;
+    get required(): boolean {
+        return this.source.required;
     }
 
-    get min(): number {
-        return this.source.data.min ?? 0;
+    get unique(): boolean {
+        return this.source.unique;
     }
 
-    get max(): number {
-        return this.source.data.max ?? Number.MAX_SAFE_INTEGER;
+    get minimum(): number | null {
+        return this.source.minimum;
     }
 
-    get enums(): string[] {
-        return this.source.data.enums ?? [];
+    get maximum(): number | null {
+        return this.source.maximum;
     }
 
-    //
-    // Helper properties
-    //
-
-    get schema(): Schema {
-        return assertReturn(this.__schema);
-    }
-
-    set schema(schema: Schema) {
-        this.__schema = schema;
-    }
-
-    //
-    // Methods
-    //
-
-    toFullName(): string {
-        return this.schema_name + '.' + this.column_name;
-    }
-
-    toJSON(): Partial<RecordJson> {
-        return toJSON(_.omit(this.source, ['info', 'acls']));
+    toJSON() {
+        return toJSON(this.source);
     }
 }

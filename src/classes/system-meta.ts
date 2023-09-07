@@ -13,65 +13,45 @@ import { System } from '../classes/system';
 
 export class SystemMeta {
     // Cache known schema and column names
-    private readonly __schema_dict: _.Dictionary<Schema> = {};
-    private readonly __column_dict: _.Dictionary<Column> = {};
+    public readonly schemas: _.Dictionary<Schema> = {};
 
     constructor(private readonly __system: System) {}
 
     async startup(): Promise<void> {
         let select_data = async (schema_name: string) => {
-            return this.__system.knex.select(schema_name, ['*']).then(results => {
-                return _.map(results, source => {
-                    return new Record(schema_name).fromRecordFlat(source);
-                });
-            });
+            return this.__system.knex.select(schema_name, ['*']);
+        };
+
+        // Process system schemas
+        for(let schema_data of await select_data('schema')) {
+            let schema = new Schema(schema_data);
+
+            // Add to local cache
+            _.set(this.schemas, schema.schema_name, schema);
         }
 
-        // Load from DB
-        let schemas = _.map(await select_data('schema'), source => new Schema(source));
-        let columns = _.map(await select_data('column'), source => new Column(source));
+        for(let column_data of await select_data('column')) {
+            let schema = _.get(this.schemas, column_data.schema_name);
+            let column = new Column(column_data, schema);
 
-        // Add to the known dict data
-        _.each(schemas, schema => this.__schema_dict[schema.toFullName()] = schema);
-        _.each(columns, column => this.__column_dict[column.toFullName()] = column);
-
-        // Post-process columns
-        for(let column_name in this.__column_dict) {
-            let column = this.__column_dict[column_name];
-            let schema = this.__schema_dict[column.schema_name];
-
-            // Orphaned column?
-            if (schema === undefined) {
-                continue;
-            }
-
-            // Bidirectional link
-            column.schema = schema;
-            schema.columns_map[column.column_name] = column;
+            // Add to schema
+            _.set(schema.columns, column.column_name, column);
         }
     }
 
 
     isSchema(schema_name: string): boolean {
-        return this.__schema_dict[schema_name] instanceof Schema;
-    }
-
-    isColumn(column_name: string): boolean {
-        return this.__column_dict[column_name] instanceof Column;
+        return _.has(this.schemas, schema_name);
     }
 
     toSchema(schema_name: string): Schema {
-        let schema = this.__schema_dict[schema_name];
+        let schema = this.schemas[schema_name];
 
         if (schema === undefined) {
             throw `Schema '${schema_name}' not found/loaded`;
         }
 
         return schema;
-    }
-
-    toColumn(schema_name: string, column_name: string): Column | undefined {
-        return this.__column_dict[schema_name + '.' + column_name];
     }
 
     toFilter(schema_name: string, filter_data: _.Dictionary<any>): Filter {
@@ -82,26 +62,5 @@ export class SystemMeta {
 
     toChange(schema_name: string, change_data: Partial<RecordJson>[]): Record[] {
         return change_data.map(change => new Record(schema_name).fromRecordJson(change));
-    }
-
-    describe(): Object {
-        let result = {
-            schemas: this.__schema_dict,
-            columns: this.__column_dict
-        };
-
-        // Type convert
-        return JSON.parse(JSON.stringify(result));
-    }
-
-    async import(source: unknown): Promise<void> {
-        // ...
-    }
-
-    async export(): Promise<Object> {
-        return {
-            schemas: _.map(this.__schema_dict, schema => schema.toJSON()),
-            columns: _.map(this.__column_dict, column => column.toJSON()),
-        };
     }
 }

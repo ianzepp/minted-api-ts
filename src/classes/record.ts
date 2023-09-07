@@ -3,6 +3,7 @@ import chai from 'chai';
 
 // Classes
 import { Column } from '../classes/column';
+import { ColumnType } from '../classes/column';
 import { Schema } from '../classes/schema';
 
 // Helpers
@@ -41,7 +42,6 @@ export interface RecordJson {
 export interface RecordData extends _.Dictionary<any> {
     id: string | null;
     ns: string | null;
-    sc: string | null;
 }
 
 export interface RecordInfo {
@@ -228,7 +228,7 @@ export class Record implements RecordJson {
             return; // cannot unset a value
         }
 
-        else if (column.type === Column.Type.Boolean) {
+        else if (column.column_type == ColumnType.Boolean) {
             test.is('boolean');
         }
 
@@ -236,23 +236,23 @@ export class Record implements RecordJson {
             // null is allowable for the rest of the data types
         }
 
-        else if (column.type === Column.Type.Decimal) {
+        else if (column.column_type == ColumnType.Decimal) {
             test.is('number');
         }
 
-        else if (column.type === Column.Type.Integer) {
+        else if (column.column_type == ColumnType.Integer) {
             test.is('number');
         }
 
-        else if (column.type === Column.Type.Json) {
+        else if (column.column_type == ColumnType.Json) {
             test.is('object');
         }
 
-        else if (column.type === Column.Type.Number) {
+        else if (column.column_type == ColumnType.Number) {
             test.is('number');
         }
 
-        else if (column.type === Column.Type.Text) {
+        else if (column.column_type == ColumnType.Text) {
             test.is('string');
         }
 
