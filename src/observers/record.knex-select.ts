@@ -6,15 +6,14 @@ import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Record } from '../classes/record';
 import { Schema } from '../classes/schema';
-import { SchemaType } from '../classes/schema';
 
 export default class extends Observer {
     toName(): string {
         return 'record.knex-select';
     }
     
-    onSchema(): SchemaType {
-        return Schema.Type.Record;
+    onSchema(): string {
+        return 'record';
     }
 
     onRing(): ObserverRing {

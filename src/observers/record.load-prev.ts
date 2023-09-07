@@ -5,7 +5,6 @@ import { Observer } from '../classes/observer';
 import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Schema } from '../classes/schema';
-import { SchemaType } from '../classes/schema';
 import { RecordFlat } from '../classes/record';
 
 export default class extends Observer {
@@ -13,8 +12,8 @@ export default class extends Observer {
         return 'record.load-prev';
     }
     
-    onSchema(): SchemaType {
-        return Schema.Type.Record;
+    onSchema(): string {
+        return 'record';
     }
 
     onRing(): ObserverRing {
