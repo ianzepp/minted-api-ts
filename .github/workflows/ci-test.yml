@@ -40,6 +40,7 @@ jobs:
       run: |
         echo "POSTGRES_VERSION=12" >> $GITHUB_ENV
         echo "POSTGRES_DB=test_db" >> $GITHUB_ENV
+        echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
         echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
         echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
 
