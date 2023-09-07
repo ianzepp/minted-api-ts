@@ -21,6 +21,24 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+    
+    - name: Setup PostgreSQL database
+      uses: Harmon758/PostgreSQL-action@v1
+      with:
+        postgresql version: '12'
+        postgresql db: 'test_db'
+        postgresql user: 'postgres'
+        postgresql password: 'postgres'
+    
+    - name: Set NODE_ENV to CI
+      run: echo "NODE_ENV=CI" >> $GITHUB_ENV
+  
+    - name: Set PostgreSQL configuration
+      run: |
+        echo "POSTGRES_VERSION=12" >> $GITHUB_ENV
+        echo "POSTGRES_DB=test_db" >> $GITHUB_ENV
+        echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
+        echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
 
     - name: Build
       run: |
