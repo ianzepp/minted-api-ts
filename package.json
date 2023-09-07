@@ -1,10 +1,13 @@
 {
+  
   "name": "minted-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "command": "bash ./scripts/command.sh",
     "compile": "bash ./scripts/compile.sh",
+    "compile:clean": "bash ./scripts/compile-clean.sh",
     "migrate:make": "bash ./scripts/migrate-make.sh",
     "migrate:latest": "bash ./scripts/migrate-latest.sh",
     "migrate:up": "bash ./scripts/migrate-up.sh",

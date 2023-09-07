@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compile everything
-if ! npm run compile; then
+if ! npm run compile:clean; then
     echo "Compilation failed!"
     exit 1
 fi
