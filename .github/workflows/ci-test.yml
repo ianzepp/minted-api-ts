@@ -10,13 +10,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      NODE_ENV: development
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: minted-api-ci
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres                
+
     services:
       postgres:
         image: postgres:12
         env:
-          POSTGRES_DB: minted-api-ci
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
         ports:
           - 5432:5432
 
@@ -32,19 +40,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     
-    - name: Install node dependencies and devDependencies
+    - name: Install node dependencies
       run: |
         npm install
-      env:
-        NODE_ENV: development
+
+    - name: Install database automigrations
+      run: |
+        npm run migrate:latest
 
     - name: Run test suite
       run: |
         npm run test
-      env:
-        NODE_ENV: development
-        POSTGRES_HOST: localhost
-        POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
-        POSTGRES_DB: minted-api-ci
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres        
