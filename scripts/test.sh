@@ -13,6 +13,7 @@ fi
 # echo "Using POSTGRES_USER=$POSTGRES_USER"
 
 # Run the migration
+npm install knex -g
 knex --knexfile ./knexfile.js --client postgresql migrate:latest
 
 # Start node
