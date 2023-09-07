@@ -7,8 +7,13 @@ import { Filter } from '../classes/filter';
 import { FilterJson } from '../classes/filter';
 import { Record } from '../classes/record';
 import { RecordJson } from '../classes/record';
+import { RecordFlat } from '../classes/record';
+import { RecordData } from '../classes/record';
 
 // Helpers
+import isRecordDict from '../helpers/isRecordDict';
+import isRecordFlat from '../helpers/isRecordFlat';
+import isRecordJson from '../helpers/isRecordJson';
 import toJSON from '../helpers/toJSON';
 
 export class Schema {
@@ -49,5 +54,42 @@ export class Schema {
     
     toJSON() {
         return toJSON(this.source);
+    }
+
+    toRecord(source?: Record | RecordJson | RecordFlat | RecordData | _.Dictionary<any>) {
+        let record = new Record(this);
+
+        if (source === undefined) {
+            // do nothing
+        }
+
+        else if (source instanceof Record) {
+            _.assign(record.data, source.data);
+            _.assign(record.prev, source.prev);
+            _.assign(record.info, source.info);
+            _.assign(record.acls, source.acls);
+        }
+
+        else if (isRecordJson(source)) {
+            _.assign(record.data, source.data);
+            _.assign(record.info, source.info);
+            _.assign(record.acls, source.acls);
+        }
+
+        else if (isRecordFlat(source)) {
+            _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
+            _.assign(record.info, _.pick(source, Record.ColumnsInfo));
+            _.assign(record.acls, _.pick(source, Record.ColumnsAcls));
+        }
+
+        else if (isRecordDict(source)) {
+            _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
+        }
+
+        else {
+            throw new Error('Unsupported "Record" source: ' + toJSON(source));
+        }
+
+        return record;
     }
 }

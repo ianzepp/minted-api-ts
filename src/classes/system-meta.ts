@@ -3,10 +3,11 @@ import chai from 'chai';
 import fs from 'fs-extra';
 
 // Classes
+import { KnexDriver } from '../classes/knex';
 import { Schema } from '../classes/schema';
 import { Column } from '../classes/column';
 import { Record } from '../classes/record';
-import { RecordJson } from '../classes/record';
+import { ChangeData } from '../classes/record';
 import { Filter } from './filter';
 import { FilterJson } from './filter';
 import { System } from '../classes/system';
@@ -19,7 +20,7 @@ export class SystemMeta {
 
     async startup(): Promise<void> {
         let select_data = async (schema_name: string) => {
-            return this.__system.knex.select(schema_name, ['*']);
+            return KnexDriver(schema_name).where({ ns: 'system' }).select();
         };
 
         // Process system schemas
@@ -27,7 +28,7 @@ export class SystemMeta {
             let schema = new Schema(schema_data);
 
             // Add to local cache
-            _.set(this.schemas, schema.schema_name, schema);
+            this.schemas[schema.schema_name] = schema;
         }
 
         for(let column_data of await select_data('column')) {
@@ -35,7 +36,7 @@ export class SystemMeta {
             let column = new Column(column_data, schema);
 
             // Add to schema
-            _.set(schema.columns, column.column_name, column);
+            schema.columns[column.column_name] = column;
         }
     }
 
@@ -44,8 +45,16 @@ export class SystemMeta {
         return _.has(this.schemas, schema_name);
     }
 
-    toSchema(schema_name: string): Schema {
-        let schema = this.schemas[schema_name];
+    toSchema(schema_name: Schema | string): Schema {
+        let schema: Schema | undefined;
+
+        if (schema_name instanceof Schema) {
+            schema = schema_name;
+        }
+
+        else {
+            schema = this.schemas[schema_name];
+        }
 
         if (schema === undefined) {
             throw `Schema '${schema_name}' not found/loaded`;
@@ -54,13 +63,7 @@ export class SystemMeta {
         return schema;
     }
 
-    toFilter(schema_name: string, filter_data: _.Dictionary<any>): Filter {
-        let record_data = _.merge(filter_data, { schema_name: schema_name });
-        let record = new Record('filter').fromRecordFlat(record_data);
-        return new Filter(record);
-    }
-
-    toChange(schema_name: string, change_data: Partial<RecordJson>[]): Record[] {
-        return change_data.map(change => new Record(schema_name).fromRecordJson(change));
+    toFilter(schema_name: Schema | string, filter_data: _.Dictionary<any>): Filter {
+        return new Filter(this.toSchema(schema_name), filter_data);
     }
 }

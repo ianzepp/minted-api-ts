@@ -34,9 +34,13 @@ export class System {
     public readonly is_user: boolean;
 
     // Setup the user-specific system, or default to a root user.
-    constructor(readonly user: SystemUser) {
+    constructor(readonly user: SystemUser = { id: System.RootId, ns: 'system', scopes: null }) {
         this.is_root = user.id == System.RootId;
         this.is_user = user.id != System.RootId;
+    }
+
+    get namespaces() {
+        return _.uniq(_.compact(['system', this.user.ns, ... this.user.scopes ?? []]));
     }
 
     /** Startup the system */

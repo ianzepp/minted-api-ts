@@ -31,20 +31,12 @@ export class ObserverFlow {
         readonly filter: Filter,
         readonly op: string) {}
 
-    get schema_name(): string {
-        return this.schema.schema_name;
-    }
-
     get change_map(): _.Dictionary<Record> {
         return _.keyBy(this.change, 'data.id');
     }
 
     get change_ids(): any[] {
         return _.compact(_.map(this.change, 'data.id'));
-    }
-
-    get statement() {
-        return this.system.knex.toStatement(this.schema_name);
     }
 
     async run(ring: number): Promise<void> {

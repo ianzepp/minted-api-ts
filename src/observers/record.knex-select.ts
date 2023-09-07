@@ -26,13 +26,13 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         // Build the request statement
-        let knex = flow.system.knex.toStatementFilter(flow.schema_name, flow.filter).select();
+        let knex = flow.system.knex.toStatementFilter(flow.schema.schema_name, flow.filter).select();
 
         // Wait for the result
         let result = await knex;
 
         // Convert the raw results into records
-        let select = _.map(result, data => new Record(flow.schema_name).fromRecordFlat(data));
+        let select = _.map(result, record_flat => flow.schema.toRecord(record_flat));
 
         // Reset change list and add to results
         flow.change.length = 0;
