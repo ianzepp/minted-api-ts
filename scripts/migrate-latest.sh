@@ -10,4 +10,4 @@ fi
 knex migrate:latest \
     --client postgresql \
     --connection $DATABASE_URL \
-    --migrations-directory=./dst/database $1
+    --migrations-directory=./dst/automigrate $1
