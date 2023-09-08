@@ -44,7 +44,7 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         // Define the top-level knex change.
-        let knex = flow.system.knex.toTxSchemaBuilder();
+        let knex = flow.system.knex.toSchemaTx();
 
         // Unfortunately, knex requires record updates be done individually. We can help
         // reduce the load by running all the changes in parallel as Promises

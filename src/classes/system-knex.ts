@@ -40,7 +40,17 @@ export class SystemKnex {
     // Build requests
     //
 
-    toTx(schema_name: string, alias?: string) {
+    toSchemaTx() {
+        let knex = KnexDriver.schema;
+        
+        if (this.__transaction) {
+            knex = knex.transacting(this.__transaction);
+        }
+
+        return knex;
+    }
+
+    toDriverTx(schema_name: string, alias?: string) {
         let knex;
         
         if (typeof alias === 'string') {
