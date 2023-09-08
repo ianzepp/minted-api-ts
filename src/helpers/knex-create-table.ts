@@ -27,10 +27,10 @@ export default async function(knex: Knex, schema_name: string): Promise<void> {
         table.uuid('id').primary().references('id').inTable('system_data.' + schema_name).onDelete('CASCADE');
         table.string('ns')
 
-        table.specificType('full', 'uuid ARRAY').index();
-        table.specificType('edit', 'uuid ARRAY').index();
-        table.specificType('read', 'uuid ARRAY').index();
-        table.specificType('deny', 'uuid ARRAY').index();
+        table.specificType('acls_full', 'uuid ARRAY').index();
+        table.specificType('acls_edit', 'uuid ARRAY').index();
+        table.specificType('acls_read', 'uuid ARRAY').index();
+        table.specificType('acls_deny', 'uuid ARRAY').index();
     });
 
     // await knex.schema.withSchema(schema_ns).createTable(schema_name + '_logs', (table) => {

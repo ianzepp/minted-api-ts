@@ -48,7 +48,7 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         let schema_name = flow.schema.schema_name;
-        let created_at = new Date();
+        let created_at = new Date(flow.system.timestamp);
         let created_by = flow.system.user.id;
         let created_ns = flow.system.user.ns;
 
@@ -62,12 +62,12 @@ export default class extends Observer {
 
         // Extract the insertion data
         let insert_data = this.toExtract(flow.change, 'data');
-        let insert_info = this.toExtract(flow.change, 'info');
+        let insert_meta = this.toExtract(flow.change, 'meta');
         let insert_acls = this.toExtract(flow.change, 'acls');
 
         // Insert data
-        await flow.system.knex.toTx(schema_name).insert(insert_data);
-        await flow.system.knex.toTx(schema_name + '_info').insert(insert_info);
-        await flow.system.knex.toTx(schema_name + '_acls').insert(insert_acls);
+        await flow.system.knex.toTx('system_data.' + schema_name).insert(insert_data);
+        await flow.system.knex.toTx('system_meta.' + schema_name).insert(insert_meta);
+        await flow.system.knex.toTx('system_acls.' + schema_name).insert(insert_acls);
     }
 }
