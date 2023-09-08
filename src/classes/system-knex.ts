@@ -158,11 +158,11 @@ export class SystemKnex {
                 knex.where('data.' + name, '=', op_data);
             }
 
-            else if (op == Filter.Op.NotEq && op_data === null) {
+            else if (op == Filter.Op.Neq && op_data === null) {
                 knex.whereNotNull('data.' + name);
             }
 
-            else if (op == Filter.Op.NotEq) {
+            else if (op == Filter.Op.Neq) {
                 knex.where('data.' + name, '<>', op_data);
             }
 
@@ -170,7 +170,7 @@ export class SystemKnex {
                 knex.whereIn('data.' + name, op_data);
             }
 
-            else if (op == Filter.Op.NotIn && _.isArray(op_data)) {
+            else if (op == Filter.Op.Nin && _.isArray(op_data)) {
                 knex.whereNotIn('data.' + name, op_data);
             }
 

@@ -63,8 +63,10 @@ export enum FilterOp {
     Lte = '$lte',
     Max = '$max',
     Min = '$min',
-    NotEq = '$ne',
-    NotIn = '$nin',
+    Not = '$not',
+    Nor = '$nor',
+    Neq = '$ne',
+    Nin = '$nin',
     Or = '$or',
 }
 
