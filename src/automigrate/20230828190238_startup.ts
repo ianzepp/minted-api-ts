@@ -21,6 +21,7 @@ export async function up(knex: Knex): Promise<void> {
     // Create the core tables
     await knexCreateTable(knex, 'schema');
     await knexCreateTable(knex, 'column');
+    await knexCreateTable(knex, 'test');
 
     // Define core table structure
     await knex.schema.table('system_data.schema', (table) => {
@@ -45,19 +46,28 @@ export async function up(knex: Knex): Promise<void> {
         table.integer('maximum');
     });
 
+    await knex.schema.table('system_data.test', (table) => {
+        table.string('test').notNullable();
+        table.boolean('data_boolean');
+        table.decimal('data_decimal');
+        table.integer('data_integer');
+        table.text('data_text');
+    });
+
     // Add core schemas
     let schemas = await knexInsertAll(knex, 'schema', [
         { ns: 'system', schema_name: 'schema', schema_type: 'database', metadata: true },
         { ns: 'system', schema_name: 'column', schema_type: 'database', metadata: true },
+        { ns: 'system', schema_name: 'test', schema_type: 'database', metadata: false },
     ]);
 
     // Add core columns
     let columns = await knexInsertAll(knex, 'column', [
-        // Schema columns
+        // Columns for 'schema'
         { ns: 'system', schema_name: 'schema', column_name: 'schema_name' },
         { ns: 'system', schema_name: 'schema', column_name: 'metadata', column_type: 'boolean' },
 
-        // Column columns
+        // Columns for 'column'
         { ns: 'system', schema_name: 'column', column_name: 'schema_name', required: true, immutable: true, indexed: true },
         { ns: 'system', schema_name: 'column', column_name: 'column_name', required: true, immutable: true, indexed: true },
         { ns: 'system', schema_name: 'column', column_name: 'column_type', required: true, immutable: true, indexed: true },
@@ -71,6 +81,13 @@ export async function up(knex: Knex): Promise<void> {
 
         { ns: 'system', schema_name: 'column', column_name: 'minimum', column_type: 'integer' },
         { ns: 'system', schema_name: 'column', column_name: 'maximum', column_type: 'integer' },
+
+        // Columns for 'test'
+        { ns: 'system', schema_name: 'test', column_name: 'test', required: true },
+        { ns: 'system', schema_name: 'test', column_name: 'data_boolean', column_type: 'boolean' },
+        { ns: 'system', schema_name: 'test', column_name: 'data_decimal', column_type: 'decimal' },
+        { ns: 'system', schema_name: 'test', column_name: 'data_integer', column_type: 'integer' },
+        { ns: 'system', schema_name: 'test', column_name: 'data_text', column_type: 'text' },
     ]);
 }
 

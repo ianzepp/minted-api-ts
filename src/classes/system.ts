@@ -16,9 +16,9 @@ import { SystemHttp } from '../classes/system-http';
 export class System {
     // Services
     public readonly data = new SystemData(this);
-    public readonly meta = new SystemMeta();
-    public readonly knex = new SystemKnex();
-    public readonly http = new SystemHttp();
+    public readonly meta = new SystemMeta(this);
+    public readonly knex = new SystemKnex(this);
+    public readonly http = new SystemHttp(this);
 
     // System constants
     public readonly timestamp = new Date().toISOString();

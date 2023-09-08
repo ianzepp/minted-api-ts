@@ -13,7 +13,21 @@ import { RecordData } from '../layouts/record';
 export class SystemKnex {
     private __transaction: Knex.Transaction | undefined;
 
-    constructor() {}
+    constructor(private readonly system: System) {}
+
+    get schema(): Knex.SchemaBuilder {
+        return KnexDriver.schema;
+    }
+
+    get driver(): Knex {
+        if (this.__transaction) {
+            return this.__transaction;
+        }
+
+        else {
+            return KnexDriver;
+        }
+    }
 
     async startup(): Promise<void> {
         await KnexDriver.raw('SELECT 1'); // test connection at startup
@@ -37,7 +51,17 @@ export class SystemKnex {
     // Build requests
     //
 
-    toTx(schema_name: string, alias?: string) {
+    toSchemaTx() {
+        let knex = KnexDriver.schema;
+        
+        if (this.__transaction) {
+            knex = knex.transacting(this.__transaction);
+        }
+
+        return knex;
+    }
+
+    toDriverTx(schema_name: string, alias?: string) {
         let knex;
         
         if (typeof alias === 'string') {

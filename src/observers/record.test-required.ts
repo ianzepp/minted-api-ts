@@ -11,7 +11,7 @@ import { ObserverRing } from '../layouts/observer';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.knex-select';
+        return 'record.test-required';
     }
     
     onSchema(): string {

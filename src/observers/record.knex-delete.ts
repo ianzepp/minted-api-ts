@@ -39,7 +39,7 @@ export default class extends Observer {
         // 2. record was not previously deleted
         //
         // All timestamps are in the `system_meta` tablespace, so we only use that.
-        await flow.system.knex.toTx('system_meta.' + schema_name)
+        await flow.system.knex.toDriverTx('system_meta.' + schema_name)
             .whereIn('ns', flow.system.namespaces)
             .whereIn('id', record_ids)
             .whereNull('deleted_at')

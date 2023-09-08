@@ -66,8 +66,8 @@ export default class extends Observer {
         let insert_acls = this.toExtract(flow.change, 'acls');
 
         // Insert data
-        await flow.system.knex.toTx('system_data.' + schema_name).insert(insert_data);
-        await flow.system.knex.toTx('system_meta.' + schema_name).insert(insert_meta);
-        await flow.system.knex.toTx('system_acls.' + schema_name).insert(insert_acls);
+        await flow.system.knex.toDriverTx('system_data.' + schema_name).insert(insert_data);
+        await flow.system.knex.toDriverTx('system_meta.' + schema_name).insert(insert_meta);
+        await flow.system.knex.toDriverTx('system_acls.' + schema_name).insert(insert_acls);
     }
 }
