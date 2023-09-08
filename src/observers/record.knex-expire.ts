@@ -22,7 +22,7 @@ export default class extends Observer {
         return ObserverRing.Knex;
     }
 
-    onDelete(): boolean {
+    onExpire(): boolean {
         return true;
     }
 
@@ -35,7 +35,7 @@ export default class extends Observer {
 
         // Generate a knex raw command to mark records as expired where:
         //
-        // 1. record was not previously expired
+        // 1. record is visible to the user
         // 2. record was not previously deleted
         //
         // All timestamps are in the `system_meta` tablespace, so we only use that.
@@ -43,7 +43,6 @@ export default class extends Observer {
             .whereIn('ns', flow.system.namespaces)
             .whereIn('id', record_ids)
             .whereNull('expired_at') 
-            .whereNull('deleted_at')
             .update({ 
                 expired_at: expired_at, 
                 expired_by: expired_by

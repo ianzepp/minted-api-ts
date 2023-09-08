@@ -7,6 +7,7 @@
 export enum SystemVerb {
     Create = 'create',
     Delete = 'delete',
+    Expire = 'expire',
     Select = 'select',
     Update = 'update',
     Upsert = 'upsert',
