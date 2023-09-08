@@ -39,6 +39,10 @@ export class SystemData {
         return this.onRun(schema, change_data, {}, SystemVerb.Upsert);
     }
 
+    async expireAll(schema: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.onRun(schema, change_data, {}, SystemVerb.Expire);
+    }
+
     async deleteAll(schema: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
         return this.onRun(schema, change_data, {}, SystemVerb.Delete);
     }
@@ -59,6 +63,10 @@ export class SystemData {
         return this.onRun(schema, Array(change_data), {}, SystemVerb.Upsert).then(headOne<Record>);
     }
 
+    async expireOne(schema: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
+        return this.onRun(schema, Array(change_data), {}, SystemVerb.Expire).then(headOne<Record>);
+    }
+
     async deleteOne(schema: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
         return this.onRun(schema, Array(change_data), {}, SystemVerb.Delete).then(headOne<Record>);
     }
@@ -75,6 +83,10 @@ export class SystemData {
         return this.onRun(schema, [], { where: { id: record_ids }}, SystemVerb.Select);
     }
 
+    async expireIds(schema: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
+        return this.onRun(schema, [], { where: { id: record_ids }}, SystemVerb.Expire);
+    }
+
     async deleteIds(schema: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
         return this.onRun(schema, [], { where: { id: record_ids }}, SystemVerb.Delete);
     }
@@ -89,6 +101,10 @@ export class SystemData {
 
     async updateAny(schema: Schema | SchemaName, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {
         throw 500; // TODO
+    }
+
+    async expireAny(schema: Schema | SchemaName, filter_data: Partial<FilterJson>): Promise<Record[]> {
+        return this.onRun(schema, [], filter_data, SystemVerb.Expire);
     }
 
     async deleteAny(schema: Schema | SchemaName, filter_data: Partial<FilterJson>): Promise<Record[]> {
