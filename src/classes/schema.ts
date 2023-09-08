@@ -3,18 +3,19 @@ import chai from 'chai';
 
 // Classes
 import { Column } from '../classes/column';
-import { Filter } from '../classes/filter';
-import { FilterJson } from '../classes/filter';
 import { Record } from '../classes/record';
-import { RecordJson } from '../classes/record';
-import { RecordFlat } from '../classes/record';
-import { RecordData } from '../classes/record';
+
+// Layouts
+import { RecordData } from '../layouts/record';
+import { RecordFlat } from '../layouts/record';
+import { RecordJson } from '../layouts/record';
 
 // Helpers
 import isRecordDict from '../helpers/isRecordDict';
 import isRecordFlat from '../helpers/isRecordFlat';
 import isRecordJson from '../helpers/isRecordJson';
 import toJSON from '../helpers/toJSON';
+
 
 export class Schema {
     // Public helpers
@@ -66,19 +67,19 @@ export class Schema {
         else if (source instanceof Record) {
             _.assign(record.data, source.data);
             _.assign(record.prev, source.prev);
-            _.assign(record.info, source.info);
+            _.assign(record.meta, source.meta);
             _.assign(record.acls, source.acls);
         }
 
         else if (isRecordJson(source)) {
             _.assign(record.data, source.data);
-            _.assign(record.info, source.info);
+            _.assign(record.meta, source.meta);
             _.assign(record.acls, source.acls);
         }
 
         else if (isRecordFlat(source)) {
             _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
-            _.assign(record.info, _.pick(source, Record.ColumnsInfo));
+            _.assign(record.meta, _.pick(source, Record.ColumnsInfo));
             _.assign(record.acls, _.pick(source, Record.ColumnsAcls));
         }
 

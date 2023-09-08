@@ -12,7 +12,10 @@ const formBody = Util.promisify(require('body/form'));
 
 // Classes
 import { System } from '../classes/system';
-import { SystemUser } from '../classes/system';
+import { SystemRoot } from '../classes/system-root';
+
+// Layouts
+import { SystemUser } from '../layouts/system';
 
 // Routers
 import { HttpRouter } from './http-router';
@@ -109,7 +112,7 @@ export class HttpServer {
 
             // TODO generate actual user creds from CORS
             let system = new System({
-                id: System.RootId,
+                id: SystemRoot.UUID,
                 ns: 'test',
                 scopes: null
             });

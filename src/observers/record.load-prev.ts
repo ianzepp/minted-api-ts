@@ -2,10 +2,13 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '../classes/observer';
-import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Schema } from '../classes/schema';
-import { RecordFlat } from '../classes/record';
+
+// Layouts
+import { ObserverRing } from '../layouts/observer';
+import { RecordFlat } from '../layouts/record';
+
 
 export default class extends Observer {
     toName(): string {
@@ -17,7 +20,7 @@ export default class extends Observer {
     }
 
     onRing(): ObserverRing {
-        return Observer.Ring.Init;
+        return ObserverRing.Init;
     }
 
     onUpdate(): boolean {

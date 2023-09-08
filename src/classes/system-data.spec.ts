@@ -2,9 +2,13 @@ import _ from 'lodash';
 import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
-import { Record } from './record';
-import { Schema } from './schema';
-import { System, SystemUser } from './system';
+// Classes
+import { Record } from '../classes/record';
+import { Schema } from '../classes/schema';
+import { System } from '../classes/system';
+
+// Layouts
+import { SystemUser } from '../layouts/system';
 
 function expectStringOrNull(value: any) {
     console.warn('value', value);

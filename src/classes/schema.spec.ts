@@ -1,4 +1,6 @@
-import { Schema } from './schema';
+// Classes
+import { Schema } from '../classes/schema';
+
 
 describe('Schema', () => {
     let schema: Schema;

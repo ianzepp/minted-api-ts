@@ -2,25 +2,9 @@
 // Classes
 import { ObserverFlow } from '../classes/observer-flow';
 
-export enum ObserverRank {
-    SystemMax = 0,
-    Max = 1,
-    Avg = 5,
-    Min = 9,
-}
-
-export enum ObserverRing {
-    Init = 0, // System init
-    Prep = 1, // Logic prep
-    Load = 2, // Load in any data dependencies
-    Work = 3, // Run logic
-    Test = 4, // Validations
-    Knex = 5, // Database changes
-    Post = 6, // Post-db changes
-    Flow = 7, // Cascade down to more flow operations
-    Http = 8, // External HTTP updates, non-blocking
-    Done = 9, // System cleanup
-}
+// Layouts
+import { ObserverRank } from '../layouts/observer';
+import { ObserverRing } from '../layouts/observer';
 
 export class Observer {
     // Re-export aliases
@@ -56,11 +40,11 @@ export class Observer {
     }
 
     onRing(): ObserverRing {
-        return Observer.Ring.Work;
+        return ObserverRing.Work;
     }
 
     onRank(): ObserverRank {
-        return Observer.Rank.Avg;
+        return ObserverRank.Avg;
     }
 
     onSelect(): boolean {

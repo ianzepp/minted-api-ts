@@ -1,16 +1,15 @@
 import _ from 'lodash';
-import chai from 'chai';
-import fs from 'fs-extra';
 
 // Classes
+import { Filter } from '../classes/filter';
 import { KnexDriver } from '../classes/knex';
 import { Schema } from '../classes/schema';
 import { Column } from '../classes/column';
-import { Record } from '../classes/record';
-import { ChangeData } from '../classes/record';
-import { Filter } from './filter';
-import { FilterJson } from './filter';
 import { System } from '../classes/system';
+
+// Layouts
+import { SchemaName } from '../layouts/schema';
+
 
 export class SystemMeta {
     // Cache known schema and column names
@@ -19,7 +18,7 @@ export class SystemMeta {
     constructor(private readonly __system: System) {}
 
     async startup(): Promise<void> {
-        let select_data = async (schema_name: string) => {
+        let select_data = async (schema_name: SchemaName) => {
             return KnexDriver(schema_name).where({ ns: 'system' }).select();
         };
 
@@ -45,7 +44,7 @@ export class SystemMeta {
         return _.has(this.schemas, schema_name);
     }
 
-    toSchema(schema_name: Schema | string): Schema {
+    toSchema(schema_name: Schema | SchemaName): Schema {
         let schema: Schema | undefined;
 
         if (schema_name instanceof Schema) {
@@ -63,7 +62,7 @@ export class SystemMeta {
         return schema;
     }
 
-    toFilter(schema_name: Schema | string, filter_data: _.Dictionary<any>): Filter {
-        return new Filter(this.toSchema(schema_name), filter_data);
+    toFilter(schema_name: Schema | SchemaName, filter_data: _.Dictionary<any>): Filter {
+        return new Filter(this.toSchema(schema_name).schema_name, filter_data);
     }
 }
