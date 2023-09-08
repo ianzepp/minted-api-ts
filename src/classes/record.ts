@@ -9,27 +9,14 @@ import { Schema } from '../classes/schema';
 // Helpers
 import toJSON from '../helpers/toJSON';
 
-// Types & Interfaces
+// Types
 export type UUID = string;
+
 export type RecordType = string;
 
-// Type sugar for proxy stuff
-export function isRecordJson(schema_name: string, something: any): boolean {
-    let pass = typeof something === 'object'
-            && typeof something.data === 'object'
-            && typeof something.type === 'string'
-            && something.type === schema_name;
+export type ChangeData = Record | RecordFlat;
 
-    return pass;
-}
-
-export function isRecordFlat(something: any): boolean {
-    let pass = typeof something === 'object'
-            && typeof something.id === 'string';
-
-    return pass;
-}
-
+// Interfaces
 export interface RecordFlat extends _.Dictionary<any> {}
 
 export interface RecordJson {
@@ -68,8 +55,6 @@ export interface RecordAcls {
     /** List of security IDs that are explicitly blacklisted from even knowing the record exists */
     acls_deny: UUID[];
 }
-
-export type ChangeData = Record | RecordFlat;
 
 export class Record implements RecordJson {
     public static ColumnsInfo = [
@@ -143,6 +128,14 @@ export class Record implements RecordJson {
         }, { id: this.data.id } as Partial<RecordData>);
     }
 
+    // Used for a internal record-to-record copy
+    fromRecord(source: Record): this {
+        _.assign(this.data, source.data);
+        _.assign(this.prev, source.prev);
+        _.assign(this.info, source.info);
+        _.assign(this.acls, source.acls);
+        return this;
+    }
 
     // Used when importing from API-submitted http requests (partial representation with `.data` values only)
     fromRecordData(source: RecordData): this {
@@ -153,15 +146,6 @@ export class Record implements RecordJson {
     // Used when importing from API-submitted http requests
     fromRecordJson(source: Partial<RecordJson>): this {
         _.assign(this.data, source.data);
-        _.assign(this.info, source.info);
-        _.assign(this.acls, source.acls);
-        return this;
-    }
-
-    // Used for a internal record-to-record copy
-    fromRecord(source: Record): this {
-        _.assign(this.data, source.data);
-        _.assign(this.prev, source.prev);
         _.assign(this.info, source.info);
         _.assign(this.acls, source.acls);
         return this;
@@ -255,7 +239,7 @@ export class Record implements RecordJson {
         }
 
         else {
-            // unknown data type?
+            throw new Error('Unsupported column type: ' + column.column_type)
         }
 
         // Set data
