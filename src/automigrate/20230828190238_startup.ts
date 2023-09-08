@@ -2,34 +2,34 @@ import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { Knex } from 'knex';
 
-import { migrationInsertAll as insertAll } from '../classes/helpers';
-import tableUp from '../helpers/tableUp';
-import tableDown from '../helpers/tableDown';
+import knexCreateTable from '../helpers/knex-create-table';
+import knexDropTable from '../helpers/knex-drop-table';
+import knexInsertAll from '../helpers/knex-insert-all';
 
 export async function up(knex: Knex): Promise<void> {
     await knex.raw('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
 
-    // Create top-level system table
-    await knex.schema.createTable('system', (table) => {
-        table.string('ns').primary().notNullable();
-    });
+    await knex.raw('CREATE SCHEMA IF NOT EXISTS system_data;');
+    await knex.raw('GRANT USAGE, CREATE ON SCHEMA system_data TO PUBLIC;');
 
-    // Insert system namespace
-    await knex('system').insert({ 'ns': 'system' });
-    await knex('system').insert({ 'ns': 'test' });
+    await knex.raw('CREATE SCHEMA IF NOT EXISTS system_meta;');
+    await knex.raw('GRANT USAGE, CREATE ON SCHEMA system_meta TO PUBLIC;');
+
+    await knex.raw('CREATE SCHEMA IF NOT EXISTS system_acls;');
+    await knex.raw('GRANT USAGE, CREATE ON SCHEMA system_acls TO PUBLIC;');
 
     // Create the core tables
-    await tableUp(knex, 'schema');
-    await tableUp(knex, 'column');
+    await knexCreateTable(knex, 'schema');
+    await knexCreateTable(knex, 'column');
 
     // Define core table structure
-    await knex.schema.table('schema', (table) => {
+    await knex.schema.table('system_data.schema', (table) => {
         table.string('schema_name').notNullable();
         table.string('schema_type').notNullable().defaultTo('database');
         table.boolean('metadata').defaultTo(false);
     });
 
-    await knex.schema.table('column', (table) => {
+    await knex.schema.table('system_data.column', (table) => {
         table.string('schema_name').notNullable();
         table.string('column_name').notNullable();
         table.string('column_type').notNullable().defaultTo('text');
@@ -46,13 +46,13 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     // Add core schemas
-    let schemas = await insertAll(knex, 'schema', [
+    let schemas = await knexInsertAll(knex, 'schema', [
         { ns: 'system', schema_name: 'schema', schema_type: 'database', metadata: true },
         { ns: 'system', schema_name: 'column', schema_type: 'database', metadata: true },
     ]);
 
     // Add core columns
-    let columns = await insertAll(knex, 'column', [
+    let columns = await knexInsertAll(knex, 'column', [
         // Schema columns
         { ns: 'system', schema_name: 'schema', column_name: 'schema_name' },
         { ns: 'system', schema_name: 'schema', column_name: 'metadata', column_type: 'boolean' },
@@ -75,10 +75,8 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-    await tableDown(knex, 'column');
-    await tableDown(knex, 'schema');
-
-    // Delete system namespace
-    await knex.schema.dropTableIfExists('system');
+    await knex.raw('DROP SCHEMA IF EXISTS system_acls CASCADE;');
+    await knex.raw('DROP SCHEMA IF EXISTS system_meta CASCADE;');
+    await knex.raw('DROP SCHEMA IF EXISTS system_data CASCADE;');
 }
 

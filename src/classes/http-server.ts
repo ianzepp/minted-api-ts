@@ -122,7 +122,7 @@ export class HttpServer {
 
             // Run the router validation, followed by the implementation
             await system.knex.transaction(() => {
-                return system.http.run(httpReq, httpRes);
+                return system.http.run(system, httpReq, httpRes);
             });
         }
 

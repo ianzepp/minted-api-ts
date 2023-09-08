@@ -19,11 +19,9 @@ import headOne from '../helpers/headOne';
 
 
 export class SystemData {
-    constructor(private readonly __system: System) {}
+    constructor(private readonly system: System) {}
 
-    async startup(): Promise<void> {
-        // nothing to do here
-    }
+    async startup(): Promise<void> {}
 
     //
     // Collection record methods
@@ -102,8 +100,8 @@ export class SystemData {
     //
 
     private async onRun(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
-        let schema = this.__system.meta.toSchema(schema_name);
-        let filter = this.__system.meta.toFilter(schema_name, filter_data);
+        let schema = this.system.meta.toSchema(schema_name);
+        let filter = this.system.meta.toFilter(schema_name, filter_data);
 
         console.debug('op=%j schema=%j filter=%j change=%j', op, schema.schema_name, filter, change_data);
 
@@ -111,7 +109,7 @@ export class SystemData {
         let change = change_data.map(change => schema.toRecord(change));
 
         // Build the flow
-        let flow = new ObserverFlow(this.__system, schema, change, filter, op);
+        let flow = new ObserverFlow(this.system, schema, change, filter, op);
 
         // Cycle through rings 0 - 9
         for (let ring = 0 as ObserverRing; ring <= 9; ring++) {

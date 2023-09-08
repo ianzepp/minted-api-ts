@@ -3,7 +3,7 @@ import _ from 'lodash';
 // Classes
 import { Observer } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
-import { Schema } from '../classes/schema';
+import { Record } from '../classes/record';
 import { KnexDriver } from '../classes/knex';
 
 // Layouts
@@ -27,38 +27,42 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        // Define the top-level knex change.
+    // Knex requires updates be done individually (per row). We can help reduce the load by 
+    // running all the changes in parallel as Promises.
+    async run(flow: ObserverFlow) {
+        return Promise.all(flow.change.map(record => this.updateOne(flow, record)));
+    }
+
+    // All data updates must be done in the `system_data` tablespace only.
+    // Once the data updates are done, we update the timestamps.
+    async updateOne(flow: ObserverFlow, record: Record) {
+        if (record.meta.deleted_at) {
+            return; // Cannot update
+        }
+
+        if (record.meta.expired_at) {
+            return; // Cannot update
+        }
+
         let schema_name = flow.schema.schema_name;
-        let knex = flow.system.knex.toTx(schema_name)
+        let updated_at = flow.system.timestamp;
+        let updated_by = flow.system.user.id;
 
-        // Unfortunately, knex requires record updates be done individually. We can help
-        // reduce the load by running all the changes in parallel as Promises
-        let changed_set = flow.change.map(record => {
-            return flow.system.knex.toTx(schema_name, 'data')
-                .where('data.id', record.data.id)
-                .update(record.data);
-        });
+        await flow.system.knex.toTx('system_data.' + schema_name)
+            .whereIn('ns', flow.system.namespaces)
+            .whereIn('id', [record.data.id])
+            .update(record.data);
 
-        // Wait for completion
-        await Promise.all(changed_set);
+        await flow.system.knex.toTx('system_meta.' + schema_name)
+            .whereIn('ns', flow.system.namespaces)
+            .whereIn('id', [record.data.id])
+            .update({
+                updated_at: updated_at,
+                updated_by: updated_by,
+            });
 
-        // Once the data updates are done, the timestamps can be set all at once.
-        let changed_at = flow.system.timestamp;
-        let changed_by = flow.system.user.id;
-
-        // Set timestamps
-        await flow.system.knex.toTx(schema_name + '_info', 'info')
-            .whereIn('info.ns', flow.system.namespaces)
-            .whereIn('info.id', flow.change.map(record => record.data.id))
-            .whereNull('info.expired_at')   // record was not previously expired
-            .whereNull('info.deleted_at')   // record was not previously deleted
-            .update({ updated_at: changed_at, updated_by: changed_by });
-
-        // Apply the timestamp changes back to the records
-        _.each(flow.change, record => {
-            record.meta.updated_at = changed_at;
-            record.meta.updated_by = changed_by;
-        });
+        // With success at the DB level, apply the timestamp back to the record
+        record.meta.updated_at = updated_at;
+        record.meta.updated_by = updated_by;
     }
 }

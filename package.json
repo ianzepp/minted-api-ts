@@ -8,6 +8,7 @@
     "command": "bash ./scripts/command.sh",
     "compile": "bash ./scripts/compile.sh",
     "compile:clean": "bash ./scripts/compile-clean.sh",
+    "migrate:clean": "bash ./scripts/migrate-clean.sh",
     "migrate:make": "bash ./scripts/migrate-make.sh",
     "migrate:latest": "bash ./scripts/migrate-latest.sh",
     "migrate:up": "bash ./scripts/migrate-up.sh",
