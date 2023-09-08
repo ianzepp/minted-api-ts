@@ -11,6 +11,9 @@ import { SystemRoot } from '../classes/system-root';
 import { RecordData } from '../layouts/record';
 
 export class SystemKnex {
+    public readonly Knex = Knex;
+    public readonly KnexDriver = KnexDriver;
+
     private __transaction: Knex.Transaction | undefined;
 
     constructor(private readonly __system: System) {}
@@ -55,6 +58,16 @@ export class SystemKnex {
             knex = KnexDriver(schema_name);
         }
         
+        if (this.__transaction) {
+            knex = knex.transacting(this.__transaction);
+        }
+
+        return knex;
+    }
+
+    toTxSchemaBuilder() {
+        let knex = KnexDriver.schema;
+
         if (this.__transaction) {
             knex = knex.transacting(this.__transaction);
         }
