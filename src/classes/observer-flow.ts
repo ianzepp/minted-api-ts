@@ -50,30 +50,32 @@ export class ObserverFlow {
             }
 
             // Accept if the operation matches
-            else if (observer.onCreate() && this.op == SystemVerb.Create) {
+            if (observer.onSelect() && this.op == SystemVerb.Select) {
                 return true;
             }
 
-            else if (observer.onDelete() && this.op == SystemVerb.Delete) {
+            if (observer.onCreate() && this.op == SystemVerb.Create) {
                 return true;
             }
 
-            else if (observer.onSelect() && this.op == SystemVerb.Select) {
+            if (observer.onUpdate() && this.op == SystemVerb.Update) {
                 return true;
             }
 
-            else if (observer.onUpdate() && this.op == SystemVerb.Update) {
+            if (observer.onUpsert() && this.op == SystemVerb.Upsert) {
                 return true;
             }
 
-            else if (observer.onUpsert() && this.op == SystemVerb.Upsert) {
+            if (observer.onExpire() && this.op == SystemVerb.Expire) {
+                return true;
+            }
+
+            if (observer.onDelete() && this.op == SystemVerb.Delete) {
                 return true;
             }
 
             // No acceptable matches.
-            else {
-                return false;
-            }
+            return false;
         });
 
         for(let observer of observers) {

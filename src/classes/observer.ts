@@ -27,6 +27,7 @@ export class Observer {
             'on-create': this.onCreate(),
             'on-update': this.onUpdate(),
             'on-upsert': this.onUpsert(),
+            'on-expire': this.onExpire(),
             'on-delete': this.onDelete(),
         };
     }
@@ -60,6 +61,10 @@ export class Observer {
     }
 
     onUpsert(): boolean {
+        return false;
+    }
+
+    onExpire(): boolean {
         return false;
     }
 
