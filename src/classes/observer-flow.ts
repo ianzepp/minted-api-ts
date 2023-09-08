@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
+import chai from 'chai';
 
 // Classes
 import { Filter } from '../classes/filter';
@@ -19,6 +20,7 @@ import Observers from '../preloader/observers';
 
 
 export class ObserverFlow {
+    readonly expect = chai.expect;
     readonly failures: ObserverFlowFailure[] = [];
 
     constructor(

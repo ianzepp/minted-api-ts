@@ -173,9 +173,9 @@ describe('SystemData', () => {
 
     test('runs expireAll()', async () => {
         let source_set = [
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.0' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.1' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.2' }), 
+            schema.toRecord({ test: 'system-data.spec/expireAll.0' }), 
+            schema.toRecord({ test: 'system-data.spec/expireAll.1' }), 
+            schema.toRecord({ test: 'system-data.spec/expireAll.2' }), 
         ];
 
         // Test create
@@ -212,9 +212,9 @@ describe('SystemData', () => {
 
     test('runs deleteAll()', async () => {
         let source_set = [
-            schema.toRecord({ test: 'system-data.spec/updateAll.0' }), 
-            schema.toRecord({ test: 'system-data.spec/updateAll.1' }), 
-            schema.toRecord({ test: 'system-data.spec/updateAll.2' }), 
+            schema.toRecord({ test: 'system-data.spec/deleteAll.0' }), 
+            schema.toRecord({ test: 'system-data.spec/deleteAll.1' }), 
+            schema.toRecord({ test: 'system-data.spec/deleteAll.2' }), 
         ];
 
         // Test create

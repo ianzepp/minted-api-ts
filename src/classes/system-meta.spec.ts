@@ -9,53 +9,94 @@ import { System } from '../classes/system';
 
 describe('SystemMeta', () => {
     let system: System;
-    let schema: Schema;
 
     beforeAll(async () => {
         system = await new System({ id: uuid(), ns: 'test', scopes: null }).startup();
-        schema = await system.meta.schemas.schema;
     });
 
     afterAll(async () => {
         return system.knex.destroy();
     });
 
-    test('when schema is created => create database table', async () => {
+    test('schema => database table lifecycle', async () => {
         let record_name = "test_" + new Date().getTime();
-        let record = schema.toRecord({ schema_name: record_name, schema_type: 'database' });
+        let record_schema = system.meta.schemas.schema;
+        let record = record_schema.toRecord({ schema_name: record_name, schema_type: 'database' });
 
         // Insert the new schema record
-        await system.data.createOne(schema, record);
-
-        // Refresh the system
-        await system.meta.startup();
-
-        // Now that the test schema is inserted, we should be able to create a new record of that type
-        let result = await system.data.createOne(record_name, {});
+        record = await system.data.createOne(record_schema, record);
 
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
         chai.expect(record.data).property('id').string;
-        chai.expect(record.data).property('ns').string;
+        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.meta).property('created_at');
+        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('expired_at').null;
+        chai.expect(record.meta).property('expired_by').null;
+
+        // Refresh the system
+        await system.meta.refresh();
+
+        // We should have the test schema available
+        let tested_schema = system.meta.schemas[record_name];
+        let tested = await system.data.createOne(tested_schema, {});
+
+        chai.expect(record).instanceOf(Record);
+        chai.expect(record).property('data').a('object');
+        chai.expect(record.data).property('id').string;
+        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.meta).property('created_at').not.null;
+        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('expired_at').null;
+        chai.expect(record.meta).property('expired_by').null;
+        chai.expect(record.meta).property('deleted_at').null;
+        chai.expect(record.meta).property('deleted_by').null;
+
+        // Expire the schema record.
+        record = await system.data.expireOne(record_schema, record);
+
+        chai.expect(record).instanceOf(Record);
+        chai.expect(record).property('data').a('object');
+        chai.expect(record.data).property('id').string;
+        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.meta).property('created_at').not.null;
+        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('expired_at').not.null;
+        chai.expect(record.meta).property('expired_by', system.user.id);
+        chai.expect(record.meta).property('deleted_at').null;
+        chai.expect(record.meta).property('deleted_by').null;
+
+        // Table operations should still work..
+        await system.data.selectAny(tested_schema, {});
+
+        // Expire the schema record.
+        record = await system.data.deleteOne(record_schema, record);
+
+        chai.expect(record).instanceOf(Record);
+        chai.expect(record).property('data').a('object');
+        chai.expect(record.data).property('id').string;
+        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.meta).property('created_at').not.null;
+        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('expired_at').not.null;
+        chai.expect(record.meta).property('expired_by', system.user.id);
+        chai.expect(record.meta).property('deleted_at').not.null;
+        chai.expect(record.meta).property('deleted_by', system.user.id);
+
+        // Table should be deleted, so we shouldn't be able to get data
+        try {
+            await system.data.selectAny(tested_schema, {});
+        }
+
+        catch (error) {
+            chai.expect(error).property('message').match(/relation ".+?" does not exist/);
+        }
+
+        // Refresh the system
+        await system.meta.refresh();
+
+        // Test schema should be gone
+        chai.expect(system.meta.schemas).not.property(record_name);
     });
-
-    test('when schema is expired => no changes', async () => {
-
-    });    
-
-    test('when schema is deleted => delete database table', async () => {
-
-    });    
-
-    test('when column is created => modify database table', async () => {
-
-    });    
-
-    test('when column is expired => no changes', async () => {
-
-    });    
-
-    test('when column is deleted => modify database table', async () => {
-
-    });    
 });
