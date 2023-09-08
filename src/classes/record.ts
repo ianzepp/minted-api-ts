@@ -56,10 +56,10 @@ export class Record implements RecordJson {
     };
 
     public readonly acls: RecordAcls = {
-        full: null,
-        edit: null,
-        read: null,
-        deny: null,
+        acls_full: null,
+        acls_edit: null,
+        acls_read: null,
+        acls_deny: null,
     };
 
     public readonly prev: RecordData = {
