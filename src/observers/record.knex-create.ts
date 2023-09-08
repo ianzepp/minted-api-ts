@@ -3,9 +3,12 @@ import { v4 as uuid } from 'uuid';
 
 // Classes
 import { Observer } from '../classes/observer';
-import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Record } from '../classes/record';
+
+// Layouts
+import { ObserverRing } from '../layouts/observer';
+
 
 export default class extends Observer {
     toName(): string {
@@ -17,7 +20,7 @@ export default class extends Observer {
     }
 
     onRing(): ObserverRing {
-        return Observer.Ring.Knex;
+        return ObserverRing.Knex;
     }
 
     onCreate(): boolean {
@@ -45,7 +48,7 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         let schema_name = flow.schema.schema_name;
-        let created_at = new Date().toISOString();
+        let created_at = new Date();
         let created_by = flow.system.user.id;
         let created_ns = flow.system.user.ns;
 
@@ -53,8 +56,8 @@ export default class extends Observer {
         _.each(flow.change, record => {
             record.data.id = uuid();
             record.data.ns = created_ns;
-            record.info.created_at = created_at;
-            record.info.created_by = created_by;
+            record.meta.created_at = created_at;
+            record.meta.created_by = created_by;
         });
 
         // Extract the insertion data

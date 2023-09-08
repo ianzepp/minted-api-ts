@@ -1,7 +1,12 @@
 import _ from 'lodash';
 import { program, Command } from 'commander';
-import { System } from './system';
-import { SystemUser } from './system';
+
+// Classes
+import { System } from '../classes/system';
+import { SystemRoot } from '../classes/system-root';
+
+// Layouts
+import { SystemUser } from '../layouts/system';
 
 // Data API
 async function data_select(system: System, schema_name: string, options: _.Dictionary<any>, cmd: Command) {
@@ -24,8 +29,7 @@ async function data_delete(system: System, schema_name: string, options: _.Dicti
 
 function runAction(actionFn: Function) {
     return async (... args: any[]) => {
-        let system_root: SystemUser = { id: System.RootId, ns: 'system', scopes: null };
-        let system = await new System(system_root).startup();
+        let system = await new System(new SystemRoot).startup();
 
         try {
             await actionFn(system, ... args);

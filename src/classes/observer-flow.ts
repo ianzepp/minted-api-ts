@@ -4,22 +4,19 @@ import path from 'path';
 
 // Classes
 import { Filter } from '../classes/filter';
-import { Record } from '../classes/record';
-import { RecordJson } from '../classes/record';
-import { Schema } from '../classes/schema';
 import { Observer } from '../classes/observer';
+import { Record } from '../classes/record';
+import { Schema } from '../classes/schema';
 import { System } from '../classes/system';
-import { SystemVerb } from '../classes/system-data';
+
+// Layouts
+import { ObserverFlowFailure } from '../layouts/observer';
+import { RecordJson } from '../layouts/record';
+import { SystemVerb } from '../layouts/system';
 
 // Import pre-loaded routers
 import Observers from '../preloader/observers';
 
-// Implementation
-export interface ObserverFlowFailure {
-    code: number;
-    message: string;
-    record?: RecordJson;
-}
 
 export class ObserverFlow {
     readonly failures: ObserverFlowFailure[] = [];

@@ -1,11 +1,14 @@
 import _ from 'lodash';
 import { Knex } from 'knex';
 
-// API
+// Classes
 import { KnexDriver } from './knex';
 import { Filter } from '../classes/filter';
 import { System } from '../classes/system';
-import { RecordData } from '../classes/record';
+import { SystemRoot } from '../classes/system-root';
+
+// Layouts
+import { RecordData } from '../layouts/record';
 
 export class SystemKnex {
     private __transaction: Knex.Transaction | undefined;
@@ -85,7 +88,7 @@ export class SystemKnex {
             knex.whereNull('info.expired_at');            
         }
 
-        if (filter.flags.deleted !== true || this.__system.user.id != System.RootId) {
+        if (filter.flags.deleted !== true || this.__system.user.id != SystemRoot.UUID) {
             knex.whereNull('info.deleted_at');            
         }
 
@@ -111,11 +114,11 @@ export class SystemKnex {
     }
 
     private toWhereOps(knex: Knex.QueryBuilder, name: string, data: any) {
-        if (name == Filter.Op.And) {
+        if (name == Filter.Group.And) {
             throw 'Unsupported filter where "$and" grouping';
         }
 
-        else if (name == Filter.Op.Or) {
+        else if (name == Filter.Group.Or) {
             throw 'Unsupported filter where "$or" grouping';
         }
 
@@ -150,47 +153,47 @@ export class SystemKnex {
                 throw 'Invalid filter "where" operation type: ' + typeof op;
             }
 
-            else if (op == Filter.Op.Eq && op_data === null) {
+            else if (op == Filter.Where.Eq && op_data === null) {
                 knex.whereNull('data.' + name);
             }
 
-            else if (op == Filter.Op.Eq) {
+            else if (op == Filter.Where.Eq) {
                 knex.where('data.' + name, '=', op_data);
             }
 
-            else if (op == Filter.Op.Neq && op_data === null) {
+            else if (op == Filter.Where.Neq && op_data === null) {
                 knex.whereNotNull('data.' + name);
             }
 
-            else if (op == Filter.Op.Neq) {
+            else if (op == Filter.Where.Neq) {
                 knex.where('data.' + name, '<>', op_data);
             }
 
-            else if (op == Filter.Op.In && _.isArray(op_data)) {
+            else if (op == Filter.Where.In && _.isArray(op_data)) {
                 knex.whereIn('data.' + name, op_data);
             }
 
-            else if (op == Filter.Op.Nin && _.isArray(op_data)) {
+            else if (op == Filter.Where.Nin && _.isArray(op_data)) {
                 knex.whereNotIn('data.' + name, op_data);
             }
 
-            else if (op == Filter.Op.Gt) {
+            else if (op == Filter.Where.Gt) {
                 knex.where('data.' + name, '>', op_data);
             }
 
-            else if (op == Filter.Op.Gte || op == Filter.Op.Min) {
+            else if (op == Filter.Where.Gte || op == Filter.Where.Min) {
                 knex.where('data.' + name, '>=', op_data);
             }
 
-            else if (op == Filter.Op.Lt) {
+            else if (op == Filter.Where.Lt) {
                 knex.where('data.' + name, '<', op_data);
             }
 
-            else if (op == Filter.Op.Lte || op == Filter.Op.Max) {
+            else if (op == Filter.Where.Lte || op == Filter.Where.Max) {
                 knex.where('data.' + name, '<=', op_data);
             }
 
-            else if (op == Filter.Op.Find) {
+            else if (op == Filter.Where.Find) {
                 // todo pick a LIKE operation
             }
 

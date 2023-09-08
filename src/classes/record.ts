@@ -3,58 +3,20 @@ import chai from 'chai';
 
 // Classes
 import { Column } from '../classes/column';
-import { ColumnType } from '../classes/column';
 import { Schema } from '../classes/schema';
+
+// Layouts
+import { ColumnType } from '../layouts/column';
+import { RecordAcls } from '../layouts/record';
+import { RecordData } from '../layouts/record';
+import { RecordFlat } from '../layouts/record';
+import { RecordJson } from '../layouts/record';
+import { RecordMeta } from '../layouts/record';
+import { SchemaName } from '../layouts/schema';
 
 // Helpers
 import toJSON from '../helpers/toJSON';
 
-// Types
-export type UUID = string;
-
-export type RecordType = string;
-
-export type ChangeData = Record | RecordFlat;
-
-// Interfaces
-export interface RecordFlat extends _.Dictionary<any> {}
-
-export interface RecordJson {
-    type: RecordType;
-    data: RecordData;
-    info: RecordInfo;
-    acls: RecordAcls;
-}
-
-export interface RecordData extends _.Dictionary<any> {
-    id: string | null;
-    ns: string | null;
-}
-
-export interface RecordInfo {
-    created_at: string | null;
-    created_by: string | null;
-    updated_at: string | null;
-    updated_by: string | null;
-    expired_at: string | null;
-    expired_by: string | null;
-    deleted_at: string | null;
-    deleted_by: string | null;
-}
-
-export interface RecordAcls {
-    /** List of security IDs that have unrestricted access to this record */
-    acls_full: UUID[];
-
-    /** List of security IDs that can make record data changes */
-    acls_edit: UUID[];
-
-    /** List of security IDs that can explicitly read record data */
-    acls_read: UUID[];
-
-    /** List of security IDs that are explicitly blacklisted from even knowing the record exists */
-    acls_deny: UUID[];
-}
 
 export class Record implements RecordJson {
     public static ColumnsInfo = [
@@ -75,19 +37,14 @@ export class Record implements RecordJson {
         'acls_deny',
     ];
     
-    public readonly type: RecordType;
+    public readonly type: SchemaName;
     
     public readonly data: RecordData = {
         id: null,
         ns: null,
     };
 
-    public readonly prev: RecordData = {
-        id: null,
-        ns: null,
-    };
-    
-    public readonly info: RecordInfo = {
+    public readonly meta: RecordMeta = {
         created_at: null,
         created_by: null,
         updated_at: null,
@@ -103,6 +60,11 @@ export class Record implements RecordJson {
         acls_edit: null,
         acls_read: null,
         acls_deny: null,
+    };
+
+    public readonly prev: RecordData = {
+        id: null,
+        ns: null,
     };
 
     // Related objects
@@ -132,7 +94,7 @@ export class Record implements RecordJson {
     fromRecord(source: Record): this {
         _.assign(this.data, source.data);
         _.assign(this.prev, source.prev);
-        _.assign(this.info, source.info);
+        _.assign(this.meta, source.meta);
         _.assign(this.acls, source.acls);
         return this;
     }
@@ -146,7 +108,7 @@ export class Record implements RecordJson {
     // Used when importing from API-submitted http requests
     fromRecordJson(source: Partial<RecordJson>): this {
         _.assign(this.data, source.data);
-        _.assign(this.info, source.info);
+        _.assign(this.meta, source.meta);
         _.assign(this.acls, source.acls);
         return this;
     }
@@ -154,7 +116,7 @@ export class Record implements RecordJson {
     // Used when converting from a flat knex data structure to a proper Record
     fromRecordFlat(source: RecordFlat): this {
         _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
-        _.assign(this.info, _.pick(source, Record.ColumnsInfo));
+        _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
         _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
         return this;
     }
@@ -162,7 +124,7 @@ export class Record implements RecordJson {
     // Used when imported prev data from knex
     fromRecordPrev(source: RecordFlat): this {
         _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
-        _.assign(this.info, _.pick(source, Record.ColumnsInfo));
+        _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
         _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
         return this;
     }
@@ -175,7 +137,7 @@ export class Record implements RecordJson {
         return toJSON<RecordJson>({
             type: this.type,
             data: this.data,
-            info: this.info,
+            meta: this.meta,
             acls: this.acls,
         });
     }

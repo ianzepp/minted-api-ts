@@ -2,10 +2,13 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '../classes/observer';
-import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Schema } from '../classes/schema';
 import { KnexDriver } from '../classes/knex';
+
+// Layouts
+import { ObserverRing } from '../layouts/observer';
+
 
 export default class extends Observer {
     toName(): string {
@@ -17,7 +20,7 @@ export default class extends Observer {
     }
 
     onRing(): ObserverRing {
-        return Observer.Ring.Knex;
+        return ObserverRing.Knex;
     }
 
     onUpdate(): boolean {
@@ -54,8 +57,8 @@ export default class extends Observer {
 
         // Apply the timestamp changes back to the records
         _.each(flow.change, record => {
-            record.info.updated_at = changed_at;
-            record.info.updated_by = changed_by;
+            record.meta.updated_at = changed_at;
+            record.meta.updated_by = changed_by;
         });
     }
 }

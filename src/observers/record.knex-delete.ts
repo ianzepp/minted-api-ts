@@ -2,9 +2,12 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '../classes/observer';
-import { ObserverRing } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Schema } from '../classes/schema';
+
+// Layouts
+import { ObserverRing } from '../layouts/observer';
+
 
 export default class extends Observer {
     toName(): string {
@@ -16,7 +19,7 @@ export default class extends Observer {
     }
 
     onRing(): ObserverRing {
-        return Observer.Ring.Knex;
+        return ObserverRing.Knex;
     }
 
     onDelete(): boolean {
@@ -38,8 +41,8 @@ export default class extends Observer {
 
         // Apply the timestamp changes back to the records
         _.each(flow.change, record => {
-            record.info.deleted_at = changed_at;
-            record.info.deleted_by = changed_by;
+            record.meta.deleted_at = changed_at;
+            record.meta.deleted_by = changed_by;
         });
     }
 }

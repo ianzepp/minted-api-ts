@@ -2,22 +2,15 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
-import { RecordJson } from '../classes/record';
 import { Schema } from '../classes/schema';
+
+// Layouts
+import { ColumnType } from '../layouts/column';
 
 // Helpers
 import assertReturn from '../helpers/assertReturn';
 import toJSON from '../helpers/toJSON';
 
-export enum ColumnType {
-    Boolean = 'boolean',
-    Decimal = 'decimal',
-    Enum = 'enum',
-    Integer = 'integer',
-    Json = 'json',
-    Number = 'number',
-    Text = 'text',
-}
 
 export class Column {
     public readonly system_name: string;

@@ -1,5 +1,10 @@
-import { Schema } from './schema';
-import { Column, ColumnType } from './column';
+// Classes
+import { Schema } from '../classes/schema';
+import { Column } from '../classes/column';
+
+// Layouts
+import { ColumnType } from '../layouts/column';
+
 
 describe('Column', () => {
     let schema: Schema;

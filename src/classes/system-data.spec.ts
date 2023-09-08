@@ -2,9 +2,13 @@ import _ from 'lodash';
 import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
-import { Record } from './record';
-import { Schema } from './schema';
-import { System, SystemUser } from './system';
+// Classes
+import { Record } from '../classes/record';
+import { Schema } from '../classes/schema';
+import { System } from '../classes/system';
+
+// Layouts
+import { SystemUser } from '../layouts/system';
 
 function expectStringOrNull(value: any) {
     console.warn('value', value);
@@ -21,18 +25,18 @@ function expectRecordSet(result_set: any[], length?: number) {
 
 function expectRecord(result: any) {
     chai.expect(result).instanceOf(Record);
-    chai.expect(result.data).an('object');
-    chai.expect(result.info).an('object');
+    chai.expect(result).property('data').an('object');
+    chai.expect(result).property('meta').an('object');
 
     chai.expect(result.data).property('id').string;
     chai.expect(result.data).property('ns').string;
 
-    chai.expect(result.info).property('created_at').string;
-    chai.expect(result.info).property('created_by');
-    chai.expect(result.info).property('updated_at');
-    chai.expect(result.info).property('updated_by');
-    chai.expect(result.info).property('expired_at');
-    chai.expect(result.info).property('expired_by');
+    chai.expect(result.meta).property('created_at').string;
+    chai.expect(result.meta).property('created_by');
+    chai.expect(result.meta).property('updated_at');
+    chai.expect(result.meta).property('updated_by');
+    chai.expect(result.meta).property('expired_at');
+    chai.expect(result.meta).property('expired_by');
 }
 
 describe('Schema', () => {
