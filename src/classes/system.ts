@@ -1,20 +1,19 @@
 import _ from 'lodash';
 
+// Classes
+import { SystemRoot } from '../classes/system-root';
+
+// Layouts
+import { SystemUser } from '../layouts/system';
+
 // Subsystems
 import { SystemData } from '../classes/system-data';
 import { SystemMeta } from '../classes/system-meta';
 import { SystemKnex } from '../classes/system-knex';
 import { SystemHttp } from '../classes/system-http';
 
-export interface SystemUser {
-    id: string;
-    ns: string[] | null;
-    sc: string[] | null;
-}
 
 export class System {
-    public static RootId = "00000000-0000-0000-0000-000000000000";
-
     // Services
     public readonly data = new SystemData(this);
     public readonly meta = new SystemMeta(this);
@@ -26,22 +25,26 @@ export class System {
 
     // Root or not?
     public readonly is_root: boolean;
-    public readonly is_user: boolean;
 
     // Setup the user-specific system, or default to a root user.
-    constructor(readonly user: SystemUser) {
-        console.warn('System: id=%j ns=%j sc=%j', user.id, user.ns, user.sc);
+    constructor(readonly user: SystemUser = new SystemRoot) {
+        this.is_root = user.id == SystemRoot.UUID;
+    }
 
-        this.is_root = user.id === System.RootId;
-        this.is_user = user.id !== System.RootId;
+    get namespaces() {
+        return _.uniq(_.compact(['system', this.user.ns, ... this.user.scopes ?? []]));
     }
 
     /** Startup the system */
-    async startup() {
+    async startup(): Promise<this> {
         await this.data.startup();
         await this.meta.startup();
         await this.knex.startup();
         await this.http.startup();
+
+        // Done
+        return this;
     }
 }
+
 

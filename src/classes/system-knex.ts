@@ -1,26 +1,34 @@
 import _ from 'lodash';
 import { Knex } from 'knex';
 
-// API
+// Classes
 import { KnexDriver } from './knex';
 import { Filter } from '../classes/filter';
 import { System } from '../classes/system';
+import { SystemRoot } from '../classes/system-root';
+
+// Layouts
+import { RecordData } from '../layouts/record';
 
 export class SystemKnex {
-    private _transaction: Knex.Transaction | undefined;
+    private __transaction: Knex.Transaction | undefined;
 
-    constructor(private readonly system: System) {}
+    constructor(private readonly __system: System) {}
 
-    async startup() {
+    async startup(): Promise<void> {
         await KnexDriver.raw('SELECT 1'); // test connection at startup
     }
 
-    async transaction(runFn: () => Promise<any>) {
+    async destroy(): Promise<void> {
+        await KnexDriver.destroy();
+    }
+
+    async transaction(runFn: () => Promise<any>): Promise<any> {
         return KnexDriver.transaction(async tx => {
-            this._transaction = tx;
+            this.__transaction = tx;
             return runFn();
         }).finally(() => {
-            this._transaction = undefined;
+            this.__transaction = undefined;
         });
     }
 
@@ -29,44 +37,42 @@ export class SystemKnex {
     //
 
     async select(schema_name: string, columns: string[] = ['*']) {
-        return this.toTx(schema_name).select(columns);
+        return this.toTx(schema_name).select(columns) as Promise<RecordData[]>;
     }
 
     // 
     // Build requests
     //
 
-    toTx(schema_name: string) {
-        let knex = KnexDriver(schema_name + ' as data');
+    toTx(schema_name: string, alias?: string) {
+        let knex;
+        
+        if (typeof alias === 'string') {
+            knex = KnexDriver(schema_name + ' as ' + alias);
+        }
 
-        if (this._transaction) {
-            knex = knex.transacting(this._transaction);
+        else {
+            knex = KnexDriver(schema_name);
+        }
+        
+        if (this.__transaction) {
+            knex = knex.transacting(this.__transaction);
         }
 
         return knex;
     }
 
     toStatement(schema_name: string) {
-        let knex = this.toTx(schema_name);
-        let user = this.system.user;
-        let self = this;
+        let knex = this.toTx(schema_name, 'data');
+
+        // Visibility
+        knex = knex.whereIn('data.ns', this.__system.namespaces);
 
         // Inner join the timestamps and acls
-        knex = knex.join(schema_name + '_info as info', 'info.record_id', 'data.id');
-        knex = knex.join(schema_name + '_acls as acls', 'acls.record_id', 'data.id');
-
-        // Apply all of the system restrictions in a single group
-        knex = knex.where(function() {
-            this.where(function() {
-                this.whereNull('data.ns').orWhereIn('data.ns', user.ns);
-            });
-    
-            this.where(function() {
-                this.whereNull('data.sc').orWhereIn('data.sc', user.sc);
-            });
-
-        });
-
+        knex = knex.join(schema_name + '_info as info', 'info.id', 'data.id');
+        knex = knex.join(schema_name + '_acls as acls', 'acls.id', 'data.id');
+                
+        // Done
         return knex;
     }
 
@@ -82,13 +88,13 @@ export class SystemKnex {
             knex.whereNull('info.expired_at');            
         }
 
-        if (filter.flags.deleted !== true || this.system.user.id !== System.RootId) {
+        if (filter.flags.deleted !== true || this.__system.user.id != SystemRoot.UUID) {
             knex.whereNull('info.deleted_at');            
         }
 
         // Iterate where clauses
         knex = knex.where(function() {
-            self.__where_one(this, filter.where);
+            self.toWhereOne(this, filter.where);
         });
 
         // Set limit
@@ -99,22 +105,20 @@ export class SystemKnex {
     }
 
     // Process where clause data
-    private __where_all(knex: Knex.QueryBuilder, clauses: _.Dictionary<any>[]) {
-        _.forEach(clauses, (clause) => this.__where_one(knex, clause));
+    private toWhereAll(knex: Knex.QueryBuilder, clauses: _.Dictionary<any>[]) {
+        _.forEach(clauses, (clause) => this.toWhereOne(knex, clause));
     }
 
-    private __where_one(knex: Knex.QueryBuilder, clause: _.Dictionary<any>) {
-        _.forEach(clause, (data, name) => this.__where(knex, name, data));
+    private toWhereOne(knex: Knex.QueryBuilder, clause: _.Dictionary<any>) {
+        _.forEach(clause, (data, name) => this.toWhereOps(knex, name, data));
     }
 
-    private __where(knex: Knex.QueryBuilder, name: string, data: any) {
-        console.warn('SystemKnex.addFilterWhere: raw-name=%j raw-data=%j', name, data);
-
-        if (name === '$and') {
+    private toWhereOps(knex: Knex.QueryBuilder, name: string, data: any) {
+        if (name == Filter.Group.And) {
             throw 'Unsupported filter where "$and" grouping';
         }
 
-        else if (name === '$or') {
+        else if (name == Filter.Group.Or) {
             throw 'Unsupported filter where "$or" grouping';
         }
 
@@ -127,19 +131,19 @@ export class SystemKnex {
         }
 
         else if (typeof data === 'string') {
-            knex.where(name, data);
+            knex.where('data.' + name, data);
         }
 
         else if (typeof data === 'number') {
-            knex.where(name, data);
+            knex.where('data.' + name, data);
         }
 
-        else if (data === true || data === false) {
-            knex.where(name, data);
+        else if (typeof data === 'boolean') {
+            knex.where('data.' + name, data);
         }
 
         else if (_.isArray(data)) {
-            knex.whereIn(name, data);
+            knex.whereIn('data.' + name, data);
         }
 
         else if (_.isPlainObject(data)) {
@@ -149,47 +153,47 @@ export class SystemKnex {
                 throw 'Invalid filter "where" operation type: ' + typeof op;
             }
 
-            else if (op === '$eq' && op_data === null) {
-                knex.whereNull(name);
+            else if (op == Filter.Where.Eq && op_data === null) {
+                knex.whereNull('data.' + name);
             }
 
-            else if (op === '$eq') {
-                knex.where(name, '=', op_data);
+            else if (op == Filter.Where.Eq) {
+                knex.where('data.' + name, '=', op_data);
             }
 
-            else if (op === '$ne' && op_data === null) {
-                knex.whereNotNull(name);
+            else if (op == Filter.Where.Neq && op_data === null) {
+                knex.whereNotNull('data.' + name);
             }
 
-            else if (op === '$ne') {
-                knex.where(name, '<>', op_data);
+            else if (op == Filter.Where.Neq) {
+                knex.where('data.' + name, '<>', op_data);
             }
 
-            else if (op === '$in' && _.isArray(op_data)) {
-                knex.whereIn(name, op_data);
+            else if (op == Filter.Where.In && _.isArray(op_data)) {
+                knex.whereIn('data.' + name, op_data);
             }
 
-            else if (op === '$nin' && _.isArray(op_data)) {
-                knex.whereNotIn(name, op_data);
+            else if (op == Filter.Where.Nin && _.isArray(op_data)) {
+                knex.whereNotIn('data.' + name, op_data);
             }
 
-            else if (op === '$gt') {
-                knex.where(name, '>', op_data);
+            else if (op == Filter.Where.Gt) {
+                knex.where('data.' + name, '>', op_data);
             }
 
-            else if (op === '$gte' || op === '$min') {
-                knex.where(name, '>=', op_data);
+            else if (op == Filter.Where.Gte || op == Filter.Where.Min) {
+                knex.where('data.' + name, '>=', op_data);
             }
 
-            else if (op === '$lt') {
-                knex.where(name, '<', op_data);
+            else if (op == Filter.Where.Lt) {
+                knex.where('data.' + name, '<', op_data);
             }
 
-            else if (op === '$lte' || op === '$max') {
-                knex.where(name, '<=', op_data);
+            else if (op == Filter.Where.Lte || op == Filter.Where.Max) {
+                knex.where('data.' + name, '<=', op_data);
             }
 
-            else if (op === '$find') {
+            else if (op == Filter.Where.Find) {
                 // todo pick a LIKE operation
             }
 

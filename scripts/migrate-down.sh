@@ -1,8 +1,10 @@
 #!/bin/bash
+
+# Compile
 if ! npm run compile; then
     echo "Compilation failed!"
     exit 1
 fi
 
-# Start node
-node ./dst/start.js
+# Run the migration
+knex migrate:down

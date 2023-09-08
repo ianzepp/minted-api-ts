@@ -2,25 +2,9 @@
 // Classes
 import { ObserverFlow } from '../classes/observer-flow';
 
-export enum ObserverRank {
-    SystemMax = 0,
-    Max = 1,
-    Avg = 5,
-    Min = 9,
-}
-
-export enum ObserverRing {
-    Init = 0, // System init
-    Prep = 1, // Logic prep
-    Load = 2, // Load in any data dependencies
-    Work = 3, // Run logic
-    Test = 4, // Validations
-    Knex = 5, // Database changes
-    Post = 6, // Post-db changes
-    Flow = 7, // Cascade down to more flow operations
-    Http = 8, // External HTTP updates, non-blocking
-    Done = 9, // System cleanup
-}
+// Layouts
+import { ObserverRank } from '../layouts/observer';
+import { ObserverRing } from '../layouts/observer';
 
 export class Observer {
     // Re-export aliases
@@ -33,7 +17,7 @@ export class Observer {
         throw 500;
     }
 
-    toJSON() {
+    toJSON(): Object {
         return {
             'name': this.toName(),
             'on-schema': this.onSchema(),
@@ -47,7 +31,7 @@ export class Observer {
         };
     }
 
-    toName() {
+    toName(): string {
         return __filename;
     }
 
@@ -55,39 +39,39 @@ export class Observer {
         throw 500;
     }
 
-    onRing() {
-        return Observer.Ring.Work;
+    onRing(): ObserverRing {
+        return ObserverRing.Work;
     }
 
-    onRank() {
-        return Observer.Rank.Avg;
+    onRank(): ObserverRank {
+        return ObserverRank.Avg;
     }
 
-    onSelect() {
+    onSelect(): boolean {
         return false;
     }
 
-    onCreate() {
+    onCreate(): boolean {
         return false;
     }
 
-    onUpdate() {
+    onUpdate(): boolean {
         return false;
     }
 
-    onUpsert() {
+    onUpsert(): boolean {
         return false;
     }
 
-    onDelete() {
+    onDelete(): boolean {
         return false;
     }
 
-    isRunnable() {
+    isRunnable(): boolean {
         return true;
     }
 
-    isFailable() {
+    isFailable(): boolean {
         return false;
     }
 }

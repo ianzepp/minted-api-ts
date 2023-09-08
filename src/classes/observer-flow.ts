@@ -4,21 +4,19 @@ import path from 'path';
 
 // Classes
 import { Filter } from '../classes/filter';
-import { Record } from '../classes/record';
-import { RecordJson } from '../classes/record';
-import { Schema } from '../classes/schema';
 import { Observer } from '../classes/observer';
+import { Record } from '../classes/record';
+import { Schema } from '../classes/schema';
 import { System } from '../classes/system';
+
+// Layouts
+import { ObserverFlowFailure } from '../layouts/observer';
+import { RecordJson } from '../layouts/record';
+import { SystemVerb } from '../layouts/system';
 
 // Import pre-loaded routers
 import Observers from '../preloader/observers';
 
-// Implementation
-export interface ObserverFlowFailure {
-    code: number;
-    message: string;
-    record?: RecordJson;
-}
 
 export class ObserverFlow {
     readonly failures: ObserverFlowFailure[] = [];
@@ -30,23 +28,15 @@ export class ObserverFlow {
         readonly filter: Filter,
         readonly op: string) {}
 
-    get schema_name() {
-        return this.schema.schema_name;
-    }
-
-    get change_map() {
+    get change_map(): _.Dictionary<Record> {
         return _.keyBy(this.change, 'data.id');
     }
 
-    get change_ids() {
+    get change_ids(): any[] {
         return _.compact(_.map(this.change, 'data.id'));
     }
 
-    get statement() {
-        return this.system.knex.toStatement(this.schema_name);
-    }
-
-    async run(ring: number) {
+    async run(ring: number): Promise<void> {
         // Get the master list of observers for this execution context
         let observers: Observer[] = []; 
         observers.push(... _.get(Observers, 'record') || []);
@@ -55,33 +45,35 @@ export class ObserverFlow {
         // Filter in a single loop
         observers = observers.filter(observer => {
             // Wrong ring?
-            if (observer.onRing() !== ring) {
+            if (observer.onRing() != ring) {
                 return false;
             }
 
             // Accept if the operation matches
-            if (observer.onSelect() && this.op === 'select') {
+            else if (observer.onCreate() && this.op == SystemVerb.Create) {
                 return true;
             }
 
-            if (observer.onCreate() && this.op === 'create') {
+            else if (observer.onDelete() && this.op == SystemVerb.Delete) {
                 return true;
             }
 
-            if (observer.onUpdate() && this.op === 'update') {
+            else if (observer.onSelect() && this.op == SystemVerb.Select) {
                 return true;
             }
 
-            if (observer.onUpsert() && this.op === 'upsert') {
+            else if (observer.onUpdate() && this.op == SystemVerb.Update) {
                 return true;
             }
 
-            if (observer.onDelete() && this.op === 'delete') {
+            else if (observer.onUpsert() && this.op == SystemVerb.Upsert) {
                 return true;
             }
 
             // No acceptable matches.
-            return false;
+            else {
+                return false;
+            }
         });
 
         for(let observer of observers) {
@@ -109,7 +101,7 @@ export class ObserverFlow {
         }
     }
 
-    fail(code: number, message: string, record?: Record) {
+    fail(code: number, message: string, record?: Record): void {
         this.failures.push({
             code: code,
             message: message,

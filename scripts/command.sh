@@ -5,4 +5,4 @@ if ! npm run compile; then
 fi
 
 # Start node
-node ./dst/start.js
+node ./dst/classes/command.js "$@"

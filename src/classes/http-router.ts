@@ -8,7 +8,7 @@ import { HttpRes } from '../classes/http-server';
 import { System } from '../classes/system';
 
 // Helper to assert a value is not undefined
-function assert<T>(v: T | undefined) {
+function assert<T>(v: T | undefined): T {
     chai.assert(v); return v;
 }
 
@@ -24,39 +24,51 @@ export class HttpRouter {
     // Re-export aliases
     public static Verb = HttpVerb;
 
-    private _system: System | undefined;
-    private _req: HttpReq | undefined;
-    private _res: HttpRes | undefined;
+    private __system: System | undefined;
+    private __req: HttpReq | undefined;
+    private __res: HttpRes | undefined;
 
-    get system() {
-        return assert<System>(this._system);
+    get system(): System {
+        return assert<System>(this.__system);
     }
 
-    get req() {
-        return assert<HttpReq>(this._req);
+    get req(): HttpReq {
+        return assert<HttpReq>(this.__req);
     }
 
-    get res() {
-        return assert<HttpRes>(this._res);
+    get res(): HttpRes {
+        return assert<HttpRes>(this.__res);
     }
 
-    async runsafe(system: System, req: HttpReq, res: HttpRes) {
+    async runsafe(system: System, req: HttpReq, res: HttpRes): Promise<any> {
         // Default body values
-        if (['GET'].includes(req.verb)) {
+        if (req.verb == HttpRouter.Verb.Get) {
             req.body = req.body || {};
         }
 
-        if (['POST', 'PATCH', 'PUT', 'DELETE'].includes(req.verb)) {
+        else if (req.verb == HttpRouter.Verb.Delete) {
+            req.body = req.body || [];
+        }
+
+        else if (req.verb == HttpRouter.Verb.Patch) {
+            req.body = req.body || [];
+        }
+
+        else if (req.verb == HttpRouter.Verb.Post) {
+            req.body = req.body || [];
+        }
+
+        else if (req.verb == HttpRouter.Verb.Put) {
             req.body = req.body || [];
         }
 
         // Import references
-        this._system = system;
-        this._req = req;
-        this._res = res;
+        this.__system = system;
+        this.__req = req;
+        this.__res = res;
 
         // Set the params
-        this._req.params = _.get(match(this.onHttpPath())(req.path), 'params');
+        this.__req.params = _.get(match(this.onHttpPath())(req.path), 'params');
 
         // Done
         return this.run();
@@ -79,14 +91,14 @@ export class HttpRouter {
     }
 
     isHttpVerb(verb: string): boolean {
-        return verb === this.onHttpVerb();
+        return verb == this.onHttpVerb();
     }
 
     isHttpPath(path: string): boolean {
         return pathToRegexp(this.onHttpPath()).exec(path ?? '/') !== null;
     }
 
-    is(verb: string, path: string) {
+    is(verb: string, path: string): boolean {
         return this.isHttpVerb(verb) && this.isHttpPath(path);
     }
 }

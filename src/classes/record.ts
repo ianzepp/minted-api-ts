@@ -5,70 +5,18 @@ import chai from 'chai';
 import { Column } from '../classes/column';
 import { Schema } from '../classes/schema';
 
+// Layouts
+import { ColumnType } from '../layouts/column';
+import { RecordAcls } from '../layouts/record';
+import { RecordData } from '../layouts/record';
+import { RecordFlat } from '../layouts/record';
+import { RecordJson } from '../layouts/record';
+import { RecordMeta } from '../layouts/record';
+import { SchemaName } from '../layouts/schema';
+
 // Helpers
 import toJSON from '../helpers/toJSON';
 
-// Types & Interfaces
-export type UUID = string;
-
-// Type sugar for proxy stuff
-export function isRecordJson(schema_name: string, something: any) {
-    let pass = typeof something === 'object'
-            && typeof something.data === 'object'
-            && typeof something.type === 'string'
-            && something.type === schema_name;
-
-    return pass;
-}
-
-export function isRecordFlat(something: any) {
-    let pass = typeof something === 'object'
-            && typeof something.id === 'string';
-
-    return pass;
-}
-
-export interface RecordFlat extends _.Dictionary<any> {}
-
-export interface RecordJson {
-    type: string;
-    data: RecordData;
-    info: RecordInfo;
-    acls: RecordAcls;
-}
-
-export interface RecordData extends _.Dictionary<any> {
-    id: string | null;
-    ns: string | null;
-    sc: string | null;
-}
-
-export interface RecordInfo {
-    created_at: string | null;
-    created_by: string | null;
-    updated_at: string | null;
-    updated_by: string | null;
-    expired_at: string | null;
-    expired_by: string | null;
-    trashed_at: string | null;
-    trashed_by: string | null;
-    deleted_at: string | null;
-    deleted_by: string | null;
-}
-
-export interface RecordAcls {
-    /** List of security IDs that have unrestricted access to this record */
-    acls_full: UUID[];
-
-    /** List of security IDs that can make record data changes */
-    acls_edit: UUID[];
-
-    /** List of security IDs that can explicitly read record data */
-    acls_read: UUID[];
-
-    /** List of security IDs that are explicitly blacklisted from even knowing the record exists */
-    acls_deny: UUID[];
-}
 
 export class Record implements RecordJson {
     public static ColumnsInfo = [
@@ -78,8 +26,6 @@ export class Record implements RecordJson {
         'updated_by',
         'expired_at',
         'expired_by',
-        'trashed_at',
-        'trashed_by',
         'deleted_at',
         'deleted_by',
     ];
@@ -91,29 +37,20 @@ export class Record implements RecordJson {
         'acls_deny',
     ];
     
-    public readonly type: string;
+    public readonly type: SchemaName;
     
     public readonly data: RecordData = {
         id: null,
         ns: null,
-        sc: null,
     };
 
-    public readonly prev: RecordData = {
-        id: null,
-        ns: null,
-        sc: null,
-    };
-    
-    public readonly info: RecordInfo = {
+    public readonly meta: RecordMeta = {
         created_at: null,
         created_by: null,
         updated_at: null,
         updated_by: null,
         expired_at: null,
         expired_by: null,
-        trashed_at: null,
-        trashed_by: null,
         deleted_at: null,
         deleted_by: null,
     };
@@ -125,10 +62,13 @@ export class Record implements RecordJson {
         acls_deny: null,
     };
 
+    public readonly prev: RecordData = {
+        id: null,
+        ns: null,
+    };
+
     // Related objects
-    constructor(readonly schema_name: string) {
-        this.type = schema_name;
-    }
+    constructor(public readonly schema: Schema) {}
 
     get diff(): Partial<RecordData> {
         // diff = the accumulated difference between objects
@@ -150,60 +90,59 @@ export class Record implements RecordJson {
         }, { id: this.data.id } as Partial<RecordData>);
     }
 
+    // Used for a internal record-to-record copy
+    fromRecord(source: Record): this {
+        _.assign(this.data, source.data);
+        _.assign(this.prev, source.prev);
+        _.assign(this.meta, source.meta);
+        _.assign(this.acls, source.acls);
+        return this;
+    }
 
     // Used when importing from API-submitted http requests (partial representation with `.data` values only)
-    fromRecordData(source: RecordData) {
+    fromRecordData(source: RecordData): this {
         _.assign(this.data, source);
         return this;
     }
 
     // Used when importing from API-submitted http requests
-    fromRecordJson(source: Partial<RecordJson>) {
+    fromRecordJson(source: Partial<RecordJson>): this {
         _.assign(this.data, source.data);
-        _.assign(this.info, source.info);
-        _.assign(this.acls, source.acls);
-        return this;
-    }
-
-    // Used for a internal record-to-record copy
-    fromRecord(source: Record) {
-        _.assign(this.data, source.data);
-        _.assign(this.prev, source.prev);
-        _.assign(this.info, source.info);
+        _.assign(this.meta, source.meta);
         _.assign(this.acls, source.acls);
         return this;
     }
 
     // Used when converting from a flat knex data structure to a proper Record
-    fromRecordFlat(source: RecordFlat) {
-        _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls, ['id_table', 'record_id']));
-        _.assign(this.info, _.pick(source, Record.ColumnsInfo));
+    fromRecordFlat(source: RecordFlat): this {
+        _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
+        _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
         _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
         return this;
     }
 
     // Used when imported prev data from knex
-    fromRecordPrev(source: RecordFlat) {
-        _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls, ['id_table', 'record_id']));
-        _.assign(this.info, _.pick(source, Record.ColumnsInfo));
+    fromRecordPrev(source: RecordFlat): this {
+        _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
+        _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
         _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
         return this;
     }
 
-    toString() {
-        return `${this.schema_name}#${this.data.id}`;
+    toString(): string {
+        return `${this.schema.schema_name}#${this.data.id}`;
     }
 
-    toJSON() {
+    toJSON(): RecordJson {
         return toJSON<RecordJson>({
             type: this.type,
             data: this.data,
-            info: this.info,
+            meta: this.meta,
             acls: this.acls,
         });
     }
 
-    expect(path?: string) {
+    expect(path?: string): Chai.Assertion {
         if (path === undefined) {
             return chai.expect(this);
         }
@@ -217,7 +156,7 @@ export class Record implements RecordJson {
     // Column helpers
     // 
 
-    has(column: Column) {
+    has(column: Column): boolean {
         return !!this.data[column.column_name];
     }
 
@@ -233,7 +172,7 @@ export class Record implements RecordJson {
             return; // cannot unset a value
         }
 
-        else if (column.type === Column.Type.Boolean) {
+        else if (column.column_type == ColumnType.Boolean) {
             test.is('boolean');
         }
 
@@ -241,28 +180,28 @@ export class Record implements RecordJson {
             // null is allowable for the rest of the data types
         }
 
-        else if (column.type === Column.Type.Decimal) {
+        else if (column.column_type == ColumnType.Decimal) {
             test.is('number');
         }
 
-        else if (column.type === Column.Type.Integer) {
+        else if (column.column_type == ColumnType.Integer) {
             test.is('number');
         }
 
-        else if (column.type === Column.Type.Json) {
+        else if (column.column_type == ColumnType.Json) {
             test.is('object');
         }
 
-        else if (column.type === Column.Type.Number) {
+        else if (column.column_type == ColumnType.Number) {
             test.is('number');
         }
 
-        else if (column.type === Column.Type.Text) {
+        else if (column.column_type == ColumnType.Text) {
             test.is('string');
         }
 
         else {
-            // unknown data type?
+            throw new Error('Unsupported column type: ' + column.column_type)
         }
 
         // Set data

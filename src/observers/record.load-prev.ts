@@ -4,27 +4,38 @@ import _ from 'lodash';
 import { Observer } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Schema } from '../classes/schema';
-import { RecordFlat } from '../classes/record';
+
+// Layouts
+import { ObserverRing } from '../layouts/observer';
+import { RecordFlat } from '../layouts/record';
+
 
 export default class extends Observer {
-    toName() {
+    toName(): string {
         return 'record.load-prev';
     }
     
-    onSchema() {
-        return Schema.Type.Record;
+    onSchema(): string {
+        return 'record';
     }
 
-    onRing() {
-        return Observer.Ring.Init;
+    onRing(): ObserverRing {
+        return ObserverRing.Init;
     }
 
-    onUpdate() {
+    onUpdate(): boolean {
         return true;
     }
 
-    async run(flow: ObserverFlow) {
-        let result: RecordFlat[] = await flow.statement.whereIn('id', flow.change_ids).select();
+    async run(flow: ObserverFlow): Promise<void> {
+        let schema_name = flow.schema.schema_name;
+
+        let result = await flow.system.knex.toTx(schema_name, 'data')
+            .whereIn('data.ns', flow.system.namespaces)
+            .whereIn('data.id', flow.change.map(record => record.data.id))
+            .select();
+
+        // Convert the result list to a mapping by ID
         let result_map = _.keyBy(result, 'id');
 
         // Assign the raw knex data for previous values to the records
@@ -35,7 +46,7 @@ export default class extends Observer {
                 continue; // TODO Is this an error? We have an ID but no record found?
             }
 
-            record.fromRecordPrev(record_prev);
+            _.assign(record.prev, record_prev);
         }
     }
 }

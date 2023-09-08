@@ -4,128 +4,51 @@ import chai from 'chai';
 // Classes
 import { Schema } from '../classes/schema';
 import { System } from '../classes/system';
-import { RecordJson } from './record';
+import { Record } from '../classes/record';
+
+// Layouts
+import { FilterGroup } from '../layouts/filter';
+import { FilterOrder } from '../layouts/filter';
+import { FilterWhere } from '../layouts/filter';
+import { FilterInfo } from '../layouts/filter';
+import { FilterJson } from '../layouts/filter';
+import { SchemaName } from '../layouts/schema';
 
 // Helpers
 import toJSON from '../helpers/toJSON';
 
-// Types
 
-// export type FilterOp = '$eq' | '$ne' | '$gt' | '$gte' | '$lt' | '$lte' | '$like' | '$nlike' | '$in' | '$nin';
-// export type FilterGroupingOp = '$and' | '$or' | '$not' | '$nor';
-
-// export type FilterType = FilterJson | Filter;
-
-// export type FilterWhereClause = {
-//     [index: string]: FilterWhereCriteria | {
-//         [key in FilterOp]?: FilterWhereCriteria
-//     }
-// } | {
-//     [key in FilterGroupingOp]?: FilterWhereClause[]
-// }
-
-// export type FilterWhereCriteria = string | string[] | boolean | number | null;
-
-// export type FilterOrderClause = {
-//     [index: string]: 'asc' | 'desc';
-// }
-
-// export interface FilterJson {
-//     where?: FilterWhereClause | FilterWhereClause[];
-//     order?: FilterOrderClause | FilterOrderClause[];
-//     flags?: FilterFlags;
-//     limit?: number | 'max';
-// }
-
-// export interface FilterConcreteJson extends FilterJson {
-//     where: FilterWhereClause[];
-//     order: FilterOrderClause[];
-//     flags: FilterFlags;
-//     limit: number;
-// }
-
-// export interface FilterFlags {
-//     // Include expired records?
-//     expired?: boolean;
-
-//     // Include deleted records? Only applies to root
-//     deleted?: boolean;
-// }
-
-export enum FilterOp {
-    And = '$and',
-    Eq = '$eq',
-    Gt = '$gt',
-    Gte = '$gte',
-    In = '$in',
-    Lt = '$lt',
-    Lte = '$lte',
-    NotEq = '$ne',
-    NotIn = '$nin',
-    Or = '$or',
-}
-
-export class FilterJson {
-    where: _.Dictionary<any>;
-    order: _.Dictionary<any>;
-    flags: _.Dictionary<any>;
-    limit: number;
-}
-
-export class Filter implements FilterJson {
+export class Filter implements FilterInfo {
+    // Static values
     public static LimitDefault = 100;
     public static LimitMaximum = 10000;
+    public static LimitMinimum = 0;
 
     // Re-export aliases
-    public static Op = FilterOp;
+    public static Group = FilterGroup;
+    public static Order = FilterOrder;
+    public static Where = FilterWhere;
 
-    constructor(private readonly source: RecordJson) {
-        chai.expect(source).property('type').eq('filter');
-        chai.expect(source).property('data');
-        chai.expect(source).nested.property('data.schema_name');
+    // Default values
+    public readonly where: _.Dictionary<any> = {};
+    public readonly order: _.Dictionary<any> = {};
+    public readonly flags: _.Dictionary<any> = {};
+    public limit: number = Filter.LimitDefault;
 
-        _.defaults(source.data, {
-            where: {},
-            order: {},
-            flags: {},
-            limit: Filter.LimitDefault
+    constructor(public readonly using: SchemaName, source?: Partial<FilterJson>) {
+        _.assign(this.where, source?.where);
+        _.assign(this.order, source?.order);
+        _.assign(this.flags, source?.flags);
+        _.assign(this.limit, source?.limit);
+    }
+
+    toJSON(): FilterJson {
+        return toJSON({
+            using: this.using,
+            where: this.where,
+            order: this.order,
+            flags: this.flags,
+            limit: this.limit,
         });
-
-        chai.expect(source).nested.property('data.where').a('object');
-        chai.expect(source).nested.property('data.order').a('object');
-        chai.expect(source).nested.property('data.flags').a('object');
-        chai.expect(source).nested.property('data.limit').a('number').lte(Filter.LimitMaximum);
-    }
-
-    get schema_name(): string {
-        return this.source.data.schema_name;
-    }
-
-    get where(): _.Dictionary<any> {
-        return this.source.data.where;
-    }
-
-    get order(): _.Dictionary<any> {
-        return this.source.data.order;
-    }
-
-    get flags(): _.Dictionary<any> {
-        return this.source.data.flags;
-    }
-
-    get limit(): number {
-        return this.source.data.limit;
-    }
-
-    public static isFilter(something: unknown): boolean {
-        return something instanceof Filter;
-    }
-
-    public static isFilterJson(something: unknown): boolean {
-        return _.isPlainObject(something) && (<_.Dictionary<any>> something).where;
-    }
-
-    toJSON(): Partial<RecordJson> {
-        return toJSON(_.omit(this.source, ['info', 'acls']));
     }
 }

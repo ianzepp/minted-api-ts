@@ -4,43 +4,70 @@ import { v4 as uuid } from 'uuid';
 // Classes
 import { Observer } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
+import { Record } from '../classes/record';
+
+// Layouts
+import { ObserverRing } from '../layouts/observer';
+
 
 export default class extends Observer {
-    toName() {
+    toName(): string {
         return 'record.knex-create';
     }
     
-    onSchema() {
+    onSchema(): string {
         return 'record';
     }
 
-    onRing() {
-        return Observer.Ring.Knex;
+    onRing(): ObserverRing {
+        return ObserverRing.Knex;
     }
 
-    onCreate() {
+    onCreate(): boolean {
         return true;
     }
 
-    async run(flow: ObserverFlow) {
+    toExtract(record_set: Record[], record_property: string) {
+        return record_set.map(record => _.assign({
+            id: record.data.id,
+            ns: record.data.ns,
+        }, _.get(record, record_property)) as _.Dictionary<any>);
+    }
+
+    toExtractData(record_set: Record[]) {
+        return this.toExtract(record_set, 'data');
+    }
+
+    toExtractInfo(record_set: Record[]) {
+        return this.toExtract(record_set, 'info');
+    }
+
+    toExtractAcls(record_set: Record[]) {
+        return this.toExtract(record_set, 'acls');
+    }
+
+    async run(flow: ObserverFlow): Promise<void> {
+        let schema_name = flow.schema.schema_name;
+        let created_at = new Date();
+        let created_by = flow.system.user.id;
+        let created_ns = flow.system.user.ns;
+
         // Populate insertion data
         _.each(flow.change, record => {
             record.data.id = uuid();
-            record.data.ns = null;
-            record.data.sc = null;
-            record.info.created_at = new Date().toISOString();
-            record.info.created_by = null;
+            record.data.ns = created_ns;
+            record.meta.created_at = created_at;
+            record.meta.created_by = created_by;
         });
 
         // Extract the insertion data
-        let insert_data = _.map(flow.change, record => _.merge({}, record.data));
-        let insert_info = _.map(flow.change, record => _.merge({}, record.info, { 
-            id: record.data.id,
-            id_table: flow.schema_name,
-        }));
+        let insert_data = this.toExtract(flow.change, 'data');
+        let insert_info = this.toExtract(flow.change, 'info');
+        let insert_acls = this.toExtract(flow.change, 'acls');
 
         // Insert data
-        await flow.system.knex.toTx(flow.schema_name).insert(insert_data);
-        await flow.system.knex.toTx('metainfo').insert(insert_info);
+        await flow.system.knex.toTx(schema_name).insert(insert_data);
+        await flow.system.knex.toTx(schema_name + '_info').insert(insert_info);
+        await flow.system.knex.toTx(schema_name + '_acls').insert(insert_acls);
     }
 }

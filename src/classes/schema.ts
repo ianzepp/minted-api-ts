@@ -3,73 +3,94 @@ import chai from 'chai';
 
 // Classes
 import { Column } from '../classes/column';
-import { Filter } from '../classes/filter';
-import { FilterJson } from '../classes/filter';
 import { Record } from '../classes/record';
-import { RecordJson } from '../classes/record';
+
+// Layouts
+import { RecordData } from '../layouts/record';
+import { RecordFlat } from '../layouts/record';
+import { RecordJson } from '../layouts/record';
 
 // Helpers
+import isRecordDict from '../helpers/isRecordDict';
+import isRecordFlat from '../helpers/isRecordFlat';
+import isRecordJson from '../helpers/isRecordJson';
 import toJSON from '../helpers/toJSON';
 
-export enum SchemaType {
-    Schema = 'schema',
-    Column = 'column',
-    Custom = 'custom',
-    Record = 'record',
-    Filter = 'filter',
-}
-
-export type SchemaName = SchemaType | string;
 
 export class Schema {
-    public static Type = SchemaType;
+    // Public helpers
+    public readonly system_name: string;
+    public readonly columns: _.Dictionary<Column> = {};
 
-    private readonly _columns_map: _.Dictionary<Column> = {};
+    constructor(private readonly source: _.Dictionary<any>) {
+        chai.expect(source).property('id').a('string');
+        chai.expect(source).property('ns').a('string');
+        chai.expect(source).property('schema_name').a('string');
+        chai.expect(source).property('schema_type').a('string');
+        chai.expect(source).property('metadata').a('boolean');
 
-    private readonly _caching = {
-
+        // Set system name
+        this.system_name = `${ source.ns }__${ source.schema_name }`;
     }
 
-    constructor(private readonly source: Partial<RecordJson>) {
-        chai.expect(source).property('type').eq('schema');
-        chai.expect(source).property('data');
-        chai.expect(source).nested.property('data.schema_name').a('string');
-        chai.expect(source).nested.property('data.description');
+    get id(): string {
+        return this.source.id;
+    }
+
+    get ns(): string {
+        return this.source.ns;
     }
 
     get schema_name(): string {
-        return this.source.data.schema_name;
+        return this.source.schema_name;
     }
 
-    get intern_name(): string {
-        return this.source.data.intern_name ?? this.schema_name;
+    get schema_type(): string {
+        return this.source.schema_type;
     }
 
-    get description(): string | null {
-        return this.source.data.description ?? null;
+    get metadata(): boolean {
+        return this.source.metadata;
+    }
+    
+    toJSON() {
+        return toJSON(this.source);
     }
 
-    //
-    // Helpers
-    //
+    toRecord(source?: Record | RecordData | RecordFlat | RecordJson | _.Dictionary<any>) {
+        let record = new Record(this);
 
-    get columns_map() {
-        return this._columns_map;
-    }
+        if (source === undefined) {
+            // do nothing
+        }
 
-    get columns() {
-        return _.values(this._columns_map);
-    }
+        else if (source instanceof Record) {
+            _.assign(record.data, source.data);
+            _.assign(record.prev, source.prev);
+            _.assign(record.meta, source.meta);
+            _.assign(record.acls, source.acls);
+        }
 
-    //
-    // Method
-    //
+        else if (isRecordJson(source)) {
+            _.assign(record.data, source.data);
+            _.assign(record.meta, source.meta);
+            _.assign(record.acls, source.acls);
+        }
 
-    toFullName() {
-        return this.schema_name;
-    }
+        else if (isRecordFlat(source)) {
+            _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
+            _.assign(record.meta, _.pick(source, Record.ColumnsInfo));
+            _.assign(record.acls, _.pick(source, Record.ColumnsAcls));
+        }
 
-    toJSON(): Partial<RecordJson> {
-        return toJSON(_.omit(this.source, ['info', 'acls']));
+        else if (isRecordDict(source)) {
+            _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
+        }
+
+        else {
+            throw new Error('Unsupported "Record" source: ' + toJSON(source));
+        }
+
+        return record;
     }
 }

@@ -12,6 +12,10 @@ const formBody = Util.promisify(require('body/form'));
 
 // Classes
 import { System } from '../classes/system';
+import { SystemRoot } from '../classes/system-root';
+
+// Layouts
+import { SystemUser } from '../layouts/system';
 
 // Routers
 import { HttpRouter } from './http-router';
@@ -45,10 +49,10 @@ export interface HttpRes {
 
 export class HttpServer {
     // Track the router paths
-    private readonly _routes: HttpServerRoute[] = [];
+    private readonly __routes: HttpServerRoute[] = [];
 
     // Start the server
-    listen(port: number) {
+    listen(port: number): void {
         let server = Http.createServer((req, res) => {
             return this.run(req, res); // This is internally wrapped in a try/catch/finally
         });
@@ -61,7 +65,7 @@ export class HttpServer {
         // Done
     }
 
-    async run(req: Http.IncomingMessage, res: Http.ServerResponse) {
+    async run(req: Http.IncomingMessage, res: Http.ServerResponse): Promise<Http.ServerResponse<Http.IncomingMessage>> {
         console.debug('HttpServer:', req.method, req.url);
 
         // Build the structures of httpReq and httpRes to be passed into system-http
@@ -82,6 +86,7 @@ export class HttpServer {
         }
 
         try {
+            // Process URL data
             let request_url = new UrlParse(req.url, true);
 
             console.warn('Parsed URL', request_url);
@@ -105,8 +110,12 @@ export class HttpServer {
                 httpReq.body = await formBody(req, res);
             }
 
-            // Generate system, based on the logged in user for this request
-            let system = new System({ id: System.RootId, ns: ['*'], sc: ['*'] });
+            // TODO generate actual user creds from CORS
+            let system = new System({
+                id: SystemRoot.UUID,
+                ns: 'test',
+                scopes: null
+            });
 
             // Initialize the system
             await system.startup();

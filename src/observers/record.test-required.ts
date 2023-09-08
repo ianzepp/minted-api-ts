@@ -5,24 +5,28 @@ import { Observer } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Schema } from '../classes/schema';
 
+// Layouts
+import { ObserverRing } from '../layouts/observer';
+
+
 export default class extends Observer {
-    toName() {
+    toName(): string {
         return 'record.knex-select';
     }
     
-    onSchema() {
-        return Schema.Type.Record;
+    onSchema(): string {
+        return 'record';
     }
 
-    onRing() {
-        return Observer.Ring.Test;
+    onRing(): ObserverRing {
+        return ObserverRing.Test;
     }
 
-    onCreate() {
+    onCreate(): boolean {
         return true;
     }
 
-    async run(flow: ObserverFlow) {
+    async run(flow: ObserverFlow): Promise<void> {
         // Filter for 
         let columns = _.filter(flow.schema.columns, 'required');
 
