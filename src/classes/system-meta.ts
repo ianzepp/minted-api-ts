@@ -19,7 +19,7 @@ export class SystemMeta {
 
     async startup(): Promise<void> {
         let select_data = async (schema_name: SchemaName) => {
-            return KnexDriver(schema_name).where({ ns: 'system' }).select();
+            return KnexDriver(schema_name).whereIn('ns', this.system.namespaces).select();
         };
 
         // Process system schemas
@@ -38,7 +38,6 @@ export class SystemMeta {
             schema.columns[column.column_name] = column;
         }
     }
-
 
     isSchema(schema_name: string): boolean {
         return _.has(this.schemas, schema_name);
