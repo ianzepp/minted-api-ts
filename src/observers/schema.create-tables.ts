@@ -49,26 +49,22 @@ export default class extends Observer {
     async run(flow: ObserverFlow): Promise<void> {
         // Generate new schemas based on the records and add them to the meta service
         for(let record of flow.change) {
-            await this.createTable(record);
+            await this.createTable(flow, record);
         }
     }
 
-    private async createTable(record: Record) {
-        // TODO move to validation observer
-        chai.expect(record.data).property('schema_name').match(/^[a-z_0-9]+$/i);
-        chai.expect(record.data).property('schema_name').not.includes('__');
-
-        // 
+    private async createTable(flow: ObserverFlow, record: Record) {
         let schema_name = record.data.schema_name;
+        let system = flow.system;
 
         // Create base table
-        await KnexDriver.schema.withSchema('system_data').createTable(schema_name, (table) => {
+        await system.knex.schema.withSchema('system_data').createTable(schema_name, (table) => {
             table.uuid('id').primary().defaultTo(KnexDriver.fn.uuid());
             table.string('ns');
         });
 
         // Meta table
-        await KnexDriver.schema.withSchema('system_meta').createTable(schema_name, (table) => {
+        await system.knex.schema.withSchema('system_meta').createTable(schema_name, (table) => {
             table.uuid('id').primary().references('id').inTable('system_data.' + schema_name).onDelete('CASCADE');
             table.string('ns');
 
@@ -83,7 +79,7 @@ export default class extends Observer {
             table.uuid('deleted_by').index();
         });
 
-        await KnexDriver.schema.withSchema('system_acls').createTable(schema_name, (table) => {
+        await system.knex.schema.withSchema('system_acls').createTable(schema_name, (table) => {
             table.uuid('id').primary().references('id').inTable('system_data.' + schema_name).onDelete('CASCADE');
             table.string('ns');
 
