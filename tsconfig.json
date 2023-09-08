@@ -18,5 +18,14 @@
         "dst",
         "src/**/*.spec.ts",
         "node_modules"
-    ]
+    ],
+    "typedocOptions": {
+        "entryPoints": ["src/**/*.ts"],
+        "out": "docs",
+        "exclude": ["src/**/*.spec.ts"],
+        "theme": "markdown",
+        "readme": "README.md",
+        "plugin": ["typedoc-plugin-markdown"],
+        "hideGenerator": true
+    }
 }
