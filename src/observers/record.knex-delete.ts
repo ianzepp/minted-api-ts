@@ -33,16 +33,15 @@ export default class extends Observer {
         let deleted_at = flow.system.timestamp;
         let deleted_by = flow.system.user.id;
 
-        // Generate a knex raw command to mark records as deleted where:
+        // Generate a knex raw command to mark records as deleted, where 
         //
-        // 1. record was previously expired
+        // 1. record is visible to the user
         // 2. record was not previously deleted
         //
         // All timestamps are in the `system_meta` tablespace, so we only use that.
         await flow.system.knex.toDriverTx('system_meta.' + schema_name)
             .whereIn('ns', flow.system.namespaces)
             .whereIn('id', record_ids)
-            .whereNotNull('expired_at') 
             .whereNull('deleted_at')
             .update({ 
                 deleted_at: deleted_at, 

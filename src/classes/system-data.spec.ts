@@ -37,6 +37,8 @@ function expectRecord(result: any) {
     chai.expect(result.meta).property('updated_by');
     chai.expect(result.meta).property('expired_at');
     chai.expect(result.meta).property('expired_by');
+    chai.expect(result.meta).property('deleted_at');
+    chai.expect(result.meta).property('deleted_by');
 }
 
 describe('SystemData', () => {
@@ -55,6 +57,10 @@ describe('SystemData', () => {
         await system.knex.destroy();
     });
 
+    //
+    // System.Verb.Select
+    //
+    
     test('runs selectAny()', async () => {
         let create = await system.data.createOne(schema, { test: 'system-data.spec/selectAny'})
         let result = await system.data.selectAny(schema, {});
@@ -79,6 +85,10 @@ describe('SystemData', () => {
         expectRecordSet(result_set, 1);
     });
 
+    //
+    // System.Verb.Create
+    //
+    
     test.skip('runs createOne()', async () => {
 
     });
@@ -101,6 +111,10 @@ describe('SystemData', () => {
         expectRecordSet(result_set, change_set.length);
     });
 
+    //
+    // System.Verb.Update
+    //
+    
     test.skip('runs updateOne()', async () => {
 
     });
@@ -137,6 +151,10 @@ describe('SystemData', () => {
 
     });
 
+    //
+    // System.Verb.Upsert
+    //
+    
     test.skip('runs upsertOne()', async () => {
 
     });
@@ -145,6 +163,49 @@ describe('SystemData', () => {
 
     });
 
+    //
+    // System.Verb.Expire
+    //
+    
+    test.skip('runs expireOne()', async () => {
+
+    });
+
+    test('runs expireAll()', async () => {
+        let source_set = [
+            schema.toRecord({ schema_name: 'system-data.spec/updateAll.0' }), 
+            schema.toRecord({ schema_name: 'system-data.spec/updateAll.1' }), 
+            schema.toRecord({ schema_name: 'system-data.spec/updateAll.2' }), 
+        ];
+
+        // Test create
+        let create_set = await system.data.createAll(schema, source_set);
+
+        expectRecordSet(create_set, source_set.length);
+
+        // Test delete
+        let expire_set = await system.data.expireAll(schema, create_set);
+
+        expectRecordSet(expire_set, create_set.length);
+
+        // Reselect to verify
+        let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
+
+        expectRecordSet(select_set, 0);
+    });
+
+    test.skip('runs expireIds()', async () => {
+
+    });
+
+    test.skip('runs expireAny()', async () => {
+
+    });
+
+    //
+    // System.Verb.Delete
+    //
+    
     test.skip('runs deleteOne()', async () => {
 
     });
@@ -179,5 +240,4 @@ describe('SystemData', () => {
     test.skip('runs deleteAny()', async () => {
 
     });
-    
 });
