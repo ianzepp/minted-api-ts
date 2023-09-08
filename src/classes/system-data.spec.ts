@@ -39,7 +39,7 @@ function expectRecord(result: any) {
     chai.expect(result.meta).property('expired_by');
 }
 
-describe('Schema', () => {
+describe('SystemData', () => {
     let system_user: SystemUser = { id: uuid(), ns: 'test', scopes: null };
     let system: System;
     let schema_name = 'schema';
