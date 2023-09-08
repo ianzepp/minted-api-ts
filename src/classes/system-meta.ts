@@ -19,24 +19,37 @@ export class SystemMeta {
 
     async startup(): Promise<void> {
         let select_data = async (schema_name: SchemaName) => {
-            return KnexDriver(schema_name).whereIn('ns', this.system.namespaces).select();
+            return KnexDriver(`system_data.${schema_name} as data`)
+                .join(`system_meta.${schema_name} as meta`, 'meta.id', 'data.id')
+                .whereIn('data.ns', this.system.namespaces)
+                .whereNull('meta.expired_at')
+                .whereNull('meta.deleted_at')
+                .select();
         };
 
         // Process system schemas
-        for(let schema_data of await select_data('system_data.schema')) {
+        for(let schema_data of await select_data('schema')) {
             let schema = new Schema(schema_data);
 
             // Add to local cache
             this.schemas[schema.schema_name] = schema;
         }
 
-        for(let column_data of await select_data('system_data.column')) {
+        for(let column_data of await select_data('column')) {
             let schema = _.get(this.schemas, column_data.schema_name);
             let column = new Column(column_data, schema);
 
             // Add to schema
             schema.columns[column.column_name] = column;
         }
+    }
+    
+    async refresh() {
+        _.forOwn(this.schemas, (value, key) => {
+            delete this.schemas[key];
+        });
+
+        return this.startup();
     }
 
     isSchema(schema_name: string): boolean {
