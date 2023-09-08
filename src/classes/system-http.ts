@@ -11,7 +11,7 @@ import { System } from '../classes/system';
 import Routers from '../preloader/routers';
 
 export class SystemHttp {
-    constructor() {}
+    constructor(private readonly system: System) {}
 
     async startup(): Promise<void> {}
 

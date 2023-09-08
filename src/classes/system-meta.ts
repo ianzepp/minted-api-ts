@@ -15,7 +15,7 @@ export class SystemMeta {
     // Cache known schema and column names
     public readonly schemas: _.Dictionary<Schema> = {};
 
-    constructor() {}
+    constructor(private readonly system: System) {}
 
     async startup(): Promise<void> {
         let select_data = async (schema_name: SchemaName) => {

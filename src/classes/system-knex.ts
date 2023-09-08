@@ -16,7 +16,7 @@ export class SystemKnex {
 
     private __transaction: Knex.Transaction | undefined;
 
-    constructor() {}
+    constructor(private readonly system: System) {}
 
     async startup(): Promise<void> {
         await KnexDriver.raw('SELECT 1'); // test connection at startup
