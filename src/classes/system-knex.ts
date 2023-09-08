@@ -11,12 +11,23 @@ import { SystemRoot } from '../classes/system-root';
 import { RecordData } from '../layouts/record';
 
 export class SystemKnex {
-    public readonly Knex = Knex;
-    public readonly KnexDriver = KnexDriver;
-
     private __transaction: Knex.Transaction | undefined;
 
     constructor(private readonly system: System) {}
+
+    get schema(): Knex.SchemaBuilder {
+        return KnexDriver.schema;
+    }
+
+    get driver(): Knex {
+        if (this.__transaction) {
+            return this.__transaction;
+        }
+
+        else {
+            return KnexDriver;
+        }
+    }
 
     async startup(): Promise<void> {
         await KnexDriver.raw('SELECT 1'); // test connection at startup
