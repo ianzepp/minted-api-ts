@@ -15,7 +15,7 @@ export class SystemMeta {
     // Cache known schema and column names
     public readonly schemas: _.Dictionary<Schema> = {};
 
-    constructor(private readonly __system: System) {}
+    constructor() {}
 
     async startup(): Promise<void> {
         let select_data = async (schema_name: SchemaName) => {
@@ -23,14 +23,14 @@ export class SystemMeta {
         };
 
         // Process system schemas
-        for(let schema_data of await select_data('schema')) {
+        for(let schema_data of await select_data('system_data.schema')) {
             let schema = new Schema(schema_data);
 
             // Add to local cache
             this.schemas[schema.schema_name] = schema;
         }
 
-        for(let column_data of await select_data('column')) {
+        for(let column_data of await select_data('system_data.column')) {
             let schema = _.get(this.schemas, column_data.schema_name);
             let column = new Column(column_data, schema);
 
