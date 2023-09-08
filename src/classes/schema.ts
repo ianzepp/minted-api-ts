@@ -56,7 +56,7 @@ export class Schema {
         return toJSON(this.source);
     }
 
-    toRecord(source?: Record | RecordJson | RecordFlat | RecordData | _.Dictionary<any>) {
+    toRecord(source?: Record | RecordData | RecordFlat | RecordJson | _.Dictionary<any>) {
         let record = new Record(this);
 
         if (source === undefined) {
