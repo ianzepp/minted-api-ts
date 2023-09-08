@@ -47,34 +47,36 @@ describe('SystemData', () => {
 
     beforeAll(async () => {
         system = await new System(system_user).startup();
-        schema = await system.meta.toSchema('schema');
+        schema = await system.meta.schemas.test;
     });
 
     afterAll(async () => {
-        return system.knex.destroy();
+        await system.data.deleteAny(schema, {});
+        await system.knex.destroy();
     });
 
     test('runs selectAny()', async () => {
+        let create = await system.data.createOne(schema, { test: 'system-data.spec/selectAny'})
         let result = await system.data.selectAny(schema, {});
 
         expectRecordSet(result);
     });
 
     test('runs select404()', async () => {
-        // Find a valid ID from the schemas database
-        let result = await system.data.select404(schema, schema.id);
+        let create = await system.data.createOne(schema, { test: 'system-data.spec/select404'})
+        let result = await system.data.select404(schema, create.data.id as string);
 
         expectRecord(result);
 
-        chai.expect(result.data).property('id', schema.id);
+        chai.expect(result.data).property('id', create.data.id);
     });
 
     test('runs selectIds()', async () => {
-        // Find a valid ID from the schemas database
-        let schema_ids = _.map(system.meta.schemas, 'id');
-        let result_set = await system.data.selectIds(schema, schema_ids);
+        let create = await system.data.createOne(schema, { test: 'system-data.spec/selectIds'})
+        let create_ids = [create.data.id as string];
+        let result_set = await system.data.selectIds(schema, create_ids);
 
-        expectRecordSet(result_set, schema_ids.length);
+        expectRecordSet(result_set, 1);
     });
 
     test.skip('runs createOne()', async () => {
@@ -83,9 +85,9 @@ describe('SystemData', () => {
 
     test('runs createAll()', async () => {
         let change_set = [
-            schema.toRecord({ schema_name: 'system-data.spec/createAll.1' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/createAll.2' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/createAll.3' }), 
+            schema.toRecord({ test: 'system-data.spec/createAll.1' }), 
+            schema.toRecord({ test: 'system-data.spec/createAll.2' }), 
+            schema.toRecord({ test: 'system-data.spec/createAll.3' }), 
         ];
 
         // Test create
@@ -105,9 +107,9 @@ describe('SystemData', () => {
 
     test('runs updateAll()', async () => {
         let source_set = [
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.0' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.1' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.2' }), 
+            schema.toRecord({ test: 'system-data.spec/updateAll.0' }), 
+            schema.toRecord({ test: 'system-data.spec/updateAll.1' }), 
+            schema.toRecord({ test: 'system-data.spec/updateAll.2' }), 
         ];
 
         // Test create
@@ -117,7 +119,7 @@ describe('SystemData', () => {
 
         // Modify names
         for(let record of create_set) {
-            record.data.schema_name = record.data.schema_name + '-changed';
+            record.data.test = record.data.test + '-changed';
         }
 
         // Test update
@@ -149,9 +151,9 @@ describe('SystemData', () => {
 
     test('runs deleteAll()', async () => {
         let source_set = [
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.0' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.1' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.2' }), 
+            schema.toRecord({ test: 'system-data.spec/updateAll.0' }), 
+            schema.toRecord({ test: 'system-data.spec/updateAll.1' }), 
+            schema.toRecord({ test: 'system-data.spec/updateAll.2' }), 
         ];
 
         // Test create

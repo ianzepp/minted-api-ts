@@ -6,15 +6,14 @@ import { v4 as uuid } from 'uuid';
 import { Record } from '../classes/record';
 import { Schema } from '../classes/schema';
 import { System } from '../classes/system';
-import { SystemRoot } from '../classes/system-root';
 
 describe('SystemMeta', () => {
     let system: System;
     let schema: Schema;
 
     beforeAll(async () => {
-        system = await new System(new SystemRoot()).startup();
-        schema = await system.meta.toSchema('schema');
+        system = await new System({ id: uuid(), ns: 'test', scopes: null }).startup();
+        schema = await system.meta.schemas.schema;
     });
 
     afterAll(async () => {
@@ -22,10 +21,22 @@ describe('SystemMeta', () => {
     });
 
     test('when schema is created => create database table', async () => {
-        let record_name = "system_meta_test_schema_create";
-        let record = schema.toRecord({ schema_name: record_name });
+        let record_name = "test_" + new Date().getTime();
+        let record = schema.toRecord({ schema_name: record_name, schema_type: 'database' });
 
+        // Insert the new schema record
         await system.data.createOne(schema, record);
+
+        // Refresh the system
+        await system.meta.startup();
+
+        // Now that the test schema is inserted, we should be able to create a new record of that type
+        let result = await system.data.createOne(record_name, {});
+
+        chai.expect(record).instanceOf(Record);
+        chai.expect(record).property('data').a('object');
+        chai.expect(record.data).property('id').string;
+        chai.expect(record.data).property('ns').string;
     });
 
     test('when schema is expired => no changes', async () => {
