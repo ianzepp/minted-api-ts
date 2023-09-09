@@ -11,34 +11,17 @@ const jsonBody = Util.promisify(require('body/json'));
 const formBody = Util.promisify(require('body/form'));
 
 // Classes
+import { HttpReq } from '../classes/http-req';
+import { HttpRes } from '../classes/http-res';
 import { System } from '../classes/system';
 import { SystemAsCors } from '../classes/system';
 
-// Routers
-import { HttpRouter } from './http-router';
+// Error
+export class HttpError extends Error {};
+export class HttpRouteNotFoundError extends HttpError {};
 
-export interface HttpServerRoute {
-    verb: string;
-    path: string;
-    path_regexp: RegExp,
-    router_type: typeof HttpRouter;
-}
-
-export interface HttpReq {
-    verb: string;
-    path: string;
-    params: _.Dictionary<string>;
-    search: _.Dictionary<string>;
-    body: any;
-}
-
-export interface HttpRes {
-    status: number;
-    length: number;
-    schema: string | undefined;
-    record: string | undefined;
-    result: any;
-}
+// Import pre-loaded routers
+import HttpRouters from '../preloader/routers';
 
 export class HttpServer {
     // Start the server
@@ -55,7 +38,7 @@ export class HttpServer {
         // Done
     }
 
-    async run(req: Http.IncomingMessage, res: Http.ServerResponse): Promise<Http.ServerResponse<Http.IncomingMessage>> {
+    async run(req: Http.IncomingMessage, res: Http.ServerResponse) {
         console.debug('HttpServer:', req.method, req.url);
 
         // Build the structures of httpReq and httpRes to be passed into system-http
@@ -72,8 +55,17 @@ export class HttpServer {
             length: 0,
             schema: undefined,
             record: undefined,
+            filter: undefined,
             result: undefined,
         }
+
+        // Process URL data
+        let request_url = new UrlParse(req.url, true);
+
+        // Extract the search k=v data from the URL
+        httpReq.path = request_url.pathname;
+        httpReq.search = request_url.query;
+        httpRes.filter = request_url.query;
 
         // Always send CORS headers
         res.setHeader('Access-Control-Allow-Origin', '*');
@@ -86,21 +78,20 @@ export class HttpServer {
             return res.end();
         }
 
+        // Find a router that matches the request
+        let router = _.find(HttpRouters, router => router.is(httpReq.verb, httpReq.path));
+
+        if (router === undefined) {
+            res.statusCode = 404;
+            res.setHeader('Content-Length', 0);
+            return res.end();
+        }
+
         // Process the request
-        let system: System;
+        let system = new SystemAsCors(req.headers.authorization);
 
-        // TODO Generate actual user creds from CORS
-        system = new SystemAsCors(req.headers.cookie);
-
-        // Authenticate the user before we go too far
+        // Authenticate the user in a lightweight fashion before we go too far
         await system.authenticate();
-
-        // Process URL data
-        let request_url = new UrlParse(req.url, true);
-
-        // Extract the search k=v data from the URL
-        httpReq.path = request_url.pathname;
-        httpReq.search = request_url.query;
 
         // Extract the body data
         let content_type = (req.headers['content-type'] || '').split(';');
@@ -117,16 +108,42 @@ export class HttpServer {
             httpReq.body = await formBody(req, res);
         }
 
-        // Initialize the system
-        await system.startup();
-
         // Run the router
-        await system.http.run(httpReq, httpRes);
+        await new SystemAsCors().run(async system => {
+            try {
+                let result = await router.runsafe(system, httpReq, httpRes);
 
-        // Cleanup
-        await system.cleanup();
+                if (result === undefined) {
+                    result = null;
+                }
+        
+                // Save the results
+                httpRes.status = 200;
+                httpRes.length = _.isArray(result) ? _.size(result) : 1;
+                httpRes.result = result;
+            }
 
-        // Define the response
+            catch (error) {
+                if (typeof error === 'string') {
+                    httpRes.status = 500;
+                    httpRes.result = error;
+                }
+                else if (error instanceof Error) {
+                    httpRes.status = 500;
+                    httpRes.result = error.name + ': ' + error.message;
+                }
+
+                else {
+                    httpRes.status = 500;
+                    httpRes.result = error;
+                }
+
+                // Always set the length to 0
+                httpRes.length = 0;
+            }
+        });
+
+        // JSON-ify the result
         let res_json = JSON.stringify(httpRes);
 
         // Return the response

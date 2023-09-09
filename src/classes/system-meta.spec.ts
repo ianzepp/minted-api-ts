@@ -32,9 +32,9 @@ describe('SystemMeta', () => {
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
         chai.expect(record.data).property('id').string;
-        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.data).property('ns', system.user_ns);
         chai.expect(record.meta).property('created_at');
-        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('created_by', system.user_id);
         chai.expect(record.meta).property('expired_at').null;
         chai.expect(record.meta).property('expired_by').null;
 
@@ -45,9 +45,9 @@ describe('SystemMeta', () => {
         chai.expect(tested).instanceOf(Record);
         chai.expect(tested).property('data').a('object');
         chai.expect(tested.data).property('id').string;
-        chai.expect(tested.data).property('ns', system.user.ns);
+        chai.expect(tested.data).property('ns', system.user_ns);
         chai.expect(tested.meta).property('created_at').not.null;
-        chai.expect(tested.meta).property('created_by', system.user.id);
+        chai.expect(tested.meta).property('created_by', system.user_id);
         chai.expect(tested.meta).property('expired_at').null;
         chai.expect(tested.meta).property('expired_by').null;
         chai.expect(tested.meta).property('deleted_at').null;
@@ -59,11 +59,11 @@ describe('SystemMeta', () => {
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
         chai.expect(record.data).property('id').string;
-        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.data).property('ns', system.user_ns);
         chai.expect(record.meta).property('created_at').not.null;
-        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('created_by', system.user_id);
         chai.expect(record.meta).property('expired_at').not.null;
-        chai.expect(record.meta).property('expired_by', system.user.id);
+        chai.expect(record.meta).property('expired_by', system.user_id);
         chai.expect(record.meta).property('deleted_at').null;
         chai.expect(record.meta).property('deleted_by').null;
 
@@ -76,13 +76,13 @@ describe('SystemMeta', () => {
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
         chai.expect(record.data).property('id').string;
-        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.data).property('ns', system.user_ns);
         chai.expect(record.meta).property('created_at').not.null;
-        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('created_by', system.user_id);
         chai.expect(record.meta).property('expired_at').not.null;
-        chai.expect(record.meta).property('expired_by', system.user.id);
+        chai.expect(record.meta).property('expired_by', system.user_id);
         chai.expect(record.meta).property('deleted_at').not.null;
-        chai.expect(record.meta).property('deleted_by', system.user.id);
+        chai.expect(record.meta).property('deleted_by', system.user_id);
 
         // Table should be deleted, so we shouldn't be able to get data
         try {
@@ -116,11 +116,11 @@ describe('SystemMeta', () => {
         chai.expect(parent).instanceOf(Record);
         chai.expect(parent).property('data').a('object');
         chai.expect(parent.data).property('id').string;
-        chai.expect(parent.data).property('ns', system.user.ns);
+        chai.expect(parent.data).property('ns', system.user_ns);
         chai.expect(parent.data).property('schema_name', parent_data.schema_name);
         chai.expect(parent.data).property('schema_type', parent_data.schema_type);
         chai.expect(parent.meta).property('created_at');
-        chai.expect(parent.meta).property('created_by', system.user.id);
+        chai.expect(parent.meta).property('created_by', system.user_id);
         chai.expect(parent.meta).property('expired_at').null;
         chai.expect(parent.meta).property('expired_by').null;
         chai.expect(parent.meta).property('deleted_at').null;
@@ -136,12 +136,12 @@ describe('SystemMeta', () => {
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
         chai.expect(record.data).property('id').string;
-        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.data).property('ns', system.user_ns);
         chai.expect(record.data).property('schema_name', record_data.schema_name);
         chai.expect(record.data).property('column_name', record_data.column_name);
         chai.expect(record.data).property('column_type', record_data.column_type);
         chai.expect(record.meta).property('created_at');
-        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('created_by', system.user_id);
         chai.expect(record.meta).property('expired_at').null;
         chai.expect(record.meta).property('expired_by').null;
         chai.expect(record.meta).property('deleted_at').null;
@@ -158,10 +158,10 @@ describe('SystemMeta', () => {
         chai.expect(tested).instanceOf(Record);
         chai.expect(tested).property('data').a('object');
         chai.expect(tested.data).property('id').string;
-        chai.expect(tested.data).property('ns', system.user.ns);
+        chai.expect(tested.data).property('ns', system.user_ns);
         chai.expect(tested.data).property('test_text', 'this is a column');
         chai.expect(tested.meta).property('created_at').not.null;
-        chai.expect(tested.meta).property('created_by', system.user.id);
+        chai.expect(tested.meta).property('created_by', system.user_id);
         chai.expect(tested.meta).property('expired_at').null;
         chai.expect(tested.meta).property('expired_by').null;
         chai.expect(tested.meta).property('deleted_at').null;
@@ -173,10 +173,10 @@ describe('SystemMeta', () => {
         chai.expect(select).instanceOf(Record);
         chai.expect(select).property('data').a('object');
         chai.expect(select.data).property('id').string;
-        chai.expect(select.data).property('ns', system.user.ns);
+        chai.expect(select.data).property('ns', system.user_ns);
         chai.expect(select.data).property('test_text', 'this is a column');
         chai.expect(select.meta).property('created_at').not.null;
-        chai.expect(select.meta).property('created_by', system.user.id);
+        chai.expect(select.meta).property('created_by', system.user_id);
         chai.expect(select.meta).property('expired_at').null;
         chai.expect(select.meta).property('expired_by').null;
         chai.expect(select.meta).property('deleted_at').null;
@@ -188,11 +188,11 @@ describe('SystemMeta', () => {
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
         chai.expect(record.data).property('id').string;
-        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.data).property('ns', system.user_ns);
         chai.expect(record.meta).property('created_at').not.null;
-        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('created_by', system.user_id);
         chai.expect(record.meta).property('expired_at').not.null;
-        chai.expect(record.meta).property('expired_by', system.user.id);
+        chai.expect(record.meta).property('expired_by', system.user_id);
         chai.expect(record.meta).property('deleted_at').null;
         chai.expect(record.meta).property('deleted_by').null;
 
@@ -205,13 +205,13 @@ describe('SystemMeta', () => {
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
         chai.expect(record.data).property('id').string;
-        chai.expect(record.data).property('ns', system.user.ns);
+        chai.expect(record.data).property('ns', system.user_ns);
         chai.expect(record.meta).property('created_at').not.null;
-        chai.expect(record.meta).property('created_by', system.user.id);
+        chai.expect(record.meta).property('created_by', system.user_id);
         chai.expect(record.meta).property('expired_at').not.null;
-        chai.expect(record.meta).property('expired_by', system.user.id);
+        chai.expect(record.meta).property('expired_by', system.user_id);
         chai.expect(record.meta).property('deleted_at').not.null;
-        chai.expect(record.meta).property('deleted_by', system.user.id);
+        chai.expect(record.meta).property('deleted_by', system.user_id);
 
         // Column should not be present in the meta service
         chai.expect(system.meta.schemas).property(parent_data.schema_name).instanceOf(Schema);
@@ -223,10 +223,10 @@ describe('SystemMeta', () => {
         chai.expect(retest).instanceOf(Record);
         chai.expect(retest).property('data').a('object');
         chai.expect(retest.data).property('id').string;
-        chai.expect(retest.data).property('ns', system.user.ns);
+        chai.expect(retest.data).property('ns', system.user_ns);
         chai.expect(retest.data).not.property('test_text');
         chai.expect(retest.meta).property('created_at').not.null;
-        chai.expect(retest.meta).property('created_by', system.user.id);
+        chai.expect(retest.meta).property('created_by', system.user_id);
         chai.expect(retest.meta).property('expired_at').null;
         chai.expect(retest.meta).property('expired_by').null;
         chai.expect(retest.meta).property('deleted_at').null;

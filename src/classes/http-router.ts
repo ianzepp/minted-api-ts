@@ -3,8 +3,8 @@ import chai from 'chai';
 import { pathToRegexp, match } from 'path-to-regexp';
 
 // Classes
-import { HttpReq } from '../classes/http-server';
-import { HttpRes } from '../classes/http-server';
+import { HttpReq } from '../classes/http-req';
+import { HttpRes } from '../classes/http-res';
 import { System } from '../classes/system';
 
 // Helper to assert a value is not undefined

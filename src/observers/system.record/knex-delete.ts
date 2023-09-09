@@ -30,7 +30,7 @@ export default class extends Observer {
         let schema_name = flow.schema.schema_name;
         let record_ids = flow.change.map(record => record.data.id);
         let deleted_at = flow.system.timestamp;
-        let deleted_by = flow.system.user.id;
+        let deleted_by = flow.system.user_id;
 
         // Generate a knex raw command to mark records as deleted, where 
         //
@@ -39,7 +39,7 @@ export default class extends Observer {
         //
         // All timestamps are in the `system_meta` tablespace, so we only use that.
         await flow.system.knex.driver('system_meta.' + schema_name)
-            .whereIn('ns', flow.system.user.namespaces)
+            .whereIn('ns', flow.system.auth.namespaces)
             .whereIn('id', record_ids)
             .whereNull('deleted_at')
             .update({ 

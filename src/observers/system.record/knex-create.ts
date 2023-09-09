@@ -49,8 +49,8 @@ export default class extends Observer {
     async run(flow: ObserverFlow): Promise<void> {
         let schema_name = flow.schema.schema_name;
         let created_at = new Date(flow.system.timestamp);
-        let created_by = flow.system.user.id;
-        let created_ns = flow.system.user.ns;
+        let created_by = flow.system.user_id;
+        let created_ns = flow.system.user_ns;
 
         // Populate insertion data
         for(let record of flow.change) {

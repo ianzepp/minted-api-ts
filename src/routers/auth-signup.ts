@@ -6,17 +6,14 @@ import { HttpRouter } from '../classes/http-router';
 // Implementation
 export default class extends HttpRouter {
     async run() {
-        return { 
-            pong: new Date().toISOString(),
-            user: this.system.user_id
-        };
+        return this.system.auth.signup();
     }
 
     onHttpVerb() {
-        return HttpRouter.Verb.Get;
+        return HttpRouter.Verb.Post;
     }
 
     onHttpPath() {
-        return '/api/ping';
+        return '/auth/signup';
     }
 }

@@ -2,11 +2,10 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // System services
-import { SystemUser } from '../classes/system-user';
+import { SystemAuth } from '../classes/system-auth';
 import { SystemData } from '../classes/system-data';
 import { SystemMeta } from '../classes/system-meta';
 import { SystemKnex } from '../classes/system-knex';
-import { SystemHttp } from '../classes/system-http';
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
@@ -23,11 +22,10 @@ export class System {
     public static TestNs = "test";
 
     // Services
-    public readonly user = new SystemUser(this);
+    public readonly auth = new SystemAuth(this);
     public readonly data = new SystemData(this);
     public readonly meta = new SystemMeta(this);
     public readonly knex = new SystemKnex(this);
-    public readonly http = new SystemHttp(this);
 
     // Error management
     public readonly expect = chai.expect;
@@ -47,7 +45,7 @@ export class System {
     }
 
     async authenticate(): Promise<this> {
-        await this.user.authenticate();
+        await this.auth.authenticate();
 
         // Done;
         return this;
@@ -60,8 +58,7 @@ export class System {
         // Remaining services
         await this.data.startup();
         await this.meta.startup();
-        await this.http.startup();
-        await this.user.startup();
+        await this.auth.startup();
 
         // Done
         return this;
@@ -71,8 +68,7 @@ export class System {
         // Shutdown services
         await this.data.cleanup();
         await this.meta.cleanup();
-        await this.http.cleanup();
-        await this.user.cleanup();
+        await this.auth.cleanup();
 
         // Shutdown knex last so the transaction commits/rollbacks
         await this.knex.cleanup();

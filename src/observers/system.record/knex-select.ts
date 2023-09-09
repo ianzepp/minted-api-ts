@@ -36,7 +36,7 @@ export default class extends Observer {
         knex = knex.join(`system_acls.${schema_name} as acls`, 'acls.id', 'data.id');
 
         // Filter to visible namespaces
-        knex = knex.whereIn('data.ns', flow.system.user.namespaces);
+        knex = knex.whereIn('data.ns', flow.system.auth.namespaces);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');
