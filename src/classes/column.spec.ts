@@ -1,9 +1,11 @@
 // Classes
 import { Schema } from '../classes/schema';
 import { Column } from '../classes/column';
+import { System } from './system';
 
 // Layouts
 import { ColumnType } from '../layouts/column';
+import { SystemAsTest } from './system';
 
 
 describe('Column', () => {

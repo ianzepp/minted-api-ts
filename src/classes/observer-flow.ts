@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
+import chai from 'chai';
 
 // Classes
 import { Filter } from '../classes/filter';
@@ -19,6 +20,7 @@ import Observers from '../preloader/observers';
 
 
 export class ObserverFlow {
+    readonly expect = chai.expect;
     readonly failures: ObserverFlowFailure[] = [];
 
     constructor(
@@ -50,40 +52,42 @@ export class ObserverFlow {
             }
 
             // Accept if the operation matches
-            else if (observer.onCreate() && this.op == SystemVerb.Create) {
+            if (observer.onSelect() && this.op == SystemVerb.Select) {
                 return true;
             }
 
-            else if (observer.onDelete() && this.op == SystemVerb.Delete) {
+            if (observer.onCreate() && this.op == SystemVerb.Create) {
                 return true;
             }
 
-            else if (observer.onSelect() && this.op == SystemVerb.Select) {
+            if (observer.onUpdate() && this.op == SystemVerb.Update) {
                 return true;
             }
 
-            else if (observer.onUpdate() && this.op == SystemVerb.Update) {
+            if (observer.onUpsert() && this.op == SystemVerb.Upsert) {
                 return true;
             }
 
-            else if (observer.onUpsert() && this.op == SystemVerb.Upsert) {
+            if (observer.onExpire() && this.op == SystemVerb.Expire) {
+                return true;
+            }
+
+            if (observer.onDelete() && this.op == SystemVerb.Delete) {
                 return true;
             }
 
             // No acceptable matches.
-            else {
-                return false;
-            }
+            return false;
         });
 
         for(let observer of observers) {
-            console.debug('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
-                this.schema.schema_name, 
-                this.op, 
-                observer.onRing(),
-                observer.onRank(),
-                observer.toName()
-            );
+            // console.debug('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
+            //     this.schema.schema_name, 
+            //     this.op, 
+            //     observer.onRing(),
+            //     observer.onRank(),
+            //     observer.toName()
+            // );
 
             try {
                 await observer.run(this);
@@ -99,9 +103,18 @@ export class ObserverFlow {
                 }
             }
         }
+
+        // Check for failurs
+        if (this.failures.length === 0) {
+            return;
+        }
+
+        throw this.failures;
     }
 
     fail(code: number, message: string, record?: Record): void {
+        console.warn('ObserverFlow: FAIL %j message=%j record=%j', code, message, record);
+        
         this.failures.push({
             code: code,
             message: message,

@@ -5,10 +5,7 @@ import { v4 as uuid } from 'uuid';
 // Classes
 import { Record } from '../classes/record';
 import { Schema } from '../classes/schema';
-import { System } from '../classes/system';
-
-// Layouts
-import { SystemUser } from '../layouts/system';
+import { SystemAsTest } from '../classes/system';
 
 function expectStringOrNull(value: any) {
     console.warn('value', value);
@@ -37,55 +34,64 @@ function expectRecord(result: any) {
     chai.expect(result.meta).property('updated_by');
     chai.expect(result.meta).property('expired_at');
     chai.expect(result.meta).property('expired_by');
+    chai.expect(result.meta).property('deleted_at');
+    chai.expect(result.meta).property('deleted_by');
 }
 
-describe('Schema', () => {
-    let system_user: SystemUser = { id: uuid(), ns: 'test', scopes: null };
-    let system: System;
-    let schema_name = 'schema';
-    let schema: Schema;
+describe('SystemData', () => {
+    let system = new SystemAsTest();
+    let schema = 'test';
 
     beforeAll(async () => {
-        system = await new System(system_user).startup();
-        schema = await system.meta.toSchema('schema');
+        await system.authenticate();
+        await system.startup();
     });
 
     afterAll(async () => {
-        return system.knex.destroy();
+        await system.cleanup();
     });
 
+    //
+    // System.Verb.Select
+    //
+    
     test('runs selectAny()', async () => {
+        let create = await system.data.createOne(schema, { name: 'system-data.spec/selectAny'})
         let result = await system.data.selectAny(schema, {});
 
         expectRecordSet(result);
     });
 
     test('runs select404()', async () => {
-        // Find a valid ID from the schemas database
-        let result = await system.data.select404(schema, schema.id);
+        let create = await system.data.createOne(schema, { name: 'system-data.spec/select404'})
+        let result = await system.data.select404(schema, create.data.id as string);
 
         expectRecord(result);
 
-        chai.expect(result.data).property('id', schema.id);
+        chai.expect(result.data).property('id', create.data.id);
     });
 
     test('runs selectIds()', async () => {
-        // Find a valid ID from the schemas database
-        let schema_ids = _.map(system.meta.schemas, 'id');
-        let result_set = await system.data.selectIds(schema, schema_ids);
+        let create = await system.data.createOne(schema, { name: 'system-data.spec/selectIds'})
+        let create_ids = [create.data.id as string];
+        let result_set = await system.data.selectIds(schema, create_ids);
 
-        expectRecordSet(result_set, schema_ids.length);
+        expectRecordSet(result_set, 1);
     });
 
+    //
+    // System.Verb.Create
+    //
+    
     test.skip('runs createOne()', async () => {
 
     });
 
     test('runs createAll()', async () => {
         let change_set = [
-            schema.toRecord({ schema_name: 'system-data.spec/createAll.1' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/createAll.2' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/createAll.3' }), 
+            { name: 'system-data.spec/createAll.1' }, 
+            { name: 'system-data.spec/createAll.2' }, 
+            { name: 'system-data.spec/createAll.3' }, 
         ];
 
         // Test create
@@ -94,20 +100,24 @@ describe('Schema', () => {
         expectRecordSet(result_set, change_set.length);
 
         // Reselect to verify
-        let select_set = await system.data.selectIds(schema, change_set.map(change => change.data.id as string));
+        let select_set = await system.data.selectIds(schema, result_set.map(result => result.data.id as string));
 
         expectRecordSet(result_set, change_set.length);
     });
 
+    //
+    // System.Verb.Update
+    //
+    
     test.skip('runs updateOne()', async () => {
 
     });
 
     test('runs updateAll()', async () => {
         let source_set = [
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.0' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.1' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.2' }), 
+            { name: 'system-data.spec/updateAll.0' }, 
+            { name: 'system-data.spec/updateAll.1' }, 
+            { name: 'system-data.spec/updateAll.2' }, 
         ];
 
         // Test create
@@ -117,7 +127,7 @@ describe('Schema', () => {
 
         // Modify names
         for(let record of create_set) {
-            record.data.schema_name = record.data.schema_name + '-changed';
+            record.data.name = record.data.name + '-changed';
         }
 
         // Test update
@@ -135,6 +145,10 @@ describe('Schema', () => {
 
     });
 
+    //
+    // System.Verb.Upsert
+    //
+    
     test.skip('runs upsertOne()', async () => {
 
     });
@@ -143,15 +157,58 @@ describe('Schema', () => {
 
     });
 
+    //
+    // System.Verb.Expire
+    //
+    
+    test.skip('runs expireOne()', async () => {
+
+    });
+
+    test('runs expireAll()', async () => {
+        let source_set = [
+            { name: 'system-data.spec/expireAll.0' }, 
+            { name: 'system-data.spec/expireAll.1' }, 
+            { name: 'system-data.spec/expireAll.2' }, 
+        ];
+
+        // Test create
+        let create_set = await system.data.createAll(schema, source_set);
+
+        expectRecordSet(create_set, source_set.length);
+
+        // Test delete
+        let expire_set = await system.data.expireAll(schema, create_set);
+
+        expectRecordSet(expire_set, create_set.length);
+
+        // Reselect to verify
+        let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
+
+        expectRecordSet(select_set, 0);
+    });
+
+    test.skip('runs expireIds()', async () => {
+
+    });
+
+    test.skip('runs expireAny()', async () => {
+
+    });
+
+    //
+    // System.Verb.Delete
+    //
+    
     test.skip('runs deleteOne()', async () => {
 
     });
 
     test('runs deleteAll()', async () => {
         let source_set = [
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.0' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.1' }), 
-            schema.toRecord({ schema_name: 'system-data.spec/updateAll.2' }), 
+            { name: 'system-data.spec/deleteAll.0' }, 
+            { name: 'system-data.spec/deleteAll.1' }, 
+            { name: 'system-data.spec/deleteAll.2' }, 
         ];
 
         // Test create
@@ -177,5 +234,4 @@ describe('Schema', () => {
     test.skip('runs deleteAny()', async () => {
 
     });
-    
 });

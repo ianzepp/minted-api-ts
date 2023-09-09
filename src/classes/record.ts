@@ -160,8 +160,12 @@ export class Record implements RecordJson {
         return !!this.data[column.column_name];
     }
 
-    get<T = any>(column: Column): T {
-        return this.data[column.column_name];
+    get<T = any>(column: Column): T | null {
+        return this.data[column.column_name] ?? null;
+    }
+
+    old<T = any>(column: Column): T | null {
+        return this.prev[column.column_name] ?? null;
     }
 
     set<T = any>(column: Column, data: T) {
@@ -192,12 +196,12 @@ export class Record implements RecordJson {
             test.is('object');
         }
 
-        else if (column.column_type == ColumnType.Number) {
-            test.is('number');
-        }
-
         else if (column.column_type == ColumnType.Text) {
             test.is('string');
+        }
+
+        else if (column.column_type == ColumnType.Enum) {
+            test.is('array');
         }
 
         else {

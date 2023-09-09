@@ -1,5 +1,6 @@
 // Classes
 import { Schema } from '../classes/schema';
+import { SystemAsTest } from './system';
 
 
 describe('Schema', () => {

@@ -16,21 +16,14 @@ import isRecordFlat from '../helpers/isRecordFlat';
 import isRecordJson from '../helpers/isRecordJson';
 import toJSON from '../helpers/toJSON';
 
-
 export class Schema {
     // Public helpers
-    public readonly system_name: string;
     public readonly columns: _.Dictionary<Column> = {};
 
     constructor(private readonly source: _.Dictionary<any>) {
         chai.expect(source).property('id').a('string');
         chai.expect(source).property('ns').a('string');
         chai.expect(source).property('schema_name').a('string');
-        chai.expect(source).property('schema_type').a('string');
-        chai.expect(source).property('metadata').a('boolean');
-
-        // Set system name
-        this.system_name = `${ source.ns }__${ source.schema_name }`;
     }
 
     get id(): string {
@@ -46,11 +39,11 @@ export class Schema {
     }
 
     get schema_type(): string {
-        return this.source.schema_type;
+        return this.source.schema_type ?? 'database';
     }
 
     get metadata(): boolean {
-        return this.source.metadata;
+        return this.source.metadata ?? false;
     }
     
     toJSON() {

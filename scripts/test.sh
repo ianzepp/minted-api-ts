@@ -12,5 +12,8 @@ if ! npm run compile; then
     exit 1
 fi
 
+# Force test mode
+NODE_ENV="test"
+
 # Start node
 jest "$@"

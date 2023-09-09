@@ -2,12 +2,12 @@ import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 
 // Classes
-import { Observer } from '../classes/observer';
-import { ObserverFlow } from '../classes/observer-flow';
-import { Record } from '../classes/record';
+import { Observer } from '../../classes/observer';
+import { ObserverFlow } from '../../classes/observer-flow';
+import { Record } from '../../classes/record';
 
 // Layouts
-import { ObserverRing } from '../layouts/observer';
+import { ObserverRing } from '../../layouts/observer';
 
 
 export default class extends Observer {
@@ -48,26 +48,34 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         let schema_name = flow.schema.schema_name;
-        let created_at = new Date();
+        let created_at = new Date(flow.system.timestamp);
         let created_by = flow.system.user.id;
         let created_ns = flow.system.user.ns;
 
         // Populate insertion data
-        _.each(flow.change, record => {
+        for(let record of flow.change) {
             record.data.id = uuid();
             record.data.ns = created_ns;
             record.meta.created_at = created_at;
             record.meta.created_by = created_by;
-        });
+        }
 
         // Extract the insertion data
         let insert_data = this.toExtract(flow.change, 'data');
-        let insert_info = this.toExtract(flow.change, 'info');
+        let insert_meta = this.toExtract(flow.change, 'meta');
         let insert_acls = this.toExtract(flow.change, 'acls');
 
         // Insert data
-        await flow.system.knex.toTx(schema_name).insert(insert_data);
-        await flow.system.knex.toTx(schema_name + '_info').insert(insert_info);
-        await flow.system.knex.toTx(schema_name + '_acls').insert(insert_acls);
+        insert_data = await flow.system.knex.driver('system_data.' + schema_name).insert(insert_data).returning('*');
+        insert_meta = await flow.system.knex.driver('system_meta.' + schema_name).insert(insert_meta).returning('*');
+        insert_acls = await flow.system.knex.driver('system_acls.' + schema_name).insert(insert_acls).returning('*');
+
+        // Copy back to records
+        for(let i in flow.change) {
+            let record = flow.change[i];
+            _.assign(record.data, insert_data[i]);
+            _.assign(record.meta, insert_meta[i]);
+            _.assign(record.acls, insert_acls[i]);
+        }
     }
 }
