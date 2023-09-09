@@ -6,7 +6,6 @@ import { SystemAuth } from '../classes/system-auth';
 import { SystemData } from '../classes/system-data';
 import { SystemMeta } from '../classes/system-meta';
 import { SystemKnex } from '../classes/system-knex';
-import { SystemHttp } from '../classes/system-http';
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
@@ -27,7 +26,6 @@ export class System {
     public readonly data = new SystemData(this);
     public readonly meta = new SystemMeta(this);
     public readonly knex = new SystemKnex(this);
-    public readonly http = new SystemHttp(this);
 
     // Error management
     public readonly expect = chai.expect;
@@ -60,7 +58,6 @@ export class System {
         // Remaining services
         await this.data.startup();
         await this.meta.startup();
-        await this.http.startup();
         await this.auth.startup();
 
         // Done
@@ -71,7 +68,6 @@ export class System {
         // Shutdown services
         await this.data.cleanup();
         await this.meta.cleanup();
-        await this.http.cleanup();
         await this.auth.cleanup();
 
         // Shutdown knex last so the transaction commits/rollbacks
