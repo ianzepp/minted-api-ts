@@ -1,17 +1,16 @@
 import _ from 'lodash';
 
 // Classes
-import { Observer } from '../classes/observer';
-import { ObserverFlow } from '../classes/observer-flow';
-import { Column } from '../classes/column';
+import { Observer } from '../../classes/observer';
+import { ObserverFlow } from '../../classes/observer-flow';
 
 // Layouts
-import { ObserverRing } from '../layouts/observer';
+import { ObserverRing } from '../../layouts/observer';
 
 
 export default class extends Observer {
     toName(): string {
-        return 'record.test-immutable';
+        return 'record.test-maximum';
     }
     
     onSchema(): string {
@@ -36,18 +35,27 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         for(let column of Object.values(flow.schema.columns)) {
-            if (column.required === false) {
+            if (column.maximum === null) {
                 continue;
             }
 
             for(let record of flow.change) {
                 let data = record.get(column);
 
-                if (data !== null) {
+                if (data === null) {
                     continue;
                 }
 
-                throw new Error(`"${column.column_name}" is required`);
+                if (typeof data !== 'number') {
+                    continue;
+                }
+
+                if (data <= column.maximum) {
+                    continue;
+                }
+
+                // Failed test
+                flow.fail(300, `"${column.column_name}" value "${data}" > maximum of "${column.maximum}"`, record);
             }
         }
    }

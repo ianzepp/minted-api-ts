@@ -81,13 +81,13 @@ export class ObserverFlow {
         });
 
         for(let observer of observers) {
-            console.debug('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
-                this.schema.schema_name, 
-                this.op, 
-                observer.onRing(),
-                observer.onRank(),
-                observer.toName()
-            );
+            // console.debug('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
+            //     this.schema.schema_name, 
+            //     this.op, 
+            //     observer.onRing(),
+            //     observer.onRank(),
+            //     observer.toName()
+            // );
 
             try {
                 await observer.run(this);
