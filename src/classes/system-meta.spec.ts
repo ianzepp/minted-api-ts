@@ -9,18 +9,19 @@ import { Schema } from '../classes/schema';
 import { SystemAsTest } from '../classes/system';
 
 describe('SystemMeta', () => {
-    let system = new SystemAsTest();
 
     beforeAll(async () => {
-        await system.authenticate();
-        await system.startup();
     });
 
     afterAll(async () => {
-        await system.cleanup();
     });
 
     test('schema => database table lifecycle', async () => {
+        let system = new SystemAsTest();
+
+        await system.authenticate();
+        await system.startup();
+
         let record_name = "test_" + new Date().getTime();
         let record_schema = system.meta.schemas.schema;
         let record = record_schema.toRecord({ schema_name: record_name, schema_type: 'database' });
@@ -36,9 +37,6 @@ describe('SystemMeta', () => {
         chai.expect(record.meta).property('created_by', system.user.id);
         chai.expect(record.meta).property('expired_at').null;
         chai.expect(record.meta).property('expired_by').null;
-
-        // Refresh the system
-        await system.meta.refresh();
 
         // We should have the test schema available
         let tested_schema = system.meta.schemas[record_name];
@@ -95,14 +93,19 @@ describe('SystemMeta', () => {
             chai.expect(error).property('message').match(/relation ".+?" does not exist/);
         }
 
-        // Refresh the system
-        await system.meta.refresh();
-
         // Test schema should be gone
         chai.expect(system.meta.schemas).not.property(record_name);
+
+        // Done
+        await system.cleanup();
     });
 
     test('column => database table lifecycle', async () => {
+        let system = new SystemAsTest();
+
+        await system.authenticate();
+        await system.startup();
+
         // Setup the schema
         let parent_type = system.meta.schemas.schema;
         let parent_data = { schema_name: "test_" + new Date().getTime(), schema_type: 'database' };
@@ -143,9 +146,6 @@ describe('SystemMeta', () => {
         chai.expect(record.meta).property('expired_by').null;
         chai.expect(record.meta).property('deleted_at').null;
         chai.expect(record.meta).property('deleted_by').null;
-
-        // Refresh the system
-        await system.meta.refresh();
 
         // Column should be present in the meta service
         chai.expect(system.meta.schemas).property(parent_data.schema_name).instanceOf(Schema);
@@ -213,9 +213,6 @@ describe('SystemMeta', () => {
         chai.expect(record.meta).property('deleted_at').not.null;
         chai.expect(record.meta).property('deleted_by', system.user.id);
 
-        // Refresh the system
-        await system.meta.refresh();
-
         // Column should not be present in the meta service
         chai.expect(system.meta.schemas).property(parent_data.schema_name).instanceOf(Schema);
         chai.expect(system.meta.schemas[parent_data.schema_name].columns).not.property('test_text');
@@ -234,5 +231,8 @@ describe('SystemMeta', () => {
         chai.expect(retest.meta).property('expired_by').null;
         chai.expect(retest.meta).property('deleted_at').null;
         chai.expect(retest.meta).property('deleted_by').null;
+
+        // Done
+        await system.cleanup();
     });
 });

@@ -8,6 +8,7 @@ import { Record } from '../../classes/record';
 import { Schema } from '../../classes/schema';
 import { System } from '../../classes/system';
 import { SystemAsTest } from '../../classes/system';
+import { RecordColumnRequiredError } from '../../classes/errors';
 
 describe(__filename, () => {
     let system = new SystemAsTest();
@@ -36,37 +37,17 @@ describe(__filename, () => {
             required: true
         });
 
-        // Refresh the metadata
-        await system.meta.refresh();
+        // Should be able to create a record with all data
+        let record = await system.data.createOne(schema_name, { test_column: 'some value' });
 
         // Should not be able to create a record without the value
-        try {
-            let tested = await system.data.createOne(schema_name, {});
+        await system.data.createOne(schema_name, {})
+            .then(() => chai.assert.fail('Should not be able to create a record without the value'))
+            .catch(error => chai.expect(error).instanceOf(RecordColumnRequiredError));
 
-            // Did not throw yet
-            throw new Error('Test case failed');
-        }
-
-        catch (error) {
-            chai.expect(error).property('message', '"test_column" is required');
-        }
-
-        // Should be able to create a record
-        let record = await system.data.createOne(schema_name, {
-            test_column: 'some value'
-        });
-
-        // Should not be able to update record back to a null value
-        try {
-            record.data.test_column = null;
-            record = await system.data.updateOne(schema_name, record);
-
-            // Did not throw yet
-            throw new Error('Test case failed');
-        }
-
-        catch (error) {
-            chai.expect(error).property('message', '"test_column" is required');
-        }    
+        // // Should not be able to update back to a null value
+        await system.data.updateOne(schema_name, { id: record.data.id, test_column: null })
+            .then(() => chai.assert.fail('Should not be able to update back to a null value'))
+            .catch(error => chai.expect(error).instanceOf(RecordColumnRequiredError));
     });
 });

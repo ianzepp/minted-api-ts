@@ -56,14 +56,14 @@ describe('SystemData', () => {
     //
     
     test('runs selectAny()', async () => {
-        let create = await system.data.createOne(schema, { test: 'system-data.spec/selectAny'})
+        let create = await system.data.createOne(schema, { name: 'system-data.spec/selectAny'})
         let result = await system.data.selectAny(schema, {});
 
         expectRecordSet(result);
     });
 
     test('runs select404()', async () => {
-        let create = await system.data.createOne(schema, { test: 'system-data.spec/select404'})
+        let create = await system.data.createOne(schema, { name: 'system-data.spec/select404'})
         let result = await system.data.select404(schema, create.data.id as string);
 
         expectRecord(result);
@@ -72,7 +72,7 @@ describe('SystemData', () => {
     });
 
     test('runs selectIds()', async () => {
-        let create = await system.data.createOne(schema, { test: 'system-data.spec/selectIds'})
+        let create = await system.data.createOne(schema, { name: 'system-data.spec/selectIds'})
         let create_ids = [create.data.id as string];
         let result_set = await system.data.selectIds(schema, create_ids);
 
@@ -89,9 +89,9 @@ describe('SystemData', () => {
 
     test('runs createAll()', async () => {
         let change_set = [
-            { test: 'system-data.spec/createAll.1' }, 
-            { test: 'system-data.spec/createAll.2' }, 
-            { test: 'system-data.spec/createAll.3' }, 
+            { name: 'system-data.spec/createAll.1' }, 
+            { name: 'system-data.spec/createAll.2' }, 
+            { name: 'system-data.spec/createAll.3' }, 
         ];
 
         // Test create
@@ -115,9 +115,9 @@ describe('SystemData', () => {
 
     test('runs updateAll()', async () => {
         let source_set = [
-            { test: 'system-data.spec/updateAll.0' }, 
-            { test: 'system-data.spec/updateAll.1' }, 
-            { test: 'system-data.spec/updateAll.2' }, 
+            { name: 'system-data.spec/updateAll.0' }, 
+            { name: 'system-data.spec/updateAll.1' }, 
+            { name: 'system-data.spec/updateAll.2' }, 
         ];
 
         // Test create
@@ -127,7 +127,7 @@ describe('SystemData', () => {
 
         // Modify names
         for(let record of create_set) {
-            record.data.test = record.data.test + '-changed';
+            record.data.name = record.data.name + '-changed';
         }
 
         // Test update
@@ -167,9 +167,9 @@ describe('SystemData', () => {
 
     test('runs expireAll()', async () => {
         let source_set = [
-            { test: 'system-data.spec/expireAll.0' }, 
-            { test: 'system-data.spec/expireAll.1' }, 
-            { test: 'system-data.spec/expireAll.2' }, 
+            { name: 'system-data.spec/expireAll.0' }, 
+            { name: 'system-data.spec/expireAll.1' }, 
+            { name: 'system-data.spec/expireAll.2' }, 
         ];
 
         // Test create
@@ -206,9 +206,9 @@ describe('SystemData', () => {
 
     test('runs deleteAll()', async () => {
         let source_set = [
-            { test: 'system-data.spec/deleteAll.0' }, 
-            { test: 'system-data.spec/deleteAll.1' }, 
-            { test: 'system-data.spec/deleteAll.2' }, 
+            { name: 'system-data.spec/deleteAll.0' }, 
+            { name: 'system-data.spec/deleteAll.1' }, 
+            { name: 'system-data.spec/deleteAll.2' }, 
         ];
 
         // Test create

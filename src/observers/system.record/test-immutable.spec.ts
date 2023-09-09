@@ -8,6 +8,7 @@ import { Record } from '../../classes/record';
 import { Schema } from '../../classes/schema';
 import { System } from '../../classes/system';
 import { SystemAsTest } from '../../classes/system';
+import { RecordColumnImmutableError } from '../../classes/errors';
 
 describe(__filename, () => {
     let system = new SystemAsTest();
@@ -36,9 +37,6 @@ describe(__filename, () => {
             immutable: true
         });
 
-        // Refresh the metadata
-        await system.meta.refresh();
-
         // Should be able to create a record
         let record = await system.data.createOne(schema_name, {
             test_immutable: 'some value'
@@ -54,7 +52,11 @@ describe(__filename, () => {
         }
 
         catch (error) {
-            chai.expect(error).property('message', '"test_immutable" is immutable');
+            if (error instanceof RecordColumnImmutableError) {
+                return; // test passes
+            }
+
+            throw error;
         }
     });
 });

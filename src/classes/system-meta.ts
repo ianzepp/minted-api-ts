@@ -11,6 +11,9 @@ import { SystemService } from '../classes/system';
 // Layouts
 import { SchemaName } from '../layouts/schema';
 
+// Errors
+import { SchemaNotFoundError } from '../classes/errors';
+
 
 export class SystemMeta implements SystemService {
     // Cache known schema and column names
@@ -19,6 +22,8 @@ export class SystemMeta implements SystemService {
     constructor(private readonly system: System) {}
 
     async startup(): Promise<void> {
+        console.debug('SystemMeta.startup()');
+
         let select_data = async (schema_name: SchemaName) => {
             return KnexDriver(`system_data.${schema_name} as data`)
                 .join(`system_meta.${schema_name} as meta`, 'meta.id', 'data.id')
@@ -30,10 +35,9 @@ export class SystemMeta implements SystemService {
 
         // Process system schemas
         for(let schema_data of await select_data('schema')) {
-            let schema = new Schema(schema_data);
-
-            // Add to local cache
-            this.schemas[schema.schema_name] = schema;
+            let schema_name = schema_data.schema_name;
+            
+            this.schemas[schema_name] = new Schema(schema_data);
         }
 
         for(let column_data of await select_data('column')) {
@@ -45,9 +49,13 @@ export class SystemMeta implements SystemService {
         }
     }
     
-    async cleanup(): Promise<void> {}
+    async cleanup(): Promise<void> {
+        console.debug('SystemMeta.cleanup()');
+    }
 
     async refresh() {
+        console.debug('SystemMeta.refresh()');
+
         _.forOwn(this.schemas, (value, key) => {
             delete this.schemas[key];
         });
@@ -71,7 +79,7 @@ export class SystemMeta implements SystemService {
         }
 
         if (schema === undefined) {
-            throw `Schema '${schema_name}' not found/loaded`;
+            throw new SchemaNotFoundError(schema_name as string);
         }
 
         return schema;
