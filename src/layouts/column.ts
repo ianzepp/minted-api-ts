@@ -8,6 +8,5 @@ export enum ColumnType {
     Enum = 'enum',
     Integer = 'integer',
     Json = 'json',
-    Number = 'number',
     Text = 'text',
 }
