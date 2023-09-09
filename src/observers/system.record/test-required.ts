@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { ObserverRing } from '../../layouts/observer';
-import { RecordColumnRequiredError } from '../../classes/errors';
+import { RecordColumnRequiredError } from '../../classes/system-data';
 
 export default class extends Observer {
     toName(): string {

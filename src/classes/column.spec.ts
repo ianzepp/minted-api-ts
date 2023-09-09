@@ -1,6 +1,7 @@
 // Classes
 import { Schema } from '../classes/schema';
 import { Column } from '../classes/column';
+import { System } from './system';
 
 // Layouts
 import { ColumnType } from '../layouts/column';
@@ -8,18 +9,8 @@ import { SystemAsTest } from './system';
 
 
 describe('Column', () => {
-    let system = new SystemAsTest();
     let schema: Schema;
     let column: Column;
-
-    beforeAll(async () => {
-        await system.authenticate();
-        await system.startup();
-    });
-
-    afterAll(async () => {
-        await system.cleanup();
-    });
 
     beforeEach(() => {
         schema = new Schema({

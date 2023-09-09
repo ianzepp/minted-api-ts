@@ -1,14 +1,9 @@
 import _ from 'lodash';
 import chai from 'chai';
-import { v4 as uuid } from 'uuid';
 
 // Classes
-import { Column } from '../../classes/column';
-import { Record } from '../../classes/record';
-import { Schema } from '../../classes/schema';
-import { System } from '../../classes/system';
 import { SystemAsTest } from '../../classes/system';
-import { RecordColumnRequiredError } from '../../classes/errors';
+import { RecordColumnRequiredError } from '../../classes/system-data';
 
 describe(__filename, () => {
     let system = new SystemAsTest();

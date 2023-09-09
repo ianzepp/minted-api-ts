@@ -18,7 +18,13 @@ import { SystemVerb } from '../layouts/system';
 import head404 from '../helpers/head404';
 import headOne from '../helpers/headOne';
 
+// Data API errors
+export class DataError extends Error {};
+export class RecordNotFoundError extends DataError {};
+export class RecordColumnImmutableError extends DataError {};
+export class RecordColumnRequiredError extends DataError {};
 
+// Implementation
 export class SystemData implements SystemService {
     constructor(private readonly system: System) {}
 

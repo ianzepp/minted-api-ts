@@ -3,7 +3,6 @@ import chai from 'chai';
 import { Knex } from 'knex';
 
 // Classes
-import { KnexDriver } from '../../classes/knex';
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { Record } from '../../classes/record';
@@ -59,7 +58,7 @@ export default class extends Observer {
 
         // Create base table
         await system.knex.schema.withSchema('system_data').createTable(schema_name, (table) => {
-            table.uuid('id').primary().defaultTo(KnexDriver.fn.uuid());
+            table.uuid('id').primary().defaultTo(system.knex.fn.uuid());
             table.string('ns');
         });
 

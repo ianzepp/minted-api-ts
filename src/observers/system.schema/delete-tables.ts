@@ -3,7 +3,6 @@ import chai from 'chai';
 import { Knex } from 'knex';
 
 // Classes
-import { KnexDriver } from '../../classes/knex';
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { Record } from '../../classes/record';

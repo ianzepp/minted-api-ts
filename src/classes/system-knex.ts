@@ -1,23 +1,62 @@
 import _ from 'lodash';
+import knex from 'knex';
 import { Knex } from 'knex';
 
+// Create the driver reference
+export const KnexConfig = {
+    debug: process.env.POSTGRES_DEBUG === 'true',
+    client: 'postgresql',
+    connection: {
+        host:     process.env.POSTGRES_HOST,
+        database: process.env.POSTGRES_DB,
+        user:     process.env.POSTGRES_USER,
+        password: process.env.POSTGRES_PASSWORD
+    },
+    pool: {
+        min: 0,
+        max: 10
+    }
+};
+
+// Test contexts have lower connection pool sizes
+export const KnexConfigTest = _.defaults({ 
+    pool: {
+        min: 0,
+        max: 2
+    }
+}, KnexConfig);
+
+// Create the app-wide connection
+export const KnexDriver = knex(KnexConfig);
+
 // Classes
-import { KnexDriver } from './knex';
-import { Filter } from '../classes/filter';
 import { System } from '../classes/system';
 import { SystemService } from '../classes/system';
 
-// Layouts
-import { RecordData } from '../layouts/record';
+// Errors
+export class KnexError extends Error {};
+export class KnexTransactionMissingError extends KnexError {};
+export class KnexTransactionAlreadyStartedError extends KnexError {};
+export class KnexDriverMissingError extends KnexError {};
 
+// Implementation
 export class SystemKnex implements SystemService {
-    private tx: Knex.Transaction | undefined;
+    public readonly db: Knex;
+    public tx: Knex.Transaction | undefined;
 
-    constructor(private readonly system: System) {}
+    constructor(private readonly system: System) {
+        if (this.system.isTest()) {
+            this.db = knex(KnexConfigTest);
+        }
+
+        else {
+            this.db = KnexDriver; // shared pool
+        }
+    }
 
     get schema(): Knex.SchemaBuilder {
         if (this.tx === undefined) {
-            throw new Error('Not allowed to operate outside of a transaction context');
+            throw new KnexTransactionMissingError();
         }
 
         return this.tx.schema;
@@ -25,36 +64,35 @@ export class SystemKnex implements SystemService {
 
     get driver(): Knex {
         if (this.tx === undefined) {
-            throw new Error('Not allowed to operate outside of a transaction context');
+            throw new KnexTransactionMissingError();
         }
 
         return this.tx;
     }
 
-    async startup(): Promise<void> {
-        console.debug('SystemKnex.startup()');
+    get fn() {
+        return this.db.fn;
+    }
 
+    async startup(): Promise<void> {
         if (this.tx !== undefined) {
-            throw new Error('Transaction context is already created?!?');
+            throw new KnexTransactionAlreadyStartedError();
         }
 
-        this.tx = await KnexDriver.transaction();
+        this.tx = await this.db.transaction();
     }
 
     async cleanup(): Promise<void> {
-        console.debug('SystemKnex.cleanup()');
-
         if (this.tx === undefined) {
-            throw new Error('Transaction context was lost?!?');
+            throw new KnexTransactionMissingError();
         }
 
         if (this.system.isTest()) {
-            console.debug('SystemKnex.cleanup() is rolling back');
             await this.tx.rollback();
+            await this.db.destroy();
         }
 
         else {
-            console.debug('SystemKnex.cleanup() is committing');
             await this.tx.commit();
         }
 

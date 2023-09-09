@@ -54,8 +54,6 @@ export class System {
     }
 
     async startup(): Promise<this> {
-        console.debug('System.startup()');
-
         // Start knex first so we have a transaction context
         await this.knex.startup();
 
@@ -70,24 +68,20 @@ export class System {
     }
 
     async cleanup(): Promise<this> {
-        console.debug('System.cleanup()');
-
-        // Shutdown knex first so the transaction commits/rollbacks
-        await this.knex.cleanup();
-
         // Shutdown services
         await this.data.cleanup();
         await this.meta.cleanup();
         await this.http.cleanup();
         await this.user.cleanup();
 
+        // Shutdown knex last so the transaction commits/rollbacks
+        await this.knex.cleanup();
+
         // Done
         return this;
     }
 
     async refresh(): Promise<this> {
-        console.debug('System.refresh()');
-
         await this.cleanup();
         await this.startup();
 
@@ -115,9 +109,12 @@ export class System {
     }
 
     isTest() {
-        return System.TestId === this.user_id;
-    }
-    
+        return process.env.NODE_ENV === 'test';
+    } 
+
+    isProd() {
+        return process.env.NODE_ENV === 'production';
+    } 
 }
 
 export class SystemAsRoot extends System {
