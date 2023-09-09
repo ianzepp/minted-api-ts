@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import chai from 'chai';
+import jwt from 'jsonwebtoken';
 
 // Classes
 import { System } from './system';
@@ -9,7 +11,18 @@ export class AuthError extends Error {};
 export class AuthUserNotFoundError extends AuthError {};
 export class AuthClientNotFoundError extends AuthError {};
 
+// Sanity
+if (process.env.NODE_ENV === 'production') {
+    chai.assert(process.env.JWT_SECRET, '"process.env.JWT_SECRET" is missing');
+}
+
 export class SystemAuth implements SystemService {
+    // JWT secret used for dev
+    private static JWT_SECRET = process.env.JWT_SECRET || 'development-password';
+    private static JWT_OPTION = { expiresIn: '1h' };
+
+    constructor(private readonly system: System) {}
+
     get id() {
         return this.system.user_id;
     }
@@ -22,15 +35,12 @@ export class SystemAuth implements SystemService {
         return _.uniq(_.compact(['system', this.ns]));
     }
 
-    constructor(private readonly system: System) {}
-
     async startup(): Promise<void> {}
-
     async cleanup(): Promise<void> {}
 
-    async authenticate(): Promise<void> {
-        // The knex transaction isn't setup yet, so access the DB directly
-        let user = await this.system.knex.db(`system_data.user as data`)
+    async authenticate() {
+        // Verify user record exists and has access to the system
+        let user = this.system.knex.db(`system_data.user as data`)
             .where('data.id', this.system.user_id)
             .where('data.ns', this.system.user_ns)
             .first();
@@ -38,6 +48,18 @@ export class SystemAuth implements SystemService {
         if (user === undefined) {
             throw new AuthUserNotFoundError(this.system.user_id);
         }
+
+        return user;
     }
 
+    async signin() {
+        return jwt.sign({
+            id: this.system.user_id,
+            ns: this.system.user_ns,
+        }, SystemAuth.JWT_SECRET, SystemAuth.JWT_OPTION);
+    }
+
+    async signup() {
+        // nothing done right now
+    }
 }

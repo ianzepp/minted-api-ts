@@ -3,8 +3,8 @@ import chai from 'chai';
 import fs from 'fs-extra';
 
 // Classes
-import { HttpReq } from '../classes/http-server';
-import { HttpRes } from '../classes/http-server';
+import { HttpReq } from '../classes/http-req';
+import { HttpRes } from '../classes/http-res';
 import { System } from '../classes/system';
 import { SystemService } from '../classes/system';
 
@@ -19,6 +19,8 @@ export class SystemHttp implements SystemService {
     async cleanup(): Promise<void> {}
 
     async run(httpReq: HttpReq, httpRes: HttpRes): Promise<HttpRes> {
+        console.warn('SystemHttp:', httpReq);
+
         // Find the first matching router
         let router = _.find(Routers, router => router.is(httpReq.verb, httpReq.path));
 

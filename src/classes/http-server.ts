@@ -11,34 +11,10 @@ const jsonBody = Util.promisify(require('body/json'));
 const formBody = Util.promisify(require('body/form'));
 
 // Classes
+import { HttpReq } from '../classes/http-req';
+import { HttpRes } from '../classes/http-res';
 import { System } from '../classes/system';
 import { SystemAsCors } from '../classes/system';
-
-// Routers
-import { HttpRouter } from './http-router';
-
-export interface HttpServerRoute {
-    verb: string;
-    path: string;
-    path_regexp: RegExp,
-    router_type: typeof HttpRouter;
-}
-
-export interface HttpReq {
-    verb: string;
-    path: string;
-    params: _.Dictionary<string>;
-    search: _.Dictionary<string>;
-    body: any;
-}
-
-export interface HttpRes {
-    status: number;
-    length: number;
-    schema: string | undefined;
-    record: string | undefined;
-    result: any;
-}
 
 export class HttpServer {
     // Start the server
@@ -55,7 +31,7 @@ export class HttpServer {
         // Done
     }
 
-    async run(req: Http.IncomingMessage, res: Http.ServerResponse): Promise<Http.ServerResponse<Http.IncomingMessage>> {
+    async run(req: Http.IncomingMessage, res: Http.ServerResponse) {
         console.debug('HttpServer:', req.method, req.url);
 
         // Build the structures of httpReq and httpRes to be passed into system-http
