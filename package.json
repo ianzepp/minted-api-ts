@@ -14,7 +14,8 @@
         "migrate:down": "bash ./scripts/migrate-down.sh",
         "start": "bash ./scripts/start.sh",
         "start:dev": "bash ./scripts/start-dev.sh",
-        "test": "bash ./scripts/test.sh"
+        "test": "bash ./scripts/test.sh",
+        "typedoc": "bash ./scripts/typedoc.sh"
     },
     "keywords": [],
     "author": "",
@@ -50,6 +51,8 @@
         "nodemon": "^3.0.1",
         "ts-jest": "^29.1.1",
         "ts-node": "^10.9.1",
+        "typedoc": "^0.25.1",
+        "typedoc-plugin-markdown": "^3.16.0",
         "typescript": "^5.2.2",
         "webpack-cli": "^5.1.4"
     }
