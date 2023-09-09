@@ -46,7 +46,7 @@ export class System {
         console.warn('User found?', this.user.id, user);
 
         if (user === undefined) {
-            throw new Error(`Unknown user ID "${this.user.id}`);
+            // throw new Error(`Unknown user ID "${this.user.id}`);
         }
 
         // Start the related services
