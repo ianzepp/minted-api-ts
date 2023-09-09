@@ -5,10 +5,7 @@ import { v4 as uuid } from 'uuid';
 // Classes
 import { Record } from '../classes/record';
 import { Schema } from '../classes/schema';
-import { System } from '../classes/system';
-
-// Layouts
-import { SystemUser } from '../layouts/system';
+import { SystemAsTest } from '../classes/system';
 
 function expectStringOrNull(value: any) {
     console.warn('value', value);
@@ -42,19 +39,16 @@ function expectRecord(result: any) {
 }
 
 describe('SystemData', () => {
-    let system_user: SystemUser = { id: uuid(), ns: 'test', scopes: null };
-    let system: System;
-    let schema_name = 'schema';
-    let schema: Schema;
+    let system = new SystemAsTest();
+    let schema = 'test';
 
     beforeAll(async () => {
-        system = await new System(system_user).startup();
-        schema = await system.meta.schemas.test;
+        await system.authenticate();
+        await system.startup();
     });
 
     afterAll(async () => {
-        await system.data.deleteAny(schema, {});
-        await system.knex.destroy();
+        await system.cleanup();
     });
 
     //
@@ -95,9 +89,9 @@ describe('SystemData', () => {
 
     test('runs createAll()', async () => {
         let change_set = [
-            schema.toRecord({ test: 'system-data.spec/createAll.1' }), 
-            schema.toRecord({ test: 'system-data.spec/createAll.2' }), 
-            schema.toRecord({ test: 'system-data.spec/createAll.3' }), 
+            { test: 'system-data.spec/createAll.1' }, 
+            { test: 'system-data.spec/createAll.2' }, 
+            { test: 'system-data.spec/createAll.3' }, 
         ];
 
         // Test create
@@ -106,7 +100,7 @@ describe('SystemData', () => {
         expectRecordSet(result_set, change_set.length);
 
         // Reselect to verify
-        let select_set = await system.data.selectIds(schema, change_set.map(change => change.data.id as string));
+        let select_set = await system.data.selectIds(schema, result_set.map(result => result.data.id as string));
 
         expectRecordSet(result_set, change_set.length);
     });
@@ -121,9 +115,9 @@ describe('SystemData', () => {
 
     test('runs updateAll()', async () => {
         let source_set = [
-            schema.toRecord({ test: 'system-data.spec/updateAll.0' }), 
-            schema.toRecord({ test: 'system-data.spec/updateAll.1' }), 
-            schema.toRecord({ test: 'system-data.spec/updateAll.2' }), 
+            { test: 'system-data.spec/updateAll.0' }, 
+            { test: 'system-data.spec/updateAll.1' }, 
+            { test: 'system-data.spec/updateAll.2' }, 
         ];
 
         // Test create
@@ -173,9 +167,9 @@ describe('SystemData', () => {
 
     test('runs expireAll()', async () => {
         let source_set = [
-            schema.toRecord({ test: 'system-data.spec/expireAll.0' }), 
-            schema.toRecord({ test: 'system-data.spec/expireAll.1' }), 
-            schema.toRecord({ test: 'system-data.spec/expireAll.2' }), 
+            { test: 'system-data.spec/expireAll.0' }, 
+            { test: 'system-data.spec/expireAll.1' }, 
+            { test: 'system-data.spec/expireAll.2' }, 
         ];
 
         // Test create
@@ -212,9 +206,9 @@ describe('SystemData', () => {
 
     test('runs deleteAll()', async () => {
         let source_set = [
-            schema.toRecord({ test: 'system-data.spec/deleteAll.0' }), 
-            schema.toRecord({ test: 'system-data.spec/deleteAll.1' }), 
-            schema.toRecord({ test: 'system-data.spec/deleteAll.2' }), 
+            { test: 'system-data.spec/deleteAll.0' }, 
+            { test: 'system-data.spec/deleteAll.1' }, 
+            { test: 'system-data.spec/deleteAll.2' }, 
         ];
 
         // Test create

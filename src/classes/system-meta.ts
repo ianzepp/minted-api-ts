@@ -6,12 +6,13 @@ import { KnexDriver } from '../classes/knex';
 import { Schema } from '../classes/schema';
 import { Column } from '../classes/column';
 import { System } from '../classes/system';
+import { SystemService } from '../classes/system';
 
 // Layouts
 import { SchemaName } from '../layouts/schema';
 
 
-export class SystemMeta {
+export class SystemMeta implements SystemService {
     // Cache known schema and column names
     public readonly schemas: _.Dictionary<Schema> = {};
 
@@ -21,7 +22,7 @@ export class SystemMeta {
         let select_data = async (schema_name: SchemaName) => {
             return KnexDriver(`system_data.${schema_name} as data`)
                 .join(`system_meta.${schema_name} as meta`, 'meta.id', 'data.id')
-                .whereIn('data.ns', this.system.namespaces)
+                .whereIn('data.ns', this.system.user.namespaces)
                 .whereNull('meta.expired_at')
                 .whereNull('meta.deleted_at')
                 .select();
@@ -44,6 +45,8 @@ export class SystemMeta {
         }
     }
     
+    async cleanup(): Promise<void> {}
+
     async refresh() {
         _.forOwn(this.schemas, (value, key) => {
             delete this.schemas[key];

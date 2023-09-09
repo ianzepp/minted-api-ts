@@ -7,18 +7,20 @@ import { Column } from '../../classes/column';
 import { Record } from '../../classes/record';
 import { Schema } from '../../classes/schema';
 import { System } from '../../classes/system';
+import { SystemAsTest } from '../../classes/system';
 
 describe(__filename, () => {
-    let system: System;
+    let system = new SystemAsTest();
     let schema_name = 'test_' + process.hrtime().join('_');
     let column_name = 'test_column';
 
     beforeAll(async () => {
-        system = await new System({ id: uuid(), ns: 'test', scopes: null }).startup();
+        await system.authenticate();
+        await system.startup();
     });
 
     afterAll(async () => {
-        return system.knex.destroy();
+        await system.cleanup();
     });
 
     test('required column should throw an error', async () => {

@@ -1,9 +1,20 @@
 // Classes
 import { Schema } from '../classes/schema';
+import { SystemAsTest } from './system';
 
 
 describe('Schema', () => {
+    let system = new SystemAsTest();
     let schema: Schema;
+
+    beforeAll(async () => {
+        await system.authenticate();
+        await system.startup();
+    });
+
+    afterAll(async () => {
+        await system.cleanup();
+    });
 
     beforeEach(() => {
         schema = new Schema({

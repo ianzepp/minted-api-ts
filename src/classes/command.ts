@@ -3,10 +3,7 @@ import { program, Command } from 'commander';
 
 // Classes
 import { System } from '../classes/system';
-import { SystemRoot } from '../classes/system-root';
-
-// Layouts
-import { SystemUser } from '../layouts/system';
+import { SystemAsRoot } from '../classes/system';
 
 // Data API
 async function data_select(system: System, schema_name: string, options: _.Dictionary<any>, cmd: Command) {
@@ -29,7 +26,7 @@ async function data_delete(system: System, schema_name: string, options: _.Dicti
 
 function runAction(actionFn: Function) {
     return async (... args: any[]) => {
-        let system = await new System(new SystemRoot).startup();
+        let system = await new SystemAsRoot().startup();
 
         try {
             await actionFn(system, ... args);
