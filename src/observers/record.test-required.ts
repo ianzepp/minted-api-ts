@@ -47,7 +47,7 @@ export default class extends Observer {
                     continue;
                 }
 
-                flow.fail(300, `"${column.column_name}" is required`, record);
+                throw new Error(`"${column.column_name}" is required`);
             }
         }
    }
