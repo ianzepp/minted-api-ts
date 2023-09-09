@@ -1,15 +1,15 @@
 import _ from 'lodash';
 
 // Classes
-import { System } from '../classes/system';
-import { SystemService } from '../classes/system';
+import { System } from './system';
+import { SystemService } from './system';
 
 // User API errors
-export class UserError extends Error {};
-export class UserNotFoundError extends UserError {};
-export class UserClientNotActiveError extends UserError {};
+export class AuthError extends Error {};
+export class AuthUserNotFoundError extends AuthError {};
+export class AuthClientNotFoundError extends AuthError {};
 
-export class SystemUser implements SystemService {
+export class SystemAuth implements SystemService {
     get id() {
         return this.system.user_id;
     }
@@ -24,6 +24,10 @@ export class SystemUser implements SystemService {
 
     constructor(private readonly system: System) {}
 
+    async startup(): Promise<void> {}
+
+    async cleanup(): Promise<void> {}
+
     async authenticate(): Promise<void> {
         // The knex transaction isn't setup yet, so access the DB directly
         let user = await this.system.knex.db(`system_data.user as data`)
@@ -32,11 +36,8 @@ export class SystemUser implements SystemService {
             .first();
 
         if (user === undefined) {
-            throw new UserNotFoundError(this.system.user_id);
+            throw new AuthUserNotFoundError(this.system.user_id);
         }
     }
 
-    async startup(): Promise<void> {}
-
-    async cleanup(): Promise<void> {}
 }
