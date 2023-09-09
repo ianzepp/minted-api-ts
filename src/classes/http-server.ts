@@ -12,17 +12,10 @@ const formBody = Util.promisify(require('body/form'));
 
 // Classes
 import { System } from '../classes/system';
-import { SystemRoot } from '../classes/system-root';
-
-// Layouts
-import { SystemUser } from '../layouts/system';
+import { SystemAsCors } from '../classes/system';
 
 // Routers
 import { HttpRouter } from './http-router';
-
-// Import pre-loaded routers
-import Routers from '../preloader/routers';
-import { URLSearchParams } from 'url';
 
 export interface HttpServerRoute {
     verb: string;
@@ -48,9 +41,6 @@ export interface HttpRes {
 }
 
 export class HttpServer {
-    // Track the router paths
-    private readonly __routes: HttpServerRoute[] = [];
-
     // Start the server
     listen(port: number): void {
         let server = Http.createServer((req, res) => {
@@ -85,81 +75,65 @@ export class HttpServer {
             result: undefined,
         }
 
-        try {
-            // Process URL data
-            let request_url = new UrlParse(req.url, true);
+        // Always send CORS headers
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-            console.warn('Parsed URL', request_url);
-
-            // Extract the search k=v data from the URL
-            httpReq.path = request_url.pathname;
-            httpReq.search = request_url.query;
-
-            // Extract the body data
-            let content_type = (req.headers['content-type'] || '').split(';');
-
-            if (content_type.includes('application/json')) {
-                httpReq.body = await jsonBody(req, res);
-            }
-
-            if (content_type.includes('text/plain')) {
-                httpReq.body = await textBody(req, res);
-            }
-
-            if (content_type.includes('multipart/form-data')) {
-                httpReq.body = await formBody(req, res);
-            }
-
-            // TODO generate actual user creds from CORS
-            let system = new System({
-                id: SystemRoot.UUID,
-                ns: 'test',
-                scopes: null
-            });
-
-            // Initialize the system
-            await system.startup();
-
-            // Run the router validation, followed by the implementation
-            await system.knex.transaction(() => {
-                return system.http.run(system, httpReq, httpRes);
-            });
-        }
-
-        catch (error) {
-            console.error('HttpServer: **ERROR**', error);
-
-            httpRes.status = 500;
-            httpRes.length = 0;
-            httpRes.result = error;
-        }
-
-        finally {
-            console.warn('httpReq.search', httpReq.search);
-
-            if (httpReq.search.transform) {
-                _.each(httpReq.search.transform.split(','), transform => {
-                    let [tn, td] = transform.split('=');
-
-                    if (tn === 'map') {
-                        httpRes.result = _.map(httpRes.result, td);
-                    }
-
-                    if (tn === 'uniq') {
-                        httpRes.result = _.uniq(httpRes.result);
-                    }
-                });
-            }
-
-            // Define the response
-            let res_json = JSON.stringify(httpRes);
-
-            // Return the response
-            res.statusCode = httpRes.status;
-            res.setHeader('Content-Type', 'application/json');
-            res.setHeader('Content-Length', Buffer.byteLength(res_json, 'utf8').toString());
-            res.write(res_json);
+        // Is this an OPTIONS request? All they want is CORS info..
+        if (req.method === 'OPTIONS') {
             return res.end();
         }
+
+        // Process the request
+        let system: System;
+
+        // TODO Generate actual user creds from CORS
+        system = new SystemAsCors(req.headers.cookie);
+
+        // Authenticate the user before we go too far
+        await system.authenticate();
+
+        // Process URL data
+        let request_url = new UrlParse(req.url, true);
+
+        // Extract the search k=v data from the URL
+        httpReq.path = request_url.pathname;
+        httpReq.search = request_url.query;
+
+        // Extract the body data
+        let content_type = (req.headers['content-type'] || '').split(';');
+
+        if (content_type.includes('application/json')) {
+            httpReq.body = await jsonBody(req, res);
+        }
+
+        if (content_type.includes('text/plain')) {
+            httpReq.body = await textBody(req, res);
+        }
+
+        if (content_type.includes('multipart/form-data')) {
+            httpReq.body = await formBody(req, res);
+        }
+
+        // Initialize the system
+        await system.startup();
+
+        // Run the router
+        await system.http.run(httpReq, httpRes);
+
+        // Cleanup
+        await system.cleanup();
+
+        // Define the response
+        let res_json = JSON.stringify(httpRes);
+
+        // Return the response
+        res.statusCode = httpRes.status;
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Length', Buffer.byteLength(res_json, 'utf8').toString());
+        res.write(res_json);
+        return res.end();
     }
 }

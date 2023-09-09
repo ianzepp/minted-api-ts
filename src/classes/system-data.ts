@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { ObserverFlow } from '../classes/observer-flow';
 import { Record } from '../classes/record';
 import { System } from '../classes/system';
+import { SystemService } from '../classes/system';
 import { Schema } from '../classes/schema';
 
 // Layouts
@@ -18,10 +19,12 @@ import head404 from '../helpers/head404';
 import headOne from '../helpers/headOne';
 
 
-export class SystemData {
+export class SystemData implements SystemService {
     constructor(private readonly system: System) {}
 
     async startup(): Promise<void> {}
+
+    async cleanup(): Promise<void> {}
 
     //
     // Collection record methods

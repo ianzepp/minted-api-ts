@@ -6,17 +6,18 @@ import { v4 as uuid } from 'uuid';
 import { Column } from '../classes/column';
 import { Record } from '../classes/record';
 import { Schema } from '../classes/schema';
-import { System } from '../classes/system';
+import { SystemAsTest } from '../classes/system';
 
 describe('SystemMeta', () => {
-    let system: System;
+    let system = new SystemAsTest();
 
     beforeAll(async () => {
-        system = await new System({ id: uuid(), ns: 'test', scopes: null }).startup();
+        await system.authenticate();
+        await system.startup();
     });
 
     afterAll(async () => {
-        return system.knex.destroy();
+        await system.cleanup();
     });
 
     test('schema => database table lifecycle', async () => {

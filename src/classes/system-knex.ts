@@ -5,12 +5,12 @@ import { Knex } from 'knex';
 import { KnexDriver } from './knex';
 import { Filter } from '../classes/filter';
 import { System } from '../classes/system';
-import { SystemRoot } from '../classes/system-root';
+import { SystemService } from '../classes/system';
 
 // Layouts
 import { RecordData } from '../layouts/record';
 
-export class SystemKnex {
+export class SystemKnex implements SystemService {
     private __transaction: Knex.Transaction | undefined;
 
     constructor(private readonly system: System) {}
@@ -33,7 +33,7 @@ export class SystemKnex {
         await KnexDriver.raw('SELECT 1'); // test connection at startup
     }
 
-    async destroy(): Promise<void> {
+    async cleanup(): Promise<void> {
         await KnexDriver.destroy();
     }
 
@@ -45,7 +45,6 @@ export class SystemKnex {
             this.__transaction = undefined;
         });
     }
-
 
     // 
     // Build requests

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { Knex } from 'knex';
-import { SystemRoot } from '../classes/system-root';
+import { System } from '../classes/system';
 
 import knexCreateTable from '../helpers/knex-create-table';
 import knexDropTable from '../helpers/knex-drop-table';
@@ -29,8 +29,8 @@ export async function up(knex: Knex): Promise<void> {
 
     // Add table data
     await knexInsertAll(knex, SCHEMA_NAME, [
-        { ns: 'system', id: SystemRoot.UUID },
-        { ns: 'test' },
+        { ns: System.RootNs, id: System.RootId },
+        { ns: System.TestNs, id: System.TestId },
     ]);
 }
 
