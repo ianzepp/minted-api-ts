@@ -37,6 +37,17 @@ export class System {
 
     /** Startup the system */
     async startup(): Promise<this> {
+        // Verify the user exists
+        let user = await this.knex.driver(`system_data.user as data`)
+            .where('data.id', this.user.id)
+            .limit(1)
+            .first();
+
+        if (user === undefined) {
+            // throw new Error(`Unknown user ID "${this.user.id}`);
+        }
+
+        // Start the related services
         await this.data.startup();
         await this.meta.startup();
         await this.knex.startup();
