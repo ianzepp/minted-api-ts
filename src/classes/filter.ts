@@ -39,7 +39,9 @@ export class Filter implements FilterInfo {
         _.assign(this.where, source?.where);
         _.assign(this.order, source?.order);
         _.assign(this.flags, source?.flags);
-        _.assign(this.limit, source?.limit);
+
+        // Set the limit
+        this.limit = source?.limit || Filter.LimitDefault;
     }
 
     toJSON(): FilterJson {
