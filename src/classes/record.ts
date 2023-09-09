@@ -192,12 +192,12 @@ export class Record implements RecordJson {
             test.is('object');
         }
 
-        else if (column.column_type == ColumnType.Number) {
-            test.is('number');
-        }
-
         else if (column.column_type == ColumnType.Text) {
             test.is('string');
+        }
+
+        else if (column.column_type == ColumnType.Enum) {
+            test.is('array');
         }
 
         else {
