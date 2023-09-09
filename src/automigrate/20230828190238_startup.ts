@@ -47,7 +47,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     await knex.schema.table('system_data.test', (table) => {
-        table.string('test').notNullable();
+        table.string('name').notNullable();
         table.boolean('data_boolean');
         table.decimal('data_decimal');
         table.integer('data_integer');
@@ -83,7 +83,7 @@ export async function up(knex: Knex): Promise<void> {
         { ns: 'system', schema_name: 'column', column_name: 'maximum', column_type: 'integer' },
 
         // Columns for 'test'
-        { ns: 'system', schema_name: 'test', column_name: 'test', required: true },
+        { ns: 'system', schema_name: 'test', column_name: 'name', required: true },
         { ns: 'system', schema_name: 'test', column_name: 'data_boolean', column_type: 'boolean' },
         { ns: 'system', schema_name: 'test', column_name: 'data_decimal', column_type: 'decimal' },
         { ns: 'system', schema_name: 'test', column_name: 'data_integer', column_type: 'integer' },

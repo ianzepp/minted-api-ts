@@ -16,7 +16,6 @@ import isRecordFlat from '../helpers/isRecordFlat';
 import isRecordJson from '../helpers/isRecordJson';
 import toJSON from '../helpers/toJSON';
 
-
 export class Schema {
     // Public helpers
     public readonly columns: _.Dictionary<Column> = {};

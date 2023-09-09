@@ -3,7 +3,6 @@ import chai from 'chai';
 import { Knex } from 'knex';
 
 // Classes
-import { KnexDriver } from '../../classes/knex';
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { Record } from '../../classes/record';
@@ -55,6 +54,9 @@ export default class extends Observer {
             await system.knex.schema.dropTable('system_acls.' + schema_name);
             await system.knex.schema.dropTable('system_meta.' + schema_name);
             await system.knex.schema.dropTable('system_data.' + schema_name);
+
+            // Explicitly delete the schema data from the local metadata for this execution context
+            delete system.meta.schemas[record.data.schema_name];
         }
     }
 }

@@ -54,9 +54,12 @@ export class System {
     }
 
     async startup(): Promise<this> {
+        // Start knex first so we have a transaction context
+        await this.knex.startup();
+
+        // Remaining services
         await this.data.startup();
         await this.meta.startup();
-        await this.knex.startup();
         await this.http.startup();
         await this.user.startup();
 
@@ -65,15 +68,53 @@ export class System {
     }
 
     async cleanup(): Promise<this> {
+        // Shutdown services
         await this.data.cleanup();
         await this.meta.cleanup();
-        await this.knex.cleanup();
         await this.http.cleanup();
         await this.user.cleanup();
+
+        // Shutdown knex last so the transaction commits/rollbacks
+        await this.knex.cleanup();
 
         // Done
         return this;
     }
+
+    async refresh(): Promise<this> {
+        await this.cleanup();
+        await this.startup();
+
+        // Done
+        return this;
+    }
+
+    async run(executeFn: (system: System) => Promise<any>) {
+        try {
+            // Startup
+            await this.authenticate();
+            await this.startup();
+            
+            // Run the logic
+            await executeFn(this);
+        }
+        
+        finally {
+            await this.cleanup();
+        }
+    }
+
+    isRoot() {
+        return System.RootId === this.user_id;
+    }
+
+    isTest() {
+        return process.env.NODE_ENV === 'test';
+    } 
+
+    isProd() {
+        return process.env.NODE_ENV === 'production';
+    } 
 }
 
 export class SystemAsRoot extends System {

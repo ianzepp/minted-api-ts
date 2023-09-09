@@ -18,7 +18,13 @@ import { SystemVerb } from '../layouts/system';
 import head404 from '../helpers/head404';
 import headOne from '../helpers/headOne';
 
+// Data API errors
+export class DataError extends Error {};
+export class RecordNotFoundError extends DataError {};
+export class RecordColumnImmutableError extends DataError {};
+export class RecordColumnRequiredError extends DataError {};
 
+// Implementation
 export class SystemData implements SystemService {
     constructor(private readonly system: System) {}
 
@@ -122,7 +128,7 @@ export class SystemData implements SystemService {
         let schema = this.system.meta.toSchema(schema_name);
         let filter = this.system.meta.toFilter(schema_name, filter_data);
 
-        // console.debug('op=%j schema=%j filter=%j change=%j', op, schema.schema_name, filter, change_data);
+        console.debug('SystemData.onRun(): op=%j schema=%j filter=%j change=%j', op, schema.schema_name, filter, change_data);
 
         // Convert the raw change data into records
         let change = change_data.map(change => schema.toRecord(change));

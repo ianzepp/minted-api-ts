@@ -1,80 +1,102 @@
 import _ from 'lodash';
+import knex from 'knex';
 import { Knex } from 'knex';
 
+// Create the driver reference
+export const KnexConfig = {
+    debug: process.env.POSTGRES_DEBUG === 'true',
+    client: 'postgresql',
+    connection: {
+        host:     process.env.POSTGRES_HOST,
+        database: process.env.POSTGRES_DB,
+        user:     process.env.POSTGRES_USER,
+        password: process.env.POSTGRES_PASSWORD
+    },
+    pool: {
+        min: 0,
+        max: 10
+    }
+};
+
+// Test contexts have lower connection pool sizes
+export const KnexConfigTest = _.defaults({ 
+    pool: {
+        min: 0,
+        max: 2
+    }
+}, KnexConfig);
+
+// Create the app-wide connection
+export const KnexDriver = knex(KnexConfig);
+
 // Classes
-import { KnexDriver } from './knex';
-import { Filter } from '../classes/filter';
 import { System } from '../classes/system';
 import { SystemService } from '../classes/system';
 
-// Layouts
-import { RecordData } from '../layouts/record';
+// Errors
+export class KnexError extends Error {};
+export class KnexTransactionMissingError extends KnexError {};
+export class KnexTransactionAlreadyStartedError extends KnexError {};
+export class KnexDriverMissingError extends KnexError {};
 
+// Implementation
 export class SystemKnex implements SystemService {
-    private __transaction: Knex.Transaction | undefined;
+    public readonly db: Knex;
+    public tx: Knex.Transaction | undefined;
 
-    constructor(private readonly system: System) {}
+    constructor(private readonly system: System) {
+        if (this.system.isTest()) {
+            this.db = knex(KnexConfigTest);
+        }
+
+        else {
+            this.db = KnexDriver; // shared pool
+        }
+    }
 
     get schema(): Knex.SchemaBuilder {
-        return KnexDriver.schema;
+        if (this.tx === undefined) {
+            throw new KnexTransactionMissingError();
+        }
+
+        return this.tx.schema;
     }
 
     get driver(): Knex {
-        if (this.__transaction) {
-            return this.__transaction;
+        if (this.tx === undefined) {
+            throw new KnexTransactionMissingError();
         }
 
-        else {
-            return KnexDriver;
-        }
+        return this.tx;
+    }
+
+    get fn() {
+        return this.db.fn;
     }
 
     async startup(): Promise<void> {
-        await KnexDriver.raw('SELECT 1'); // test connection at startup
+        if (this.tx !== undefined) {
+            throw new KnexTransactionAlreadyStartedError();
+        }
+
+        this.tx = await this.db.transaction();
     }
 
     async cleanup(): Promise<void> {
-        await KnexDriver.destroy();
-    }
-
-    async transaction(runFn: () => Promise<any>): Promise<any> {
-        return KnexDriver.transaction(async tx => {
-            this.__transaction = tx;
-            return runFn();
-        }).finally(() => {
-            this.__transaction = undefined;
-        });
-    }
-
-    // 
-    // Build requests
-    //
-
-    toSchemaTx() {
-        let knex = KnexDriver.schema;
-        
-        if (this.__transaction) {
-            knex = knex.transacting(this.__transaction);
+        if (this.tx === undefined) {
+            throw new KnexTransactionMissingError();
         }
 
-        return knex;
-    }
-
-    toDriverTx(schema_name: string, alias?: string) {
-        let knex;
-        
-        if (typeof alias === 'string') {
-            knex = KnexDriver(schema_name + ' as ' + alias);
+        if (this.system.isTest()) {
+            await this.tx.rollback();
+            await this.db.destroy();
         }
 
         else {
-            knex = KnexDriver(schema_name);
-        }
-        
-        if (this.__transaction) {
-            knex = knex.transacting(this.__transaction);
+            await this.tx.commit();
         }
 
-        return knex;
+        // Unset the transaction
+        this.tx = undefined;
     }
 }

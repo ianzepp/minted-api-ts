@@ -3,10 +3,8 @@ import _ from 'lodash';
 // Classes
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
-
-// Layouts
 import { ObserverRing } from '../../layouts/observer';
-
+import { RecordColumnRequiredError } from '../../classes/system-data';
 
 export default class extends Observer {
     toName(): string {
@@ -46,7 +44,7 @@ export default class extends Observer {
                     continue;
                 }
 
-                throw new Error(`"${column.column_name}" is required`);
+                throw new RecordColumnRequiredError(column.column_name);
             }
         }
    }

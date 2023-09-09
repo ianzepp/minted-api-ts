@@ -1,14 +1,13 @@
 import _ from 'lodash';
-import chai from 'chai';
-import fs from 'fs-extra';
 
 // Classes
 import { System } from '../classes/system';
 import { SystemService } from '../classes/system';
 
-// Errors
-import { UserNotFoundError } from '../classes/errors';
-import { UserClientNotActiveError } from '../classes/errors';
+// User API errors
+export class UserError extends Error {};
+export class UserNotFoundError extends UserError {};
+export class UserClientNotActiveError extends UserError {};
 
 export class SystemUser implements SystemService {
     get id() {
@@ -23,23 +22,18 @@ export class SystemUser implements SystemService {
         return _.uniq(_.compact(['system', this.ns]));
     }
 
-    get is_root() {
-        return this.id === System.RootId;
-    }
-
     constructor(private readonly system: System) {}
 
     async authenticate(): Promise<void> {
-        let user = await this.system.knex.driver(`system_data.user as data`)
+        // The knex transaction isn't setup yet, so access the DB directly
+        let user = await this.system.knex.db(`system_data.user as data`)
             .where('data.id', this.system.user_id)
             .where('data.ns', this.system.user_ns)
-        .first();
+            .first();
 
         if (user === undefined) {
             throw new UserNotFoundError(this.system.user_id);
         }
-
-        // console.warn('found user:', user);
     }
 
     async startup(): Promise<void> {}
