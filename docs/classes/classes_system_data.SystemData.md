@@ -4,6 +4,10 @@
 
 [classes/system-data](../modules/classes_system_data.md).SystemData
 
+## Implements
+
+- [`SystemService`](../interfaces/classes_system.SystemService.md)
+
 ## Table of contents
 
 ### Constructors
@@ -12,16 +16,21 @@
 
 ### Properties
 
-- [\_\_system](classes_system_data.SystemData.md#__system)
+- [system](classes_system_data.SystemData.md#system)
 
 ### Methods
 
+- [cleanup](classes_system_data.SystemData.md#cleanup)
 - [createAll](classes_system_data.SystemData.md#createall)
 - [createOne](classes_system_data.SystemData.md#createone)
 - [deleteAll](classes_system_data.SystemData.md#deleteall)
 - [deleteAny](classes_system_data.SystemData.md#deleteany)
 - [deleteIds](classes_system_data.SystemData.md#deleteids)
 - [deleteOne](classes_system_data.SystemData.md#deleteone)
+- [expireAll](classes_system_data.SystemData.md#expireall)
+- [expireAny](classes_system_data.SystemData.md#expireany)
+- [expireIds](classes_system_data.SystemData.md#expireids)
+- [expireOne](classes_system_data.SystemData.md#expireone)
 - [onRun](classes_system_data.SystemData.md#onrun)
 - [select404](classes_system_data.SystemData.md#select404)
 - [selectAny](classes_system_data.SystemData.md#selectany)
@@ -37,29 +46,47 @@
 
 ### constructor
 
-• **new SystemData**(`__system`)
+• **new SystemData**(`system`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__system` | [`System`](classes_system.System.md) |
+| `system` | [`System`](classes_system.System.md) |
 
 #### Defined in
 
-[src/classes/system-data.ts:22](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L22)
+[src/classes/system-data.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L29)
 
 ## Properties
 
-### \_\_system
+### system
 
-• `Private` `Readonly` **\_\_system**: [`System`](classes_system.System.md)
+• `Private` `Readonly` **system**: [`System`](classes_system.System.md)
 
 #### Defined in
 
-[src/classes/system-data.ts:22](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L22)
+[src/classes/system-data.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L29)
 
 ## Methods
+
+### cleanup
+
+▸ **cleanup**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[SystemService](../interfaces/classes_system.SystemService.md).[cleanup](../interfaces/classes_system.SystemService.md#cleanup)
+
+#### Defined in
+
+[src/classes/system-data.ts:33](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L33)
+
+___
 
 ### createAll
 
@@ -78,7 +105,7 @@
 
 #### Defined in
 
-[src/classes/system-data.ts:32](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L32)
+[src/classes/system-data.ts:39](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L39)
 
 ___
 
@@ -99,7 +126,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:52](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L52)
+[src/classes/system-data.ts:63](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L63)
 
 ___
 
@@ -120,7 +147,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:44](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L44)
+[src/classes/system-data.ts:55](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L55)
 
 ___
 
@@ -141,7 +168,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:96](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L96)
+[src/classes/system-data.ts:119](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L119)
 
 ___
 
@@ -162,7 +189,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:80](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L80)
+[src/classes/system-data.ts:99](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L99)
 
 ___
 
@@ -183,7 +210,91 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:64](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L64)
+[src/classes/system-data.ts:79](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L79)
+
+___
+
+### expireAll
+
+▸ **expireAll**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata)[] |
+
+#### Returns
+
+`Promise`<[`Record`](classes_record.Record.md)[]\>
+
+#### Defined in
+
+[src/classes/system-data.ts:51](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L51)
+
+___
+
+### expireAny
+
+▸ **expireAny**(`schema`, `filter_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `filter_data` | `Partial`<[`FilterJson`](../interfaces/layouts_filter.FilterJson.md)\> |
+
+#### Returns
+
+`Promise`<[`Record`](classes_record.Record.md)[]\>
+
+#### Defined in
+
+[src/classes/system-data.ts:115](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L115)
+
+___
+
+### expireIds
+
+▸ **expireIds**(`schema`, `record_ids`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `record_ids` | `string`[] |
+
+#### Returns
+
+`Promise`<[`Record`](classes_record.Record.md)[]\>
+
+#### Defined in
+
+[src/classes/system-data.ts:95](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L95)
+
+___
+
+### expireOne
+
+▸ **expireOne**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata) |
+
+#### Returns
+
+`Promise`<[`Record`](classes_record.Record.md)\>
+
+#### Defined in
+
+[src/classes/system-data.ts:75](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L75)
 
 ___
 
@@ -206,7 +317,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:104](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L104)
+[src/classes/system-data.ts:127](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L127)
 
 ___
 
@@ -227,7 +338,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:72](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L72)
+[src/classes/system-data.ts:87](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L87)
 
 ___
 
@@ -248,7 +359,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:88](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L88)
+[src/classes/system-data.ts:107](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L107)
 
 ___
 
@@ -269,7 +380,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:76](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L76)
+[src/classes/system-data.ts:91](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L91)
 
 ___
 
@@ -281,9 +392,13 @@ ___
 
 `Promise`<`void`\>
 
+#### Implementation of
+
+[SystemService](../interfaces/classes_system.SystemService.md).[startup](../interfaces/classes_system.SystemService.md#startup)
+
 #### Defined in
 
-[src/classes/system-data.ts:24](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L24)
+[src/classes/system-data.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L31)
 
 ___
 
@@ -304,7 +419,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:36](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L36)
+[src/classes/system-data.ts:43](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L43)
 
 ___
 
@@ -326,7 +441,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:92](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L92)
+[src/classes/system-data.ts:111](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L111)
 
 ___
 
@@ -347,7 +462,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:56](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L56)
+[src/classes/system-data.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L67)
 
 ___
 
@@ -368,7 +483,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:40](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L40)
+[src/classes/system-data.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L47)
 
 ___
 
@@ -389,4 +504,4 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:60](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-data.ts#L60)
+[src/classes/system-data.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L71)

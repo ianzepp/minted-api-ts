@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[src/automigrate/20230828190238_startup.ts:77](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/automigrate/20230828190238_startup.ts#L77)
+[src/automigrate/20230828190238_startup.ts:94](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/automigrate/20230828190238_startup.ts#L94)
 
 ___
 
@@ -47,4 +47,4 @@ ___
 
 #### Defined in
 
-[src/automigrate/20230828190238_startup.ts:9](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/automigrate/20230828190238_startup.ts#L9)
+[src/automigrate/20230828190238_startup.ts:8](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/automigrate/20230828190238_startup.ts#L8)

@@ -4,6 +4,10 @@
 
 [classes/system-meta](../modules/classes_system_meta.md).SystemMeta
 
+## Implements
+
+- [`SystemService`](../interfaces/classes_system.SystemService.md)
+
 ## Table of contents
 
 ### Constructors
@@ -12,12 +16,15 @@
 
 ### Properties
 
-- [\_\_system](classes_system_meta.SystemMeta.md#__system)
 - [schemas](classes_system_meta.SystemMeta.md#schemas)
+- [system](classes_system_meta.SystemMeta.md#system)
 
 ### Methods
 
+- [cleanup](classes_system_meta.SystemMeta.md#cleanup)
 - [isSchema](classes_system_meta.SystemMeta.md#isschema)
+- [refresh](classes_system_meta.SystemMeta.md#refresh)
+- [select](classes_system_meta.SystemMeta.md#select)
 - [startup](classes_system_meta.SystemMeta.md#startup)
 - [toFilter](classes_system_meta.SystemMeta.md#tofilter)
 - [toSchema](classes_system_meta.SystemMeta.md#toschema)
@@ -26,29 +33,19 @@
 
 ### constructor
 
-• **new SystemMeta**(`__system`)
+• **new SystemMeta**(`system`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__system` | [`System`](classes_system.System.md) |
+| `system` | [`System`](classes_system.System.md) |
 
 #### Defined in
 
-[src/classes/system-meta.ts:18](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-meta.ts#L18)
+[src/classes/system-meta.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L23)
 
 ## Properties
-
-### \_\_system
-
-• `Private` `Readonly` **\_\_system**: [`System`](classes_system.System.md)
-
-#### Defined in
-
-[src/classes/system-meta.ts:18](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-meta.ts#L18)
-
-___
 
 ### schemas
 
@@ -56,9 +53,37 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:16](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-meta.ts#L16)
+[src/classes/system-meta.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L21)
+
+___
+
+### system
+
+• `Private` `Readonly` **system**: [`System`](classes_system.System.md)
+
+#### Defined in
+
+[src/classes/system-meta.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L23)
 
 ## Methods
+
+### cleanup
+
+▸ **cleanup**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Implementation of
+
+[SystemService](../interfaces/classes_system.SystemService.md).[cleanup](../interfaces/classes_system.SystemService.md#cleanup)
+
+#### Defined in
+
+[src/classes/system-meta.ts:42](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L42)
+
+___
 
 ### isSchema
 
@@ -76,7 +101,41 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:43](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-meta.ts#L43)
+[src/classes/system-meta.ts:62](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L62)
+
+___
+
+### refresh
+
+▸ **refresh**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/classes/system-meta.ts:48](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L48)
+
+___
+
+### select
+
+▸ `Private` **select**(`schema_name`): `Promise`<`any`[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema_name` | `string` |
+
+#### Returns
+
+`Promise`<`any`[]\>
+
+#### Defined in
+
+[src/classes/system-meta.ts:53](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L53)
 
 ___
 
@@ -88,9 +147,13 @@ ___
 
 `Promise`<`void`\>
 
+#### Implementation of
+
+[SystemService](../interfaces/classes_system.SystemService.md).[startup](../interfaces/classes_system.SystemService.md#startup)
+
 #### Defined in
 
-[src/classes/system-meta.ts:20](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-meta.ts#L20)
+[src/classes/system-meta.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L25)
 
 ___
 
@@ -111,7 +174,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:65](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-meta.ts#L65)
+[src/classes/system-meta.ts:84](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L84)
 
 ___
 
@@ -131,4 +194,4 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:47](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-meta.ts#L47)
+[src/classes/system-meta.ts:66](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L66)

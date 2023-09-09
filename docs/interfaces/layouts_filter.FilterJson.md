@@ -30,7 +30,7 @@ Represents the filter's JSON representation in object format.
 
 #### Defined in
 
-[src/layouts/filter.ts:67](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L67)
+[src/layouts/filter.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L67)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:68](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L68)
+[src/layouts/filter.ts:68](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L68)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:66](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L66)
+[src/layouts/filter.ts:66](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L66)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:64](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L64)
+[src/layouts/filter.ts:64](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L64)
 
 ___
 
@@ -70,4 +70,4 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:65](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L65)
+[src/layouts/filter.ts:65](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L65)

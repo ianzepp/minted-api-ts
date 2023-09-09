@@ -21,7 +21,7 @@ The filter operation that can be conducted for 'order' logic.
 
 #### Defined in
 
-[src/layouts/filter.ts:29](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L29)
+[src/layouts/filter.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L29)
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:30](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L30)
+[src/layouts/filter.ts:30](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L30)

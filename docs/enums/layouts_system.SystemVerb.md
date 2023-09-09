@@ -12,6 +12,7 @@ The system verbs associated with system operations.
 
 - [Create](layouts_system.SystemVerb.md#create)
 - [Delete](layouts_system.SystemVerb.md#delete)
+- [Expire](layouts_system.SystemVerb.md#expire)
 - [Select](layouts_system.SystemVerb.md#select)
 - [Update](layouts_system.SystemVerb.md#update)
 - [Upsert](layouts_system.SystemVerb.md#upsert)
@@ -24,7 +25,7 @@ The system verbs associated with system operations.
 
 #### Defined in
 
-[src/layouts/system.ts:8](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/system.ts#L8)
+[src/layouts/system.ts:8](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L8)
 
 ___
 
@@ -34,7 +35,17 @@ ___
 
 #### Defined in
 
-[src/layouts/system.ts:9](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/system.ts#L9)
+[src/layouts/system.ts:9](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L9)
+
+___
+
+### Expire
+
+• **Expire** = ``"expire"``
+
+#### Defined in
+
+[src/layouts/system.ts:10](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L10)
 
 ___
 
@@ -44,7 +55,7 @@ ___
 
 #### Defined in
 
-[src/layouts/system.ts:10](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/system.ts#L10)
+[src/layouts/system.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L11)
 
 ___
 
@@ -54,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/layouts/system.ts:11](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/system.ts#L11)
+[src/layouts/system.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L12)
 
 ___
 
@@ -64,4 +75,4 @@ ___
 
 #### Defined in
 
-[src/layouts/system.ts:12](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/system.ts#L12)
+[src/layouts/system.ts:13](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L13)

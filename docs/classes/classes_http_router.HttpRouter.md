@@ -8,6 +8,10 @@
 
 - **`HttpRouter`**
 
+  ↳ [`default`](routers_auth_signin.default.md)
+
+  ↳ [`default`](routers_auth_signup.default.md)
+
   ↳ [`default`](routers_data_create_all.default.md)
 
   ↳ [`default`](routers_data_delete_all.default.md)
@@ -23,6 +27,8 @@
   ↳ [`default`](routers_data_update_one.default.md)
 
   ↳ [`default`](routers_data_upsert_all.default.md)
+
+  ↳ [`default`](routers_find_search_any.default.md)
 
   ↳ [`default`](routers_meta_export.default.md)
 
@@ -72,21 +78,21 @@
 
 ### \_\_req
 
-• `Private` **\_\_req**: [`HttpReq`](../interfaces/classes_http_server.HttpReq.md)
+• `Private` **\_\_req**: [`HttpReq`](../interfaces/classes_http_req.HttpReq.md)
 
 #### Defined in
 
-[src/classes/http-router.ts:28](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L28)
+[src/classes/http-router.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L28)
 
 ___
 
 ### \_\_res
 
-• `Private` **\_\_res**: [`HttpRes`](../interfaces/classes_http_server.HttpRes.md)
+• `Private` **\_\_res**: [`HttpRes`](../interfaces/classes_http_res.HttpRes.md)
 
 #### Defined in
 
-[src/classes/http-router.ts:29](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L29)
+[src/classes/http-router.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L29)
 
 ___
 
@@ -96,7 +102,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:27](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L27)
+[src/classes/http-router.ts:27](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L27)
 
 ___
 
@@ -106,35 +112,35 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:25](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L25)
+[src/classes/http-router.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L25)
 
 ## Accessors
 
 ### req
 
-• `get` **req**(): [`HttpReq`](../interfaces/classes_http_server.HttpReq.md)
+• `get` **req**(): [`HttpReq`](../interfaces/classes_http_req.HttpReq.md)
 
 #### Returns
 
-[`HttpReq`](../interfaces/classes_http_server.HttpReq.md)
+[`HttpReq`](../interfaces/classes_http_req.HttpReq.md)
 
 #### Defined in
 
-[src/classes/http-router.ts:35](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L35)
+[src/classes/http-router.ts:35](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L35)
 
 ___
 
 ### res
 
-• `get` **res**(): [`HttpRes`](../interfaces/classes_http_server.HttpRes.md)
+• `get` **res**(): [`HttpRes`](../interfaces/classes_http_res.HttpRes.md)
 
 #### Returns
 
-[`HttpRes`](../interfaces/classes_http_server.HttpRes.md)
+[`HttpRes`](../interfaces/classes_http_res.HttpRes.md)
 
 #### Defined in
 
-[src/classes/http-router.ts:39](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L39)
+[src/classes/http-router.ts:39](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L39)
 
 ___
 
@@ -148,7 +154,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:31](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L31)
+[src/classes/http-router.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L31)
 
 ## Methods
 
@@ -169,7 +175,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:101](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L101)
+[src/classes/http-router.ts:101](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L101)
 
 ___
 
@@ -189,7 +195,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:97](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L97)
+[src/classes/http-router.ts:97](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L97)
 
 ___
 
@@ -209,7 +215,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:93](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L93)
+[src/classes/http-router.ts:93](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L93)
 
 ___
 
@@ -223,7 +229,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:89](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L89)
+[src/classes/http-router.ts:89](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L89)
 
 ___
 
@@ -237,7 +243,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:85](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L85)
+[src/classes/http-router.ts:85](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L85)
 
 ___
 
@@ -251,7 +257,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:77](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L77)
+[src/classes/http-router.ts:77](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L77)
 
 ___
 
@@ -264,8 +270,8 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `system` | [`System`](classes_system.System.md) |
-| `req` | [`HttpReq`](../interfaces/classes_http_server.HttpReq.md) |
-| `res` | [`HttpRes`](../interfaces/classes_http_server.HttpRes.md) |
+| `req` | [`HttpReq`](../interfaces/classes_http_req.HttpReq.md) |
+| `res` | [`HttpRes`](../interfaces/classes_http_res.HttpRes.md) |
 
 #### Returns
 
@@ -273,7 +279,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:43](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L43)
+[src/classes/http-router.ts:43](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L43)
 
 ___
 
@@ -287,4 +293,4 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:81](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L81)
+[src/classes/http-router.ts:81](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L81)

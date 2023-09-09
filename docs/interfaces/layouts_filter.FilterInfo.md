@@ -38,7 +38,7 @@ Represents the architecture needed to obtain a filter's info.
 
 #### Defined in
 
-[src/layouts/filter.ts:67](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L67)
+[src/layouts/filter.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L67)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:68](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L68)
+[src/layouts/filter.ts:68](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L68)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:66](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L66)
+[src/layouts/filter.ts:66](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L66)
 
 ___
 
@@ -82,7 +82,7 @@ Returns the parent schema table name for this filter
 
 #### Defined in
 
-[src/layouts/filter.ts:83](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L83)
+[src/layouts/filter.ts:83](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L83)
 
 ___
 
@@ -96,4 +96,4 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:65](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L65)
+[src/layouts/filter.ts:65](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L65)

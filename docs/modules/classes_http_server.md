@@ -6,10 +6,6 @@
 
 ### Classes
 
+- [HttpError](../classes/classes_http_server.HttpError.md)
+- [HttpRouteNotFoundError](../classes/classes_http_server.HttpRouteNotFoundError.md)
 - [HttpServer](../classes/classes_http_server.HttpServer.md)
-
-### Interfaces
-
-- [HttpReq](../interfaces/classes_http_server.HttpReq.md)
-- [HttpRes](../interfaces/classes_http_server.HttpRes.md)
-- [HttpServerRoute](../interfaces/classes_http_server.HttpServerRoute.md)

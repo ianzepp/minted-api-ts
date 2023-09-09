@@ -22,4 +22,4 @@ Returns the name of the schema
 
 #### Defined in
 
-[src/layouts/schema.ts:10](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/schema.ts#L10)
+[src/layouts/schema.ts:10](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/schema.ts#L10)

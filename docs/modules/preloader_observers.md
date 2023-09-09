@@ -12,8 +12,8 @@
 
 ### default
 
-• **default**: `Dictionary`<`any`[]\>
+• **default**: `Dictionary`<[`Observer`](../classes/classes_observer.Observer.md)[]\>
 
 #### Defined in
 
-[src/preloader/observers.ts:9](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/preloader/observers.ts#L9)
+[src/preloader/observers.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/preloader/observers.ts#L14)

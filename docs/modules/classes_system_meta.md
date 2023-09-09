@@ -6,4 +6,7 @@
 
 ### Classes
 
+- [ColumnNotFoundError](../classes/classes_system_meta.ColumnNotFoundError.md)
+- [MetaError](../classes/classes_system_meta.MetaError.md)
+- [SchemaNotFoundError](../classes/classes_system_meta.SchemaNotFoundError.md)
 - [SystemMeta](../classes/classes_system_meta.SystemMeta.md)

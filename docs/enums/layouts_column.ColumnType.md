@@ -13,7 +13,6 @@
 - [Enum](layouts_column.ColumnType.md#enum)
 - [Integer](layouts_column.ColumnType.md#integer)
 - [Json](layouts_column.ColumnType.md#json)
-- [Number](layouts_column.ColumnType.md#number)
 - [Text](layouts_column.ColumnType.md#text)
 
 ## Enumeration Members
@@ -24,7 +23,7 @@
 
 #### Defined in
 
-[src/layouts/column.ts:6](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/column.ts#L6)
+[src/layouts/column.ts:6](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L6)
 
 ___
 
@@ -34,7 +33,7 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:7](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/column.ts#L7)
+[src/layouts/column.ts:7](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L7)
 
 ___
 
@@ -44,7 +43,7 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:8](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/column.ts#L8)
+[src/layouts/column.ts:8](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L8)
 
 ___
 
@@ -54,7 +53,7 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:9](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/column.ts#L9)
+[src/layouts/column.ts:9](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L9)
 
 ___
 
@@ -64,17 +63,7 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:10](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/column.ts#L10)
-
-___
-
-### Number
-
-• **Number** = ``"number"``
-
-#### Defined in
-
-[src/layouts/column.ts:11](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/column.ts#L11)
+[src/layouts/column.ts:10](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L10)
 
 ___
 
@@ -84,4 +73,4 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:12](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/column.ts#L12)
+[src/layouts/column.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L11)

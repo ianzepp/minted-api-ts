@@ -30,4 +30,4 @@ The filter operations for either 'where' or 'group' logic.
 
 #### Defined in
 
-[src/layouts/filter.ts:12](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/filter.ts#L12)
+[src/layouts/filter.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L12)

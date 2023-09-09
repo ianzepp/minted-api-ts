@@ -16,4 +16,4 @@
 
 #### Defined in
 
-[src/preloader/routers.ts:10](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/preloader/routers.ts#L10)
+[src/preloader/routers.ts:15](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/preloader/routers.ts#L15)

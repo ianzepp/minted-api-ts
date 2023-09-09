@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/classes/http-router.ts:16](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L16)
+[src/classes/http-router.ts:16](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L16)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:17](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L17)
+[src/classes/http-router.ts:17](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L17)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:18](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L18)
+[src/classes/http-router.ts:18](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L18)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:19](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L19)
+[src/classes/http-router.ts:19](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L19)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:20](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-router.ts#L20)
+[src/classes/http-router.ts:20](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L20)

@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[src/layouts/schema.ts:2](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/schema.ts#L2)
+[src/layouts/schema.ts:2](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/schema.ts#L2)
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-[src/layouts/schema.ts:5](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/layouts/schema.ts#L5)
+[src/layouts/schema.ts:5](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/schema.ts#L5)

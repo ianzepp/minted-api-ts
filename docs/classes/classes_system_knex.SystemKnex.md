@@ -4,6 +4,10 @@
 
 [classes/system-knex](../modules/classes_system_knex.md).SystemKnex
 
+## Implements
+
+- [`SystemService`](../interfaces/classes_system.SystemService.md)
+
 ## Table of contents
 
 ### Constructors
@@ -12,92 +16,126 @@
 
 ### Properties
 
-- [\_\_system](classes_system_knex.SystemKnex.md#__system)
-- [\_\_transaction](classes_system_knex.SystemKnex.md#__transaction)
+- [db](classes_system_knex.SystemKnex.md#db)
+- [system](classes_system_knex.SystemKnex.md#system)
+- [tx](classes_system_knex.SystemKnex.md#tx)
+
+### Accessors
+
+- [driver](classes_system_knex.SystemKnex.md#driver)
+- [fn](classes_system_knex.SystemKnex.md#fn)
+- [schema](classes_system_knex.SystemKnex.md#schema)
 
 ### Methods
 
-- [destroy](classes_system_knex.SystemKnex.md#destroy)
-- [select](classes_system_knex.SystemKnex.md#select)
+- [cleanup](classes_system_knex.SystemKnex.md#cleanup)
 - [startup](classes_system_knex.SystemKnex.md#startup)
-- [toStatement](classes_system_knex.SystemKnex.md#tostatement)
-- [toStatementFilter](classes_system_knex.SystemKnex.md#tostatementfilter)
-- [toTx](classes_system_knex.SystemKnex.md#totx)
-- [toWhereAll](classes_system_knex.SystemKnex.md#towhereall)
-- [toWhereOne](classes_system_knex.SystemKnex.md#towhereone)
-- [toWhereOps](classes_system_knex.SystemKnex.md#towhereops)
-- [transaction](classes_system_knex.SystemKnex.md#transaction)
 
 ## Constructors
 
 ### constructor
 
-• **new SystemKnex**(`__system`)
+• **new SystemKnex**(`system`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `__system` | [`System`](classes_system.System.md) |
+| `system` | [`System`](classes_system.System.md) |
 
 #### Defined in
 
-[src/classes/system-knex.ts:16](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L16)
+[src/classes/system-knex.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L47)
 
 ## Properties
 
-### \_\_system
+### db
 
-• `Private` `Readonly` **\_\_system**: [`System`](classes_system.System.md)
+• `Readonly` **db**: `Knex`<`any`, `any`[]\>
 
 #### Defined in
 
-[src/classes/system-knex.ts:16](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L16)
+[src/classes/system-knex.ts:44](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L44)
 
 ___
 
-### \_\_transaction
+### system
 
-• `Private` **\_\_transaction**: `Transaction`<`any`, `any`[]\>
+• `Private` `Readonly` **system**: [`System`](classes_system.System.md)
 
 #### Defined in
 
-[src/classes/system-knex.ts:14](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L14)
+[src/classes/system-knex.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L47)
+
+___
+
+### tx
+
+• **tx**: `Transaction`<`any`, `any`[]\>
+
+#### Defined in
+
+[src/classes/system-knex.ts:45](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L45)
+
+## Accessors
+
+### driver
+
+• `get` **driver**(): `Knex`<`any`, `any`[]\>
+
+#### Returns
+
+`Knex`<`any`, `any`[]\>
+
+#### Defined in
+
+[src/classes/system-knex.ts:65](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L65)
+
+___
+
+### fn
+
+• `get` **fn**(): `FunctionHelper`
+
+#### Returns
+
+`FunctionHelper`
+
+#### Defined in
+
+[src/classes/system-knex.ts:73](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L73)
+
+___
+
+### schema
+
+• `get` **schema**(): `SchemaBuilder`
+
+#### Returns
+
+`SchemaBuilder`
+
+#### Defined in
+
+[src/classes/system-knex.ts:57](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L57)
 
 ## Methods
 
-### destroy
+### cleanup
 
-▸ **destroy**(): `Promise`<`void`\>
+▸ **cleanup**(): `Promise`<`void`\>
 
 #### Returns
 
 `Promise`<`void`\>
 
-#### Defined in
+#### Implementation of
 
-[src/classes/system-knex.ts:22](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L22)
-
-___
-
-### select
-
-▸ **select**(`schema_name`, `columns?`): `Promise`<[`RecordData`](../interfaces/layouts_record.RecordData.md)[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema_name` | `string` |
-| `columns` | `string`[] |
-
-#### Returns
-
-`Promise`<[`RecordData`](../interfaces/layouts_record.RecordData.md)[]\>
+[SystemService](../interfaces/classes_system.SystemService.md).[cleanup](../interfaces/classes_system.SystemService.md#cleanup)
 
 #### Defined in
 
-[src/classes/system-knex.ts:39](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L39)
+[src/classes/system-knex.ts:85](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L85)
 
 ___
 
@@ -109,152 +147,10 @@ ___
 
 `Promise`<`void`\>
 
-#### Defined in
+#### Implementation of
 
-[src/classes/system-knex.ts:18](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L18)
-
-___
-
-### toStatement
-
-▸ **toStatement**(`schema_name`): `QueryBuilder`<`any`, `DeferredKeySelection`<`any`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema_name` | `string` |
-
-#### Returns
-
-`QueryBuilder`<`any`, `DeferredKeySelection`<`any`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
+[SystemService](../interfaces/classes_system.SystemService.md).[startup](../interfaces/classes_system.SystemService.md#startup)
 
 #### Defined in
 
-[src/classes/system-knex.ts:65](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L65)
-
-___
-
-### toStatementFilter
-
-▸ **toStatementFilter**(`schema_name`, `filter`): `QueryBuilder`<`any`, `DeferredKeySelection`<`any`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema_name` | `string` |
-| `filter` | [`Filter`](classes_filter.Filter.md) |
-
-#### Returns
-
-`QueryBuilder`<`any`, `DeferredKeySelection`<`any`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
-
-#### Defined in
-
-[src/classes/system-knex.ts:83](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L83)
-
-___
-
-### toTx
-
-▸ **toTx**(`schema_name`, `alias?`): `QueryBuilder`<`any`, `DeferredKeySelection`<`any`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema_name` | `string` |
-| `alias?` | `string` |
-
-#### Returns
-
-`QueryBuilder`<`any`, `DeferredKeySelection`<`any`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
-
-#### Defined in
-
-[src/classes/system-knex.ts:47](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L47)
-
-___
-
-### toWhereAll
-
-▸ `Private` **toWhereAll**(`knex`, `clauses`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `knex` | `QueryBuilder`<`any`, `any`\> |
-| `clauses` | `Dictionary`<`any`\>[] |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[src/classes/system-knex.ts:108](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L108)
-
-___
-
-### toWhereOne
-
-▸ `Private` **toWhereOne**(`knex`, `clause`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `knex` | `QueryBuilder`<`any`, `any`\> |
-| `clause` | `Dictionary`<`any`\> |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[src/classes/system-knex.ts:112](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L112)
-
-___
-
-### toWhereOps
-
-▸ `Private` **toWhereOps**(`knex`, `name`, `data`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `knex` | `QueryBuilder`<`any`, `any`\> |
-| `name` | `string` |
-| `data` | `any` |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[src/classes/system-knex.ts:116](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L116)
-
-___
-
-### transaction
-
-▸ **transaction**(`runFn`): `Promise`<`any`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `runFn` | () => `Promise`<`any`\> |
-
-#### Returns
-
-`Promise`<`any`\>
-
-#### Defined in
-
-[src/classes/system-knex.ts:26](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/system-knex.ts#L26)
+[src/classes/system-knex.ts:77](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L77)

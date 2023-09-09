@@ -10,10 +10,6 @@
 
 - [constructor](classes_http_server.HttpServer.md#constructor)
 
-### Properties
-
-- [\_\_routes](classes_http_server.HttpServer.md#__routes)
-
 ### Methods
 
 - [listen](classes_http_server.HttpServer.md#listen)
@@ -24,16 +20,6 @@
 ### constructor
 
 • **new HttpServer**()
-
-## Properties
-
-### \_\_routes
-
-• `Private` `Readonly` **\_\_routes**: [`HttpServerRoute`](../interfaces/classes_http_server.HttpServerRoute.md)[] = `[]`
-
-#### Defined in
-
-[src/classes/http-server.ts:52](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-server.ts#L52)
 
 ## Methods
 
@@ -53,7 +39,7 @@
 
 #### Defined in
 
-[src/classes/http-server.ts:55](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-server.ts#L55)
+[src/classes/http-server.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server.ts#L28)
 
 ___
 
@@ -74,4 +60,4 @@ ___
 
 #### Defined in
 
-[src/classes/http-server.ts:68](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/http-server.ts#L68)
+[src/classes/http-server.ts:41](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server.ts#L41)

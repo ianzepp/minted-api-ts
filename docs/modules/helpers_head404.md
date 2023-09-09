@@ -32,4 +32,4 @@
 
 #### Defined in
 
-[src/helpers/head404.ts:3](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/helpers/head404.ts#L3)
+[src/helpers/head404.ts:3](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/helpers/head404.ts#L3)

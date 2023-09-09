@@ -33,4 +33,4 @@
 
 #### Defined in
 
-[src/helpers/assertReturn.ts:3](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/helpers/assertReturn.ts#L3)
+[src/helpers/assertReturn.ts:3](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/helpers/assertReturn.ts#L3)

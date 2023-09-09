@@ -32,4 +32,4 @@
 
 #### Defined in
 
-[src/helpers/headOne.ts:3](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/helpers/headOne.ts#L3)
+[src/helpers/headOne.ts:3](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/helpers/headOne.ts#L3)

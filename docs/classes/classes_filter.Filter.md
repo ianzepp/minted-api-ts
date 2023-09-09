@@ -49,7 +49,7 @@ Represents the architecture needed to obtain a filter's info.
 
 #### Defined in
 
-[src/classes/filter.ts:38](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L38)
+[src/classes/filter.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L38)
 
 ## Properties
 
@@ -63,7 +63,7 @@ Represents the architecture needed to obtain a filter's info.
 
 #### Defined in
 
-[src/classes/filter.ts:35](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L35)
+[src/classes/filter.ts:35](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L35)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:36](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L36)
+[src/classes/filter.ts:36](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L36)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:34](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L34)
+[src/classes/filter.ts:34](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L34)
 
 ___
 
@@ -107,7 +107,7 @@ Returns the parent schema table name for this filter
 
 #### Defined in
 
-[src/classes/filter.ts:38](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L38)
+[src/classes/filter.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L38)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:33](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L33)
+[src/classes/filter.ts:33](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L33)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:28](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L28)
+[src/classes/filter.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L28)
 
 ___
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:23](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L23)
+[src/classes/filter.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L23)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:24](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L24)
+[src/classes/filter.ts:24](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L24)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:25](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L25)
+[src/classes/filter.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L25)
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:29](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L29)
+[src/classes/filter.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L29)
 
 ___
 
@@ -181,7 +181,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:30](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L30)
+[src/classes/filter.ts:30](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L30)
 
 ## Methods
 
@@ -195,4 +195,4 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:45](https://github.com/ianzepp/minted-api-ts/blob/4ef4443/src/classes/filter.ts#L45)
+[src/classes/filter.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L47)
