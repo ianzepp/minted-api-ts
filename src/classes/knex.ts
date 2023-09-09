@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 // Create the driver reference
 export const KnexDriver = knex({
+    debug: process.env.POSTGRES_DEBUG === 'true',
     client: 'postgresql',
     connection: {
         host:     process.env.POSTGRES_HOST,
