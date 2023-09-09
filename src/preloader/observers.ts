@@ -10,6 +10,10 @@ let preloads = _.chain(fs.readdirSync(preload_base))
     // Ignore anything that ends in `.map`, which happens when the TS is compiled to JS
     .reject(observerPath => observerPath.endsWith('.map'))
 
+    // Ignore test cases
+    .reject(observerPath => observerPath.endsWith('.spec.ts'))
+    .reject(observerPath => observerPath.endsWith('.spec.js'))
+
     // Load the observer code
     .map(observerPath => require(path.join(preload_base, observerPath)).default)
 
