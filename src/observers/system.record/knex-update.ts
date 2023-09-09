@@ -45,15 +45,15 @@ export default class extends Observer {
 
         let schema_name = flow.schema.schema_name;
         let updated_at = flow.system.timestamp;
-        let updated_by = flow.system.user.id;
+        let updated_by = flow.system.user_id;
 
         await flow.system.knex.driver('system_data.' + schema_name)
-            .whereIn('ns', flow.system.user.namespaces)
+            .whereIn('ns', flow.system.auth.namespaces)
             .whereIn('id', [record.data.id])
             .update(record.data);
 
         await flow.system.knex.driver('system_meta.' + schema_name)
-            .whereIn('ns', flow.system.user.namespaces)
+            .whereIn('ns', flow.system.auth.namespaces)
             .whereIn('id', [record.data.id])
             .update({
                 updated_at: updated_at,

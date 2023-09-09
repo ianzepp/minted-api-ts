@@ -8,7 +8,7 @@ export default class extends HttpRouter {
     async run() {
         return { 
             pong: new Date().toISOString(),
-            user: this.system.user
+            user: this.system.user_id
         };
     }
 

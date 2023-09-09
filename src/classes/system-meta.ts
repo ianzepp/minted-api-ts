@@ -53,7 +53,7 @@ export class SystemMeta implements SystemService {
     private async select(schema_name: SchemaName) {
         return this.system.knex.driver(`system_data.${schema_name} as data`)
             .join(`system_meta.${schema_name} as meta`, 'meta.id', 'data.id')
-            .whereIn('data.ns', this.system.user.namespaces)
+            .whereIn('data.ns', this.system.auth.namespaces)
             .whereNull('meta.expired_at')
             .whereNull('meta.deleted_at')
             .select();
