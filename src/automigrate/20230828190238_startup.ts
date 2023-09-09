@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid';
 import { Knex } from 'knex';
 
 import knexCreateTable from '../helpers/knex-create-table';
-import knexDropTable from '../helpers/knex-drop-table';
 import knexInsertAll from '../helpers/knex-insert-all';
 
 export async function up(knex: Knex): Promise<void> {
@@ -27,6 +26,8 @@ export async function up(knex: Knex): Promise<void> {
     await knex.schema.table('system_data.schema', (table) => {
         table.string('schema_name').notNullable();
         table.string('schema_type').notNullable().defaultTo('database');
+
+        table.boolean('external').defaultTo(false);
         table.boolean('metadata').defaultTo(false);
     });
 
@@ -41,7 +42,6 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean('internal').defaultTo(false);
         table.boolean('required').defaultTo(false);
         table.boolean('unique').defaultTo(false);
-
         table.integer('minimum');
         table.integer('maximum');
     });
