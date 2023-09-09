@@ -31,6 +31,10 @@ export default class extends Observer {
             await system.knex.schema.table(`system_data.${schema_name}`, t => {
                 return t.dropColumn(column_name);
             });
+
+            // Explicitly remove the column data
+            let schema = system.meta.toSchema(record.data.schema_name);
+            delete schema.columns[record.data.column_name];
         }
     }
 }

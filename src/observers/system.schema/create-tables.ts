@@ -88,5 +88,8 @@ export default class extends Observer {
             table.specificType('acls_read', 'uuid ARRAY').index();
             table.specificType('acls_deny', 'uuid ARRAY').index();
         });
+
+        // Explicitly add the schema data to the local metadata for this execution context
+        system.meta.schemas[record.data.schema_name] = new Schema(record.data);
     }
 }

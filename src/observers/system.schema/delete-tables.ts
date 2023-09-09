@@ -55,6 +55,9 @@ export default class extends Observer {
             await system.knex.schema.dropTable('system_acls.' + schema_name);
             await system.knex.schema.dropTable('system_meta.' + schema_name);
             await system.knex.schema.dropTable('system_data.' + schema_name);
+
+            // Explicitly delete the schema data from the local metadata for this execution context
+            delete system.meta.schemas[record.data.schema_name];
         }
     }
 }

@@ -5,6 +5,7 @@ import { ColumnType } from '../../layouts/column';
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { ObserverRing } from '../../layouts/observer';
+import { Column } from '../../classes/column';
 
 export default class extends Observer {
     toName(): string {
@@ -58,6 +59,10 @@ export default class extends Observer {
 
                 // Invalid column type
             });
+
+            // Explicitly add the column data
+            let schema = system.meta.toSchema(record.data.schema_name);
+            schema.columns[record.data.column_name] = new Column(record.data, schema);
         }
     }
 }
