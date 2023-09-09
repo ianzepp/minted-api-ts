@@ -3,6 +3,7 @@ import chai from 'chai';
 import fs from 'fs-extra';
 
 // Classes
+import { KnexDriver } from '../classes/knex';
 import { System } from '../classes/system';
 import { SystemService } from '../classes/system';
 
@@ -23,14 +24,10 @@ export class SystemUser implements SystemService {
         return _.uniq(_.compact(['system', this.ns]));
     }
 
-    get is_root() {
-        return this.id === System.RootId;
-    }
-
     constructor(private readonly system: System) {}
 
     async authenticate(): Promise<void> {
-        let user = await this.system.knex.driver(`system_data.user as data`)
+        let user = await KnexDriver(`system_data.user as data`)
             .where('data.id', this.system.user_id)
             .where('data.ns', this.system.user_ns)
         .first();

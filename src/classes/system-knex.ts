@@ -11,70 +11,54 @@ import { SystemService } from '../classes/system';
 import { RecordData } from '../layouts/record';
 
 export class SystemKnex implements SystemService {
-    private __transaction: Knex.Transaction | undefined;
+    private tx: Knex.Transaction | undefined;
 
     constructor(private readonly system: System) {}
 
     get schema(): Knex.SchemaBuilder {
-        return KnexDriver.schema;
+        if (this.tx === undefined) {
+            throw new Error('Not allowed to operate outside of a transaction context');
+        }
+
+        return this.tx.schema;
     }
 
     get driver(): Knex {
-        if (this.__transaction) {
-            return this.__transaction;
+        if (this.tx === undefined) {
+            throw new Error('Not allowed to operate outside of a transaction context');
         }
 
-        else {
-            return KnexDriver;
-        }
+        return this.tx;
     }
 
     async startup(): Promise<void> {
-        await KnexDriver.raw('SELECT 1'); // test connection at startup
+        console.debug('SystemKnex.startup()');
+
+        if (this.tx !== undefined) {
+            throw new Error('Transaction context is already created?!?');
+        }
+
+        this.tx = await KnexDriver.transaction();
     }
 
     async cleanup(): Promise<void> {
-        await KnexDriver.destroy();
-    }
+        console.debug('SystemKnex.cleanup()');
 
-    async transaction(runFn: () => Promise<any>): Promise<any> {
-        return KnexDriver.transaction(async tx => {
-            this.__transaction = tx;
-            return runFn();
-        }).finally(() => {
-            this.__transaction = undefined;
-        });
-    }
-
-    // 
-    // Build requests
-    //
-
-    toSchemaTx() {
-        let knex = KnexDriver.schema;
-        
-        if (this.__transaction) {
-            knex = knex.transacting(this.__transaction);
+        if (this.tx === undefined) {
+            throw new Error('Transaction context was lost?!?');
         }
 
-        return knex;
-    }
-
-    toDriverTx(schema_name: string, alias?: string) {
-        let knex;
-        
-        if (typeof alias === 'string') {
-            knex = KnexDriver(schema_name + ' as ' + alias);
+        if (this.system.isTest()) {
+            console.debug('SystemKnex.cleanup() is rolling back');
+            await this.tx.rollback();
         }
 
         else {
-            knex = KnexDriver(schema_name);
-        }
-        
-        if (this.__transaction) {
-            knex = knex.transacting(this.__transaction);
+            console.debug('SystemKnex.cleanup() is committing');
+            await this.tx.commit();
         }
 
-        return knex;
+        // Unset the transaction
+        this.tx = undefined;
     }
 }

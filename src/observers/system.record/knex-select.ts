@@ -29,7 +29,7 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         let schema_name = flow.schema.schema_name;
-        let knex = flow.system.knex.toDriverTx(`system_data.${schema_name} as data`);
+        let knex = flow.system.knex.driver(`system_data.${schema_name} as data`);
 
         // Join meta and acls
         knex = knex.join(`system_meta.${schema_name} as meta`, 'meta.id', 'data.id');
