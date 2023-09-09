@@ -25,8 +25,6 @@ export class Schema {
         chai.expect(source).property('id').a('string');
         chai.expect(source).property('ns').a('string');
         chai.expect(source).property('schema_name').a('string');
-        chai.expect(source).property('schema_type').a('string');
-        chai.expect(source).property('metadata').a('boolean');
     }
 
     get id(): string {
@@ -42,11 +40,11 @@ export class Schema {
     }
 
     get schema_type(): string {
-        return this.source.schema_type;
+        return this.source.schema_type ?? 'database';
     }
 
     get metadata(): boolean {
-        return this.source.metadata;
+        return this.source.metadata ?? false;
     }
     
     toJSON() {
