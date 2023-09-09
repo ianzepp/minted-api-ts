@@ -1,15 +1,17 @@
 import { Knex } from 'knex';
 
-export default async function(knex: Knex, schema_name: string): Promise<void> {
+export default async function(knex: Knex, table_name: string): Promise<void> {
+    console.debug('knex-create-table: %j', table_name);
+
     // Data table
-    await knex.schema.withSchema('system_data').createTable(schema_name, (table) => {
+    await knex.schema.withSchema('system_data').createTable(table_name, (table) => {
         table.uuid('id').primary().defaultTo(knex.fn.uuid());
         table.string('ns')
     });
 
     // Meta table
-    await knex.schema.withSchema('system_meta').createTable(schema_name, (table) => {
-        table.uuid('id').primary().references('id').inTable('system_data.' + schema_name).onDelete('CASCADE');
+    await knex.schema.withSchema('system_meta').createTable(table_name, (table) => {
+        table.uuid('id').primary().references('id').inTable('system_data.' + table_name).onDelete('CASCADE');
         table.string('ns')
 
         table.timestamp('created_at').index();
@@ -23,8 +25,8 @@ export default async function(knex: Knex, schema_name: string): Promise<void> {
         table.uuid('deleted_by').index();
     });
 
-    await knex.schema.withSchema('system_acls').createTable(schema_name, (table) => {
-        table.uuid('id').primary().references('id').inTable('system_data.' + schema_name).onDelete('CASCADE');
+    await knex.schema.withSchema('system_acls').createTable(table_name, (table) => {
+        table.uuid('id').primary().references('id').inTable('system_data.' + table_name).onDelete('CASCADE');
         table.string('ns')
 
         table.specificType('acls_full', 'uuid ARRAY').index();
