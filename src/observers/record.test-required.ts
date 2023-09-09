@@ -3,7 +3,7 @@ import _ from 'lodash';
 // Classes
 import { Observer } from '../classes/observer';
 import { ObserverFlow } from '../classes/observer-flow';
-import { Schema } from '../classes/schema';
+import { Column } from '../classes/column';
 
 // Layouts
 import { ObserverRing } from '../layouts/observer';
@@ -11,7 +11,7 @@ import { ObserverRing } from '../layouts/observer';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.test-required';
+        return 'record.test-immutable';
     }
     
     onSchema(): string {
@@ -26,26 +26,29 @@ export default class extends Observer {
         return true;
     }
 
+    onUpdate(): boolean {
+        return true;
+    }
+
+    onUpsert(): boolean {
+        return true;
+    }
+
     async run(flow: ObserverFlow): Promise<void> {
-        // Filter for 
-        let columns = _.filter(flow.schema.columns, 'required');
+        for(let column of Object.values(flow.schema.columns)) {
+            if (column.required === false) {
+                continue;
+            }
 
-        // Nothing to do
-        if (columns.length === 0) {
-            return;
-        }
+            for(let record of flow.change) {
+                let data = record.get(column);
 
-        // Loop records, and then inner loop columns. This minimizes the total
-        // number of passes that need to be made. 
-
-        _.each(flow.change, record => {
-            _.each(columns, column => {
-                if (record.has(column)) {
-                    return;
+                if (data !== null) {
+                    continue;
                 }
 
                 flow.fail(300, `"${column.column_name}" is required`, record);
-            });
-        });
+            }
+        }
    }
 }
