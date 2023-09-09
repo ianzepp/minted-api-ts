@@ -36,7 +36,7 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         for(let column of Object.values(flow.schema.columns)) {
-            if (column.immutable === false) {
+            if (column.immutable !== true) {
                 continue;
             }
 
@@ -45,14 +45,16 @@ export default class extends Observer {
                 let prev = record.old(column);
 
                 if (prev === null) {
+                    console.debug('prev === null');
                     continue;
                 }
 
                 if (prev === data) {
+                    console.debug('prev === data');
                     continue;
                 }
 
-                flow.fail(300, `"${column.column_name}" is immutable`, record);
+                throw new Error(`"${column.column_name}" is immutable`);
             }
         }
    }
