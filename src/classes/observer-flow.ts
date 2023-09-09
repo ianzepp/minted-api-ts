@@ -103,9 +103,18 @@ export class ObserverFlow {
                 }
             }
         }
+
+        // Check for failurs
+        if (this.failures.length === 0) {
+            return;
+        }
+
+        throw this.failures;
     }
 
     fail(code: number, message: string, record?: Record): void {
+        console.warn('ObserverFlow: FAIL %j message=%j record=%j', code, message, record);
+        
         this.failures.push({
             code: code,
             message: message,

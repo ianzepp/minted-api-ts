@@ -11,7 +11,7 @@ import { ObserverRing } from '../layouts/observer';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.test-immutable';
+        return 'record.test-minimum';
     }
     
     onSchema(): string {
@@ -36,18 +36,27 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         for(let column of Object.values(flow.schema.columns)) {
-            if (column.required === false) {
+            if (column.minimum === null) {
                 continue;
             }
 
             for(let record of flow.change) {
                 let data = record.get(column);
 
-                if (data !== null) {
+                if (data === null) {
                     continue;
                 }
 
-                throw new Error(`"${column.column_name}" is required`);
+                if (typeof data !== 'number') {
+                    continue;
+                }
+
+                if (data >= column.minimum) {
+                    continue;
+                }
+
+                // Failed test
+                flow.fail(300, `"${column.column_name}" value "${data}" < minimum of "${column.minimum}"`, record);
             }
         }
    }

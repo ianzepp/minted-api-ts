@@ -36,18 +36,25 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         for(let column of Object.values(flow.schema.columns)) {
-            if (column.required === false) {
+            if (column.immutable !== true) {
                 continue;
             }
 
             for(let record of flow.change) {
                 let data = record.get(column);
+                let prev = record.old(column);
 
-                if (data !== null) {
+                if (prev === null) {
+                    console.debug('prev === null');
                     continue;
                 }
 
-                throw new Error(`"${column.column_name}" is required`);
+                if (prev === data) {
+                    console.debug('prev === data');
+                    continue;
+                }
+
+                throw new Error(`"${column.column_name}" is immutable`);
             }
         }
    }

@@ -53,12 +53,12 @@ export default class extends Observer {
         let created_ns = flow.system.user.ns;
 
         // Populate insertion data
-        _.each(flow.change, record => {
+        for(let record of flow.change) {
             record.data.id = uuid();
             record.data.ns = created_ns;
             record.meta.created_at = created_at;
             record.meta.created_by = created_by;
-        });
+        }
 
         // Extract the insertion data
         let insert_data = this.toExtract(flow.change, 'data');
@@ -66,8 +66,16 @@ export default class extends Observer {
         let insert_acls = this.toExtract(flow.change, 'acls');
 
         // Insert data
-        await flow.system.knex.toDriverTx('system_data.' + schema_name).insert(insert_data);
-        await flow.system.knex.toDriverTx('system_meta.' + schema_name).insert(insert_meta);
-        await flow.system.knex.toDriverTx('system_acls.' + schema_name).insert(insert_acls);
+        insert_data = await flow.system.knex.toDriverTx('system_data.' + schema_name).insert(insert_data).returning('*');
+        insert_meta = await flow.system.knex.toDriverTx('system_meta.' + schema_name).insert(insert_meta).returning('*');
+        insert_acls = await flow.system.knex.toDriverTx('system_acls.' + schema_name).insert(insert_acls).returning('*');
+
+        // Copy back to records
+        for(let i in flow.change) {
+            let record = flow.change[i];
+            _.assign(record.data, insert_data[i]);
+            _.assign(record.meta, insert_meta[i]);
+            _.assign(record.acls, insert_acls[i]);
+        }
     }
 }
