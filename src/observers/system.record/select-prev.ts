@@ -11,7 +11,7 @@ import { RecordFlat } from '../../layouts/record';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.prev-select';
+        return 'record.select-prev';
     }
     
     onSchema(): string {
