@@ -119,7 +119,7 @@ export class SystemData {
         let schema = this.system.meta.toSchema(schema_name);
         let filter = this.system.meta.toFilter(schema_name, filter_data);
 
-        console.debug('op=%j schema=%j filter=%j change=%j', op, schema.schema_name, filter, change_data);
+        // console.debug('op=%j schema=%j filter=%j change=%j', op, schema.schema_name, filter, change_data);
 
         // Convert the raw change data into records
         let change = change_data.map(change => schema.toRecord(change));
