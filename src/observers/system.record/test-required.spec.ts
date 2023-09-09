@@ -10,7 +10,7 @@ import { System } from '../../classes/system';
 
 describe(__filename, () => {
     let system: System;
-    let schema_name = 'test_' + new Date().getTime();
+    let schema_name = 'test_' + process.hrtime().join('_');
     let column_name = 'test_column';
 
     beforeAll(async () => {

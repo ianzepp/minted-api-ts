@@ -43,8 +43,6 @@ export class System {
             .limit(1)
             .first();
 
-        console.warn('User found?', this.user.id, user);
-
         if (user === undefined) {
             // throw new Error(`Unknown user ID "${this.user.id}`);
         }
