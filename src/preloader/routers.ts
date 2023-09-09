@@ -1,27 +1,35 @@
 import _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
+import klaw from 'klaw-sync';
 
 // Import base router class definition
 import { HttpRouter } from '../classes/http-router';
 
+const preload_files = klaw(path.join(__dirname, '../routers'), {
+    nodir: true,
+    traverseAll: true
+});
+
 // Build the list of routers
-let preload_base = path.join(__dirname, '../routers');
-let preloads = _.chain(fs.readdirSync(preload_base))
+let preloads = _.chain(preload_files)
+    // Convert the klaw format into a simple path
+    .map(preload_info => preload_info.path)
+
     // Ignore anything that ends in `.map`, which happens when the TS is compiled to JS
-    .reject(file => file.endsWith('.map'))
+    .reject(preload_path => preload_path.endsWith('.map'))
 
     // Ignore test cases
-    .reject(observerPath => observerPath.endsWith('.spec.ts'))
-    .reject(observerPath => observerPath.endsWith('.spec.js'))
+    .reject(preload_path => preload_path.endsWith('.spec.ts'))
+    .reject(preload_path => preload_path.endsWith('.spec.js'))
 
     // Load the file
-    .map(file => require(path.join(preload_base, file)).default)
+    .map(preload_path => require(preload_path).default)
 
     // Instantiate each observer
-    .map(type => new type() as HttpRouter)
+    .map(preload_type => new preload_type() as HttpRouter)
 
-    // Done, return the _.Dictionary<Observer[]>
+    // Done
     .value();
 
 // Export the result as the default

@@ -1,12 +1,11 @@
 import _ from 'lodash';
 
 // Classes
-import { Observer } from '../classes/observer';
-import { ObserverFlow } from '../classes/observer-flow';
-import { Column } from '../classes/column';
+import { Observer } from '../../classes/observer';
+import { ObserverFlow } from '../../classes/observer-flow';
 
 // Layouts
-import { ObserverRing } from '../layouts/observer';
+import { ObserverRing } from '../../layouts/observer';
 
 
 export default class extends Observer {
@@ -45,12 +44,10 @@ export default class extends Observer {
                 let prev = record.old(column);
 
                 if (prev === null) {
-                    console.debug('prev === null');
                     continue;
                 }
 
                 if (prev === data) {
-                    console.debug('prev === data');
                     continue;
                 }
 

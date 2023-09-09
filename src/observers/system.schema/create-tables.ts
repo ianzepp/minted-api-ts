@@ -3,17 +3,17 @@ import chai from 'chai';
 import { Knex } from 'knex';
 
 // Classes
-import { KnexDriver } from '../classes/knex';
-import { Observer } from '../classes/observer';
-import { ObserverFlow } from '../classes/observer-flow';
-import { Record } from '../classes/record';
-import { Schema } from '../classes/schema';
+import { KnexDriver } from '../../classes/knex';
+import { Observer } from '../../classes/observer';
+import { ObserverFlow } from '../../classes/observer-flow';
+import { Record } from '../../classes/record';
+import { Schema } from '../../classes/schema';
 
 // Layouts
-import { ObserverRing } from '../layouts/observer';
+import { ObserverRing } from '../../layouts/observer';
 
 // Helpers
-import knexCreateTable from '../helpers/knex-create-table';
+import knexCreateTable from '../../helpers/knex-create-table';
 
 /**
  * This class extends the Observer class and provides methods for creating a schema in Knex.

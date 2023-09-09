@@ -2,12 +2,12 @@ import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 
 // Classes
-import { Observer } from '../classes/observer';
-import { ObserverFlow } from '../classes/observer-flow';
-import { Record } from '../classes/record';
+import { Observer } from '../../classes/observer';
+import { ObserverFlow } from '../../classes/observer-flow';
+import { Record } from '../../classes/record';
 
 // Layouts
-import { ObserverRing } from '../layouts/observer';
+import { ObserverRing } from '../../layouts/observer';
 
 
 export default class extends Observer {

@@ -1,13 +1,12 @@
 import _ from 'lodash';
 
 // Classes
-import { Observer } from '../classes/observer';
-import { ObserverFlow } from '../classes/observer-flow';
-import { Schema } from '../classes/schema';
+import { Observer } from '../../classes/observer';
+import { ObserverFlow } from '../../classes/observer-flow';
 
 // Layouts
-import { ObserverRing } from '../layouts/observer';
-import { RecordFlat } from '../layouts/record';
+import { ObserverRing } from '../../layouts/observer';
+import { RecordFlat } from '../../layouts/record';
 
 
 export default class extends Observer {
