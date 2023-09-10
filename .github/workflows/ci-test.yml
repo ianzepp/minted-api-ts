@@ -54,4 +54,4 @@ jobs:
 
     - name: Run test suite
       run: |
-        bun test --timeout 5000
+        bun test --timeout 5000 --bail 5
