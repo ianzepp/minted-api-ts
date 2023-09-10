@@ -5,4 +5,4 @@ if ! bun compile; then
 fi
 
 # Start node
-bun run ./dst/start.js
+bun ./src/start.ts
