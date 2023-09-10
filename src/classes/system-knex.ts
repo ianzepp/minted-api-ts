@@ -4,13 +4,13 @@ import { Knex } from 'knex';
 
 // Create the driver reference
 export const KnexConfig = {
-    debug: process.env.POSTGRES_DEBUG === 'true',
+    debug: Bun.env.POSTGRES_DEBUG === 'true',
     client: 'postgresql',
     connection: {
-        host:     process.env.POSTGRES_HOST,
-        database: process.env.POSTGRES_DB,
-        user:     process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD
+        host:     Bun.env.POSTGRES_HOST,
+        database: Bun.env.POSTGRES_DB,
+        user:     Bun.env.POSTGRES_USER,
+        password: Bun.env.POSTGRES_PASSWORD
     },
     pool: {
         min: 0,
@@ -30,8 +30,8 @@ export const KnexConfigTest = _.defaults({
 export const KnexDriver = knex(KnexConfig);
 
 // Classes
-import { System } from '../classes/system';
-import { SystemService } from '../classes/system';
+import { System } from '@classes/system';
+import { SystemService } from '@classes/system';
 
 // Errors
 export class KnexError extends Error {};

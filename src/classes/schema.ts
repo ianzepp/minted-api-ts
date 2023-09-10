@@ -2,19 +2,19 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
-import { Column } from '../classes/column';
-import { Record } from '../classes/record';
+import { Column } from '@classes/column';
+import { Record } from '@classes/record';
 
 // Layouts
-import { RecordData } from '../layouts/record';
-import { RecordFlat } from '../layouts/record';
-import { RecordJson } from '../layouts/record';
+import { RecordData } from '@layouts/record';
+import { RecordFlat } from '@layouts/record';
+import { RecordJson } from '@layouts/record';
 
 // Helpers
-import isRecordDict from '../helpers/isRecordDict';
-import isRecordFlat from '../helpers/isRecordFlat';
-import isRecordJson from '../helpers/isRecordJson';
-import toJSON from '../helpers/toJSON';
+import isRecordDict from '@helpers/isRecordDict';
+import isRecordFlat from '@helpers/isRecordFlat';
+import isRecordJson from '@helpers/isRecordJson';
+import toJSON from '@helpers/toJSON';
 
 export class Schema {
     // Public helpers

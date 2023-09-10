@@ -2,20 +2,20 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
-import { Schema } from '../classes/schema';
-import { System } from '../classes/system';
-import { Record } from '../classes/record';
+import { Schema } from '@classes/schema';
+import { System } from '@classes/system';
+import { Record } from '@classes/record';
 
 // Layouts
-import { FilterGroup } from '../layouts/filter';
-import { FilterOrder } from '../layouts/filter';
-import { FilterWhere } from '../layouts/filter';
-import { FilterInfo } from '../layouts/filter';
-import { FilterJson } from '../layouts/filter';
-import { SchemaName } from '../layouts/schema';
+import { FilterGroup } from '@layouts/filter';
+import { FilterOrder } from '@layouts/filter';
+import { FilterWhere } from '@layouts/filter';
+import { FilterInfo } from '@layouts/filter';
+import { FilterJson } from '@layouts/filter';
+import { SchemaName } from '@layouts/schema';
 
 // Helpers
-import toJSON from '../helpers/toJSON';
+import toJSON from '@helpers/toJSON';
 
 
 export class Filter implements FilterInfo {

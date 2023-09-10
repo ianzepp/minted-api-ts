@@ -6,7 +6,7 @@ This is the minted-api project. It is a Node.js project with a PostgreSQL databa
 
 ## Setup
 
-1. Install the dependencies by running `npm install`.
+1. Install the dependencies by running `bun install`.
 2. Define your database connection by setting the following environment variables:
    - `POSTGRES_HOST`: The host of your PostgreSQL database.
    - `POSTGRES_DB`: The name of your PostgreSQL database.

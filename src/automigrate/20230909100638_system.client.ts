@@ -2,9 +2,9 @@ import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { Knex } from 'knex';
 
-import knexCreateTable from '../helpers/knex-create-table';
-import knexDropTable from '../helpers/knex-drop-table';
-import knexInsertAll from '../helpers/knex-insert-all';
+import knexCreateTable from '@helpers/knex-create-table';
+import knexDropTable from '@helpers/knex-drop-table';
+import knexInsertAll from '@helpers/knex-insert-all';
 
 export const SCHEMA_NAME = 'client';
 

@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { program, Command } from 'commander';
 
 // Classes
-import { System } from '../classes/system';
-import { SystemAsRoot } from '../classes/system';
+import { System } from '@classes/system';
+import { SystemAsRoot } from '@classes/system';
 
 // Data API
 async function data_select(system: System, schema_name: string, options: _.Dictionary<any>, cmd: Command) {

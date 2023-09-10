@@ -3,13 +3,13 @@ import chai from 'chai';
 import fs from 'fs-extra';
 
 // Classes
-import { HttpReq } from '../classes/http-server';
-import { HttpRes } from '../classes/http-server';
-import { System } from '../classes/system';
-import { SystemService } from '../classes/system';
+import { HttpReq } from '@classes/http-server';
+import { HttpRes } from '@classes/http-server';
+import { System } from '@classes/system';
+import { SystemService } from '@classes/system';
 
 // Import pre-loaded routers
-import Routers from '../preloader/routers';
+import Routers from '@preloader/routers';
 
 export class SystemHttp implements SystemService {
     constructor(private readonly system: System) {}

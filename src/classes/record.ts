@@ -2,20 +2,20 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
-import { Column } from '../classes/column';
-import { Schema } from '../classes/schema';
+import { Column } from '@classes/column';
+import { Schema } from '@classes/schema';
 
 // Layouts
-import { ColumnType } from '../layouts/column';
-import { RecordAcls } from '../layouts/record';
-import { RecordData } from '../layouts/record';
-import { RecordFlat } from '../layouts/record';
-import { RecordJson } from '../layouts/record';
-import { RecordMeta } from '../layouts/record';
-import { SchemaName } from '../layouts/schema';
+import { ColumnType } from '@layouts/column';
+import { RecordAcls } from '@layouts/record';
+import { RecordData } from '@layouts/record';
+import { RecordFlat } from '@layouts/record';
+import { RecordJson } from '@layouts/record';
+import { RecordMeta } from '@layouts/record';
+import { SchemaName } from '@layouts/schema';
 
 // Helpers
-import toJSON from '../helpers/toJSON';
+import toJSON from '@helpers/toJSON';
 
 
 export class Record implements RecordJson {

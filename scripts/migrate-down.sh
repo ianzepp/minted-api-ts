@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compile
-if ! npm run compile; then
+if ! bun compile; then
     echo "Compilation failed!"
     exit 1
 fi

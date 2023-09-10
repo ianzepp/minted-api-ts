@@ -3,10 +3,10 @@ import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
 // Classes
-import { Column } from '../classes/column';
-import { Record } from '../classes/record';
-import { Schema } from '../classes/schema';
-import { SystemAsTest } from '../classes/system';
+import { Column } from '@classes/column';
+import { Record } from '@classes/record';
+import { Schema } from '@classes/schema';
+import { SystemAsTest } from '@classes/system';
 
 describe('SystemMeta', () => {
 

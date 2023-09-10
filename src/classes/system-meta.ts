@@ -1,14 +1,14 @@
 import _ from 'lodash';
 
 // Classes
-import { Filter } from '../classes/filter';
-import { Schema } from '../classes/schema';
-import { Column } from '../classes/column';
-import { System } from '../classes/system';
-import { SystemService } from '../classes/system';
+import { Filter } from '@classes/filter';
+import { Schema } from '@classes/schema';
+import { Column } from '@classes/column';
+import { System } from '@classes/system';
+import { SystemService } from '@classes/system';
 
 // Layouts
-import { SchemaName } from '../layouts/schema';
+import { SchemaName } from '@layouts/schema';
 
 // Meta API errors
 export class MetaError extends Error {};

@@ -3,8 +3,8 @@ import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
 // Classes
-import { Record } from '../../classes/record';
-import { SystemAsTest } from '../../classes/system';
+import { Record } from '@classes/record';
+import { SystemAsTest } from '@classes/system';
 
 describe(__filename, () => {
     let system = new SystemAsTest();

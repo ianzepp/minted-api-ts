@@ -1,5 +1,5 @@
 // Classes
-import { Schema } from '../classes/schema';
+import { Schema } from '@classes/schema';
 import { SystemAsTest } from './system';
 
 

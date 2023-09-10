@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 import { Knex } from 'knex';
 
-import knexCreateTable from '../helpers/knex-create-table';
-import knexInsertAll from '../helpers/knex-insert-all';
+import knexCreateTable from '@helpers/knex-create-table';
+import knexInsertAll from '@helpers/knex-insert-all';
 
 export async function up(knex: Knex): Promise<void> {
     await knex.raw('CREATE EXTENSION IF NOT EXISTS pgcrypto;');

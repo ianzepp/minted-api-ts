@@ -2,11 +2,11 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // System services
-import { SystemUser } from '../classes/system-user';
-import { SystemData } from '../classes/system-data';
-import { SystemMeta } from '../classes/system-meta';
-import { SystemKnex } from '../classes/system-knex';
-import { SystemHttp } from '../classes/system-http';
+import { SystemUser } from '@classes/system-user';
+import { SystemData } from '@classes/system-data';
+import { SystemMeta } from '@classes/system-meta';
+import { SystemKnex } from '@classes/system-knex';
+import { SystemHttp } from '@classes/system-http';
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
@@ -109,11 +109,11 @@ export class System {
     }
 
     isTest() {
-        return process.env.NODE_ENV === 'test';
+        return Bun.env.NODE_ENV === 'test';
     } 
 
     isProd() {
-        return process.env.NODE_ENV === 'production';
+        return Bun.env.NODE_ENV === 'production';
     } 
 }
 

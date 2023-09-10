@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 // Classes
-import { System } from '../classes/system';
-import { SystemService } from '../classes/system';
+import { System } from '@classes/system';
+import { SystemService } from '@classes/system';
 
 // User API errors
 export class UserError extends Error {};

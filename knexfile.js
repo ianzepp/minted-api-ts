@@ -7,10 +7,10 @@ module.exports = {
     development: {
         client: 'postgresql',
         connection: {
-            host:     process.env.POSTGRES_HOST,
-            database: process.env.POSTGRES_DB,
-            user:     process.env.POSTGRES_USER,
-            password: process.env.POSTGRES_PASSWORD
+            host:     Bun.env.POSTGRES_HOST,
+            database: Bun.env.POSTGRES_DB,
+            user:     Bun.env.POSTGRES_USER,
+            password: Bun.env.POSTGRES_PASSWORD
         },
         pool: {
             min: 2,

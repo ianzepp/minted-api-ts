@@ -2,7 +2,7 @@ import _ from 'lodash';
 import Chai from 'chai';
 
 // Layouts
-import { SchemaName } from '../layouts/schema';
+import { SchemaName } from '@layouts/schema';
 
 
 //

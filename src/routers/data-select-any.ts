@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 // API
-import { HttpRouter } from '../classes/http-router';
-import head404 from '../helpers/head404';
+import { HttpRouter } from '@classes/http-router';
+import head404 from '@helpers/head404';
 
 // Implementation
 export default class extends HttpRouter {

@@ -1,11 +1,11 @@
 import _ from 'lodash';
 
 // Classes
-import { ColumnType } from '../../layouts/column';
-import { Observer } from '../../classes/observer';
-import { ObserverFlow } from '../../classes/observer-flow';
-import { ObserverRing } from '../../layouts/observer';
-import { Column } from '../../classes/column';
+import { ColumnType } from '@layouts/column';
+import { Observer } from '@classes/observer';
+import { ObserverFlow } from '@classes/observer-flow';
+import { ObserverRing } from '@layouts/observer';
+import { Column } from '@classes/column';
 
 export default class extends Observer {
     toName(): string {

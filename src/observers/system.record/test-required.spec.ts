@@ -2,8 +2,8 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
-import { SystemAsTest } from '../../classes/system';
-import { RecordColumnRequiredError } from '../../classes/system-data';
+import { SystemAsTest } from '@classes/system';
+import { RecordColumnRequiredError } from '@classes/system-data';
 
 describe(__filename, () => {
     let system = new SystemAsTest();

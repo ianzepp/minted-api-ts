@@ -44,6 +44,7 @@ export class HttpServer {
     // Start the server
     listen(port: number): void {
         let server = Http.createServer((req, res) => {
+            // @ts-ignore
             return this.run(req, res); // This is internally wrapped in a try/catch/finally
         });
 
@@ -55,7 +56,7 @@ export class HttpServer {
         // Done
     }
 
-    async run(req: Http.IncomingMessage, res: Http.ServerResponse): Promise<Http.ServerResponse<Http.IncomingMessage>> {
+    async run(req: Http.IncomingMessage, res: Http.ServerResponse) {
         console.debug('HttpServer:', req.method, req.url);
 
         // Build the structures of httpReq and httpRes to be passed into system-http

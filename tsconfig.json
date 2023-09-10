@@ -1,15 +1,35 @@
 {
     "compilerOptions": {
-        "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "module": "commonjs",
-        "moduleResolution": "Node",
-        "noImplicitAny": true,
-        "outDir": "dst",
-        "preserveConstEnums": true,
-        "removeComments": true,
-        "sourceMap": true,
-        "target": "ES6"
+        // add Bun type definitions
+        "types": ["bun-types"],
+        "paths": {
+            "@classes/*": ["./src/classes/*"],
+            "@helpers/*": ["./src/helpers/*"],
+            "@layouts/*": ["./src/layouts/*"],
+            "@observers/*": ["./src/observers/*"],
+            "@preloader/*": ["./src/preloader/*"],
+            "@routers/*": ["./src/routers/*"],
+        },
+
+        // enable latest features
+        "lib": ["esnext"],
+        "module": "esnext",
+        "target": "esnext",
+
+        // if TS 5.x+
+        "moduleResolution": "bundler",
+        "noEmit": true,
+        "allowImportingTsExtensions": true,
+        "moduleDetection": "force",
+        
+        // other
+        "allowJs": true, // allow importing `.js` from `.ts`
+        "esModuleInterop": true, // allow default imports for CommonJS modules
+
+        // best practices
+        // "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true
     },
     "include": [
         "src/**/*.ts"

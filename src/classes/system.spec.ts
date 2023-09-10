@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Classes
-import { SystemAsTest } from '../classes/system';
+import { SystemAsTest } from '@classes/system';
 
 describe('System', () => {
     // test('new System()', async () => {

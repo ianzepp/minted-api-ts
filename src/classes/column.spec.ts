@@ -1,12 +1,11 @@
 // Classes
 import { Schema } from '../classes/schema';
 import { Column } from '../classes/column';
-import { System } from './system';
+import { System } from '../classes/system';
+import { SystemAsTest } from '../classes/system';
 
 // Layouts
 import { ColumnType } from '../layouts/column';
-import { SystemAsTest } from './system';
-
 
 describe('Column', () => {
     let schema: Schema;
