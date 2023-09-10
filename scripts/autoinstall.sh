@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Compile
-if ! bun compile:clean; then
-    echo "Compilation (clean) failed!"
-    exit 1
-fi
-
 # Delete the database
 if ! dropdb -e $POSTGRES_DB; then
     echo "Failed to drop database '$POSTGRES_DB'!"
@@ -25,4 +19,4 @@ else
 fi
 
 # Run the migration from scratch
-knex migrate:latest
+bun ./src/autoinstall.ts

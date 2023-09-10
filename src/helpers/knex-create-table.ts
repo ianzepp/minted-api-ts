@@ -6,13 +6,13 @@ export default async function(knex: Knex, table_name: string): Promise<void> {
     // Data table
     await knex.schema.withSchema('system_data').createTable(table_name, (table) => {
         table.uuid('id').primary().defaultTo(knex.fn.uuid());
-        table.string('ns')
+        table.string('ns').references('ns').inTable('system_data.master').onDelete('CASCADE');
     });
 
     // Meta table
     await knex.schema.withSchema('system_meta').createTable(table_name, (table) => {
         table.uuid('id').primary().references('id').inTable('system_data.' + table_name).onDelete('CASCADE');
-        table.string('ns')
+        table.string('ns');
 
         table.timestamp('created_at').index();
         table.timestamp('updated_at').index();
@@ -27,7 +27,7 @@ export default async function(knex: Knex, table_name: string): Promise<void> {
 
     await knex.schema.withSchema('system_acls').createTable(table_name, (table) => {
         table.uuid('id').primary().references('id').inTable('system_data.' + table_name).onDelete('CASCADE');
-        table.string('ns')
+        table.string('ns');
 
         table.specificType('acls_full', 'uuid ARRAY').index();
         table.specificType('acls_edit', 'uuid ARRAY').index();
