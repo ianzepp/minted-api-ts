@@ -40,14 +40,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     
-    - name: Install node dependencies
+    - name: Install Bun
       run: |
-        npm install
+        npm install -g bun
 
-    - name: Install database automigrations
+    - name: Install dependencies using Bun
       run: |
-        npm run migrate:latest
+        bun install
+
+    - name: Install database schemas
+      run: |
+        bun autoinstall
 
     - name: Run test suite
       run: |
-        npm run test
+        bun test
