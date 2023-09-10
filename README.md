@@ -28,6 +28,39 @@ Bun requires additional steps in order to configure it for use with TypeScript. 
   }
 }
 ```
+3. To use the recommended `compilerOptions` (via https://bun.sh/docs/runtime/typescript) alongside necessary ones:
+```json
+{
+  "compilerOptions": {
+     // required for minted-api
+     "outDir": "dst",
+     "sourceMap": true,
+
+     // add Bun type definitions
+     "types": ["bun-types"],
+ 
+     // enable latest features
+     "lib": ["esnext"],
+     "module": "esnext",
+     "target": "esnext",
+ 
+     // if TS 5.x+
+     "moduleResolution": "bundler",
+     "noEmit": true,
+     "allowImportingTsExtensions": true,
+     "moduleDetection": "force",
+ 
+     // other 
+     "allowJs": true, // allow importing `.js` from `.ts`
+     "esModuleInterop": true, // allow default imports for CommonJS modules
+ 
+     // best practices
+     "strict": true,
+     "forceConsistentCasingInFileNames": true,
+     "skipLibCheck": true
+  }
+}
+```
 
 ## Setup
 
