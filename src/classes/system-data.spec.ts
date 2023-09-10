@@ -50,7 +50,6 @@ describe('SystemData', () => {
     });
 
     afterAll(async () => {
-        console.warn('Finished system-data tests.')
         await system.cleanup();
     });
 
