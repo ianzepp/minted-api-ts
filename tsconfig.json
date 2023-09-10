@@ -20,8 +20,6 @@
         "src/**/*.ts"
     ],
     "exclude": [
-        "dst",
-        "src/**/*.spec.ts",
         "node_modules"
     ],
     "typedocOptions": {
