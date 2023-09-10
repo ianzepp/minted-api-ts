@@ -9,23 +9,39 @@ This is the minted-api project. It is a Node.js project with a PostgreSQL databa
 - Using curl via macOS/Linux, run in your terminal: `curl -fsSL https://bun.sh/install | bash`
 - Using NPM, run in your terminal: `npm install -g bun`
 - Using Homebrew, run in your terminal: 
-   1. `brew tap oven-sh/bun`
-   2. `brew install bun`
+```sh
+brew tap oven-sh/bun
+brew install bun
+```
 - Please read Bun's installation page for more information: https://bun.sh/docs/installation
+
+## Setup Bun For TypeScript
+
+Bun requires additional steps in order to configure it for use with TypeScript. The steps are taken from Bun's installation page. Please refer to the aforementioned website for more information.
+
+1. Install TypeScript definitions for Bun's built-in APIs: `bun add -d bun-types # dev dependency`
+2. Include `"bun-types"` in the `compilerOptions.types` of your `tsconfig.json`:
+```json
+{
+  "compilerOptions": {
+     "types": ["bun-types"]
+  }
+}
+```
 
 ## Setup
 
 1. Install the dependencies by running `bun install`.
-2. Define your database connection by setting the following environment variables:
+3. Define your database connection by setting the following environment variables:
    - `POSTGRES_HOST`: The host of your PostgreSQL database.
    - `POSTGRES_DB`: The name of your PostgreSQL database.
    - `POSTGRES_USER`: The user for your PostgreSQL database.
    - `POSTGRES_PASSWORD`: The password for your PostgreSQL database.
-3. Set up the database by running the migrations with `bun migrate:latest`.
+4. Set up the database by running the migrations with `bun migrate:latest`.
 
 ## Scripts
 
-Here are some of the npm scripts that you can run:
+Here are some of the bun scripts that you can run:
 
 - `bun compile`: Compiles the TypeScript files.
 - `bun migrate:make`: Creates a new database migration file.
@@ -44,24 +60,24 @@ Tests are use Bun's framework for testing, which is akin to Jest testing. You ca
 
 Here are some of the key dependencies that the project uses:
 
-- body: For parsing HTTP request bodies.
-- chai: For assertions in tests.
-- dotenv: For loading environment variables.
-- fs-extra & klaw: For file system operations.
-- knex: For database migrations and interacting with the PostgreSQL database.
-- lodash: A utility library.
-- url-parse: For parsing URLs.
-- util: A utility library.
-- uuid: For generating UUIDs.
+- `body`: For parsing HTTP request bodies.
+- `chai`: For assertions in tests.
+- `dotenv`: For loading environment variables.
+- `fs-extra` & `klaw`: For file system operations.
+- `knex`: For database migrations and interacting with the PostgreSQL database.
+- `lodash`: A utility library.
+- `url-parse`: For parsing URLs.
+- `util`: A utility library.
+- `uuid`: For generating UUIDs.
 
 ## Dev Dependencies
 
-- @types/*: TypeScript type definitions.
-- bun-types: For using Bun's built-in APIs.
-- nodemon: For automatically restarting the application during development.
-- ts-node: For running TypeScript files.
-- typescript: The TypeScript compiler.
-- webpack-cli: A command line interface for webpack.
+- `@types/*`: TypeScript type definitions.
+- `bun-types`: For using Bun's built-in APIs.
+- `nodemon`: For automatically restarting the application during development.
+- `ts-node`: For running TypeScript files.
+- `typescript`: The TypeScript compiler.
+- `webpack-cli`: A command line interface for webpack.
 
 ## License
 
