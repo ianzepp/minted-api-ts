@@ -43,7 +43,7 @@ export class KnexDriverMissingError extends KnexError {};
 
 // Implementation
 export class SystemKnex implements SystemService {
-    public db: Knex | undefined;
+    public db: Knex = knex(KnexConfig);
 
     constructor(private readonly system: System) {
 
@@ -62,11 +62,10 @@ export class SystemKnex implements SystemService {
     }
 
     async startup(): Promise<void> {
-        this.db = knex(KnexConfig);
+        await this.db.raw('SELECT 1');
     }
 
     async cleanup(): Promise<void> {
-        this.db.destroy();
-        this.db = undefined;
+        await this.db.destroy();
     }
 }
