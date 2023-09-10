@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import { System } from './system';
 import { SystemAsRoot } from './system';
+import { KnexDriver } from './system-knex';
 
 import knexCreateTable from '../helpers/knex-create-table';
 import knexInsertAll from '../helpers/knex-insert-all';
@@ -10,7 +11,7 @@ export class AutoInstall {
     public readonly system = new SystemAsRoot();
     
     async up() {
-        let knex = this.system.knex.db;
+        let knex = KnexDriver;
 
         await knex.raw('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
 
