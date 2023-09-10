@@ -1,7 +1,11 @@
 #!/bin/bash
 
-# Delete all the compiled data
-rm -rf ./dst
+if ! bun clean; then
+    echo "Clean failed!"
+    exit 1
+fi
 
-# Rebuild
-bun build ./src/start.ts --outdir ./dst
+if ! bun compile; then
+    echo "Compilation failed!"
+    exit 1
+fi
