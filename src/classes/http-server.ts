@@ -27,6 +27,7 @@ export class HttpServer {
     // Start the server
     listen(port: number): void {
         let server = Http.createServer((req, res) => {
+            // @ts-ignore FIXME
             return this.run(req, res); // This is internally wrapped in a try/catch/finally
         });
 
