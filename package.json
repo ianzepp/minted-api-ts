@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "command": "bash ./scripts/command.sh",
     "compile": "bash ./scripts/compile.sh",

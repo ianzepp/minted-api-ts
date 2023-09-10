@@ -4,4 +4,4 @@
 rm -rf ./dst
 
 # Rebuild
-tsc --build tsconfig.json
+bun build ./src/start.ts --outdir ./dst

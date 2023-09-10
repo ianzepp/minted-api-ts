@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Rebuild if needed
-tsc --build tsconfig.json
+bun build ./src/start.ts --outdir ./dst
