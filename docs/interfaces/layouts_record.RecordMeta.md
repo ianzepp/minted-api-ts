@@ -29,7 +29,7 @@ Timestamp when the record was created.
 
 #### Defined in
 
-[src/layouts/record.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L38)
+[src/layouts/record.ts:38](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L38)
 
 ___
 
@@ -41,7 +41,7 @@ User ID that created the record.
 
 #### Defined in
 
-[src/layouts/record.ts:41](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L41)
+[src/layouts/record.ts:41](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L41)
 
 ___
 
@@ -53,7 +53,7 @@ Timestamp when the record was deleted, or `null` if the record was not deleted
 
 #### Defined in
 
-[src/layouts/record.ts:56](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L56)
+[src/layouts/record.ts:56](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L56)
 
 ___
 
@@ -65,7 +65,7 @@ User ID that deleted the record, or `null` if the record was not deleted
 
 #### Defined in
 
-[src/layouts/record.ts:59](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L59)
+[src/layouts/record.ts:59](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L59)
 
 ___
 
@@ -77,7 +77,7 @@ Timestamp when the record was expired.
 
 #### Defined in
 
-[src/layouts/record.ts:50](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L50)
+[src/layouts/record.ts:50](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L50)
 
 ___
 
@@ -89,7 +89,7 @@ User ID that expired the record, or `null` if the record was not expired.
 
 #### Defined in
 
-[src/layouts/record.ts:53](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L53)
+[src/layouts/record.ts:53](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L53)
 
 ___
 
@@ -101,7 +101,7 @@ Timestamp when the record was updated.
 
 #### Defined in
 
-[src/layouts/record.ts:44](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L44)
+[src/layouts/record.ts:44](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L44)
 
 ___
 
@@ -113,4 +113,4 @@ User ID that created the record, or the last User ID to update the record.
 
 #### Defined in
 
-[src/layouts/record.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L47)
+[src/layouts/record.ts:47](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L47)

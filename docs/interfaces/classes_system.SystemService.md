@@ -30,7 +30,7 @@
 
 #### Defined in
 
-[src/classes/system.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L14)
+[src/classes/system.ts:14](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system.ts#L14)
 
 ___
 
@@ -44,4 +44,4 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:13](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L13)
+[src/classes/system.ts:13](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system.ts#L13)

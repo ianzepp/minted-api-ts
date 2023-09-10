@@ -35,7 +35,7 @@ Accessor to the set of access control list data.
 
 #### Defined in
 
-[src/layouts/record.ts:89](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L89)
+[src/layouts/record.ts:89](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L89)
 
 ___
 
@@ -47,7 +47,7 @@ Accessor to the key/value mapping of record properties with their values.
 
 #### Defined in
 
-[src/layouts/record.ts:83](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L83)
+[src/layouts/record.ts:83](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L83)
 
 ___
 
@@ -59,7 +59,7 @@ Accessor to the set of timestamp and access information describing this record.
 
 #### Defined in
 
-[src/layouts/record.ts:86](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L86)
+[src/layouts/record.ts:86](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L86)
 
 ___
 
@@ -71,4 +71,4 @@ Returns the string name of the parent schema type.
 
 #### Defined in
 
-[src/layouts/record.ts:80](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L80)
+[src/layouts/record.ts:80](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L80)

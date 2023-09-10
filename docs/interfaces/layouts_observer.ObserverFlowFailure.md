@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/layouts/observer.ts:37](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L37)
+[src/layouts/observer.ts:37](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/observer.ts#L37)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L38)
+[src/layouts/observer.ts:38](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/observer.ts#L38)
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:39](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L39)
+[src/layouts/observer.ts:39](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/observer.ts#L39)

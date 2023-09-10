@@ -21,7 +21,7 @@ Represents the flags to be checked for in a filter operation.
 
 #### Defined in
 
-[src/layouts/filter.ts:59](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L59)
+[src/layouts/filter.ts:59](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/filter.ts#L59)
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:56](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L56)
+[src/layouts/filter.ts:56](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/filter.ts#L56)

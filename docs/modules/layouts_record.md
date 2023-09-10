@@ -29,7 +29,7 @@ Defines the allowable types for database change operations.
 
 #### Defined in
 
-[src/layouts/record.ts:13](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L13)
+[src/layouts/record.ts:13](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L13)
 
 ___
 
@@ -41,7 +41,7 @@ Defines the types allowed for date-related fields.
 
 #### Defined in
 
-[src/layouts/record.ts:16](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L16)
+[src/layouts/record.ts:16](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L16)
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-[src/layouts/record.ts:19](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L19)
+[src/layouts/record.ts:19](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L19)

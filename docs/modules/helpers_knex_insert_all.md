@@ -12,14 +12,14 @@
 
 ### default
 
-▸ **default**(`knex`, `table_name`, `table_rows`): `Promise`<`_.Dictionary`<`any`\>\>
+▸ **default**(`knex`, `table_path`, `table_rows`): `Promise`<`_.Dictionary`<`any`\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `knex` | `Knex`<`any`, `any`[]\> |
-| `table_name` | `string` |
+| `table_path` | `string` |
 | `table_rows` | `Dictionary`<`any`\>[] |
 
 #### Returns
@@ -28,4 +28,4 @@
 
 #### Defined in
 
-[src/helpers/knex-insert-all.ts:4](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/helpers/knex-insert-all.ts#L4)
+[src/helpers/knex-insert-all.ts:4](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/helpers/knex-insert-all.ts#L4)

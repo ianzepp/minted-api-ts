@@ -21,7 +21,7 @@
 
 #### Defined in
 
-[src/classes/http-server-route.ts:5](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server-route.ts#L5)
+[src/classes/http-server-route.ts:5](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-server-route.ts#L5)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-server-route.ts:6](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server-route.ts#L6)
+[src/classes/http-server-route.ts:6](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-server-route.ts#L6)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-server-route.ts:7](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server-route.ts#L7)
+[src/classes/http-server-route.ts:7](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-server-route.ts#L7)
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 #### Defined in
 
-[src/classes/http-server-route.ts:4](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server-route.ts#L4)
+[src/classes/http-server-route.ts:4](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-server-route.ts#L4)

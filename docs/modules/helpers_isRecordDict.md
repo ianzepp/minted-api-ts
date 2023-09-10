@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/helpers/isRecordDict.ts:4](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/helpers/isRecordDict.ts#L4)
+[src/helpers/isRecordDict.ts:4](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/helpers/isRecordDict.ts#L4)

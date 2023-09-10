@@ -26,4 +26,4 @@
 
 #### Defined in
 
-[src/helpers/isRecordFlat.ts:3](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/helpers/isRecordFlat.ts#L3)
+[src/helpers/isRecordFlat.ts:3](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/helpers/isRecordFlat.ts#L3)

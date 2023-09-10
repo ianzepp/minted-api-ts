@@ -47,7 +47,7 @@ Accessor to the set of access control list data.
 
 #### Defined in
 
-[src/layouts/record.ts:89](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L89)
+[src/layouts/record.ts:89](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L89)
 
 ___
 
@@ -63,7 +63,7 @@ Accessor to the key/value mapping of record properties with their values.
 
 #### Defined in
 
-[src/layouts/record.ts:83](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L83)
+[src/layouts/record.ts:83](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L83)
 
 ___
 
@@ -75,7 +75,7 @@ Accessor to the subset of changed data for this record for this operation.
 
 #### Defined in
 
-[src/layouts/record.ts:98](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L98)
+[src/layouts/record.ts:98](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L98)
 
 ___
 
@@ -87,7 +87,7 @@ Accessor to the flat version of the data, with all namespaces prefixed.
 
 #### Defined in
 
-[src/layouts/record.ts:101](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L101)
+[src/layouts/record.ts:101](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L101)
 
 ___
 
@@ -99,7 +99,7 @@ Returns the set of record property keys (fully qualified).
 
 #### Defined in
 
-[src/layouts/record.ts:104](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L104)
+[src/layouts/record.ts:104](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L104)
 
 ___
 
@@ -115,7 +115,7 @@ Accessor to the set of timestamp and access information describing this record.
 
 #### Defined in
 
-[src/layouts/record.ts:86](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L86)
+[src/layouts/record.ts:86](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L86)
 
 ___
 
@@ -127,7 +127,7 @@ Accessor to the previous version of the data (if any).
 
 #### Defined in
 
-[src/layouts/record.ts:95](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L95)
+[src/layouts/record.ts:95](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L95)
 
 ___
 
@@ -143,7 +143,7 @@ Returns the string name of the parent schema type.
 
 #### Defined in
 
-[src/layouts/record.ts:80](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L80)
+[src/layouts/record.ts:80](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L80)
 
 ## Methods
 
@@ -165,7 +165,7 @@ Start an expectation.
 
 #### Defined in
 
-[src/layouts/record.ts:116](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L116)
+[src/layouts/record.ts:116](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L116)
 
 ___
 
@@ -187,7 +187,7 @@ Import the original database data.
 
 #### Defined in
 
-[src/layouts/record.ts:119](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L119)
+[src/layouts/record.ts:119](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L119)
 
 ___
 
@@ -203,7 +203,7 @@ Returns the full flattened record data.
 
 #### Defined in
 
-[src/layouts/record.ts:110](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L110)
+[src/layouts/record.ts:110](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L110)
 
 ___
 
@@ -219,7 +219,7 @@ Returns the full flattened record data, but only for changed properties.
 
 #### Defined in
 
-[src/layouts/record.ts:113](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L113)
+[src/layouts/record.ts:113](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L113)
 
 ___
 
@@ -235,4 +235,4 @@ Returns a JSON representation of this record.
 
 #### Defined in
 
-[src/layouts/record.ts:107](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L107)
+[src/layouts/record.ts:107](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L107)

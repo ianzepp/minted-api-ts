@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [SchemaType](../enums/classes_schema.SchemaType.md)
+
 ### Classes
 
 - [Schema](../classes/classes_schema.Schema.md)

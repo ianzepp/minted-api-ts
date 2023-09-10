@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[src/classes/system-knex.ts:6](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L6)
+[src/classes/system-knex.ts:6](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L6)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:22](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L22)
+[src/classes/system-knex.ts:22](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L22)
 
 ## Functions
 

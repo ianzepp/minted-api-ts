@@ -27,4 +27,4 @@
 
 #### Defined in
 
-[src/classes/system.ts:10](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L10)
+[src/classes/system.ts:10](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system.ts#L10)

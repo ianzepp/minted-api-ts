@@ -60,7 +60,7 @@ Represents the record's JSON representation in object format.
 
 #### Defined in
 
-[src/classes/record.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L71)
+[src/classes/record.ts:71](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L71)
 
 ## Properties
 
@@ -76,7 +76,7 @@ Accessor to the set of access control list data.
 
 #### Defined in
 
-[src/classes/record.ts:58](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L58)
+[src/classes/record.ts:58](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L58)
 
 ___
 
@@ -92,7 +92,7 @@ Accessor to the key/value mapping of record properties with their values.
 
 #### Defined in
 
-[src/classes/record.ts:42](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L42)
+[src/classes/record.ts:42](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L42)
 
 ___
 
@@ -108,7 +108,7 @@ Accessor to the set of timestamp and access information describing this record.
 
 #### Defined in
 
-[src/classes/record.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L47)
+[src/classes/record.ts:47](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L47)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:65](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L65)
+[src/classes/record.ts:65](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L65)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L71)
+[src/classes/record.ts:71](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L71)
 
 ___
 
@@ -144,7 +144,7 @@ Returns the string name of the parent schema type.
 
 #### Defined in
 
-[src/classes/record.ts:40](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L40)
+[src/classes/record.ts:40](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L40)
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:33](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L33)
+[src/classes/record.ts:33](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L33)
 
 ___
 
@@ -164,7 +164,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:22](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L22)
+[src/classes/record.ts:22](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L22)
 
 ## Accessors
 
@@ -178,7 +178,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:73](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L73)
+[src/classes/record.ts:73](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L73)
 
 ## Methods
 
@@ -198,7 +198,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:145](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L145)
+[src/classes/record.ts:145](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L145)
 
 ___
 
@@ -218,7 +218,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:94](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L94)
+[src/classes/record.ts:94](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L94)
 
 ___
 
@@ -238,7 +238,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:103](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L103)
+[src/classes/record.ts:103](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L103)
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:117](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L117)
+[src/classes/record.ts:117](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L117)
 
 ___
 
@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:109](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L109)
+[src/classes/record.ts:109](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L109)
 
 ___
 
@@ -298,7 +298,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:125](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L125)
+[src/classes/record.ts:125](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L125)
 
 ___
 
@@ -324,7 +324,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:163](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L163)
+[src/classes/record.ts:163](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L163)
 
 ___
 
@@ -344,7 +344,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:159](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L159)
+[src/classes/record.ts:159](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L159)
 
 ___
 
@@ -370,7 +370,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:167](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L167)
+[src/classes/record.ts:167](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L167)
 
 ___
 
@@ -397,7 +397,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:171](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L171)
+[src/classes/record.ts:171](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L171)
 
 ___
 
@@ -411,7 +411,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:136](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L136)
+[src/classes/record.ts:136](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L136)
 
 ___
 
@@ -425,4 +425,4 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:132](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L132)
+[src/classes/record.ts:132](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/record.ts#L132)

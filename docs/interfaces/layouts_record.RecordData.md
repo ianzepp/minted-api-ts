@@ -27,7 +27,7 @@ Represents the data of a record.
 
 #### Defined in
 
-[src/layouts/record.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L31)
+[src/layouts/record.ts:31](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L31)
 
 ___
 
@@ -37,4 +37,4 @@ ___
 
 #### Defined in
 
-[src/layouts/record.ts:32](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L32)
+[src/layouts/record.ts:32](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/record.ts#L32)

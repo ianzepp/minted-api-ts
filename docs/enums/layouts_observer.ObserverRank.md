@@ -23,7 +23,7 @@ The priority levels an observer can have.
 
 #### Defined in
 
-[src/layouts/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L12)
+[src/layouts/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/observer.ts#L12)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L11)
+[src/layouts/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/observer.ts#L11)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:13](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L13)
+[src/layouts/observer.ts:13](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/observer.ts#L13)
 
 ___
 
@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:10](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L10)
+[src/layouts/observer.ts:10](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/observer.ts#L10)

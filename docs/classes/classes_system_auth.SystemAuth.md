@@ -48,7 +48,7 @@
 
 #### Defined in
 
-[src/classes/system-auth.ts:24](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L24)
+[src/classes/system-auth.ts:24](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L24)
 
 ## Properties
 
@@ -58,7 +58,7 @@
 
 #### Defined in
 
-[src/classes/system-auth.ts:24](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L24)
+[src/classes/system-auth.ts:24](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L24)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:22](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L22)
+[src/classes/system-auth.ts:22](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L22)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L21)
+[src/classes/system-auth.ts:21](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L21)
 
 ## Accessors
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:26](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L26)
+[src/classes/system-auth.ts:26](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L26)
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:34](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L34)
+[src/classes/system-auth.ts:34](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L34)
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:30](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L30)
+[src/classes/system-auth.ts:30](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L30)
 
 ## Methods
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:41](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L41)
+[src/classes/system-auth.ts:41](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L41)
 
 ___
 
@@ -158,7 +158,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:39](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L39)
+[src/classes/system-auth.ts:39](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L39)
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:55](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L55)
+[src/classes/system-auth.ts:55](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L55)
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:62](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L62)
+[src/classes/system-auth.ts:62](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L62)
 
 ___
 
@@ -204,4 +204,4 @@ ___
 
 #### Defined in
 
-[src/classes/system-auth.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-auth.ts#L38)
+[src/classes/system-auth.ts:38](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-auth.ts#L38)

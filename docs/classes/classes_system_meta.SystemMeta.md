@@ -16,15 +16,14 @@
 
 ### Properties
 
+- [columns](classes_system_meta.SystemMeta.md#columns)
 - [schemas](classes_system_meta.SystemMeta.md#schemas)
 - [system](classes_system_meta.SystemMeta.md#system)
 
 ### Methods
 
 - [cleanup](classes_system_meta.SystemMeta.md#cleanup)
-- [isSchema](classes_system_meta.SystemMeta.md#isschema)
 - [refresh](classes_system_meta.SystemMeta.md#refresh)
-- [select](classes_system_meta.SystemMeta.md#select)
 - [startup](classes_system_meta.SystemMeta.md#startup)
 - [toFilter](classes_system_meta.SystemMeta.md#tofilter)
 - [toSchema](classes_system_meta.SystemMeta.md#toschema)
@@ -43,9 +42,19 @@
 
 #### Defined in
 
-[src/classes/system-meta.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L23)
+[src/classes/system-meta.ts:24](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-meta.ts#L24)
 
 ## Properties
+
+### columns
+
+• `Readonly` **columns**: `Dictionary`<[`Column`](classes_column.Column.md)\> = `{}`
+
+#### Defined in
+
+[src/classes/system-meta.ts:22](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-meta.ts#L22)
+
+___
 
 ### schemas
 
@@ -53,7 +62,7 @@
 
 #### Defined in
 
-[src/classes/system-meta.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L21)
+[src/classes/system-meta.ts:21](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-meta.ts#L21)
 
 ___
 
@@ -63,7 +72,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L23)
+[src/classes/system-meta.ts:24](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-meta.ts#L24)
 
 ## Methods
 
@@ -81,27 +90,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:42](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L42)
-
-___
-
-### isSchema
-
-▸ **isSchema**(`schema_name`): `boolean`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema_name` | `string` |
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-[src/classes/system-meta.ts:62](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L62)
+[src/classes/system-meta.ts:56](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-meta.ts#L56)
 
 ___
 
@@ -115,27 +104,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:48](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L48)
-
-___
-
-### select
-
-▸ `Private` **select**(`schema_name`): `Promise`<`any`[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema_name` | `string` |
-
-#### Returns
-
-`Promise`<`any`[]\>
-
-#### Defined in
-
-[src/classes/system-meta.ts:53](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L53)
+[src/classes/system-meta.ts:62](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-meta.ts#L62)
 
 ___
 
@@ -153,7 +122,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L25)
+[src/classes/system-meta.ts:26](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-meta.ts#L26)
 
 ___
 
@@ -174,7 +143,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:84](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L84)
+[src/classes/system-meta.ts:94](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-meta.ts#L94)
 
 ___
 
@@ -194,4 +163,4 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:66](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L66)
+[src/classes/system-meta.ts:67](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-meta.ts#L67)

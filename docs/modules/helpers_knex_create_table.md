@@ -12,14 +12,14 @@
 
 ### default
 
-▸ **default**(`knex`, `table_name`): `Promise`<`void`\>
+▸ **default**(`knex`, `table_path`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `knex` | `Knex`<`any`, `any`[]\> |
-| `table_name` | `string` |
+| `table_path` | `string` |
 
 #### Returns
 
@@ -27,4 +27,4 @@
 
 #### Defined in
 
-[src/helpers/knex-create-table.ts:3](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/helpers/knex-create-table.ts#L3)
+[src/helpers/knex-create-table.ts:3](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/helpers/knex-create-table.ts#L3)

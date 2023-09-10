@@ -45,7 +45,7 @@
 
 #### Defined in
 
-[src/classes/system-knex.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L47)
+[src/classes/system-knex.ts:47](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L47)
 
 ## Properties
 
@@ -55,7 +55,7 @@
 
 #### Defined in
 
-[src/classes/system-knex.ts:44](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L44)
+[src/classes/system-knex.ts:44](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L44)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L47)
+[src/classes/system-knex.ts:47](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L47)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:45](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L45)
+[src/classes/system-knex.ts:45](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L45)
 
 ## Accessors
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:65](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L65)
+[src/classes/system-knex.ts:65](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L65)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:73](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L73)
+[src/classes/system-knex.ts:73](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L73)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:57](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L57)
+[src/classes/system-knex.ts:57](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L57)
 
 ## Methods
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:85](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L85)
+[src/classes/system-knex.ts:89](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L89)
 
 ___
 
@@ -153,4 +153,4 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:77](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L77)
+[src/classes/system-knex.ts:77](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/system-knex.ts#L77)

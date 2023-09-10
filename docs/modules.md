@@ -7,7 +7,6 @@
 ### Modules
 
 - [automigrate/20230828190238\_startup](modules/automigrate_20230828190238_startup.md)
-- [automigrate/20230909100638\_system.client](modules/automigrate_20230909100638_system_client.md)
 - [automigrate/20230909101202\_system.user](modules/automigrate_20230909101202_system_user.md)
 - [classes/automigrate](modules/classes_automigrate.md)
 - [classes/column](modules/classes_column.md)

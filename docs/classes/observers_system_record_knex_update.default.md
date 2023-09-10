@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L14)
+[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L14)
 
 ## Properties
 
@@ -65,7 +65,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L11)
+[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L11)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L12)
+[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L12)
 
 ## Methods
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L79)
+[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L79)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L75)
+[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L75)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:55](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L55)
+[src/classes/observer.ts:55](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L55)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L71)
+[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L71)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L67)
+[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L67)
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L47)
+[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L47)
 
 ___
 
@@ -205,7 +205,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L21)
+[src/observers/system.record/knex-update.ts:22](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/knex-update.ts#L22)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:17](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L17)
+[src/observers/system.record/knex-update.ts:18](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/knex-update.ts#L18)
 
 ___
 
@@ -241,7 +241,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L51)
+[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L51)
 
 ___
 
@@ -259,7 +259,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L25)
+[src/observers/system.record/knex-update.ts:26](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/knex-update.ts#L26)
 
 ___
 
@@ -277,7 +277,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:63](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L63)
+[src/classes/observer.ts:63](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L63)
 
 ___
 
@@ -301,7 +301,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L31)
+[src/observers/system.record/knex-update.ts:32](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/knex-update.ts#L32)
 
 ___
 
@@ -319,7 +319,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L20)
+[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L20)
 
 ___
 
@@ -337,7 +337,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:13](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L13)
+[src/observers/system.record/knex-update.ts:14](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/knex-update.ts#L14)
 
 ___
 
@@ -358,4 +358,4 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:37](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L37)
+[src/observers/system.record/knex-update.ts:37](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/knex-update.ts#L37)

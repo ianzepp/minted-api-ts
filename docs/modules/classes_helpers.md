@@ -28,4 +28,4 @@
 
 #### Defined in
 
-[src/classes/helpers.ts:4](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/helpers.ts#L4)
+[src/classes/helpers.ts:4](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/helpers.ts#L4)

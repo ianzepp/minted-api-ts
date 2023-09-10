@@ -39,7 +39,7 @@
 
 #### Defined in
 
-[src/classes/http-server.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server.ts#L28)
+[src/classes/http-server.ts:28](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-server.ts#L28)
 
 ___
 
@@ -60,4 +60,4 @@ ___
 
 #### Defined in
 
-[src/classes/http-server.ts:41](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server.ts#L41)
+[src/classes/http-server.ts:41](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-server.ts#L41)

@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[src/classes/schema.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L23)
+[src/classes/schema.ts:31](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L31)
 
 ## Properties
 
@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[src/classes/schema.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L21)
+[src/classes/schema.ts:29](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L29)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L23)
+[src/classes/schema.ts:31](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L31)
 
 ## Accessors
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L29)
+[src/classes/schema.ts:37](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L37)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:45](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L45)
+[src/classes/schema.ts:53](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L53)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:33](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L33)
+[src/classes/schema.ts:41](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L41)
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:37](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L37)
+[src/classes/schema.ts:45](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L45)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:41](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L41)
+[src/classes/schema.ts:49](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L49)
 
 ## Methods
 
@@ -146,7 +146,7 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:49](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L49)
+[src/classes/schema.ts:57](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L57)
 
 ___
 
@@ -166,4 +166,4 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:53](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L53)
+[src/classes/schema.ts:61](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/schema.ts#L61)

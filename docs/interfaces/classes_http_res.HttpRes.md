@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[src/classes/http-res.ts:6](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-res.ts#L6)
+[src/classes/http-res.ts:6](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-res.ts#L6)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-res.ts:3](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-res.ts#L3)
+[src/classes/http-res.ts:3](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-res.ts#L3)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-res.ts:5](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-res.ts#L5)
+[src/classes/http-res.ts:5](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-res.ts#L5)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-res.ts:7](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-res.ts#L7)
+[src/classes/http-res.ts:7](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-res.ts#L7)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-res.ts:4](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-res.ts#L4)
+[src/classes/http-res.ts:4](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-res.ts#L4)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[src/classes/http-res.ts:2](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-res.ts#L2)
+[src/classes/http-res.ts:2](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/http-res.ts#L2)

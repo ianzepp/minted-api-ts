@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[src/layouts/column.ts:6](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L6)
+[src/layouts/column.ts:6](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/column.ts#L6)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:7](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L7)
+[src/layouts/column.ts:7](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/column.ts#L7)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:8](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L8)
+[src/layouts/column.ts:8](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/column.ts#L8)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:9](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L9)
+[src/layouts/column.ts:9](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/column.ts#L9)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:10](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L10)
+[src/layouts/column.ts:10](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/column.ts#L10)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[src/layouts/column.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/column.ts#L11)
+[src/layouts/column.ts:11](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/layouts/column.ts#L11)

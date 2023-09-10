@@ -50,7 +50,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L14)
+[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L14)
 
 ## Properties
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L11)
+[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L11)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L12)
+[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L12)
 
 ## Methods
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L79)
+[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L79)
 
 ___
 
@@ -114,7 +114,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L75)
+[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L75)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-maximum.ts:24](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-maximum.ts#L24)
+[src/observers/system.record/test-maximum.ts:25](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/test-maximum.ts#L25)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L71)
+[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L71)
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L67)
+[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L67)
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L47)
+[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L47)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-maximum.ts:20](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-maximum.ts#L20)
+[src/observers/system.record/test-maximum.ts:21](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/test-maximum.ts#L21)
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-maximum.ts:16](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-maximum.ts#L16)
+[src/observers/system.record/test-maximum.ts:17](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/test-maximum.ts#L17)
 
 ___
 
@@ -240,7 +240,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L51)
+[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L51)
 
 ___
 
@@ -258,7 +258,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-maximum.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-maximum.ts#L28)
+[src/observers/system.record/test-maximum.ts:29](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/test-maximum.ts#L29)
 
 ___
 
@@ -276,7 +276,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-maximum.ts:32](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-maximum.ts#L32)
+[src/observers/system.record/test-maximum.ts:33](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/test-maximum.ts#L33)
 
 ___
 
@@ -300,7 +300,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-maximum.ts:36](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-maximum.ts#L36)
+[src/observers/system.record/test-maximum.ts:37](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/test-maximum.ts#L37)
 
 ___
 
@@ -318,7 +318,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L20)
+[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/classes/observer.ts#L20)
 
 ___
 
@@ -336,4 +336,4 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-maximum.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-maximum.ts#L12)
+[src/observers/system.record/test-maximum.ts:13](https://github.com/ianzepp/minted-api-ts/blob/d1e72a6/src/observers/system.record/test-maximum.ts#L13)
