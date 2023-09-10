@@ -6,7 +6,7 @@ import { Knex } from 'knex';
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { Record } from '../../classes/record';
-import { Schema } from '../../classes/schema';
+import { Schema, SchemaType } from '../../classes/schema';
 
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
@@ -34,7 +34,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'schema';
+        return SchemaType.Schema;
     }
 
     onRing(): ObserverRing {
@@ -57,36 +57,7 @@ export default class extends Observer {
         let system = flow.system;
 
         // Create base table
-        await system.knex.schema.withSchema('system_data').createTable(schema_name, (table) => {
-            table.uuid('id').primary().defaultTo(system.knex.fn.uuid());
-            table.string('ns');
-        });
-
-        // Meta table
-        await system.knex.schema.withSchema('system_meta').createTable(schema_name, (table) => {
-            table.uuid('id').primary().references('id').inTable('system_data.' + schema_name).onDelete('CASCADE');
-            table.string('ns');
-
-            table.timestamp('created_at').index();
-            table.timestamp('updated_at').index();
-            table.timestamp('expired_at').index();
-            table.timestamp('deleted_at').index();
-
-            table.uuid('created_by').index();
-            table.uuid('updated_by').index();
-            table.uuid('expired_by').index();
-            table.uuid('deleted_by').index();
-        });
-
-        await system.knex.schema.withSchema('system_acls').createTable(schema_name, (table) => {
-            table.uuid('id').primary().references('id').inTable('system_data.' + schema_name).onDelete('CASCADE');
-            table.string('ns');
-
-            table.specificType('acls_full', 'uuid ARRAY').index();
-            table.specificType('acls_edit', 'uuid ARRAY').index();
-            table.specificType('acls_read', 'uuid ARRAY').index();
-            table.specificType('acls_deny', 'uuid ARRAY').index();
-        });
+        await knexCreateTable(system.knex.driver, schema_name);
 
         // Explicitly add the schema data to the local metadata for this execution context
         system.meta.schemas[record.data.schema_name] = new Schema(record.data);

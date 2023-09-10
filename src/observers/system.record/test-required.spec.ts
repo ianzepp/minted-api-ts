@@ -4,6 +4,7 @@ import chai from 'chai';
 // Classes
 import { SystemAsTest } from '../../classes/system';
 import { RecordColumnRequiredError } from '../../classes/system-data';
+import { SchemaType } from '../../classes/schema';
 
 describe(__filename, () => {
     let system = new SystemAsTest();
@@ -20,12 +21,12 @@ describe(__filename, () => {
     });
 
     test('required column should throw an error', async () => {
-        let schema = await system.data.createOne('schema', {
+        let schema = await system.data.createOne(SchemaType.Schema, {
             schema_name: schema_name,
             schema_type: 'database',
         });
 
-        let column = await system.data.createOne('column', {
+        let column = await system.data.createOne(SchemaType.Column, {
             schema_name: schema_name,
             column_name: column_name,
             column_type: 'text',

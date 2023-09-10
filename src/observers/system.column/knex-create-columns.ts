@@ -6,6 +6,7 @@ import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { ObserverRing } from '../../layouts/observer';
 import { Column } from '../../classes/column';
+import { SchemaType } from '../../classes/schema';
 
 export default class extends Observer {
     toName(): string {
@@ -13,7 +14,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'column';
+        return SchemaType.Column;
     }
 
     onRing(): ObserverRing {
@@ -30,7 +31,7 @@ export default class extends Observer {
             let schema_name = record.data.schema_name;
             let column_name = record.data.column_name;
 
-            await system.knex.schema.table(`system_data.${schema_name}`, t => {
+            await system.knex.schema.table(schema_name, t => {
                 let column_type = record.data.column_type;
                 
                 if (column_type === ColumnType.Text) {
@@ -62,7 +63,7 @@ export default class extends Observer {
 
             // Explicitly add the column data
             let schema = system.meta.toSchema(record.data.schema_name);
-            schema.columns[record.data.column_name] = new Column(record.data, schema);
+            schema.columns[record.data.column_name] = new Column(record.data);
         }
     }
 }

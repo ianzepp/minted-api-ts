@@ -8,6 +8,7 @@ import { Filter } from '../../classes/filter';
 
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
+import { SchemaType } from '../../classes/schema';
 
 
 export default class extends Observer {
@@ -16,7 +17,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'record';
+        return SchemaType.Record;
     }
 
     onRing(): ObserverRing {
@@ -29,7 +30,7 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         let schema_name = flow.schema.schema_name;
-        let knex = flow.system.knex.driver(`system_data.${schema_name} as data`);
+        let knex = flow.system.knex.driver(`${schema_name} as data`);
 
         // Join meta and acls
         knex = knex.join(`system_meta.${schema_name} as meta`, 'meta.id', 'data.id');

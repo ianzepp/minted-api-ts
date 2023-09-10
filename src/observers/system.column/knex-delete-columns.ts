@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { ObserverRing } from '../../layouts/observer';
+import { SchemaType } from '../../classes/schema';
 
 export default class extends Observer {
     toName(): string {
@@ -11,7 +12,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'column';
+        return SchemaType.Column;
     }
 
     onRing(): ObserverRing {
@@ -28,7 +29,7 @@ export default class extends Observer {
             let schema_name = record.data.schema_name;
             let column_name = record.data.column_name;
 
-            await system.knex.schema.table(`system_data.${schema_name}`, t => {
+            await system.knex.schema.table(schema_name, t => {
                 return t.dropColumn(column_name);
             });
 

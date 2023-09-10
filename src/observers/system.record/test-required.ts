@@ -5,6 +5,7 @@ import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { ObserverRing } from '../../layouts/observer';
 import { RecordColumnRequiredError } from '../../classes/system-data';
+import { SchemaType } from '../../classes/schema';
 
 export default class extends Observer {
     toName(): string {
@@ -12,7 +13,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'record';
+        return SchemaType.Record;
     }
 
     onRing(): ObserverRing {

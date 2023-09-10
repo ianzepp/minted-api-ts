@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 // Classes
 import { SystemAsTest } from '../../classes/system';
 import { RecordColumnImmutableError } from '../../classes/system-data';
+import { SchemaType } from '../../classes/schema';
 
 describe(__filename, () => {
     let schema_name = 'test_' + process.hrtime().join('_');
@@ -12,12 +13,12 @@ describe(__filename, () => {
 
     test('immutable column should throw an error', async () => {
         return new SystemAsTest().run(async system => {
-            let schema = await system.data.createOne('schema', {
+            let schema = await system.data.createOne(SchemaType.Column, {
                 schema_name: schema_name,
                 schema_type: 'database',
             });
 
-            let column = await system.data.createOne('column', {
+            let column = await system.data.createOne(SchemaType.Column, {
                 schema_name: schema_name,
                 column_name: column_name,
                 column_type: 'text',

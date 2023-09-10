@@ -5,29 +5,28 @@ import { v4 as uuid } from 'uuid';
 // Classes
 import { Column } from '../classes/column';
 import { Record } from '../classes/record';
-import { Schema } from '../classes/schema';
+import { Schema, SchemaType } from '../classes/schema';
 import { SystemAsTest } from '../classes/system';
 
 describe('SystemMeta', () => {
+    let system = new SystemAsTest();
 
     beforeAll(async () => {
+        await system.authenticate();
+        await system.startup();
     });
 
     afterAll(async () => {
+        await system.cleanup();
     });
 
     test('schema => database table lifecycle', async () => {
-        let system = new SystemAsTest();
-
-        await system.authenticate();
-        await system.startup();
-
+        let schema = system.meta.toSchema(SchemaType.Schema);
         let record_name = "test_" + new Date().getTime();
-        let record_schema = system.meta.schemas.schema;
-        let record = record_schema.toRecord({ schema_name: record_name, schema_type: 'database' });
+        let record_data = { schema_name: record_name, schema_type: 'database' };
 
         // Insert the new schema record
-        record = await system.data.createOne(record_schema, record);
+        let record = await system.data.createOne(schema, record_data);
 
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
@@ -54,7 +53,7 @@ describe('SystemMeta', () => {
         chai.expect(tested.meta).property('deleted_by').null;
 
         // Expire the schema record.
-        record = await system.data.expireOne(record_schema, record);
+        record = await system.data.expireOne(schema, record);
 
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
@@ -71,7 +70,7 @@ describe('SystemMeta', () => {
         await system.data.selectAny(tested_schema, {});
 
         // Delete the schema record.
-        record = await system.data.deleteOne(record_schema, record);
+        record = await system.data.deleteOne(schema, record);
 
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
@@ -95,23 +94,15 @@ describe('SystemMeta', () => {
 
         // Test schema should be gone
         chai.expect(system.meta.schemas).not.property(record_name);
-
-        // Done
-        await system.cleanup();
     });
 
     test('column => database table lifecycle', async () => {
-        let system = new SystemAsTest();
-
-        await system.authenticate();
-        await system.startup();
-
         // Setup the schema
-        let parent_type = system.meta.schemas.schema;
+        let schema = system.meta.toSchema(SchemaType.Schema);
         let parent_data = { schema_name: "test_" + new Date().getTime(), schema_type: 'database' };
 
         // Insert the new schema record
-        let parent = await system.data.createOne(parent_type, parent_data);
+        let parent = await system.data.createOne(schema, parent_data);
 
         chai.expect(parent).instanceOf(Record);
         chai.expect(parent).property('data').a('object');
@@ -127,11 +118,10 @@ describe('SystemMeta', () => {
         chai.expect(parent.meta).property('deleted_by').null;
 
         // Setup the column
-        let record_type = system.meta.schemas.column;
         let record_data = { schema_name: parent.data.schema_name, column_name: 'test_text', column_type: 'text' };
 
         // Insert the new column record
-        let record = await system.data.createOne(record_type, record_data);
+        let record = await system.data.createOne(SchemaType.Column, record_data);
 
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
@@ -183,7 +173,7 @@ describe('SystemMeta', () => {
         chai.expect(select.meta).property('deleted_by').null;
         
         // Expire the column record.
-        record = await system.data.expireOne(record_type, record);
+        record = await system.data.expireOne(SchemaType.Column, record);
 
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
@@ -199,8 +189,8 @@ describe('SystemMeta', () => {
         // Table operations should still work..
         await system.data.selectAny(tested_schema, {});
 
-        // Delete the schema record.
-        record = await system.data.deleteOne(record_type, record);
+        // Delete the column record.
+        record = await system.data.deleteOne(SchemaType.Column, record);
 
         chai.expect(record).instanceOf(Record);
         chai.expect(record).property('data').a('object');
@@ -231,8 +221,5 @@ describe('SystemMeta', () => {
         chai.expect(retest.meta).property('expired_by').null;
         chai.expect(retest.meta).property('deleted_at').null;
         chai.expect(retest.meta).property('deleted_by').null;
-
-        // Done
-        await system.cleanup();
     });
 });

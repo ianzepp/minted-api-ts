@@ -8,6 +8,7 @@ import { Record } from '../../classes/record';
 
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
+import { SchemaType } from '../../classes/schema';
 
 
 export default class extends Observer {
@@ -16,7 +17,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'record';
+        return SchemaType.Record;
     }
 
     onRing(): ObserverRing {
@@ -62,20 +63,15 @@ export default class extends Observer {
 
         // Extract the insertion data
         let insert_data = this.toExtract(flow.change, 'data');
-        let insert_meta = this.toExtract(flow.change, 'meta');
-        let insert_acls = this.toExtract(flow.change, 'acls');
+        // let insert_meta = this.toExtract(flow.change, 'meta');
 
         // Insert data
-        insert_data = await flow.system.knex.driver('system_data.' + schema_name).insert(insert_data).returning('*');
-        insert_meta = await flow.system.knex.driver('system_meta.' + schema_name).insert(insert_meta).returning('*');
-        insert_acls = await flow.system.knex.driver('system_acls.' + schema_name).insert(insert_acls).returning('*');
+        insert_data = await flow.system.knex.driver(schema_name).insert(insert_data).returning('*');
 
         // Copy back to records
         for(let i in flow.change) {
             let record = flow.change[i];
             _.assign(record.data, insert_data[i]);
-            _.assign(record.meta, insert_meta[i]);
-            _.assign(record.acls, insert_acls[i]);
         }
     }
 }

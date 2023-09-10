@@ -7,6 +7,7 @@ import { ObserverFlow } from '../../classes/observer-flow';
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
 import { RecordFlat } from '../../layouts/record';
+import { SchemaType } from '../../classes/schema';
 
 
 export default class extends Observer {
@@ -15,7 +16,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'record';
+        return SchemaType.Record;
     }
 
     onRing(): ObserverRing {

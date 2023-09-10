@@ -7,6 +7,7 @@ import { Record } from '../../classes/record';
 
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
+import { SchemaType } from '../../classes/schema';
 
 
 export default class extends Observer {
@@ -15,7 +16,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'record';
+        return SchemaType.Record;
     }
 
     onRing(): ObserverRing {
@@ -32,7 +33,6 @@ export default class extends Observer {
         return Promise.all(flow.change.map(record => this.updateOne(flow, record)));
     }
 
-    // All data updates must be done in the `system_data` tablespace only.
     // Once the data updates are done, we update the timestamps.
     async updateOne(flow: ObserverFlow, record: Record) {
         if (record.meta.deleted_at) {
@@ -47,12 +47,12 @@ export default class extends Observer {
         let updated_at = flow.system.timestamp;
         let updated_by = flow.system.user_id;
 
-        await flow.system.knex.driver('system_data.' + schema_name)
+        await flow.system.knex.driver(schema_name)
             .whereIn('ns', flow.system.auth.namespaces)
             .whereIn('id', [record.data.id])
             .update(record.data);
 
-        await flow.system.knex.driver('system_meta.' + schema_name)
+        await flow.system.knex.driver(schema_name + '__meta')
             .whereIn('ns', flow.system.auth.namespaces)
             .whereIn('id', [record.data.id])
             .update({

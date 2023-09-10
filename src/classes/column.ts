@@ -13,9 +13,7 @@ import toJSON from '../helpers/toJSON';
 
 
 export class Column {
-    public readonly system_name: string;
-
-    constructor(private readonly source: _.Dictionary<any>, public readonly schema: Schema) {
+    constructor(private readonly source: _.Dictionary<any>) {
         chai.expect(source).property('id').a('string');
         chai.expect(source).property('ns').a('string');
 
@@ -32,9 +30,6 @@ export class Column {
         
         chai.expect(source).property('minimum');
         chai.expect(source).property('maximum');
-
-        // Set system name
-        this.system_name = `${ source.ns }__${ source.schema_name }`;
     }
 
     get id(): string {

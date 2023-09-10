@@ -79,7 +79,11 @@ export class SystemKnex implements SystemService {
             throw new KnexTransactionAlreadyStartedError();
         }
 
+        // Start the transation
         this.tx = await this.db.transaction();
+
+        // Send config commands
+        await this.tx.raw('SET search_path TO system,test;');
     }
 
     async cleanup(): Promise<void> {

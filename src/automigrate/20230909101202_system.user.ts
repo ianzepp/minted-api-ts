@@ -7,48 +7,48 @@ import knexCreateTable from '../helpers/knex-create-table';
 import knexDropTable from '../helpers/knex-drop-table';
 import knexInsertAll from '../helpers/knex-insert-all';
 
-export const SCHEMA_NAME = 'user';
-
 export async function up(knex: Knex): Promise<void> {
-    await knexCreateTable(knex, SCHEMA_NAME);
+    await knexCreateTable(knex, 'system.user');
 
     // Update table structure
-    await knex.schema.table('system_data.' + SCHEMA_NAME, (table) => {
-        table.string('ns').references('ns').inTable('system_data.client').onDelete('CASCADE').alter();
+    await knex.schema.table('system.user', (table) => {
+        table.string('ns').references('ns').inTable('system.client').onDelete('CASCADE').alter();
+        table.string('name').notNullable();
     });
 
     // Add schema records
-    await knexInsertAll(knex, 'schema', [
-        { ns: 'system', schema_name: SCHEMA_NAME, schema_type: 'database' },
+    await knexInsertAll(knex, 'system.schema', [
+        { ns: 'system', schema_name: 'system.user', schema_type: 'database' },
     ]);
     
     // Add column records
-    await knexInsertAll(knex, 'column', [
+    await knexInsertAll(knex, 'system.column', [
+        { ns: 'system', schema_name: 'system.column', column_name: 'system.name', required: true },
         // none
     ]);
 
     // Add table data
-    await knexInsertAll(knex, SCHEMA_NAME, [
-        { ns: System.RootNs, id: System.RootId },
-        { ns: System.TestNs, id: System.TestId },
+    await knexInsertAll(knex, 'system.user', [
+        { ns: System.RootNs, id: System.RootId, name: "API root user" },
+        { ns: System.TestNs, id: System.TestId, name: "API test user" },
     ]);
 }
 
 
 export async function down(knex: Knex): Promise<void> {
     // Remove schema record
-    await knex('system_data.schema')
+    await knex('system.schema')
         .where('ns', 'system')
-        .where('schema_name', SCHEMA_NAME)
+        .where('schema_name', 'system.user')
         .delete();
 
     // Remove column record
-    await knex('system_data.column')
+    await knex('system.column')
         .where('ns', 'system')
-        .where('schema_name', SCHEMA_NAME)
+        .where('schema_name', 'system.user')
         .delete();
 
     // Remove tables
-    await knexDropTable(knex, SCHEMA_NAME);
+    await knexDropTable(knex, 'system.user');
 }
 

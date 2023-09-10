@@ -1,9 +1,10 @@
 import _ from 'lodash';
+import { expect } from 'chai';
 
 // Classes
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
-import { Schema } from '../../classes/schema';
+import { Schema, SchemaType } from '../../classes/schema';
 
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
@@ -15,7 +16,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'schema';
+        return SchemaType.Schema;
     }
 
     onRing(): ObserverRing {
@@ -36,9 +37,23 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         for(let record of flow.change) {
-            flow.expect(record.data).property('schema_name').match(/^[a-z_0-9]+$/i);
-            flow.expect(record.data).property('schema_name').not.match(/^[_0-9]/i);
-            flow.expect(record.data).property('schema_name').not.includes('__');
+            let record_name = record.data.schema_name;
+
+            // Name requirements
+            expect(record_name, 'schema_name').a('string');
+            expect(record_name, 'schema_name').includes('.');
+
+            // Check each side
+            let [namespace, name] = record.data.schema_name.split('.');
+
+            expect(namespace, 'schema_name').match(/^[a-z_0-9]+$/i);
+            expect(name, 'schema_name').match(/^[a-z_0-9]+$/i);
+
+            expect(namespace, 'schema_name').not.match(/^[_0-9]/i);
+            expect(name, 'schema_name').not.match(/^[_0-9]/i);
+
+            expect(namespace, 'schema_name').not.includes('__');
+            expect(name, 'schema_name').not.includes('__');
         }
     }
 }

@@ -6,7 +6,7 @@ import { Knex } from 'knex';
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
 import { Record } from '../../classes/record';
-import { Schema } from '../../classes/schema';
+import { Schema, SchemaType } from '../../classes/schema';
 
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
@@ -34,7 +34,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'schema';
+        return SchemaType.Schema;
     }
 
     onRing(): ObserverRing {
@@ -50,10 +50,8 @@ export default class extends Observer {
             let system = flow.system;
             let schema_name = record.data.schema_name;
 
-            // Create base table
-            await system.knex.schema.dropTable('system_acls.' + schema_name);
-            await system.knex.schema.dropTable('system_meta.' + schema_name);
-            await system.knex.schema.dropTable('system_data.' + schema_name);
+            // Delete the base table
+            await system.knex.schema.dropTable(schema_name);
 
             // Explicitly delete the schema data from the local metadata for this execution context
             delete system.meta.schemas[record.data.schema_name];

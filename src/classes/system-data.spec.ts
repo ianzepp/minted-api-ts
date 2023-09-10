@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 
 // Classes
 import { Record } from '../classes/record';
-import { Schema } from '../classes/schema';
+import { Schema, SchemaType } from '../classes/schema';
 import { SystemAsTest } from '../classes/system';
 
 function expectStringOrNull(value: any) {
@@ -38,13 +38,25 @@ function expectRecord(result: any) {
     chai.expect(result.meta).property('deleted_by');
 }
 
-describe('SystemData', () => {
+describe('classes/system-data.spec', () => {
     let system = new SystemAsTest();
-    let schema = 'test';
+    let schema_name = "test.test_" + process.hrtime().join('_');
 
     beforeAll(async () => {
         await system.authenticate();
         await system.startup();
+
+        // Create the test_NNN schema
+        await system.data.createOne(SchemaType.Schema, {
+            schema_name: schema_name,
+        });
+
+        await system.data.createOne(SchemaType.Column, {
+            schema_name: schema_name,
+            column_name: 'test.name',
+        });
+
+        console.warn('schemas', system.meta.schemas);
     });
 
     afterAll(async () => {
@@ -55,16 +67,16 @@ describe('SystemData', () => {
     // System.Verb.Select
     //
     
-    test('runs selectAny()', async () => {
-        let create = await system.data.createOne(schema, { name: 'system-data.spec/selectAny'})
-        let result = await system.data.selectAny(schema, {});
+    test.only('runs selectAny()', async () => {
+        let create = await system.data.createOne(schema_name, { name: 'system-data.spec/selectAny'})
+        let result = await system.data.selectAny(schema_name, {});
 
         expectRecordSet(result);
     });
 
     test('runs select404()', async () => {
-        let create = await system.data.createOne(schema, { name: 'system-data.spec/select404'})
-        let result = await system.data.select404(schema, create.data.id as string);
+        let create = await system.data.createOne(schema_name, { name: 'system-data.spec/select404'})
+        let result = await system.data.select404(schema_name, create.data.id as string);
 
         expectRecord(result);
 
@@ -72,9 +84,9 @@ describe('SystemData', () => {
     });
 
     test('runs selectIds()', async () => {
-        let create = await system.data.createOne(schema, { name: 'system-data.spec/selectIds'})
+        let create = await system.data.createOne(schema_name, { name: 'system-data.spec/selectIds'})
         let create_ids = [create.data.id as string];
-        let result_set = await system.data.selectIds(schema, create_ids);
+        let result_set = await system.data.selectIds(schema_name, create_ids);
 
         expectRecordSet(result_set, 1);
     });
@@ -95,12 +107,12 @@ describe('SystemData', () => {
         ];
 
         // Test create
-        let result_set = await system.data.createAll(schema, change_set);
+        let result_set = await system.data.createAll(schema_name, change_set);
 
         expectRecordSet(result_set, change_set.length);
 
         // Reselect to verify
-        let select_set = await system.data.selectIds(schema, result_set.map(result => result.data.id as string));
+        let select_set = await system.data.selectIds(schema_name, result_set.map(result => result.data.id as string));
 
         expectRecordSet(result_set, change_set.length);
     });
@@ -121,7 +133,7 @@ describe('SystemData', () => {
         ];
 
         // Test create
-        let create_set = await system.data.createAll(schema, source_set);
+        let create_set = await system.data.createAll(schema_name, source_set);
 
         expectRecordSet(create_set, source_set.length);
 
@@ -131,12 +143,12 @@ describe('SystemData', () => {
         }
 
         // Test update
-        let update_set = await system.data.updateAll(schema, create_set);
+        let update_set = await system.data.updateAll(schema_name, create_set);
 
         expectRecordSet(update_set, create_set.length);
 
         // Reselect to verify
-        let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
+        let select_set = await system.data.selectIds(schema_name, create_set.map(change => change.data.id as string));
 
         expectRecordSet(select_set, create_set.length);
     });
@@ -173,17 +185,17 @@ describe('SystemData', () => {
         ];
 
         // Test create
-        let create_set = await system.data.createAll(schema, source_set);
+        let create_set = await system.data.createAll(schema_name, source_set);
 
         expectRecordSet(create_set, source_set.length);
 
         // Test delete
-        let expire_set = await system.data.expireAll(schema, create_set);
+        let expire_set = await system.data.expireAll(schema_name, create_set);
 
         expectRecordSet(expire_set, create_set.length);
 
         // Reselect to verify
-        let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
+        let select_set = await system.data.selectIds(schema_name, create_set.map(change => change.data.id as string));
 
         expectRecordSet(select_set, 0);
     });
@@ -212,17 +224,17 @@ describe('SystemData', () => {
         ];
 
         // Test create
-        let create_set = await system.data.createAll(schema, source_set);
+        let create_set = await system.data.createAll(schema_name, source_set);
 
         expectRecordSet(create_set, source_set.length);
 
         // Test delete
-        let delete_set = await system.data.deleteAll(schema, create_set);
+        let delete_set = await system.data.deleteAll(schema_name, create_set);
 
         expectRecordSet(delete_set, create_set.length);
 
         // Reselect to verify
-        let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
+        let select_set = await system.data.selectIds(schema_name, create_set.map(change => change.data.id as string));
 
         expectRecordSet(select_set, 0);
     });

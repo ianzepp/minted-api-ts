@@ -7,7 +7,7 @@ import chai from 'chai';
 import { Filter } from '../classes/filter';
 import { Observer } from '../classes/observer';
 import { Record } from '../classes/record';
-import { Schema } from '../classes/schema';
+import { Schema, SchemaType } from '../classes/schema';
 import { System } from '../classes/system';
 
 // Layouts
@@ -41,7 +41,7 @@ export class ObserverFlow {
     async run(ring: number): Promise<void> {
         // Get the master list of observers for this execution context
         let observers: Observer[] = []; 
-        observers.push(... _.get(Observers, 'record') || []);
+        observers.push(... _.get(Observers, SchemaType.Record) || []);
         observers.push(... _.get(Observers, this.schema.schema_name) || []);
 
         // Filter in a single loop
