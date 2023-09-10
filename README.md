@@ -76,7 +76,9 @@ Bun requires additional steps in order to configure it for use with TypeScript. 
 
 Here are some of the bun scripts that you can run:
 
+- `bun clean`: Deletes any compiled files in the `dst` directory.
 - `bun compile`: Compiles the TypeScript files.
+- `bun compile:clean`: Executes the steps in `bun clean` and then in `bun compile`.
 - `bun migrate:make`: Creates a new database migration file.
 - `bun migrate:latest`: Runs all the database migrations to the latest.
 - `bun migrate:up`: Runs the next database migration.
