@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "clean": "bash ./scripts/clean.sh",
     "command": "bash ./scripts/command.sh",
     "compile": "bash ./scripts/compile.sh",
     "compile:clean": "bash ./scripts/compile-clean.sh",
