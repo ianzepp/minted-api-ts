@@ -44,7 +44,6 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/klaw-sync": "^6.0.1",
     "@types/lodash": "^4.14.197",
-    "@types/node": "^20.5.3",
     "@types/url-parse": "^1.4.9",
     "@types/uuid": "^9.0.2",
     "bun-types": "^1.0.1",
