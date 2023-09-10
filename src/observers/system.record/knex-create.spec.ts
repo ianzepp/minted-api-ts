@@ -2,6 +2,9 @@ import _ from 'lodash';
 import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
+// Bun:test
+import { beforeAll, afterAll, describe, test } from "bun:test";
+
 // Classes
 import { Record } from '../../classes/record';
 import { SystemAsTest } from '../../classes/system';

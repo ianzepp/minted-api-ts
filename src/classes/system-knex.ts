@@ -8,9 +8,11 @@ export const KnexConfig = {
     client: 'postgresql',
     connection: {
         host:     process.env.POSTGRES_HOST,
+        port:     process.env.POSTGRES_PORT,
         database: process.env.POSTGRES_DB,
         user:     process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD
+        password: process.env.POSTGRES_PASSWORD,
+        acquireConnectionTimeout: 10000,
     },
     pool: {
         min: 0,
@@ -41,33 +43,18 @@ export class KnexDriverMissingError extends KnexError {};
 
 // Implementation
 export class SystemKnex implements SystemService {
-    public readonly db: Knex;
-    public tx: Knex.Transaction | undefined;
+    public db: Knex = knex(KnexConfig);
 
     constructor(private readonly system: System) {
-        if (this.system.isTest()) {
-            this.db = knex(KnexConfigTest);
-        }
 
-        else {
-            this.db = KnexDriver; // shared pool
-        }
     }
 
     get schema(): Knex.SchemaBuilder {
-        if (this.tx === undefined) {
-            throw new KnexTransactionMissingError();
-        }
-
-        return this.tx.schema;
+        return this.db.schema;
     }
 
     get driver(): Knex {
-        if (this.tx === undefined) {
-            throw new KnexTransactionMissingError();
-        }
-
-        return this.tx;
+        return this.db;
     }
 
     get fn() {
@@ -75,28 +62,10 @@ export class SystemKnex implements SystemService {
     }
 
     async startup(): Promise<void> {
-        if (this.tx !== undefined) {
-            throw new KnexTransactionAlreadyStartedError();
-        }
-
-        this.tx = await this.db.transaction();
+        await this.db.raw('SELECT 1');
     }
 
     async cleanup(): Promise<void> {
-        if (this.tx === undefined) {
-            throw new KnexTransactionMissingError();
-        }
-
-        if (this.system.isTest()) {
-            await this.tx.rollback();
-            await this.db.destroy();
-        }
-
-        else {
-            await this.tx.commit();
-        }
-
-        // Unset the transaction
-        this.tx = undefined;
+        await this.db.destroy();
     }
 }

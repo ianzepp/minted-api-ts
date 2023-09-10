@@ -14,7 +14,7 @@ jobs:
       NODE_ENV: development
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 5432
-      POSTGRES_DB: minted-api-ci
+      POSTGRES_DB: github-ci
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres                
 
@@ -40,14 +40,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     
-    - name: Install node dependencies
+    - name: Install Bun
       run: |
-        npm install
+        npm install -g bun
 
-    - name: Install database automigrations
+    - name: Install dependencies using Bun
       run: |
-        npm run migrate:latest
+        bun install
+
+    - name: Install database schemas
+      run: |
+        bun autoinstall
 
     - name: Run test suite
       run: |
-        npm run test
+        bun test --timeout 5000

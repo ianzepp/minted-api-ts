@@ -2,3 +2,4 @@ node_modules
 dst
 tmp
 .env
+.env.local

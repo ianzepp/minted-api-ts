@@ -2,6 +2,9 @@ import _ from 'lodash';
 import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
+// Bun:test
+import { beforeAll, afterAll, describe, test } from "bun:test";
+
 // Classes
 import { Column } from '../classes/column';
 import { Record } from '../classes/record';
@@ -11,6 +14,7 @@ import { SystemAsTest } from '../classes/system';
 describe('SystemMeta', () => {
 
     beforeAll(async () => {
+        console.warn('Starting system-meta tests...')
     });
 
     afterAll(async () => {
