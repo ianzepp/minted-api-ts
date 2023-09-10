@@ -90,7 +90,7 @@ export class SystemKnex implements SystemService {
 
         if (this.system.isTest()) {
             await this.tx.rollback();
-            await this.db.destroy();
+            // await this.db.destroy();
         }
 
         else {
