@@ -11,7 +11,8 @@ export const KnexConfig = {
         port:     process.env.POSTGRES_PORT,
         database: process.env.POSTGRES_DB,
         user:     process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD
+        password: process.env.POSTGRES_PASSWORD,
+        acquireConnectionTimeout: 10000,
     },
     pool: {
         min: 0,
@@ -90,7 +91,7 @@ export class SystemKnex implements SystemService {
 
         if (this.system.isTest()) {
             await this.tx.rollback();
-            // await this.db.destroy();
+            await this.db.destroy();
         }
 
         else {

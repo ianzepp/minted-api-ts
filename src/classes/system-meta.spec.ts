@@ -14,6 +14,7 @@ import { SystemAsTest } from '../classes/system';
 describe('SystemMeta', () => {
 
     beforeAll(async () => {
+        console.warn('Starting system-meta tests...')
     });
 
     afterAll(async () => {
