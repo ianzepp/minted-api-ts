@@ -2,23 +2,22 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Bun:test
-import { beforeAll, afterAll, describe, test } from "bun:test";
+import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { SystemAsTest } from '../../classes/system';
 import { RecordColumnRequiredError } from '../../classes/system-data';
 
-describe(__filename, () => {
+describe('test-required', () => {
     let system = new SystemAsTest();
     let schema_name = 'test_' + process.hrtime().join('_');
     let column_name = 'test_column';
 
-    beforeAll(async () => {
-        await system.authenticate();
+    beforeEach(async () => {
         await system.startup();
     });
 
-    afterAll(async () => {
+    afterEach(async () => {
         await system.cleanup();
     });
 

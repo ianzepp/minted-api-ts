@@ -44,14 +44,11 @@ export class System {
         chai.expect(user_ns).a('string').not.empty;
     }
 
-    async authenticate(): Promise<this> {
+    async authenticate() {
         await this.auth.authenticate();
-
-        // Done;
-        return this;
     }
 
-    async startup(): Promise<this> {
+    async startup() {
         // Start knex first so we have a transaction context
         await this.knex.startup();
 
@@ -59,12 +56,9 @@ export class System {
         await this.data.startup();
         await this.meta.startup();
         await this.auth.startup();
-
-        // Done
-        return this;
     }
 
-    async cleanup(): Promise<this> {
+    async cleanup() {
         // Shutdown services
         await this.data.cleanup();
         await this.meta.cleanup();
@@ -72,17 +66,11 @@ export class System {
 
         // Shutdown knex last so the transaction commits/rollbacks
         await this.knex.cleanup();
-
-        // Done
-        return this;
     }
 
-    async refresh(): Promise<this> {
+    async refresh() {
         await this.cleanup();
         await this.startup();
-
-        // Done
-        return this;
     }
 
     async run(executeFn: (system: System) => Promise<any>) {
@@ -105,7 +93,7 @@ export class System {
     }
 
     isTest() {
-        return process.env.NODE_ENV === 'test';
+        return this instanceof SystemAsTest;
     } 
 
     isProd() {
@@ -122,6 +110,16 @@ export class SystemAsRoot extends System {
 export class SystemAsTest extends System {
     constructor() {
         super(System.TestId, System.TestNs);
+    }
+
+    async startup() {
+        await super.startup();
+        await this.knex.transaction();
+    }
+
+    async cleanup() {
+        await this.knex.rollback();
+        await super.cleanup();
     }
 }
 
