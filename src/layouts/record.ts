@@ -84,9 +84,6 @@ export interface RecordJson {
 
     /** Accessor to the set of timestamp and access information describing this record. */
     meta: RecordMeta | null;
-
-    /** Accessor to the set of access control list data. */
-    acls: RecordAcls | null;
 }
 
 /** Represents the architecture needed to obtain a record's info. */

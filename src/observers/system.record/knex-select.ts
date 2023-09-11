@@ -28,23 +28,13 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        let schema_name = flow.schema.schema_name;
-        let knex = flow.system.knex.driver(`system_data.${schema_name} as data`);
-
-        // Join meta and acls
-        knex = knex.join(`system_meta.${schema_name} as meta`, 'meta.id', 'data.id');
-        knex = knex.join(`system_acls.${schema_name} as acls`, 'acls.id', 'data.id');
-
-        // Filter to visible namespaces
-        knex = knex.whereIn('data.ns', flow.system.auth.namespaces);
+        let schema = flow.schema;
+        let knex = flow.system.knex.selectTo(schema.schema_name);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');
         knex = knex.whereNull('meta.deleted_at');
         
-        // Filter out ACLs 
-        // knex = knex.whereNotIn('acls.acls_deny', [flow.system.user.id]);
-
         // Build `filter.where` conditions
         knex = this.where(knex, flow.filter.where);
 

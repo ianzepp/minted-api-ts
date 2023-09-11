@@ -26,31 +26,19 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        // Once the data updates are done, the timestamps can be set all at once.
-        let schema_name = flow.schema.schema_name;
-        let record_ids = flow.change.map(record => record.data.id);
-        let expired_at = flow.system.timestamp;
-        let expired_by = flow.system.user_id;
-
-        // Generate a knex raw command to mark records as expired where:
-        //
-        // 1. record is visible to the user
-        // 2. record was not previously deleted
-        //
-        // All timestamps are in the `system_meta` tablespace, so we only use that.
-        await flow.system.knex.driver('system_meta.' + schema_name)
-            .whereIn('ns', flow.system.auth.namespaces)
-            .whereIn('id', record_ids)
-            .whereNull('expired_at') 
-            .update({ 
-                expired_at: expired_at, 
-                expired_by: expired_by
+        return flow.system.knex
+            .driverTo(flow.schema.schema_name, 'meta')
+            .whereIn('id', _.map(flow.change_data, 'id'))
+            .update({
+                expired_at: flow.system.time,
+                expired_by: flow.system.user_id
             });
+    }
 
-        // Apply the timestamp changes back to the records
-        for(let record of flow.change) {
-            record.meta.expired_at = expired_at;
-            record.meta.expired_by = expired_by;
-        }
+    async cleanup(flow: ObserverFlow) {
+        flow.change.forEach(record => {
+            record.meta.expired_at = flow.system.time;
+            record.meta.expired_by = flow.system.user_id;
+        })
     }
 }

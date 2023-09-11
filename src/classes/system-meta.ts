@@ -6,6 +6,7 @@ import { Schema } from '../classes/schema';
 import { Column } from '../classes/column';
 import { System } from '../classes/system';
 import { SystemService } from '../classes/system';
+import { RecordFlat } from '../layouts/record';
 
 // Layouts
 import { SchemaName } from '../layouts/schema';
@@ -24,18 +25,28 @@ export class SystemMeta implements SystemService {
 
     async startup(): Promise<void> {
         // Process system schemas
-        for(let schema_data of await this.select('schema')) {
+        for(let schema_data of await this.select('system.schema')) {
             let schema_name = schema_data.schema_name;
             
             this.schemas[schema_name] = new Schema(schema_data);
         }
 
-        for(let column_data of await this.select('column')) {
-            let schema = _.get(this.schemas, column_data.schema_name);
-            let column = new Column(column_data, schema);
+        for(let column_data of await this.select('system.column')) {
+            let schema_name = column_data.schema_name;
+            let column_name = column_data.column_name;
+            let schema = _.get(this.schemas, schema_name);
+
+            if (schema === undefined) {
+                console.warn('system-meta.startup()', 
+                    'unknown parent schema:', schema_name,
+                    'for column:', column_name
+                );
+                
+                continue; // No known parent schema
+            }
 
             // Add to schema
-            schema.columns[column.column_name] = column;
+            schema.columns[column_name] = new Column(column_data, schema);
         }
     }
     
@@ -50,10 +61,8 @@ export class SystemMeta implements SystemService {
         await this.startup();
     }
 
-    private async select(schema_name: SchemaName) {
-        return this.system.knex.driver(`system_data.${schema_name} as data`)
-            .join(`system_meta.${schema_name} as meta`, 'meta.id', 'data.id')
-            .whereIn('data.ns', this.system.auth.namespaces)
+    private async select(schema_path: string): Promise<RecordFlat[]> {
+        return this.system.knex.selectTo(schema_path)
             .whereNull('meta.expired_at')
             .whereNull('meta.deleted_at')
             .select();

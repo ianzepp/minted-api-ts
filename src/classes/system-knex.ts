@@ -2,6 +2,8 @@ import _ from 'lodash';
 import knex from 'knex';
 import { Knex } from 'knex';
 
+import { RecordFlat } from '../layouts/record';
+
 // Create the driver reference
 export const KnexConfig = {
     debug: process.env.POSTGRES_DEBUG === 'true',
@@ -78,15 +80,36 @@ export class SystemKnex implements SystemService {
     }
 
     async transaction() {
-        return this.db.transaction().then(tx => this.tx = tx);
+        // Initiate a transaction
+        this.tx = await this.db.transaction();
+
+        // Save the session inside the transaction context
+        await this.tx.raw(`
+            CREATE TEMPORARY TABLE tx_session_data (
+                user_id UUID, 
+                user_ns TEXT,
+                user_ts TIMESTAMP
+            );
+
+            INSERT INTO tx_session_data (user_id, user_ns, user_ts) 
+            VALUES ('${ this.system.user_id }', '${ this.system.user_ns }', '${ this.system.time_iso }');
+        `);
     }
 
     async commit() {
-        return this.tx.commit().finally(() => this.tx = undefined);
+        if (this.tx.isCompleted() === false) {
+            await this.tx.commit();
+        }
+
+        this.tx = undefined;
     }
 
     async rollback() {
-        return this.tx.rollback().finally(() => this.tx = undefined);
+        if (this.tx.isCompleted() === false) {
+            await this.tx.rollback();
+        }
+
+        return this.tx = undefined;
     }
 
     //
@@ -103,6 +126,30 @@ export class SystemKnex implements SystemService {
 
     get driver(): Knex {
         return this.tx ?? this.db;
+    }
+
+    selectTo<T = RecordFlat>(schema_path: string) {
+        let [ns, sn] = schema_path.split('.');
+
+        // For example, using a `schema_path` of `system.client_user`, then:
+        //
+        // 1. split the path into ns=system and sn=client_user
+        // 2. start from a top-level table of `system.client_user`
+        // 3. pull in timestamps from `system__meta.client_user`
+        // 4. restrict to only the running user's visible namespaces
+        
+        return this
+            .driver<T>({ data: `${ ns }__data.${ sn }` })
+            .join({ meta: `${ ns }__meta.${ sn }` }, 'meta.id', 'data.id')
+            .whereIn('data.ns', this.system.auth.namespaces);
+    }
+
+    driverTo<T = _.Dictionary<any>>(schema_path: string, alias: 'data' | 'meta' = 'data') {
+        let [ns, sn] = schema_path.split('.');
+
+        return this
+            .driver<T>(`${ ns }__${ alias }.${ sn } as ${ alias }`)
+            .whereIn(`${ alias }.ns`, this.system.auth.namespaces);
     }
 
 }

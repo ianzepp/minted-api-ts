@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import chai from 'chai';
+import { v4 as uuid } from 'uuid';
 
 // System services
 import { SystemAuth } from '../classes/system-auth';
@@ -32,7 +33,10 @@ export class System {
     public readonly errors: Error[] = [];
 
     // System constants
-    public readonly timestamp = new Date().toISOString();
+    public readonly time: Date = new Date(); // timestamp
+    public readonly time_iso = this.time.toISOString();
+    public readonly uuid = uuid;
+    public readonly chai = chai;
 
     // Setup the user-specific system, or default to a root user.
     constructor(readonly user_id: string, readonly user_ns: string) {

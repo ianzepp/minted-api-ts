@@ -26,31 +26,19 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        // Once the data updates are done, the timestamps can be set all at once.
-        let schema_name = flow.schema.schema_name;
-        let record_ids = flow.change.map(record => record.data.id);
-        let deleted_at = flow.system.timestamp;
-        let deleted_by = flow.system.user_id;
-
-        // Generate a knex raw command to mark records as deleted, where 
-        //
-        // 1. record is visible to the user
-        // 2. record was not previously deleted
-        //
-        // All timestamps are in the `system_meta` tablespace, so we only use that.
-        await flow.system.knex.driver('system_meta.' + schema_name)
-            .whereIn('ns', flow.system.auth.namespaces)
-            .whereIn('id', record_ids)
-            .whereNull('deleted_at')
-            .update({ 
-                deleted_at: deleted_at, 
-                deleted_by: deleted_by
+        return flow.system.knex
+            .driverTo(flow.schema.schema_name, 'meta')
+            .whereIn('id', _.map(flow.change_data, 'id'))
+            .update({
+                deleted_at: flow.system.time,
+                deleted_by: flow.system.user_id
             });
+    }
 
-        // Apply the timestamp changes back to the records
-        for(let record of flow.change) {
-            record.meta.deleted_at = deleted_at;
-            record.meta.deleted_by = deleted_by;
-        }
+    async cleanup(flow: ObserverFlow) {
+        flow.change.forEach(record => {
+            record.meta.deleted_at = flow.system.time;
+            record.meta.deleted_by = flow.system.user_id;
+        })
     }
 }

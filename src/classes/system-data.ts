@@ -14,15 +14,27 @@ import { ObserverRing } from '../layouts/observer';
 import { SchemaName } from '../layouts/schema';
 import { SystemVerb } from '../layouts/system';
 
-// Helpers
-import head404 from '../helpers/head404';
-import headOne from '../helpers/headOne';
-
 // Data API errors
 export class DataError extends Error {};
 export class RecordNotFoundError extends DataError {};
 export class RecordColumnImmutableError extends DataError {};
 export class RecordColumnRequiredError extends DataError {};
+
+// Local helpers
+function headOne<T>(result: T[]): T | undefined {
+    return _.head(result);
+}
+
+function head404<T>(result: T[]): T {
+    let r = _.head(result);
+
+    if (r === undefined) {
+        throw new RecordNotFoundError();
+    }
+
+    return r;
+}
+
 
 // Implementation
 export class SystemData implements SystemService {
@@ -33,102 +45,25 @@ export class SystemData implements SystemService {
     async cleanup(): Promise<void> {}
 
     //
-    // Collection record methods
+    // Core runtime
     //
 
-    async createAll(schema: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.onRun(schema, change_data, {}, SystemVerb.Create);
-    }
+    async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
+        if (process.env.POSTGRES_DEBUG === 'true') {
+            console.debug('SystemData.onRun()', op, schema_name, filter_data, change_data.length);
+        }
 
-    async updateAll(schema: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.onRun(schema, change_data, {}, SystemVerb.Update);
-    }
+        this.system.expect(change_data, 'change_data').an('array');
+        this.system.expect(filter_data, 'filter_data').an('object');
+        this.system.expect(op, 'op').a('string');
 
-    async upsertAll(schema: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.onRun(schema, change_data, {}, SystemVerb.Upsert);
-    }
-
-    async expireAll(schema: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.onRun(schema, change_data, {}, SystemVerb.Expire);
-    }
-
-    async deleteAll(schema: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.onRun(schema, change_data, {}, SystemVerb.Delete);
-    }
-
-    //
-    // Single record methods
-    //
-
-    async createOne(schema: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.onRun(schema, Array(change_data), {}, SystemVerb.Create).then(headOne<Record>);
-    }
-
-    async updateOne(schema: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.onRun(schema, Array(change_data), {}, SystemVerb.Update).then(headOne<Record>);
-    }
-
-    async upsertOne(schema: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.onRun(schema, Array(change_data), {}, SystemVerb.Upsert).then(headOne<Record>);
-    }
-
-    async expireOne(schema: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.onRun(schema, Array(change_data), {}, SystemVerb.Expire).then(headOne<Record>);
-    }
-
-    async deleteOne(schema: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.onRun(schema, Array(change_data), {}, SystemVerb.Delete).then(headOne<Record>);
-    }
-
-    //
-    // By ID or IDs
-    //
-
-    async select404(schema: Schema | SchemaName, record_id: string): Promise<Record> {
-        return this.onRun(schema, [], { where: { id: record_id }}, SystemVerb.Select).then(head404<Record>);
-    }
-
-    async selectIds(schema: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
-        return this.onRun(schema, [], { where: { id: record_ids }}, SystemVerb.Select);
-    }
-
-    async expireIds(schema: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
-        return this.onRun(schema, [], { where: { id: record_ids }}, SystemVerb.Expire);
-    }
-
-    async deleteIds(schema: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
-        return this.onRun(schema, [], { where: { id: record_ids }}, SystemVerb.Delete);
-    }
-
-    //
-    // Filter + Change ops
-    //
-
-    async selectAny(schema: Schema | SchemaName, filter_data: Partial<FilterJson>): Promise<Record[]> {
-        return this.onRun(schema, [], filter_data, SystemVerb.Select);
-    }
-
-    async updateAny(schema: Schema | SchemaName, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {
-        throw 500; // TODO
-    }
-
-    async expireAny(schema: Schema | SchemaName, filter_data: Partial<FilterJson>): Promise<Record[]> {
-        return this.onRun(schema, [], filter_data, SystemVerb.Expire);
-    }
-
-    async deleteAny(schema: Schema | SchemaName, filter_data: Partial<FilterJson>): Promise<Record[]> {
-        return this.onRun(schema, [], filter_data, SystemVerb.Delete);
-    }
-
-    //
-    // Internal functions
-    //
-
-    private async onRun(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
         let schema = this.system.meta.toSchema(schema_name);
         let filter = this.system.meta.toFilter(schema_name, filter_data);
 
-        // console.debug('SystemData.onRun(): op=%j schema=%j filter=%j change.length=%j', op, schema.schema_name, filter, change_data.length);
+        // Is this something other than a select op, and the change data is empty?
+        if (change_data.length === 0 && op !== SystemVerb.Select) {
+            return [];
+        }
 
         // Convert the raw change data into records
         let change = change_data.map(change => schema.toRecord(change));
@@ -143,5 +78,111 @@ export class SystemData implements SystemService {
 
         // Done
         return flow.change;
+    }
+    
+    //
+    // Collection record methods
+    //
+
+    async selectAll(schema_name: Schema | SchemaName, source_data: ChangeData[]): Promise<Record[]> {
+        let schema = this.system.meta.toSchema(schema_name);
+        let source = source_data.map(change => schema.toRecord(change).data.id);
+
+        return this.selectIds(schema, _.uniq(_.compact(source)));
+    }
+
+    async createAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(schema_name, change_data, {}, SystemVerb.Create);
+    }
+
+    async updateAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(schema_name, change_data, {}, SystemVerb.Update);
+    }
+
+    async upsertAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(schema_name, change_data, {}, SystemVerb.Upsert);
+    }
+
+    async expireAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(schema_name, change_data, {}, SystemVerb.Expire);
+    }
+
+    async deleteAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(schema_name, change_data, {}, SystemVerb.Delete);
+    }
+
+    //
+    // Single record methods
+    //
+
+    async selectOne(schema_name: Schema | SchemaName, source_data: ChangeData): Promise<Record | undefined> {
+        return this.selectAll(schema_name, [source_data]).then(headOne<Record>);
+    }
+
+    async createOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
+        return this.createAll(schema_name, [change_data]).then(headOne<Record>);
+    }
+
+    async updateOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
+        return this.updateAll(schema_name, [change_data]).then(headOne<Record>);
+    }
+
+    async upsertOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
+        return this.upsertAll(schema_name, [change_data]).then(headOne<Record>);
+    }
+
+    async expireOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
+        return this.expireAll(schema_name, [change_data]).then(headOne<Record>);
+    }
+
+    async deleteOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
+        return this.deleteAll(schema_name, [change_data]).then(headOne<Record>);
+    }
+
+    //
+    // Filter + Change ops
+    //
+
+    async selectAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
+        return this.run(schema_name, [], filter_data, SystemVerb.Select);
+    }
+
+    async updateAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {
+        return this.selectAny(schema_name, filter_data).then(result => {
+            result.forEach(record => _.assign(record.data, change_data));
+            return this.updateAll(schema_name, result);
+        });
+    }
+
+    async expireAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson>): Promise<Record[]> {
+        return this.selectAny(schema_name, filter_data).then(result => this.expireAll(schema_name, result));
+    }
+
+    async deleteAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson>): Promise<Record[]> {
+        return this.selectAny(schema_name, filter_data).then(result => this.deleteAll(schema_name, result));
+    }
+
+    //
+    // By ID or IDs
+    //
+
+    async select404(schema_name: Schema | SchemaName, record_one: string): Promise<Record> {
+        return this.selectAny(schema_name, { where: { id: record_one }}).then(head404<Record>);
+    }
+
+    async selectIds(schema_name: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
+        return this.selectAny(schema_name, { where: { id: record_ids }});
+    }
+
+    async updateIds(schema_name: Schema | SchemaName, record_ids: string[], change_data: ChangeData): Promise<Record[]> {
+        return this.updateAny(schema_name, { where: { id: record_ids }}, change_data);
+    }
+
+    async expireIds(schema_name: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
+        return this.expireAny(schema_name, { where: { id: record_ids }});
+    }
+
+    async deleteIds(schema_name: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
+        return this.deleteAny(schema_name, { where: { id: record_ids }});
     }
 }

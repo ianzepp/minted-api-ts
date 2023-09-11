@@ -8,6 +8,7 @@ import { Record } from '../../classes/record';
 
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
+import { DataError } from '../../classes/system-data';
 
 
 export default class extends Observer {
@@ -27,55 +28,31 @@ export default class extends Observer {
         return true;
     }
 
-    toExtract(record_set: Record[], record_property: string) {
-        return record_set.map(record => _.assign({
-            id: record.data.id,
-            ns: record.data.ns,
-        }, _.get(record, record_property)) as _.Dictionary<any>);
-    }
+    async startup(flow: ObserverFlow): Promise<void> {
+        let exceptions = flow.change.filter(record => record.data.id);
 
-    toExtractData(record_set: Record[]) {
-        return this.toExtract(record_set, 'data');
-    }
+        if (exceptions.length) {
+            throw new DataError('One or more records are already assigned IDs');
+        }
 
-    toExtractInfo(record_set: Record[]) {
-        return this.toExtract(record_set, 'info');
-    }
-
-    toExtractAcls(record_set: Record[]) {
-        return this.toExtract(record_set, 'acls');
+        // Set ID and namespace
+        flow.change.forEach(record => {
+            record.data.id = flow.system.uuid();
+            record.data.ns = flow.system.user_ns;
+        });
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        let schema_name = flow.schema.schema_name;
-        let created_at = new Date(flow.system.timestamp);
-        let created_by = flow.system.user_id;
-        let created_ns = flow.system.user_ns;
-
-        // Populate insertion data
-        for(let record of flow.change) {
-            record.data.id = uuid();
-            record.data.ns = created_ns;
-            record.meta.created_at = created_at;
-            record.meta.created_by = created_by;
-        }
-
-        // Extract the insertion data
-        let insert_data = this.toExtract(flow.change, 'data');
-        let insert_meta = this.toExtract(flow.change, 'meta');
-        let insert_acls = this.toExtract(flow.change, 'acls');
-
-        // Insert data
-        insert_data = await flow.system.knex.driver('system_data.' + schema_name).insert(insert_data).returning('*');
-        insert_meta = await flow.system.knex.driver('system_meta.' + schema_name).insert(insert_meta).returning('*');
-        insert_acls = await flow.system.knex.driver('system_acls.' + schema_name).insert(insert_acls).returning('*');
-
-        // Copy back to records
-        for(let i in flow.change) {
-            let record = flow.change[i];
-            _.assign(record.data, insert_data[i]);
-            _.assign(record.meta, insert_meta[i]);
-            _.assign(record.acls, insert_acls[i]);
-        }
+        return flow.system.knex
+            .driverTo(flow.schema.schema_name, 'data')
+            .insert(flow.change_data);
     }
+
+    async cleanup(flow: ObserverFlow): Promise<void> {
+        flow.change.forEach(record => {
+            record.meta.created_at = flow.system.time;
+            record.meta.created_by = flow.system.user_id;
+        });
+    }
+
 }

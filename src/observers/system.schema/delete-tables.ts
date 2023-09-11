@@ -11,9 +11,6 @@ import { Schema } from '../../classes/schema';
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
 
-// Helpers
-import knexCreateTable from '../../helpers/knex-create-table';
-
 /**
  * This class extends the Observer class and provides methods for creating a schema in Knex.
  * 
@@ -50,10 +47,8 @@ export default class extends Observer {
             let system = flow.system;
             let schema_name = record.data.schema_name;
 
-            // Create base table
-            await system.knex.schema.dropTable('system_acls.' + schema_name);
-            await system.knex.schema.dropTable('system_meta.' + schema_name);
-            await system.knex.schema.dropTable('system_data.' + schema_name);
+            // Delete base table
+            await system.knex.schema.dropTable(schema_name);
 
             // Explicitly delete the schema data from the local metadata for this execution context
             delete system.meta.schemas[record.data.schema_name];

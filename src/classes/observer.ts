@@ -13,9 +13,9 @@ export class Observer {
 
     constructor() {}
 
-    async run(flow: ObserverFlow): Promise<any> {
-        throw 500;
-    }
+    async startup(flow: ObserverFlow): Promise<any> {}
+    async run(flow: ObserverFlow): Promise<any> {}
+    async cleanup(flow: ObserverFlow): Promise<any> {}
 
     toJSON(): Object {
         return {
