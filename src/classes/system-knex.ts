@@ -70,39 +70,39 @@ export class SystemKnex implements SystemService {
     // Transaction methods
     //
 
-    // async transactionFn(runFn: () => Promise<any>, config?: Knex.TransactionConfig): Promise<void> {
-    //     return this.db.transaction(tx => {
-    //         this.tx = tx;
-    //         return runFn();
-    //     }, config).finally(() => this.tx = undefined);
-    // }
+    async transactionFn(runFn: () => Promise<any>, config?: Knex.TransactionConfig): Promise<void> {
+        return this.db.transaction(tx => {
+            this.tx = tx;
+            return runFn();
+        }, config).finally(() => this.tx = undefined);
+    }
 
-    // async transaction() {
-    //     return this.db.transaction().then(tx => this.tx = tx);
-    // }
+    async transaction() {
+        return this.db.transaction().then(tx => this.tx = tx);
+    }
 
-    // async commit() {
-    //     return this.tx.commit().finally(() => this.tx = undefined);
-    // }
+    async commit() {
+        return this.tx.commit().finally(() => this.tx = undefined);
+    }
 
-    // async rollback() {
-    //     return this.tx.rollback().finally(() => this.tx = undefined);
-    // }
+    async rollback() {
+        return this.tx.rollback().finally(() => this.tx = undefined);
+    }
 
     //
     // Driver methods
     //
 
     get fn() {
-        return this.db.fn;
+        return this.driver.fn;
     }
 
     get schema(): Knex.SchemaBuilder {
-        return this.db.schema;
+        return this.driver.schema;
     }
 
     get driver(): Knex {
-        return this.db;
+        return this.tx ?? this.db;
     }
 
 }

@@ -9,7 +9,7 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 import { SystemAsTest } from '../../classes/system';
 import { RecordColumnImmutableError } from '../../classes/system-data';
 
-describe('observers/system.record/test-immutable.spec', () => {
+describe('test-immutable', () => {
     let schema_name = 'test_' + process.hrtime().join('_');
     let column_name = 'test_immutable';
     let system = new SystemAsTest();

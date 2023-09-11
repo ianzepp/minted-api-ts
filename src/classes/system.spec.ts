@@ -9,22 +9,19 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 import { System } from '../classes/system';
 import { SystemAsTest } from '../classes/system';
 
-describe('system.spec', () => {
+describe('System', () => {
     let system = new SystemAsTest();
 
-    beforeEach(async () => {
-        await system.startup();
+    beforeEach(() => system.startup());
+    afterEach(() => system.cleanup());
+
+    test('tx test: insert a user => should rollback', async () => {
+        let result = await system.data.createOne('user', { username: 'system-tx-test' });
+        chai.expect(result).an('object').not.empty;
     });
 
-    afterEach(async () => {
-        await system.cleanup();
-    })
-
-    test('system.knex.tx is disabled', async () => {
-        // return system.data.createOne('user', { username: 'foobar' });
-    });
-
-    test('system.knex.tx is enabled', async () => {
-        // await system.data.createOne('user', { username: 'foobar' });
+    test('tx test: verify the user does not exist', async () => {
+        let result = await system.data.selectAny('user', { where: { username: 'system-tx-test' }});
+        chai.expect(result).an('array').empty;
     });
 });

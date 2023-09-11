@@ -9,7 +9,7 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 import { Record } from '../../classes/record';
 import { SystemAsTest } from '../../classes/system';
 
-describe(__filename, () => {
+describe('knex-create', () => {
     let system = new SystemAsTest();
 
     beforeEach(async () => {
