@@ -40,9 +40,8 @@ export class SystemAuth implements SystemService {
 
     async authenticate() {
         // Verify user record exists and has access to the system
-        let user = this.system.knex.db(`system_data.user as data`)
-            .where('data.id', this.system.user_id)
-            .where('data.ns', this.system.user_ns)
+        let user = this.system.knex.driverTo('system.client_user')
+            .where('id', this.system.user_id)
             .first();
 
         if (user === undefined) {

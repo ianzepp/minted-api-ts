@@ -3,10 +3,6 @@ import { Knex } from 'knex';
 
 import { System } from './system';
 import { SystemAsRoot } from './system';
-import { KnexDriver } from './system-knex';
-
-import knexCreateTable from '../helpers/knex-create-table';
-import knexInsertAll from '../helpers/knex-insert-all';
 
 export class AutoInstall {
     public readonly system = new SystemAsRoot();
@@ -37,13 +33,13 @@ export class AutoInstall {
 
         // Save a variable for future use in this tx
         await this.knex.raw(`
-            CREATE TEMPORARY TABLE temp_session_data(
+            CREATE TEMPORARY TABLE tx_session_data (
                 user_id UUID, 
                 user_ns TEXT,
                 user_ts TIMESTAMP
             );
 
-            INSERT INTO temp_session_data (user_id, user_ns, user_ts) 
+            INSERT INTO tx_session_data (user_id, user_ns, user_ts) 
             VALUES ('${ System.RootId }', '${ System.RootNs }', CURRENT_TIMESTAMP);
         `)
 
@@ -106,42 +102,35 @@ export class AutoInstall {
 
         // Add data for `schema`
         await this.insertAll('system', 'schema', [
-            { ns: 'system', schema_name: 'schema', schema_type: 'database', metadata: true },
-            { ns: 'system', schema_name: 'column', schema_type: 'database', metadata: true },
-            { ns: 'system', schema_name: 'client_user', schema_type: 'database', metadata: false },
+            { ns: 'system', schema_name: 'system.schema', schema_type: 'database', metadata: true },
+            { ns: 'system', schema_name: 'system.column', schema_type: 'database', metadata: true },
+            { ns: 'system', schema_name: 'system.client_user', schema_type: 'database', metadata: false },
         ]);
 
         // Add data for `column`
         await this.insertAll('system', 'column', [
             // Columns for 'schema'
-            { ns: 'system', schema_name: 'schema', column_name: 'schema_name' },
-            { ns: 'system', schema_name: 'schema', column_name: 'metadata', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.schema', column_name: 'schema_name' },
+            { ns: 'system', schema_name: 'system.schema', column_name: 'metadata', column_type: 'boolean' },
 
             // Columns for 'column'
-            { ns: 'system', schema_name: 'column', column_name: 'schema_name', required: true, immutable: true, indexed: true },
-            { ns: 'system', schema_name: 'column', column_name: 'column_name', required: true, immutable: true, indexed: true },
-            { ns: 'system', schema_name: 'column', column_name: 'column_type', required: true, immutable: true, indexed: true },
+            { ns: 'system', schema_name: 'system.column', column_name: 'schema_name', required: true, immutable: true, indexed: true },
+            { ns: 'system', schema_name: 'system.column', column_name: 'column_name', required: true, immutable: true, indexed: true },
+            { ns: 'system', schema_name: 'system.column', column_name: 'column_type', required: true, immutable: true, indexed: true },
 
-            { ns: 'system', schema_name: 'column', column_name: 'audited', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'column', column_name: 'immutable', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'column', column_name: 'indexed', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'column', column_name: 'internal', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'column', column_name: 'required', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'column', column_name: 'unique', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', column_name: 'audited', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', column_name: 'immutable', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', column_name: 'indexed', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', column_name: 'internal', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', column_name: 'required', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', column_name: 'unique', column_type: 'boolean' },
 
-            { ns: 'system', schema_name: 'column', column_name: 'minimum', column_type: 'integer' },
-            { ns: 'system', schema_name: 'column', column_name: 'maximum', column_type: 'integer' },
-            { ns: 'system', schema_name: 'column', column_name: 'precision', column_type: 'integer' },
-
-            // Columns for 'test'
-            { ns: 'system', schema_name: 'test', column_name: 'name', required: true },
-            { ns: 'system', schema_name: 'test', column_name: 'data_boolean', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'test', column_name: 'data_decimal', column_type: 'decimal' },
-            { ns: 'system', schema_name: 'test', column_name: 'data_integer', column_type: 'integer' },
-            { ns: 'system', schema_name: 'test', column_name: 'data_text', column_type: 'text' },
+            { ns: 'system', schema_name: 'system.column', column_name: 'minimum', column_type: 'integer' },
+            { ns: 'system', schema_name: 'system.column', column_name: 'maximum', column_type: 'integer' },
+            { ns: 'system', schema_name: 'system.column', column_name: 'precision', column_type: 'integer' },
 
             // Columns for 'user'
-            { ns: 'system', schema_name: 'client_user', column_name: 'name', column_type: 'text' },
+            { ns: 'system', schema_name: 'system.client_user', column_name: 'name', column_type: 'text' },
         ]);
 
         // Add data for `client_user`
@@ -210,7 +199,7 @@ export class AutoInstall {
                 -- Find the current session vars
                 SELECT COALESCE(user_id, '00000000-0000-0000-0000-000000000000'), COALESCE(user_ts, CURRENT_TIMESTAMP)
                   INTO temp_user_id, temp_user_ts 
-                  FROM temp_session_data 
+                  FROM tx_session_data
                  LIMIT 1;
         
                 -- Create the meta data

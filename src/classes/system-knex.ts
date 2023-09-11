@@ -78,7 +78,20 @@ export class SystemKnex implements SystemService {
     }
 
     async transaction() {
-        return this.db.transaction().then(tx => this.tx = tx);
+        // Initiate a transaction
+        this.tx = await this.db.transaction();
+
+        // Save the session inside the transaction context
+        await this.tx.raw(`
+            CREATE TEMPORARY TABLE tx_session_data (
+                user_id UUID, 
+                user_ns TEXT,
+                user_ts TIMESTAMP
+            );
+
+            INSERT INTO tx_session_data (user_id, user_ns, user_ts) 
+            VALUES ('${ this.system.user_id }', '${ this.system.user_ns }', CURRENT_TIMESTAMP);
+        `);
     }
 
     async commit() {
@@ -103,6 +116,35 @@ export class SystemKnex implements SystemService {
 
     get driver(): Knex {
         return this.tx ?? this.db;
+    }
+
+    selectTo(schema_path: string): Knex.QueryBuilder {
+        let [ns, sn] = schema_path.split('.');
+
+        // For example, using a `schema_path` of `system.client_user`, then:
+        //
+        // 1. split the path into ns=system and sn=client_user
+        // 2. start from a top-level table of `system.client_user`
+        // 3. pull in timestamps from `system__meta.client_user`
+        // 4. restrict to only the running user's visible namespaces
+        
+        return this
+            .driver({ data: `${ ns }.${ sn }` })
+            .join({ meta: `${ ns }__meta.${ sn }` }, 'meta.id', 'data.id')
+            .whereIn('data.ns', this.system.auth.namespaces);
+    }
+
+    driverTo(schema_path: string, suffix?: string): Knex.QueryBuilder {
+        let [ns, sn] = schema_path.split('.');
+
+        // For example, converts `system` to `system__meta`
+        if (typeof suffix === 'string') {
+            ns = ns + '__' + suffix;
+        }
+
+        return this
+            .driver(`${ ns }.${ sn }`)
+            .whereIn('ns', this.system.auth.namespaces);
     }
 
 }

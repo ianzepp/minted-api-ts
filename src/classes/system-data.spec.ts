@@ -42,7 +42,9 @@ function expectRecord(result: any) {
 
 describe('SystemData', () => {
     let system = new SystemAsTest();
-    let schema = 'test';
+    let schema_path = 'system.client_user';
+    let source_data = { ns: 'test', name: 'test-user' };
+    let source_list = [source_data, source_data, source_data];
 
     beforeEach(async () => {
         await system.startup();
@@ -56,26 +58,26 @@ describe('SystemData', () => {
     // System.Verb.Select
     //
     
-    test('runs selectAny()', async () => {
-        let create = await system.data.createOne(schema, { name: 'system-data.spec/selectAny'})
-        let result = await system.data.selectAny(schema, {});
+    test('selectAny()', async () => {
+        let create = await system.data.createOne(schema_path, source_data)
+        let result = await system.data.selectAny(schema_path, {});
 
         expectRecordSet(result);
     });
 
-    test('runs select404()', async () => {
-        let create = await system.data.createOne(schema, { name: 'system-data.spec/select404'})
-        let result = await system.data.select404(schema, create.data.id as string);
+    test('select404()', async () => {
+        let create = await system.data.createOne(schema_path, source_data)
+        let result = await system.data.select404(schema_path, create.data.id as string);
 
         expectRecord(result);
 
         chai.expect(result.data).property('id', create.data.id);
     });
 
-    test('runs selectIds()', async () => {
-        let create = await system.data.createOne(schema, { name: 'system-data.spec/selectIds'})
+    test('selectIds()', async () => {
+        let create = await system.data.createOne(schema_path, source_data)
         let create_ids = [create.data.id as string];
-        let result_set = await system.data.selectIds(schema, create_ids);
+        let result_set = await system.data.selectIds(schema_path, create_ids);
 
         expectRecordSet(result_set, 1);
     });
@@ -84,24 +86,20 @@ describe('SystemData', () => {
     // System.Verb.Create
     //
     
-    test.skip('runs createOne()', async () => {
+    test.skip('createOne()', async () => {
 
     });
 
-    test('runs createAll()', async () => {
-        let change_set = [
-            { name: 'system-data.spec/createAll.1' }, 
-            { name: 'system-data.spec/createAll.2' }, 
-            { name: 'system-data.spec/createAll.3' }, 
-        ];
+    test('createAll()', async () => {
+        let change_set = [source_data, source_data, source_data];
 
         // Test create
-        let result_set = await system.data.createAll(schema, change_set);
+        let result_set = await system.data.createAll(schema_path, change_set);
 
         expectRecordSet(result_set, change_set.length);
 
         // Reselect to verify
-        let select_set = await system.data.selectIds(schema, result_set.map(result => result.data.id as string));
+        let select_set = await system.data.selectIds(schema_path, result_set.map(result => result.data.id as string));
 
         expectRecordSet(result_set, change_set.length);
     });
@@ -110,21 +108,15 @@ describe('SystemData', () => {
     // System.Verb.Update
     //
     
-    test.skip('runs updateOne()', async () => {
+    test.skip('updateOne()', async () => {
 
     });
 
-    test('runs updateAll()', async () => {
-        let source_set = [
-            { name: 'system-data.spec/updateAll.0' }, 
-            { name: 'system-data.spec/updateAll.1' }, 
-            { name: 'system-data.spec/updateAll.2' }, 
-        ];
-
+    test('updateAll()', async () => {
         // Test create
-        let create_set = await system.data.createAll(schema, source_set);
+        let create_set = await system.data.createAll(schema_path, source_list);
 
-        expectRecordSet(create_set, source_set.length);
+        expectRecordSet(create_set, source_list.length);
 
         // Modify names
         for(let record of create_set) {
@@ -132,17 +124,17 @@ describe('SystemData', () => {
         }
 
         // Test update
-        let update_set = await system.data.updateAll(schema, create_set);
+        let update_set = await system.data.updateAll(schema_path, create_set);
 
         expectRecordSet(update_set, create_set.length);
 
         // Reselect to verify
-        let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
+        let select_set = await system.data.selectIds(schema_path, create_set.map(change => change.data.id as string));
 
         expectRecordSet(select_set, create_set.length);
     });
 
-    test.skip('runs updateAny()', async () => {
+    test.skip('updateAny()', async () => {
 
     });
 
@@ -150,11 +142,11 @@ describe('SystemData', () => {
     // System.Verb.Upsert
     //
     
-    test.skip('runs upsertOne()', async () => {
+    test.skip('upsertOne()', async () => {
 
     });
 
-    test.skip('runs upsertAll()', async () => {
+    test.skip('upsertAll()', async () => {
 
     });
 
@@ -162,38 +154,32 @@ describe('SystemData', () => {
     // System.Verb.Expire
     //
     
-    test.skip('runs expireOne()', async () => {
+    test.skip('expireOne()', async () => {
 
     });
 
-    test('runs expireAll()', async () => {
-        let source_set = [
-            { name: 'system-data.spec/expireAll.0' }, 
-            { name: 'system-data.spec/expireAll.1' }, 
-            { name: 'system-data.spec/expireAll.2' }, 
-        ];
-
+    test('expireAll()', async () => {
         // Test create
-        let create_set = await system.data.createAll(schema, source_set);
+        let create_set = await system.data.createAll(schema_path, source_list);
 
-        expectRecordSet(create_set, source_set.length);
+        expectRecordSet(create_set, source_list.length);
 
         // Test delete
-        let expire_set = await system.data.expireAll(schema, create_set);
+        let expire_set = await system.data.expireAll(schema_path, create_set);
 
         expectRecordSet(expire_set, create_set.length);
 
         // Reselect to verify
-        let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
+        let select_set = await system.data.selectIds(schema_path, create_set.map(change => change.data.id as string));
 
         expectRecordSet(select_set, 0);
     });
 
-    test.skip('runs expireIds()', async () => {
+    test.skip('expireIds()', async () => {
 
     });
 
-    test.skip('runs expireAny()', async () => {
+    test.skip('expireAny()', async () => {
 
     });
 
@@ -201,38 +187,18 @@ describe('SystemData', () => {
     // System.Verb.Delete
     //
     
-    test.skip('runs deleteOne()', async () => {
-
-    });
-
-    test('runs deleteAll()', async () => {
-        let source_set = [
-            { name: 'system-data.spec/deleteAll.0' }, 
-            { name: 'system-data.spec/deleteAll.1' }, 
-            { name: 'system-data.spec/deleteAll.2' }, 
-        ];
-
+    test('deleteIds()', async () => {
         // Test create
-        let create_set = await system.data.createAll(schema, source_set);
+        let create_set = await system.data.createAll(schema_path, source_list);
+        let create_ids = _.compact(_.uniq(create_set.map(create => create.data.id)));
 
-        expectRecordSet(create_set, source_set.length);
+        chai.expect(create_set, 'create_set').an('array').length(source_list.length);
+        chai.expect(create_ids, 'create_ids').an('array').length(source_list.length);
 
         // Test delete
-        let delete_set = await system.data.deleteAll(schema, create_set);
+        let delete_set = await system.data.deleteIds(schema_path, create_ids);
+        let select_set = await system.data.selectIds(schema_path, create_ids);
 
-        expectRecordSet(delete_set, create_set.length);
-
-        // Reselect to verify
-        let select_set = await system.data.selectIds(schema, create_set.map(change => change.data.id as string));
-
-        expectRecordSet(select_set, 0);
-    });
-
-    test.skip('runs deleteIds()', async () => {
-
-    });
-
-    test.skip('runs deleteAny()', async () => {
-
+        chai.expect(select_set, 'select_set').an('array').length(0);
     });
 });
