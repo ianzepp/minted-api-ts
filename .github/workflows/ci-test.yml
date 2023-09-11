@@ -48,6 +48,10 @@ jobs:
       run: |
         bun install
 
+    - name: Compile codebase with TSC
+      run: |
+        bun tsc
+
     - name: Install database schemas
       run: |
         bun autoinstall
