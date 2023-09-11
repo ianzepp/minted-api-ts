@@ -61,19 +61,16 @@ export class Schema {
             _.assign(record.data, source.data);
             _.assign(record.prev, source.prev);
             _.assign(record.meta, source.meta);
-            _.assign(record.acls, source.acls);
         }
 
         else if (isRecordJson(source)) {
             _.assign(record.data, source.data);
             _.assign(record.meta, source.meta);
-            _.assign(record.acls, source.acls);
         }
 
         else if (isRecordFlat(source)) {
             _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
             _.assign(record.meta, _.pick(source, Record.ColumnsInfo));
-            _.assign(record.acls, _.pick(source, Record.ColumnsAcls));
         }
 
         else if (isRecordDict(source)) {

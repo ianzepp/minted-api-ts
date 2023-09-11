@@ -26,19 +26,19 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        let expired_at = flow.system.timestamp;
-        let expired_by = flow.system.user_id;
-
-        // Run the op
-        await flow.system.knex
+        return flow.system.knex
             .driverTo(flow.schema.schema_name, 'meta')
-            .whereIn('id', flow.change_ids)
-            .update({  expired_at: expired_at, expired_by: expired_by });
+            .whereIn('id', _.map(flow.change_data, 'id'))
+            .update({
+                expired_at: flow.system.time,
+                expired_by: flow.system.user_id
+            });
+    }
 
-        // Apply the timestamp changes back to the records
-        for(let record of flow.change) {
-            record.meta.expired_at = expired_at;
-            record.meta.expired_by = expired_by;
-        }
+    async cleanup(flow: ObserverFlow) {
+        flow.change.forEach(record => {
+            record.meta.expired_at = flow.system.time;
+            record.meta.expired_by = flow.system.user_id;
+        })
     }
 }

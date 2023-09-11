@@ -92,7 +92,7 @@ export class SystemKnex implements SystemService {
             );
 
             INSERT INTO tx_session_data (user_id, user_ns, user_ts) 
-            VALUES ('${ this.system.user_id }', '${ this.system.user_ns }', CURRENT_TIMESTAMP);
+            VALUES ('${ this.system.user_id }', '${ this.system.user_ns }', '${ this.system.time_iso }');
         `);
     }
 

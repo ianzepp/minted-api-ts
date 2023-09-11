@@ -17,6 +17,8 @@ import { SystemVerb } from '../layouts/system';
 
 // Import pre-loaded routers
 import Observers from '../preloader/observers';
+import { fail } from 'assert';
+import { DataError } from './system-data';
 
 
 export class ObserverFlow {
@@ -30,12 +32,12 @@ export class ObserverFlow {
         readonly filter: Filter,
         readonly op: string) {}
 
-    get change_map(): _.Dictionary<Record> {
-        return _.keyBy(this.change, 'data.id');
+    get change_data() {
+        return _.map(this.change, 'data');
     }
 
-    get change_ids(): any[] {
-        return _.compact(_.map(this.change, 'data.id'));
+    get change_meta() {
+        return _.map(this.change, 'meta');
     }
 
     async run(ring: number): Promise<void> {
@@ -90,17 +92,21 @@ export class ObserverFlow {
             // );
 
             try {
+                await observer.startup(this);
                 await observer.run(this);
+                await observer.cleanup(this);
             }
 
             catch (error) {
-                if (observer.isFailable()) {
-                    console.warn('ObserverFlow, failable error:', error);
+                if (this.system.isTest() === false) {
+                    console.error('ObserverFlow:', error.message);
                 }
 
-                else {
+                if (error instanceof DataError) {
                     throw error;
                 }
+
+                throw new DataError(error);
             }
         }
 

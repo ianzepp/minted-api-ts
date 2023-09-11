@@ -152,7 +152,7 @@ export class AutoInstall {
 
         // Data table
         await this.knex.schema.withSchema(ns + '__data').createTable(sn, (table) => {
-            table.uuid('id').primary().defaultTo(this.knex.fn.uuid());
+            table.uuid('id').primary().notNullable();
 
             // Only applies to the very first one
             if (schema_path === 'system.client') {

@@ -38,34 +38,11 @@ export class Record implements RecordJson {
     ];
     
     public readonly type: SchemaName;
-    
-    public readonly data: RecordData = {
-        id: null,
-        ns: null,
-    };
 
-    public readonly meta: RecordMeta = {
-        created_at: null,
-        created_by: null,
-        updated_at: null,
-        updated_by: null,
-        expired_at: null,
-        expired_by: null,
-        deleted_at: null,
-        deleted_by: null,
-    };
-
-    public readonly acls: RecordAcls = {
-        acls_full: null,
-        acls_edit: null,
-        acls_read: null,
-        acls_deny: null,
-    };
-
-    public readonly prev: RecordData = {
-        id: null,
-        ns: null,
-    };
+    // Containers
+    public readonly data: any = {};
+    public readonly prev: any = {};
+    public readonly meta: any = {};
 
     // Related objects
     constructor(public readonly schema: Schema) {}
@@ -90,44 +67,44 @@ export class Record implements RecordJson {
         }, { id: this.data.id } as Partial<RecordData>);
     }
 
-    // Used for a internal record-to-record copy
-    fromRecord(source: Record): this {
-        _.assign(this.data, source.data);
-        _.assign(this.prev, source.prev);
-        _.assign(this.meta, source.meta);
-        _.assign(this.acls, source.acls);
-        return this;
-    }
+    // // Used for a internal record-to-record copy
+    // fromRecord(source: Record): this {
+    //     _.assign(this.data, source.data);
+    //     _.assign(this.prev, source.prev);
+    //     _.assign(this.meta, source.meta);
+    //     _.assign(this.acls, source.acls);
+    //     return this;
+    // }
 
-    // Used when importing from API-submitted http requests (partial representation with `.data` values only)
-    fromRecordData(source: RecordData): this {
-        _.assign(this.data, source);
-        return this;
-    }
+    // // Used when importing from API-submitted http requests (partial representation with `.data` values only)
+    // fromRecordData(source: RecordData): this {
+    //     _.assign(this.data, source);
+    //     return this;
+    // }
 
-    // Used when importing from API-submitted http requests
-    fromRecordJson(source: Partial<RecordJson>): this {
-        _.assign(this.data, source.data);
-        _.assign(this.meta, source.meta);
-        _.assign(this.acls, source.acls);
-        return this;
-    }
+    // // Used when importing from API-submitted http requests
+    // fromRecordJson(source: Partial<RecordJson>): this {
+    //     _.assign(this.data, source.data);
+    //     _.assign(this.meta, source.meta);
+    //     _.assign(this.acls, source.acls);
+    //     return this;
+    // }
 
-    // Used when converting from a flat knex data structure to a proper Record
-    fromRecordFlat(source: RecordFlat): this {
-        _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
-        _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
-        _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
-        return this;
-    }
+    // // Used when converting from a flat knex data structure to a proper Record
+    // fromRecordFlat(source: RecordFlat): this {
+    //     _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
+    //     _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
+    //     _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
+    //     return this;
+    // }
 
-    // Used when imported prev data from knex
-    fromRecordPrev(source: RecordFlat): this {
-        _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
-        _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
-        _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
-        return this;
-    }
+    // // Used when imported prev data from knex
+    // fromRecordPrev(source: RecordFlat): this {
+    //     _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
+    //     _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
+    //     _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
+    //     return this;
+    // }
 
     toString(): string {
         return `${this.schema.schema_name}#${this.data.id}`;
@@ -135,10 +112,9 @@ export class Record implements RecordJson {
 
     toJSON(): RecordJson {
         return toJSON<RecordJson>({
-            type: this.type,
+            type: this.schema.schema_name,
             data: this.data,
             meta: this.meta,
-            acls: this.acls,
         });
     }
 

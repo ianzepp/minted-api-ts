@@ -49,11 +49,20 @@ export class SystemData implements SystemService {
     //
 
     async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
+        if (process.env.POSTGRES_DEBUG === 'true') {
+            console.debug('SystemData.onRun()', op, schema_name, filter_data, change_data.length);
+        }
+
+        this.system.expect(change_data, 'change_data').an('array');
+        this.system.expect(filter_data, 'filter_data').an('object');
+        this.system.expect(op, 'op').a('string');
+
         let schema = this.system.meta.toSchema(schema_name);
         let filter = this.system.meta.toFilter(schema_name, filter_data);
 
-        if (process.env.POSTGRES_DEBUG === 'true') {
-            console.debug('SystemData.onRun()', op, schema.schema_name, filter, change_data.length);
+        // Is this something other than a select op, and the change data is empty?
+        if (change_data.length === 0 && op !== SystemVerb.Select) {
+            return [];
         }
 
         // Convert the raw change data into records

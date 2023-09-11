@@ -7,6 +7,7 @@ import { Record } from '../../classes/record';
 
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
+import { DataError } from '../../classes/system-data';
 
 
 export default class extends Observer {
@@ -26,17 +27,30 @@ export default class extends Observer {
         return true;
     }
 
-    // Knex requires updates be done individually (per row). We can help reduce the load by 
-    // running all the changes in parallel as Promises.
-    async run(flow: ObserverFlow) {
-        return Promise.all(flow.change.map(record => this.updateOne(flow, record)));
+    async startup(flow: ObserverFlow) {
+        let exceptions = flow.change.filter(record => typeof record.data.id !== 'string');
+
+        if (exceptions.length) {
+            throw new DataError('One or more records are missing IDs');
+        }
     }
 
-    // All data updates must be done in the `system` tablespace only.
-    async updateOne(flow: ObserverFlow, record: Record) {
+
+    async run(flow: ObserverFlow) {
+        return Promise.all(flow.change.map(record => this.one(flow, record)));
+    }
+
+    async one(flow: ObserverFlow, record: Record) {
         return flow.system.knex
             .driverTo(flow.schema.schema_name, 'data')
             .whereIn('data.id', [record.data.id])
-            .update(record.data);
+            .update(record.diff);
+    }
+
+    async cleanup(flow: ObserverFlow) {
+        flow.change.forEach(record => {
+            record.meta.updated_at = flow.system.time;
+            record.meta.updated_by = flow.system.user_id;
+        });
     }
 }

@@ -33,7 +33,8 @@ export class System {
     public readonly errors: Error[] = [];
 
     // System constants
-    public readonly timestamp = new Date().toISOString();
+    public readonly time: Date = new Date(); // timestamp
+    public readonly time_iso = this.time.toISOString();
     public readonly uuid = uuid;
     public readonly chai = chai;
 

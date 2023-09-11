@@ -8,6 +8,7 @@ import { Record } from '../../classes/record';
 
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
+import { DataError } from '../../classes/system-data';
 
 
 export default class extends Observer {
@@ -27,35 +28,31 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        // Preprocess data
-        let insert_data = flow.change.map((record, i) => {
-            record.data.ns = flow.system.user_ns;
+    async startup(flow: ObserverFlow): Promise<void> {
+        let exceptions = flow.change.filter(record => record.data.id);
 
-            // Done
-            return _.omit(record.data, ['id']);
-        })
-
-        // Extract the insertion data
-        let driver = flow.system.knex.driverTo(flow.schema.schema_name, 'data');
-        let created_at = new Date(flow.system.timestamp);
-        let created_by = flow.system.user_id;
-
-        // Run the op
-        let result_list = await driver.insert(insert_data).returning(['id', 'ns']);
-
-        // Process back into original records
-        for(let i in flow.change) {
-            let record = flow.change[i];
-            let result = result_list[i];
-
-            // Set data properties
-            record.data.id = result.id;
-            record.data.ns = result.ns;
-
-            // Set meta properties
-            record.meta.created_at = created_at;
-            record.meta.created_by = created_by;
+        if (exceptions.length) {
+            throw new DataError('One or more records are already assigned IDs');
         }
+
+        // Set ID and namespace
+        flow.change.forEach(record => {
+            record.data.id = flow.system.uuid();
+            record.data.ns = flow.system.user_ns;
+        });
     }
+
+    async run(flow: ObserverFlow): Promise<void> {
+        return flow.system.knex
+            .driverTo(flow.schema.schema_name, 'data')
+            .insert(flow.change_data);
+    }
+
+    async cleanup(flow: ObserverFlow): Promise<void> {
+        flow.change.forEach(record => {
+            record.meta.created_at = flow.system.time;
+            record.meta.created_by = flow.system.user_id;
+        });
+    }
+
 }

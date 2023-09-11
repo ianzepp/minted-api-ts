@@ -26,19 +26,19 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        let deleted_at = flow.system.timestamp;
-        let deleted_by = flow.system.user_id;
-
-        // Run the op
-        await flow.system.knex
+        return flow.system.knex
             .driverTo(flow.schema.schema_name, 'meta')
-            .whereIn('id', flow.change_ids)
-            .update({  deleted_at: deleted_at, deleted_by: deleted_by });
+            .whereIn('id', _.map(flow.change_data, 'id'))
+            .update({
+                deleted_at: flow.system.time,
+                deleted_by: flow.system.user_id
+            });
+    }
 
-        // Apply the timestamp changes back to the records
-        for(let record of flow.change) {
-            record.meta.deleted_at = deleted_at;
-            record.meta.deleted_by = deleted_by;
-        }
+    async cleanup(flow: ObserverFlow) {
+        flow.change.forEach(record => {
+            record.meta.deleted_at = flow.system.time;
+            record.meta.deleted_by = flow.system.user_id;
+        })
     }
 }
