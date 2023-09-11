@@ -7,6 +7,7 @@
   "scripts": {
     "autoinstall": "bash ./scripts/autoinstall.sh",
     "start": "bash ./scripts/start.sh",
+    "tsc": "bash ./scripts/tsc.sh",
     "typedoc": "bash ./scripts/typedoc.sh"
   },
   "keywords": [],
@@ -40,8 +41,8 @@
     "@types/uuid": "^9.0.2",
     "bun-types": "^1.0.1",
     "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1",
     "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
     "typedoc": "^0.25.1",
     "typedoc-plugin-markdown": "^3.16.0",
     "typescript": "^5.2.2",
