@@ -62,11 +62,7 @@ export class SystemMeta implements SystemService {
     }
 
     private async select(schema_path: string): Promise<RecordFlat[]> {
-        let [ns, schema_name] = schema_path.split('.');
-
-        return this.system.knex.driver<RecordFlat>({ data: `${ns}.${schema_name}` })
-            .join({ meta: `${ns}__meta.${schema_name}` }, 'meta.id', 'data.id')
-            .whereIn('data.ns', this.system.auth.namespaces)
+        return this.system.knex.selectTo(schema_path)
             .whereNull('meta.expired_at')
             .whereNull('meta.deleted_at')
             .select();

@@ -35,8 +35,8 @@ export default class extends Observer {
     // All data updates must be done in the `system` tablespace only.
     async updateOne(flow: ObserverFlow, record: Record) {
         return flow.system.knex
-            .driverTo(flow.schema.schema_name)
-            .whereIn('id', [record.data.id])
+            .driverTo(flow.schema.schema_name, 'data')
+            .whereIn('data.id', [record.data.id])
             .update(record.data);
     }
 }

@@ -2,6 +2,8 @@ import _ from 'lodash';
 import knex from 'knex';
 import { Knex } from 'knex';
 
+import { RecordFlat } from '../layouts/record';
+
 // Create the driver reference
 export const KnexConfig = {
     debug: process.env.POSTGRES_DEBUG === 'true',
@@ -118,7 +120,7 @@ export class SystemKnex implements SystemService {
         return this.tx ?? this.db;
     }
 
-    selectTo(schema_path: string): Knex.QueryBuilder {
+    selectTo<T = RecordFlat>(schema_path: string) {
         let [ns, sn] = schema_path.split('.');
 
         // For example, using a `schema_path` of `system.client_user`, then:
@@ -129,22 +131,17 @@ export class SystemKnex implements SystemService {
         // 4. restrict to only the running user's visible namespaces
         
         return this
-            .driver({ data: `${ ns }.${ sn }` })
+            .driver<T>({ data: `${ ns }__data.${ sn }` })
             .join({ meta: `${ ns }__meta.${ sn }` }, 'meta.id', 'data.id')
             .whereIn('data.ns', this.system.auth.namespaces);
     }
 
-    driverTo(schema_path: string, suffix?: string): Knex.QueryBuilder {
+    driverTo<T = _.Dictionary<any>>(schema_path: string, alias: 'data' | 'meta') {
         let [ns, sn] = schema_path.split('.');
 
-        // For example, converts `system` to `system__meta`
-        if (typeof suffix === 'string') {
-            ns = ns + '__' + suffix;
-        }
-
         return this
-            .driver(`${ ns }.${ sn }`)
-            .whereIn('ns', this.system.auth.namespaces);
+            .driver<T>(`${ ns }__${ alias }.${ sn } as ${ alias }`)
+            .whereIn(`${ alias }.ns`, this.system.auth.namespaces);
     }
 
 }

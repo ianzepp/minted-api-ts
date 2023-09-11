@@ -37,12 +37,12 @@ export default class extends Observer {
         })
 
         // Extract the insertion data
-        let driver = flow.system.knex.driverTo(flow.schema.schema_name);
+        let driver = flow.system.knex.driverTo(flow.schema.schema_name, 'data');
         let created_at = new Date(flow.system.timestamp);
         let created_by = flow.system.user_id;
 
         // Run the op
-        let result_list = await driver.insert(insert_data).returning('*');
+        let result_list = await driver.insert(insert_data).returning(['id', 'ns']);
 
         // Process back into original records
         for(let i in flow.change) {
