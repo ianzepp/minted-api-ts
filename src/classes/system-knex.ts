@@ -97,11 +97,19 @@ export class SystemKnex implements SystemService {
     }
 
     async commit() {
-        return this.tx.commit().finally(() => this.tx = undefined);
+        if (this.tx.isCompleted() === false) {
+            await this.tx.commit();
+        }
+
+        this.tx = undefined;
     }
 
     async rollback() {
-        return this.tx.rollback().finally(() => this.tx = undefined);
+        if (this.tx.isCompleted() === false) {
+            await this.tx.rollback();
+        }
+
+        return this.tx = undefined;
     }
 
     //
@@ -136,7 +144,7 @@ export class SystemKnex implements SystemService {
             .whereIn('data.ns', this.system.auth.namespaces);
     }
 
-    driverTo<T = _.Dictionary<any>>(schema_path: string, alias: 'data' | 'meta') {
+    driverTo<T = _.Dictionary<any>>(schema_path: string, alias: 'data' | 'meta' = 'data') {
         let [ns, sn] = schema_path.split('.');
 
         return this

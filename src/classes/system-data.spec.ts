@@ -8,6 +8,9 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 import { Record } from '../classes/record';
 import { Schema } from '../classes/schema';
 import { SystemAsTest } from '../classes/system';
+import { SchemaType } from './schema-type';
+
+import { RecordNotFoundError } from './system-data';
 
 function expectStringOrNull(value: any) {
     console.warn('value', value);
@@ -42,163 +45,295 @@ function expectRecord(result: any) {
 
 describe('SystemData', () => {
     let system = new SystemAsTest();
-    let schema_path = 'system.client_user';
+    let schema_type = SchemaType.ClientUser;
     let source_data = { ns: 'test', name: 'test-user' };
     let source_list = [source_data, source_data, source_data];
 
-    beforeEach(async () => {
-        await system.startup();
-    });
+    function insertSamples() {
+        return system.knex.driverTo(schema_type).insert(source_list).returning('*');
+    }
 
-    afterEach(async () => {
-        await system.cleanup();
-    });
+    describe('select methods', () => {
+        let sources = [];
 
-    //
-    // System.Verb.Select
-    //
+        beforeEach(async () => {
+            await system.startup();
+
+            // Insert dummy user records
+            sources.push(... await insertSamples());
+        });
     
-    test('selectAny()', async () => {
-        let create = await system.data.createOne(schema_path, source_data)
-        let result = await system.data.selectAny(schema_path, {});
+        afterEach(async () => {
+            await system.cleanup();
 
-        expectRecordSet(result);
-    });
-
-    test('select404()', async () => {
-        let create = await system.data.createOne(schema_path, source_data)
-        let result = await system.data.select404(schema_path, create.data.id as string);
-
-        expectRecord(result);
-
-        chai.expect(result.data).property('id', create.data.id);
-    });
-
-    test('selectIds()', async () => {
-        let create = await system.data.createOne(schema_path, source_data)
-        let create_ids = [create.data.id as string];
-        let result_set = await system.data.selectIds(schema_path, create_ids);
-
-        expectRecordSet(result_set, 1);
-    });
-
-    //
-    // System.Verb.Create
-    //
+            // Cleanup
+            sources.length = 0;
+        });
     
-    test.skip('createOne()', async () => {
+        // selectAny()
 
+        test('selectAny()', async () => {
+            let select = await system.data.selectAny(schema_type);
+
+            chai.expect(select).an('array').not.empty;
+        });
+
+        test('selectAny() using filter ID', async () => {
+            let source = sources[0];
+            let select = await system.data.selectAny(schema_type, {
+                where: {
+                    id: source.id
+                }
+            });
+
+            chai.expect(select).an('array').length(1);
+            chai.expect(select[0].data).property('id', source.id);
+        });
+
+        test('selectAny() using limit of 1', async () => {
+            let select = await system.data.selectAny(schema_type, { limit: 1 });
+            chai.expect(select).an('array').length(1);
+        });    
+
+        test('selectAny() using invalid limit of 0', async () => {
+            let select = await system.data.selectAny(schema_type, { limit: 0 });
+            chai.expect(select).an('array').length.gte(sources.length);
+        });
+
+        // selectAll()
+
+        test('selectAll() with empty sources gives empty results', async () => {
+            let select = await system.data.selectAll(schema_type, []);
+            chai.expect(select).an('array').empty;
+        });
+
+        test('selectAll() with valid source IDs', async () => {
+            let select = await system.data.selectAll(schema_type, [sources[0], sources[1]]);
+            chai.expect(select).an('array').length(2);
+        });
+
+        test('selectAll() with duplicate source IDs', async () => {
+            let select = await system.data.selectAll(schema_type, [sources[0], sources[0]]);
+            chai.expect(select).an('array').length(1);
+        });
+
+        test('selectAll() with invalid source IDs', async () => {
+            let select = await system.data.selectAll(schema_type, [
+                { id: system.uuid() },
+                { id: system.uuid() },
+            ]);
+
+            chai.expect(select).an('array').length(0);
+        });
+
+        // selectOne()
+
+        test('selectOne() with empty source gives empty result', async () => {
+            let select = await system.data.selectOne(schema_type, {});
+            chai.expect(select).undefined;
+        });
+
+        test('selectOne() with valid source', async () => {
+            let select = await system.data.selectOne(schema_type, sources[0]);
+            chai.expect(select).instanceOf(Record);
+            chai.expect(select.data).property('id', sources[0].id);
+        });
+
+        test('selectOne() with invalid source ID', async () => {
+            let select = await system.data.selectOne(schema_type, { id: system.uuid() });
+            chai.expect(select).undefined;
+        });
+
+        // selectIds()
+
+        test('selectIds() with empty IDs gives empty results', async () => {
+            let select = await system.data.selectIds(schema_type, []);
+            chai.expect(select).an('array').empty;
+        });
+
+        test('selectIds() with valid IDs', async () => {
+            let select = await system.data.selectIds(schema_type, [sources[0].id, sources[1].id]);
+            chai.expect(select).an('array').length(2);
+        });
+
+        test('selectIds() with duplicate IDs', async () => {
+            let select = await system.data.selectIds(schema_type, [sources[0].id, sources[0].id]);
+            chai.expect(select).an('array').length(1);
+        });
+
+        test('selectIds() with invalid IDs', async () => {
+            let select = await system.data.selectIds(schema_type, [system.uuid(), system.uuid()]);
+            chai.expect(select).an('array').length(0);
+        });
+
+
+        // select404()
+
+        test('select404() with null ID throws an error', async () => {
+            let select = await system.data.select404(schema_type, null)
+                .then(() => chai.assert.fail('Test failed'))
+                .catch(error => chai.expect(error).instanceOf(RecordNotFoundError));
+        });
+
+        test('select404() with valid ID', async () => {
+            let select = await system.data.select404(schema_type, sources[0].id);
+            chai.expect(select).instanceOf(Record);
+            chai.expect(select.data).property('id', sources[0].id);
+        });
+
+        test('select404() with invalid ID throws an error', async () => {
+            let select = await system.data.select404(schema_type, system.uuid())
+                .then(() => chai.assert.fail('Test failed'))
+                .catch(error => chai.expect(error).instanceOf(RecordNotFoundError));
+        });
     });
 
-    test('createAll()', async () => {
-        let change_set = [source_data, source_data, source_data];
 
-        // Test create
-        let result_set = await system.data.createAll(schema_path, change_set);
-
-        expectRecordSet(result_set, change_set.length);
-
-        // Reselect to verify
-        let select_set = await system.data.selectIds(schema_path, result_set.map(result => result.data.id as string));
-
-        expectRecordSet(result_set, change_set.length);
-    });
-
-    //
-    // System.Verb.Update
-    //
+    // //
+    // // System.Verb.Select
+    // //
     
-    test.skip('updateOne()', async () => {
+    // test('selectAny()', async () => {
+    //     let create = await system.data.createOne(schema_path, source_data)
+    //     let result = await system.data.selectAny(schema_path, {});
 
-    });
+    //     expectRecordSet(result);
+    // });
 
-    test('updateAll()', async () => {
-        // Test create
-        let create_set = await system.data.createAll(schema_path, source_list);
+    // test('select404()', async () => {
+    //     let create = await system.data.createOne(schema_path, source_data)
+    //     let result = await system.data.select404(schema_path, create.data.id as string);
 
-        expectRecordSet(create_set, source_list.length);
+    //     expectRecord(result);
 
-        // Modify names
-        for(let record of create_set) {
-            record.data.name = record.data.name + '-changed';
-        }
+    //     chai.expect(result.data).property('id', create.data.id);
+    // });
 
-        // Test update
-        let update_set = await system.data.updateAll(schema_path, create_set);
+    // test('selectIds()', async () => {
+    //     let create = await system.data.createOne(schema_path, source_data)
+    //     let create_ids = [create.data.id as string];
+    //     let result_set = await system.data.selectIds(schema_path, create_ids);
 
-        expectRecordSet(update_set, create_set.length);
+    //     expectRecordSet(result_set, 1);
+    // });
 
-        // Reselect to verify
-        let select_set = await system.data.selectIds(schema_path, create_set.map(change => change.data.id as string));
-
-        expectRecordSet(select_set, create_set.length);
-    });
-
-    test.skip('updateAny()', async () => {
-
-    });
-
-    //
-    // System.Verb.Upsert
-    //
+    // //
+    // // System.Verb.Create
+    // //
     
-    test.skip('upsertOne()', async () => {
+    // test.skip('createOne()', async () => {
 
-    });
+    // });
 
-    test.skip('upsertAll()', async () => {
+    // test('createAll()', async () => {
+    //     let change_set = [source_data, source_data, source_data];
 
-    });
+    //     // Test create
+    //     let result_set = await system.data.createAll(schema_path, change_set);
 
-    //
-    // System.Verb.Expire
-    //
+    //     expectRecordSet(result_set, change_set.length);
+
+    //     // Reselect to verify
+    //     let select_set = await system.data.selectIds(schema_path, result_set.map(result => result.data.id as string));
+
+    //     expectRecordSet(result_set, change_set.length);
+    // });
+
+    // //
+    // // System.Verb.Update
+    // //
     
-    test.skip('expireOne()', async () => {
+    // test.skip('updateOne()', async () => {
 
-    });
+    // });
 
-    test('expireAll()', async () => {
-        // Test create
-        let create_set = await system.data.createAll(schema_path, source_list);
+    // test('updateAll()', async () => {
+    //     // Test create
+    //     let create_set = await system.data.createAll(schema_path, source_list);
 
-        expectRecordSet(create_set, source_list.length);
+    //     expectRecordSet(create_set, source_list.length);
 
-        // Test delete
-        let expire_set = await system.data.expireAll(schema_path, create_set);
+    //     // Modify names
+    //     for(let record of create_set) {
+    //         record.data.name = record.data.name + '-changed';
+    //     }
 
-        expectRecordSet(expire_set, create_set.length);
+    //     // Test update
+    //     let update_set = await system.data.updateAll(schema_path, create_set);
 
-        // Reselect to verify
-        let select_set = await system.data.selectIds(schema_path, create_set.map(change => change.data.id as string));
+    //     expectRecordSet(update_set, create_set.length);
 
-        expectRecordSet(select_set, 0);
-    });
+    //     // Reselect to verify
+    //     let select_set = await system.data.selectIds(schema_path, create_set.map(change => change.data.id as string));
 
-    test.skip('expireIds()', async () => {
+    //     expectRecordSet(select_set, create_set.length);
+    // });
 
-    });
+    // test.skip('updateAny()', async () => {
 
-    test.skip('expireAny()', async () => {
+    // });
 
-    });
-
-    //
-    // System.Verb.Delete
-    //
+    // //
+    // // System.Verb.Upsert
+    // //
     
-    test('deleteIds()', async () => {
-        // Test create
-        let create_set = await system.data.createAll(schema_path, source_list);
-        let create_ids = _.compact(_.uniq(create_set.map(create => create.data.id)));
+    // test.skip('upsertOne()', async () => {
 
-        chai.expect(create_set, 'create_set').an('array').length(source_list.length);
-        chai.expect(create_ids, 'create_ids').an('array').length(source_list.length);
+    // });
 
-        // Test delete
-        let delete_set = await system.data.deleteIds(schema_path, create_ids);
-        let select_set = await system.data.selectIds(schema_path, create_ids);
+    // test.skip('upsertAll()', async () => {
 
-        chai.expect(select_set, 'select_set').an('array').length(0);
-    });
+    // });
+
+    // //
+    // // System.Verb.Expire
+    // //
+    
+    // test.skip('expireOne()', async () => {
+
+    // });
+
+    // test('expireAll()', async () => {
+    //     // Test create
+    //     let create_set = await system.data.createAll(schema_path, source_list);
+
+    //     expectRecordSet(create_set, source_list.length);
+
+    //     // Test delete
+    //     let expire_set = await system.data.expireAll(schema_path, create_set);
+
+    //     expectRecordSet(expire_set, create_set.length);
+
+    //     // Reselect to verify
+    //     let select_set = await system.data.selectIds(schema_path, create_set.map(change => change.data.id as string));
+
+    //     expectRecordSet(select_set, 0);
+    // });
+
+    // test.skip('expireIds()', async () => {
+
+    // });
+
+    // test.skip('expireAny()', async () => {
+
+    // });
+
+    // //
+    // // System.Verb.Delete
+    // //
+    
+    // test('deleteIds()', async () => {
+    //     // Test create
+    //     let create_set = await system.data.createAll(schema_path, source_list);
+    //     let create_ids = _.compact(_.uniq(create_set.map(create => create.data.id)));
+
+    //     chai.expect(create_set, 'create_set').an('array').length(source_list.length);
+    //     chai.expect(create_ids, 'create_ids').an('array').length(source_list.length);
+
+    //     // Test delete
+    //     let delete_set = await system.data.deleteIds(schema_path, create_ids);
+    //     let select_set = await system.data.selectIds(schema_path, create_ids);
+
+    //     chai.expect(select_set, 'select_set').an('array').length(0);
+    // });
 });
