@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Build everything
-if tsc --noEmit true; then
-    echo "Typescript is ok."
-else
+if ! tsc --noEmit; then
     echo "Typescript errors found."
+else
+    echo "Typescript is ok."
 fi
