@@ -105,7 +105,7 @@ export class System {
     }
 
     isTest() {
-        return process.env.NODE_ENV === 'test';
+        return this instanceof SystemAsTest;
     } 
 
     isProd() {

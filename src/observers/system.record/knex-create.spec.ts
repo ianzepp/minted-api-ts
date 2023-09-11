@@ -3,7 +3,7 @@ import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
 // Bun:test
-import { beforeAll, afterAll, describe, test } from "bun:test";
+import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Record } from '../../classes/record';
@@ -12,12 +12,11 @@ import { SystemAsTest } from '../../classes/system';
 describe(__filename, () => {
     let system = new SystemAsTest();
 
-    beforeAll(async () => {
-        await system.authenticate();
+    beforeEach(async () => {
         await system.startup();
     });
 
-    afterAll(async () => {
+    afterEach(async () => {
         await system.cleanup();
     });
 

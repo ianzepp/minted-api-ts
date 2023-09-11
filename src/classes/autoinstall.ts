@@ -79,7 +79,7 @@ export class AutoInstall {
         });
 
         await knex.schema.table('system_data.user', (table) => {
-            // Nada
+            table.string('username').notNullable();
         });
 
         //
@@ -87,7 +87,7 @@ export class AutoInstall {
         //
 
         // Add data for `schema`
-        let schemas = await knexInsertAll(knex, 'schema', [
+        await knexInsertAll(knex, 'schema', [
             { ns: 'system', schema_name: 'schema', schema_type: 'database', metadata: true },
             { ns: 'system', schema_name: 'column', schema_type: 'database', metadata: true },
             { ns: 'system', schema_name: 'test', schema_type: 'database', metadata: false },
@@ -95,7 +95,7 @@ export class AutoInstall {
         ]);
 
         // Add data for `column`
-        let columns = await knexInsertAll(knex, 'column', [
+        await knexInsertAll(knex, 'column', [
             // Columns for 'schema'
             { ns: 'system', schema_name: 'schema', column_name: 'schema_name' },
             { ns: 'system', schema_name: 'schema', column_name: 'metadata', column_type: 'boolean' },
@@ -123,15 +123,13 @@ export class AutoInstall {
             { ns: 'system', schema_name: 'test', column_name: 'data_text', column_type: 'text' },
 
             // Columns for 'user'
-
+            { ns: 'system', schema_name: 'user', column_name: 'username', column_type: 'text' },
         ]);
-    }
 
-    async down(): Promise<void> {
-        let knex = this.system.knex.db;
+        // Add data for `user`
+        await knex('system_data.user').insert([
+            { ns: 'test', username: 'test' },
+        ]);
 
-        await knex.raw('DROP SCHEMA IF EXISTS system_acls CASCADE;');
-        await knex.raw('DROP SCHEMA IF EXISTS system_meta CASCADE;');
-        await knex.raw('DROP SCHEMA IF EXISTS system_data CASCADE;');
     }
 }

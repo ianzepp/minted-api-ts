@@ -3,7 +3,7 @@ import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
 // Bun:test
-import { beforeAll, afterAll, describe, test } from "bun:test";
+import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Column } from '../classes/column';
@@ -12,20 +12,17 @@ import { Schema } from '../classes/schema';
 import { SystemAsTest } from '../classes/system';
 
 describe('SystemMeta', () => {
+    let system = new SystemAsTest();
 
-    beforeAll(async () => {
-        console.warn('Starting system-meta tests...')
+    beforeEach(async () => {
+        await system.startup();
     });
 
-    afterAll(async () => {
+    afterEach(async () => {
+        await system.cleanup();
     });
 
     test('schema => database table lifecycle', async () => {
-        let system = new SystemAsTest();
-
-        await system.authenticate();
-        await system.startup();
-
         let record_name = "test_" + new Date().getTime();
         let record_schema = system.meta.schemas.schema;
         let record = record_schema.toRecord({ schema_name: record_name, schema_type: 'database' });
@@ -99,17 +96,9 @@ describe('SystemMeta', () => {
 
         // Test schema should be gone
         chai.expect(system.meta.schemas).not.property(record_name);
-
-        // Done
-        await system.cleanup();
     });
 
     test('column => database table lifecycle', async () => {
-        let system = new SystemAsTest();
-
-        await system.authenticate();
-        await system.startup();
-
         // Setup the schema
         let parent_type = system.meta.schemas.schema;
         let parent_data = { schema_name: "test_" + new Date().getTime(), schema_type: 'database' };
@@ -235,8 +224,5 @@ describe('SystemMeta', () => {
         chai.expect(retest.meta).property('expired_by').null;
         chai.expect(retest.meta).property('deleted_at').null;
         chai.expect(retest.meta).property('deleted_by').null;
-
-        // Done
-        await system.cleanup();
     });
 });

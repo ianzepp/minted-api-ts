@@ -42,11 +42,59 @@ export class KnexTransactionAlreadyStartedError extends KnexError {};
 export class KnexDriverMissingError extends KnexError {};
 
 // Implementation
+export interface SystemKnexConfig {
+    isolate: boolean;
+}
+
 export class SystemKnex implements SystemService {
-    public db: Knex = knex(KnexConfig);
+    public db: Knex = KnexDriver;
+    public tx: Knex.Transaction | undefined;
 
-    constructor(private readonly system: System) {
+    constructor(private readonly system: System) {}
 
+    async startup(): Promise<void> {
+        // Isolated driver for test suites
+        if (this.system.isTest()) {
+            this.db = knex(KnexConfig);
+        }
+    }
+
+    async cleanup(): Promise<void> {
+        // Isolated driver. Kill the connection so tests don't hang
+        if (this.system.isTest()) {
+            await this.db.destroy();
+        }
+    }
+
+    //
+    // Transaction methods
+    //
+
+    // async transactionFn(runFn: () => Promise<any>, config?: Knex.TransactionConfig): Promise<void> {
+    //     return this.db.transaction(tx => {
+    //         this.tx = tx;
+    //         return runFn();
+    //     }, config).finally(() => this.tx = undefined);
+    // }
+
+    // async transaction() {
+    //     return this.db.transaction().then(tx => this.tx = tx);
+    // }
+
+    // async commit() {
+    //     return this.tx.commit().finally(() => this.tx = undefined);
+    // }
+
+    // async rollback() {
+    //     return this.tx.rollback().finally(() => this.tx = undefined);
+    // }
+
+    //
+    // Driver methods
+    //
+
+    get fn() {
+        return this.db.fn;
     }
 
     get schema(): Knex.SchemaBuilder {
@@ -57,15 +105,4 @@ export class SystemKnex implements SystemService {
         return this.db;
     }
 
-    get fn() {
-        return this.db.fn;
-    }
-
-    async startup(): Promise<void> {
-        await this.db.raw('SELECT 1');
-    }
-
-    async cleanup(): Promise<void> {
-        await this.db.destroy();
-    }
 }
