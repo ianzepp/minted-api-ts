@@ -11,9 +11,6 @@ import { Schema } from '../../classes/schema';
 // Layouts
 import { ObserverRing } from '../../layouts/observer';
 
-// Helpers
-import knexCreateTable from '../../helpers/knex-create-table';
-
 /**
  * This class extends the Observer class and provides methods for creating a schema in Knex.
  * 
@@ -60,32 +57,6 @@ export default class extends Observer {
         await system.knex.schema.withSchema('system_data').createTable(schema_name, (table) => {
             table.uuid('id').primary().defaultTo(system.knex.fn.uuid());
             table.string('ns');
-        });
-
-        // Meta table
-        await system.knex.schema.withSchema('system_meta').createTable(schema_name, (table) => {
-            table.uuid('id').primary().references('id').inTable('system_data.' + schema_name).onDelete('CASCADE');
-            table.string('ns');
-
-            table.timestamp('created_at').index();
-            table.timestamp('updated_at').index();
-            table.timestamp('expired_at').index();
-            table.timestamp('deleted_at').index();
-
-            table.uuid('created_by').index();
-            table.uuid('updated_by').index();
-            table.uuid('expired_by').index();
-            table.uuid('deleted_by').index();
-        });
-
-        await system.knex.schema.withSchema('system_acls').createTable(schema_name, (table) => {
-            table.uuid('id').primary().references('id').inTable('system_data.' + schema_name).onDelete('CASCADE');
-            table.string('ns');
-
-            table.specificType('acls_full', 'uuid ARRAY').index();
-            table.specificType('acls_edit', 'uuid ARRAY').index();
-            table.specificType('acls_read', 'uuid ARRAY').index();
-            table.specificType('acls_deny', 'uuid ARRAY').index();
         });
 
         // Explicitly add the schema data to the local metadata for this execution context

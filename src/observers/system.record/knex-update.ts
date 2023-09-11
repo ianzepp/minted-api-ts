@@ -32,36 +32,11 @@ export default class extends Observer {
         return Promise.all(flow.change.map(record => this.updateOne(flow, record)));
     }
 
-    // All data updates must be done in the `system_data` tablespace only.
-    // Once the data updates are done, we update the timestamps.
+    // All data updates must be done in the `system` tablespace only.
     async updateOne(flow: ObserverFlow, record: Record) {
-        if (record.meta.deleted_at) {
-            return; // Cannot update
-        }
-
-        if (record.meta.expired_at) {
-            return; // Cannot update
-        }
-
-        let schema_name = flow.schema.schema_name;
-        let updated_at = flow.system.timestamp;
-        let updated_by = flow.system.user_id;
-
-        await flow.system.knex.driver('system_data.' + schema_name)
-            .whereIn('ns', flow.system.auth.namespaces)
+        return flow.system.knex
+            .driverTo(flow.schema.schema_name)
             .whereIn('id', [record.data.id])
             .update(record.data);
-
-        await flow.system.knex.driver('system_meta.' + schema_name)
-            .whereIn('ns', flow.system.auth.namespaces)
-            .whereIn('id', [record.data.id])
-            .update({
-                updated_at: updated_at,
-                updated_by: updated_by,
-            });
-
-        // With success at the DB level, apply the timestamp back to the record
-        record.meta.updated_at = updated_at;
-        record.meta.updated_by = updated_by;
     }
 }

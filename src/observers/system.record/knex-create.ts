@@ -27,55 +27,35 @@ export default class extends Observer {
         return true;
     }
 
-    toExtract(record_set: Record[], record_property: string) {
-        return record_set.map(record => _.assign({
-            id: record.data.id,
-            ns: record.data.ns,
-        }, _.get(record, record_property)) as _.Dictionary<any>);
-    }
-
-    toExtractData(record_set: Record[]) {
-        return this.toExtract(record_set, 'data');
-    }
-
-    toExtractInfo(record_set: Record[]) {
-        return this.toExtract(record_set, 'info');
-    }
-
-    toExtractAcls(record_set: Record[]) {
-        return this.toExtract(record_set, 'acls');
-    }
-
     async run(flow: ObserverFlow): Promise<void> {
-        let schema_name = flow.schema.schema_name;
-        let created_at = new Date(flow.system.timestamp);
-        let created_by = flow.system.user_id;
-        let created_ns = flow.system.user_ns;
+        // Preprocess data
+        let insert_data = flow.change.map((record, i) => {
+            record.data.ns = flow.system.user_ns;
 
-        // Populate insertion data
-        for(let record of flow.change) {
-            record.data.id = uuid();
-            record.data.ns = created_ns;
-            record.meta.created_at = created_at;
-            record.meta.created_by = created_by;
-        }
+            // Done
+            return _.omit(record.data, ['id']);
+        })
 
         // Extract the insertion data
-        let insert_data = this.toExtract(flow.change, 'data');
-        let insert_meta = this.toExtract(flow.change, 'meta');
-        let insert_acls = this.toExtract(flow.change, 'acls');
+        let driver = flow.system.knex.driverTo(flow.schema.schema_name);
+        let created_at = new Date(flow.system.timestamp);
+        let created_by = flow.system.user_id;
 
-        // Insert data
-        insert_data = await flow.system.knex.driver('system_data.' + schema_name).insert(insert_data).returning('*');
-        insert_meta = await flow.system.knex.driver('system_meta.' + schema_name).insert(insert_meta).returning('*');
-        insert_acls = await flow.system.knex.driver('system_acls.' + schema_name).insert(insert_acls).returning('*');
+        // Run the op
+        let result_list = await driver.insert(insert_data).returning('*');
 
-        // Copy back to records
+        // Process back into original records
         for(let i in flow.change) {
             let record = flow.change[i];
-            _.assign(record.data, insert_data[i]);
-            _.assign(record.meta, insert_meta[i]);
-            _.assign(record.acls, insert_acls[i]);
+            let result = result_list[i];
+
+            // Set data properties
+            record.data.id = result.id;
+            record.data.ns = result.ns;
+
+            // Set meta properties
+            record.meta.created_at = created_at;
+            record.meta.created_by = created_by;
         }
     }
 }
