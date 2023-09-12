@@ -6,55 +6,43 @@ import { v4 as uuid } from 'uuid';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { SystemAsTest } from '@classes/system';
 import { RecordColumnImmutableError } from '@classes/system-data';
+import { SchemaType } from '@classes/schema-type';
+import { SystemAsTest } from '@classes/system';
 
-describe('test-immutable', () => {
-    let schema_name = 'test_' + process.hrtime().join('_');
-    let column_name = 'test_immutable';
-    let system = new SystemAsTest();
+let system = new SystemAsTest();
+let schema_name = system.toTestSchemaName();
 
-    beforeEach(async () => {
-        await system.startup();
+beforeEach(async () => {
+    await system.startup();
+});
+
+afterEach(async () => {
+    await system.cleanup();
+});
+
+test('immutable column should throw an error', async () => {
+    await system.data.createOne(SchemaType.Schema, {
+            schema_name: schema_name 
+    });
+    
+    await system.data.createOne(SchemaType.Column, { 
+        schema_name: schema_name, 
+        column_name: 'test_column', 
+        column_type: 'text',
+        immutable: true 
     });
 
-    afterEach(async () => {
-        await system.cleanup();
+    // Should be able to create a record
+    let record = await system.data.createOne(schema_name, {
+        test_column: 'some value'
     });
 
-    test('immutable column should throw an error', async () => {
-        let schema = await system.data.createOne('schema', {
-            schema_name: schema_name,
-            schema_type: 'database',
-        });
+    // Change the value
+    record.data.test_column = 'changed value';
 
-        let column = await system.data.createOne('column', {
-            schema_name: schema_name,
-            column_name: column_name,
-            column_type: 'text',
-            immutable: true
-        });
-
-        // Should be able to create a record
-        let record = await system.data.createOne(schema_name, {
-            test_immutable: 'some value'
-        });
-
-        // Should not be able to change the value
-        try {
-            record.data.test_immutable = 'changed value';
-            record = await system.data.updateOne(schema_name, record);
-
-            // Did not throw yet
-            throw new Error('Test case failed');
-        }
-
-        catch (error) {
-            if (error instanceof RecordColumnImmutableError) {
-                return; // test passes
-            }
-
-            throw error;
-        }
-    });
+    // Should not be able to change the value
+    await system.data.updateOne(schema_name, record)
+        .then(() => chai.assert.fail('Should not be able to create a record without the value'))
+        .catch(error => chai.expect(error).instanceOf(RecordColumnImmutableError));
 });

@@ -43,9 +43,17 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        return flow.system.knex
+        let creates = await flow.system.knex
             .driverTo(flow.schema.schema_name, 'data')
-            .insert(flow.change_data);
+            .insert(flow.change_data)
+            .returning('*');
+
+        for(let i in flow.change) {
+            let create = creates[i];
+            let change = flow.change[i];
+
+            _.assign(change.data, create);
+        }
     }
 
     async cleanup(flow: ObserverFlow): Promise<void> {
