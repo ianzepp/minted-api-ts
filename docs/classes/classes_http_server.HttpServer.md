@@ -12,8 +12,7 @@
 
 ### Methods
 
-- [listen](classes_http_server.HttpServer.md#listen)
-- [run](classes_http_server.HttpServer.md#run)
+- [route](classes_http_server.HttpServer.md#route)
 
 ## Constructors
 
@@ -23,41 +22,20 @@
 
 ## Methods
 
-### listen
+### route
 
-▸ **listen**(`port`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `port` | `number` |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[src/classes/http-server.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server.ts#L28)
-
-___
-
-### run
-
-▸ **run**(`req`, `res`): `Promise`<`ServerResponse`<`IncomingMessage`\>\>
+▸ **route**(`req`): `Promise`<`Response`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `req` | `IncomingMessage` |
-| `res` | `ServerResponse`<`IncomingMessage`\> |
+| `req` | `Request` |
 
 #### Returns
 
-`Promise`<`ServerResponse`<`IncomingMessage`\>\>
+`Promise`<`Response`\>
 
 #### Defined in
 
-[src/classes/http-server.ts:41](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-server.ts#L41)
+[src/classes/http-server.ts:27](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-server.ts#L27)

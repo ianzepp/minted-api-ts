@@ -23,6 +23,7 @@
 
 ### Methods
 
+- [cleanup](observers_system_record_knex_update.default.md#cleanup)
 - [isFailable](observers_system_record_knex_update.default.md#isfailable)
 - [isRunnable](observers_system_record_knex_update.default.md#isrunnable)
 - [onCreate](observers_system_record_knex_update.default.md#oncreate)
@@ -34,10 +35,11 @@
 - [onSelect](observers_system_record_knex_update.default.md#onselect)
 - [onUpdate](observers_system_record_knex_update.default.md#onupdate)
 - [onUpsert](observers_system_record_knex_update.default.md#onupsert)
+- [one](observers_system_record_knex_update.default.md#one)
 - [run](observers_system_record_knex_update.default.md#run)
+- [startup](observers_system_record_knex_update.default.md#startup)
 - [toJSON](observers_system_record_knex_update.default.md#tojson)
 - [toName](observers_system_record_knex_update.default.md#toname)
-- [updateOne](observers_system_record_knex_update.default.md#updateone)
 
 ## Constructors
 
@@ -51,7 +53,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L14)
+[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L14)
 
 ## Properties
 
@@ -65,7 +67,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L11)
+[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L11)
 
 ___
 
@@ -79,9 +81,33 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L12)
+[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L12)
 
 ## Methods
+
+### cleanup
+
+▸ **cleanup**(`flow`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Overrides
+
+[Observer](classes_observer.Observer.md).[cleanup](classes_observer.Observer.md#cleanup)
+
+#### Defined in
+
+[src/observers/system.record/knex-update.ts:50](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-update.ts#L50)
+
+___
 
 ### isFailable
 
@@ -97,7 +123,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L79)
+[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L79)
 
 ___
 
@@ -115,7 +141,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L75)
+[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L75)
 
 ___
 
@@ -133,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:55](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L55)
+[src/classes/observer.ts:55](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L55)
 
 ___
 
@@ -151,7 +177,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L71)
+[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L71)
 
 ___
 
@@ -169,7 +195,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L67)
+[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L67)
 
 ___
 
@@ -187,7 +213,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L47)
+[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L47)
 
 ___
 
@@ -205,7 +231,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L21)
+[src/observers/system.record/knex-update.ts:22](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-update.ts#L22)
 
 ___
 
@@ -223,7 +249,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:17](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L17)
+[src/observers/system.record/knex-update.ts:18](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-update.ts#L18)
 
 ___
 
@@ -241,7 +267,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L51)
+[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L51)
 
 ___
 
@@ -259,7 +285,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L25)
+[src/observers/system.record/knex-update.ts:26](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-update.ts#L26)
 
 ___
 
@@ -277,13 +303,34 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:63](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L63)
+[src/classes/observer.ts:63](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L63)
+
+___
+
+### one
+
+▸ **one**(`flow`, `record`): `Promise`<`number`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
+| `record` | [`Record`](classes_record.Record.md) |
+
+#### Returns
+
+`Promise`<`number`\>
+
+#### Defined in
+
+[src/observers/system.record/knex-update.ts:43](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-update.ts#L43)
 
 ___
 
 ### run
 
-▸ **run**(`flow`): `Promise`<`void`[]\>
+▸ **run**(`flow`): `Promise`<`number`[]\>
 
 #### Parameters
 
@@ -293,7 +340,7 @@ ___
 
 #### Returns
 
-`Promise`<`void`[]\>
+`Promise`<`number`[]\>
 
 #### Overrides
 
@@ -301,7 +348,31 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L31)
+[src/observers/system.record/knex-update.ts:39](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-update.ts#L39)
+
+___
+
+### startup
+
+▸ **startup**(`flow`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Overrides
+
+[Observer](classes_observer.Observer.md).[startup](classes_observer.Observer.md#startup)
+
+#### Defined in
+
+[src/observers/system.record/knex-update.ts:30](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-update.ts#L30)
 
 ___
 
@@ -319,7 +390,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L20)
+[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L20)
 
 ___
 
@@ -337,25 +408,4 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-update.ts:13](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L13)
-
-___
-
-### updateOne
-
-▸ **updateOne**(`flow`, `record`): `Promise`<`void`\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
-| `record` | [`Record`](classes_record.Record.md) |
-
-#### Returns
-
-`Promise`<`void`\>
-
-#### Defined in
-
-[src/observers/system.record/knex-update.ts:37](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-update.ts#L37)
+[src/observers/system.record/knex-update.ts:14](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-update.ts#L14)

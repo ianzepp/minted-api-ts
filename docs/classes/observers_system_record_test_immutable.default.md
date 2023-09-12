@@ -23,6 +23,7 @@
 
 ### Methods
 
+- [cleanup](observers_system_record_test_immutable.default.md#cleanup)
 - [isFailable](observers_system_record_test_immutable.default.md#isfailable)
 - [isRunnable](observers_system_record_test_immutable.default.md#isrunnable)
 - [onCreate](observers_system_record_test_immutable.default.md#oncreate)
@@ -35,6 +36,7 @@
 - [onUpdate](observers_system_record_test_immutable.default.md#onupdate)
 - [onUpsert](observers_system_record_test_immutable.default.md#onupsert)
 - [run](observers_system_record_test_immutable.default.md#run)
+- [startup](observers_system_record_test_immutable.default.md#startup)
 - [toJSON](observers_system_record_test_immutable.default.md#tojson)
 - [toName](observers_system_record_test_immutable.default.md#toname)
 
@@ -50,7 +52,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L14)
+[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L14)
 
 ## Properties
 
@@ -64,7 +66,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L11)
+[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L11)
 
 ___
 
@@ -78,9 +80,33 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L12)
+[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L12)
 
 ## Methods
+
+### cleanup
+
+▸ **cleanup**(`flow`): `Promise`<`any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
+
+#### Returns
+
+`Promise`<`any`\>
+
+#### Inherited from
+
+[Observer](classes_observer.Observer.md).[cleanup](classes_observer.Observer.md#cleanup)
+
+#### Defined in
+
+[src/classes/observer.ts:18](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L18)
+
+___
 
 ### isFailable
 
@@ -96,7 +122,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L79)
+[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L79)
 
 ___
 
@@ -114,7 +140,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L75)
+[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L75)
 
 ___
 
@@ -132,7 +158,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-immutable.ts:22](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-immutable.ts#L22)
+[src/observers/system.record/test-immutable.ts:22](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/test-immutable.ts#L22)
 
 ___
 
@@ -150,7 +176,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L71)
+[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L71)
 
 ___
 
@@ -168,7 +194,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L67)
+[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L67)
 
 ___
 
@@ -186,7 +212,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L47)
+[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L47)
 
 ___
 
@@ -204,7 +230,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-immutable.ts:18](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-immutable.ts#L18)
+[src/observers/system.record/test-immutable.ts:18](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/test-immutable.ts#L18)
 
 ___
 
@@ -222,7 +248,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-immutable.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-immutable.ts#L14)
+[src/observers/system.record/test-immutable.ts:14](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/test-immutable.ts#L14)
 
 ___
 
@@ -240,7 +266,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L51)
+[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L51)
 
 ___
 
@@ -258,7 +284,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-immutable.ts:26](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-immutable.ts#L26)
+[src/observers/system.record/test-immutable.ts:26](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/test-immutable.ts#L26)
 
 ___
 
@@ -276,7 +302,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-immutable.ts:30](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-immutable.ts#L30)
+[src/observers/system.record/test-immutable.ts:30](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/test-immutable.ts#L30)
 
 ___
 
@@ -300,7 +326,31 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-immutable.ts:34](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-immutable.ts#L34)
+[src/observers/system.record/test-immutable.ts:34](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/test-immutable.ts#L34)
+
+___
+
+### startup
+
+▸ **startup**(`flow`): `Promise`<`any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
+
+#### Returns
+
+`Promise`<`any`\>
+
+#### Inherited from
+
+[Observer](classes_observer.Observer.md).[startup](classes_observer.Observer.md#startup)
+
+#### Defined in
+
+[src/classes/observer.ts:16](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L16)
 
 ___
 
@@ -318,7 +368,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L20)
+[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L20)
 
 ___
 
@@ -336,4 +386,4 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/test-immutable.ts:10](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/test-immutable.ts#L10)
+[src/observers/system.record/test-immutable.ts:10](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/test-immutable.ts#L10)

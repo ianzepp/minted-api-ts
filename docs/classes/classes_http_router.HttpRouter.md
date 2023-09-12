@@ -53,8 +53,10 @@
 
 ### Accessors
 
+- [params](classes_http_router.HttpRouter.md#params)
 - [req](classes_http_router.HttpRouter.md#req)
 - [res](classes_http_router.HttpRouter.md#res)
+- [search](classes_http_router.HttpRouter.md#search)
 - [system](classes_http_router.HttpRouter.md#system)
 
 ### Methods
@@ -82,7 +84,7 @@
 
 #### Defined in
 
-[src/classes/http-router.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L28)
+[src/classes/http-router.ts:28](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L28)
 
 ___
 
@@ -92,7 +94,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L29)
+[src/classes/http-router.ts:29](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L29)
 
 ___
 
@@ -102,7 +104,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:27](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L27)
+[src/classes/http-router.ts:27](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L27)
 
 ___
 
@@ -112,9 +114,23 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L25)
+[src/classes/http-router.ts:25](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L25)
 
 ## Accessors
+
+### params
+
+• `get` **params**(): `Dictionary`<`string`\>
+
+#### Returns
+
+`Dictionary`<`string`\>
+
+#### Defined in
+
+[src/classes/http-router.ts:43](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L43)
+
+___
 
 ### req
 
@@ -126,7 +142,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:35](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L35)
+[src/classes/http-router.ts:35](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L35)
 
 ___
 
@@ -140,7 +156,21 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:39](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L39)
+[src/classes/http-router.ts:39](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L39)
+
+___
+
+### search
+
+• `get` **search**(): `Dictionary`<`string`\>
+
+#### Returns
+
+`Dictionary`<`string`\>
+
+#### Defined in
+
+[src/classes/http-router.ts:47](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L47)
 
 ___
 
@@ -154,7 +184,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L31)
+[src/classes/http-router.ts:31](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L31)
 
 ## Methods
 
@@ -175,7 +205,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:101](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L101)
+[src/classes/http-router.ts:109](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L109)
 
 ___
 
@@ -195,7 +225,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:97](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L97)
+[src/classes/http-router.ts:105](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L105)
 
 ___
 
@@ -215,7 +245,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:93](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L93)
+[src/classes/http-router.ts:101](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L101)
 
 ___
 
@@ -229,7 +259,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:89](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L89)
+[src/classes/http-router.ts:97](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L97)
 
 ___
 
@@ -243,7 +273,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:85](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L85)
+[src/classes/http-router.ts:93](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L93)
 
 ___
 
@@ -257,7 +287,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:77](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L77)
+[src/classes/http-router.ts:85](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L85)
 
 ___
 
@@ -279,7 +309,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:43](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L43)
+[src/classes/http-router.ts:51](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L51)
 
 ___
 
@@ -293,4 +323,4 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:81](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L81)
+[src/classes/http-router.ts:89](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L89)

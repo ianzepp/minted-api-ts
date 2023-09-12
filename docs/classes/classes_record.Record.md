@@ -4,12 +4,6 @@
 
 [classes/record](../modules/classes_record.md).Record
 
-Represents the record's JSON representation in object format.
-
-## Implements
-
-- [`RecordJson`](../interfaces/layouts_record.RecordJson.md)
-
 ## Table of contents
 
 ### Constructors
@@ -18,29 +12,24 @@ Represents the record's JSON representation in object format.
 
 ### Properties
 
-- [acls](classes_record.Record.md#acls)
 - [data](classes_record.Record.md#data)
 - [meta](classes_record.Record.md#meta)
 - [prev](classes_record.Record.md#prev)
 - [schema](classes_record.Record.md#schema)
 - [type](classes_record.Record.md#type)
-- [ColumnsAcls](classes_record.Record.md#columnsacls)
-- [ColumnsInfo](classes_record.Record.md#columnsinfo)
 
 ### Accessors
 
+- [created](classes_record.Record.md#created)
 - [diff](classes_record.Record.md#diff)
+- [expired](classes_record.Record.md#expired)
+- [updated](classes_record.Record.md#updated)
 
 ### Methods
 
-- [expect](classes_record.Record.md#expect)
-- [fromRecord](classes_record.Record.md#fromrecord)
-- [fromRecordData](classes_record.Record.md#fromrecorddata)
-- [fromRecordFlat](classes_record.Record.md#fromrecordflat)
-- [fromRecordJson](classes_record.Record.md#fromrecordjson)
-- [fromRecordPrev](classes_record.Record.md#fromrecordprev)
 - [get](classes_record.Record.md#get)
 - [has](classes_record.Record.md#has)
+- [is](classes_record.Record.md#is)
 - [old](classes_record.Record.md#old)
 - [set](classes_record.Record.md#set)
 - [toJSON](classes_record.Record.md#tojson)
@@ -60,65 +49,37 @@ Represents the record's JSON representation in object format.
 
 #### Defined in
 
-[src/classes/record.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L71)
+[src/classes/record.ts:110](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L110)
 
 ## Properties
 
-### acls
-
-• `Readonly` **acls**: [`RecordAcls`](../interfaces/layouts_record.RecordAcls.md)
-
-Accessor to the set of access control list data.
-
-#### Implementation of
-
-[RecordJson](../interfaces/layouts_record.RecordJson.md).[acls](../interfaces/layouts_record.RecordJson.md#acls)
-
-#### Defined in
-
-[src/classes/record.ts:58](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L58)
-
-___
-
 ### data
 
-• `Readonly` **data**: [`RecordData`](../interfaces/layouts_record.RecordData.md)
-
-Accessor to the key/value mapping of record properties with their values.
-
-#### Implementation of
-
-[RecordJson](../interfaces/layouts_record.RecordJson.md).[data](../interfaces/layouts_record.RecordJson.md#data)
+• `Readonly` **data**: `Dictionary`<`any`\>
 
 #### Defined in
 
-[src/classes/record.ts:42](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L42)
+[src/classes/record.ts:105](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L105)
 
 ___
 
 ### meta
 
-• `Readonly` **meta**: [`RecordMeta`](../interfaces/layouts_record.RecordMeta.md)
-
-Accessor to the set of timestamp and access information describing this record.
-
-#### Implementation of
-
-[RecordJson](../interfaces/layouts_record.RecordJson.md).[meta](../interfaces/layouts_record.RecordJson.md#meta)
+• `Readonly` **meta**: `Dictionary`<`any`\>
 
 #### Defined in
 
-[src/classes/record.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L47)
+[src/classes/record.ts:107](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L107)
 
 ___
 
 ### prev
 
-• `Readonly` **prev**: [`RecordData`](../interfaces/layouts_record.RecordData.md)
+• `Readonly` **prev**: `Dictionary`<`any`\>
 
 #### Defined in
 
-[src/classes/record.ts:65](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L65)
+[src/classes/record.ts:106](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L106)
 
 ___
 
@@ -128,7 +89,7 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L71)
+[src/classes/record.ts:110](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L110)
 
 ___
 
@@ -136,181 +97,71 @@ ___
 
 • `Readonly` **type**: `string`
 
-Returns the string name of the parent schema type.
-
-#### Implementation of
-
-[RecordJson](../interfaces/layouts_record.RecordJson.md).[type](../interfaces/layouts_record.RecordJson.md#type)
-
 #### Defined in
 
-[src/classes/record.ts:40](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L40)
-
-___
-
-### ColumnsAcls
-
-▪ `Static` **ColumnsAcls**: `string`[]
-
-#### Defined in
-
-[src/classes/record.ts:33](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L33)
-
-___
-
-### ColumnsInfo
-
-▪ `Static` **ColumnsInfo**: `string`[]
-
-#### Defined in
-
-[src/classes/record.ts:22](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L22)
+[src/classes/record.ts:102](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L102)
 
 ## Accessors
 
-### diff
+### created
 
-• `get` **diff**(): `Partial`<[`RecordData`](../interfaces/layouts_record.RecordData.md)\>
+• `get` **created**(): `boolean`
 
 #### Returns
 
-`Partial`<[`RecordData`](../interfaces/layouts_record.RecordData.md)\>
+`boolean`
 
 #### Defined in
 
-[src/classes/record.ts:73](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L73)
+[src/classes/record.ts:136](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L136)
+
+___
+
+### diff
+
+• `get` **diff**(): `Dictionary`<`any`\>
+
+#### Returns
+
+`Dictionary`<`any`\>
+
+#### Defined in
+
+[src/classes/record.ts:116](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L116)
+
+___
+
+### expired
+
+• `get` **expired**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[src/classes/record.ts:144](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L144)
+
+___
+
+### updated
+
+• `get` **updated**(): `boolean`
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[src/classes/record.ts:140](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L140)
 
 ## Methods
 
-### expect
-
-▸ **expect**(`path?`): `Assertion`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `path?` | `string` |
-
-#### Returns
-
-`Assertion`
-
-#### Defined in
-
-[src/classes/record.ts:145](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L145)
-
-___
-
-### fromRecord
-
-▸ **fromRecord**(`source`): [`Record`](classes_record.Record.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `source` | [`Record`](classes_record.Record.md) |
-
-#### Returns
-
-[`Record`](classes_record.Record.md)
-
-#### Defined in
-
-[src/classes/record.ts:94](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L94)
-
-___
-
-### fromRecordData
-
-▸ **fromRecordData**(`source`): [`Record`](classes_record.Record.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `source` | [`RecordData`](../interfaces/layouts_record.RecordData.md) |
-
-#### Returns
-
-[`Record`](classes_record.Record.md)
-
-#### Defined in
-
-[src/classes/record.ts:103](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L103)
-
-___
-
-### fromRecordFlat
-
-▸ **fromRecordFlat**(`source`): [`Record`](classes_record.Record.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `source` | [`RecordFlat`](../interfaces/layouts_record.RecordFlat.md) |
-
-#### Returns
-
-[`Record`](classes_record.Record.md)
-
-#### Defined in
-
-[src/classes/record.ts:117](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L117)
-
-___
-
-### fromRecordJson
-
-▸ **fromRecordJson**(`source`): [`Record`](classes_record.Record.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `source` | `Partial`<[`RecordJson`](../interfaces/layouts_record.RecordJson.md)\> |
-
-#### Returns
-
-[`Record`](classes_record.Record.md)
-
-#### Defined in
-
-[src/classes/record.ts:109](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L109)
-
-___
-
-### fromRecordPrev
-
-▸ **fromRecordPrev**(`source`): [`Record`](classes_record.Record.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `source` | [`RecordFlat`](../interfaces/layouts_record.RecordFlat.md) |
-
-#### Returns
-
-[`Record`](classes_record.Record.md)
-
-#### Defined in
-
-[src/classes/record.ts:125](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L125)
-
-___
-
 ### get
 
-▸ **get**<`T`\>(`column`): `T`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | `any` |
+▸ **get**(`column`): `any`
 
 #### Parameters
 
@@ -320,11 +171,11 @@ ___
 
 #### Returns
 
-`T`
+`any`
 
 #### Defined in
 
-[src/classes/record.ts:163](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L163)
+[src/classes/record.ts:168](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L168)
 
 ___
 
@@ -344,19 +195,33 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:159](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L159)
+[src/classes/record.ts:163](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L163)
+
+___
+
+### is
+
+▸ **is**(`schema_name`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema_name` | `string` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[src/classes/record.ts:159](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L159)
 
 ___
 
 ### old
 
-▸ **old**<`T`\>(`column`): `T`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | `any` |
+▸ **old**(`column`): `any`
 
 #### Parameters
 
@@ -366,52 +231,51 @@ ___
 
 #### Returns
 
-`T`
+`any`
 
 #### Defined in
 
-[src/classes/record.ts:167](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L167)
+[src/classes/record.ts:172](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L172)
 
 ___
 
 ### set
 
-▸ **set**<`T`\>(`column`, `data`): `void`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | `any` |
+▸ **set**(`column`, `data`): `any`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `column` | [`Column`](classes_column.Column.md) |
-| `data` | `T` |
+| `data` | `any` |
 
 #### Returns
 
-`void`
+`any`
 
 #### Defined in
 
-[src/classes/record.ts:171](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L171)
+[src/classes/record.ts:176](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L176)
 
 ___
 
 ### toJSON
 
-▸ **toJSON**(): [`RecordJson`](../interfaces/layouts_record.RecordJson.md)
+▸ **toJSON**(): `Object`
 
 #### Returns
 
-[`RecordJson`](../interfaces/layouts_record.RecordJson.md)
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `data` | `Dictionary`<`any`\> |
+| `meta` | `Dictionary`<`any`\> |
 
 #### Defined in
 
-[src/classes/record.ts:136](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L136)
+[src/classes/record.ts:152](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L152)
 
 ___
 
@@ -425,4 +289,4 @@ ___
 
 #### Defined in
 
-[src/classes/record.ts:132](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/record.ts#L132)
+[src/classes/record.ts:148](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/record.ts#L148)

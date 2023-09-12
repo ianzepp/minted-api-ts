@@ -24,6 +24,7 @@
 
 ### Properties
 
+- [cause](classes_system_knex.KnexError.md#cause)
 - [message](classes_system_knex.KnexError.md#message)
 - [name](classes_system_knex.KnexError.md#name)
 - [stack](classes_system_knex.KnexError.md#stack)
@@ -54,7 +55,38 @@ Error.constructor
 
 node_modules/typescript/lib/lib.es5.d.ts:1073
 
+• **new KnexError**(`message?`, `options?`)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Inherited from
+
+Error.constructor
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es2022.error.d.ts:28
+
 ## Properties
+
+### cause
+
+• `Optional` **cause**: `unknown`
+
+#### Inherited from
+
+Error.cause
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es2022.error.d.ts:24
+
+___
 
 ### message
 
@@ -131,6 +163,8 @@ Error.prepareStackTrace
 
 node_modules/@types/node/globals.d.ts:11
 
+node_modules/bun-types/types.d.ts:4093
+
 ___
 
 ### stackTraceLimit
@@ -144,6 +178,8 @@ Error.stackTraceLimit
 #### Defined in
 
 node_modules/@types/node/globals.d.ts:13
+
+node_modules/bun-types/types.d.ts:4097
 
 ## Methods
 
@@ -171,3 +207,26 @@ Error.captureStackTrace
 #### Defined in
 
 node_modules/@types/node/globals.d.ts:4
+
+▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
+
+Create .stack property on a target object
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `targetObject` | `object` |
+| `constructorOpt?` | `Function` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+Error.captureStackTrace
+
+#### Defined in
+
+node_modules/bun-types/types.d.ts:4086

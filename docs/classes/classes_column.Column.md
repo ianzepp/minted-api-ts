@@ -12,12 +12,6 @@
 
 ### Properties
 
-- [schema](classes_column.Column.md#schema)
-- [source](classes_column.Column.md#source)
-- [system\_name](classes_column.Column.md#system_name)
-
-### Accessors
-
 - [audited](classes_column.Column.md#audited)
 - [column\_name](classes_column.Column.md#column_name)
 - [column\_type](classes_column.Column.md#column_type)
@@ -32,216 +26,161 @@
 - [schema\_name](classes_column.Column.md#schema_name)
 - [unique](classes_column.Column.md#unique)
 
-### Methods
+### Accessors
 
-- [toJSON](classes_column.Column.md#tojson)
+- [column\_path](classes_column.Column.md#column_path)
 
 ## Constructors
 
 ### constructor
 
-• **new Column**(`source`, `schema`)
+• **new Column**(`flat`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `source` | `Dictionary`<`any`\> |
-| `schema` | [`Schema`](classes_schema.Schema.md) |
+| `flat` | `Dictionary`<`any`\> |
 
 #### Defined in
 
-[src/classes/column.ts:18](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L18)
+[src/classes/column.ts:21](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L21)
 
 ## Properties
 
-### schema
-
-• `Readonly` **schema**: [`Schema`](classes_schema.Schema.md)
-
-#### Defined in
-
-[src/classes/column.ts:18](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L18)
-
-___
-
-### source
-
-• `Private` `Readonly` **source**: `Dictionary`<`any`\>
-
-#### Defined in
-
-[src/classes/column.ts:18](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L18)
-
-___
-
-### system\_name
-
-• `Readonly` **system\_name**: `string`
-
-#### Defined in
-
-[src/classes/column.ts:16](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L16)
-
-## Accessors
-
 ### audited
 
-• `get` **audited**(): `boolean`
-
-#### Returns
-
-`boolean`
+• `Readonly` **audited**: `boolean`
 
 #### Defined in
 
-[src/classes/column.ts:60](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L60)
+[src/classes/column.ts:11](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L11)
 
 ___
 
 ### column\_name
 
-• `get` **column_name**(): `string`
-
-#### Returns
-
-`string`
+• `Readonly` **column\_name**: `string`
 
 #### Defined in
 
-[src/classes/column.ts:52](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L52)
+[src/classes/column.ts:8](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L8)
 
 ___
 
 ### column\_type
 
-• `get` **column_type**(): `string`
-
-#### Returns
-
-`string`
+• `Readonly` **column\_type**: `string`
 
 #### Defined in
 
-[src/classes/column.ts:56](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L56)
+[src/classes/column.ts:9](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L9)
 
 ___
 
 ### id
 
-• `get` **id**(): `string`
-
-#### Returns
-
-`string`
+• `Readonly` **id**: `string`
 
 #### Defined in
 
-[src/classes/column.ts:40](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L40)
+[src/classes/column.ts:4](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L4)
 
 ___
 
 ### immutable
 
-• `get` **immutable**(): `boolean`
-
-#### Returns
-
-`boolean`
+• `Readonly` **immutable**: `boolean`
 
 #### Defined in
 
-[src/classes/column.ts:64](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L64)
+[src/classes/column.ts:12](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L12)
 
 ___
 
 ### indexed
 
-• `get` **indexed**(): `boolean`
-
-#### Returns
-
-`boolean`
+• `Readonly` **indexed**: `boolean`
 
 #### Defined in
 
-[src/classes/column.ts:68](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L68)
+[src/classes/column.ts:13](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L13)
 
 ___
 
 ### internal
 
-• `get` **internal**(): `boolean`
-
-#### Returns
-
-`boolean`
+• `Readonly` **internal**: `boolean`
 
 #### Defined in
 
-[src/classes/column.ts:72](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L72)
+[src/classes/column.ts:14](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L14)
 
 ___
 
 ### maximum
 
-• `get` **maximum**(): `number`
-
-#### Returns
-
-`number`
+• `Readonly` **maximum**: `number`
 
 #### Defined in
 
-[src/classes/column.ts:88](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L88)
+[src/classes/column.ts:19](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L19)
 
 ___
 
 ### minimum
 
-• `get` **minimum**(): `number`
-
-#### Returns
-
-`number`
+• `Readonly` **minimum**: `number`
 
 #### Defined in
 
-[src/classes/column.ts:84](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L84)
+[src/classes/column.ts:18](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L18)
 
 ___
 
 ### ns
 
-• `get` **ns**(): `string`
-
-#### Returns
-
-`string`
+• `Readonly` **ns**: `string`
 
 #### Defined in
 
-[src/classes/column.ts:44](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L44)
+[src/classes/column.ts:5](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L5)
 
 ___
 
 ### required
 
-• `get` **required**(): `boolean`
-
-#### Returns
-
-`boolean`
+• `Readonly` **required**: `boolean`
 
 #### Defined in
 
-[src/classes/column.ts:76](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L76)
+[src/classes/column.ts:15](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L15)
 
 ___
 
 ### schema\_name
 
-• `get` **schema_name**(): `string`
+• `Readonly` **schema\_name**: `string`
+
+#### Defined in
+
+[src/classes/column.ts:7](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L7)
+
+___
+
+### unique
+
+• `Readonly` **unique**: `boolean`
+
+#### Defined in
+
+[src/classes/column.ts:16](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L16)
+
+## Accessors
+
+### column\_path
+
+• `get` **column_path**(): `string`
 
 #### Returns
 
@@ -249,32 +188,4 @@ ___
 
 #### Defined in
 
-[src/classes/column.ts:48](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L48)
-
-___
-
-### unique
-
-• `get` **unique**(): `boolean`
-
-#### Returns
-
-`boolean`
-
-#### Defined in
-
-[src/classes/column.ts:80](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L80)
-
-## Methods
-
-### toJSON
-
-▸ **toJSON**(): `Dictionary`<`any`\>
-
-#### Returns
-
-`Dictionary`<`any`\>
-
-#### Defined in
-
-[src/classes/column.ts:92](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/column.ts#L92)
+[src/classes/column.ts:42](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/column.ts#L42)
