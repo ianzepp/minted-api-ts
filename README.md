@@ -62,30 +62,27 @@ Bun requires additional steps in order to configure it for use with TypeScript. 
 }
 ```
 
-## Setup
+## Quick Start
 
-1. Install the dependencies by running `bun install`.
-3. Define your database connection by setting the following environment variables:
+1. Install `Bun` at a global level using `npm install -g bun`
+1. Install the project dependencies by running `bun install`.
+1. Define your database connection by setting the following environment variables:
    - `POSTGRES_HOST`: The host of your PostgreSQL database.
    - `POSTGRES_DB`: The name of your PostgreSQL database.
    - `POSTGRES_USER`: The user for your PostgreSQL database.
    - `POSTGRES_PASSWORD`: The password for your PostgreSQL database.
-4. Set up the database by running the migrations with `bun migrate:latest`.
+1. Set up the database by running the migrations with `bun autoinstall`.
+1. Test everything works by running `bun test`
+1. Start the server with `bun start`
 
 ## Scripts
 
 Here are some of the bun scripts that you can run:
 
-- `bun clean`: Deletes any compiled files in the `dst` directory.
-- `bun compile`: Compiles the TypeScript files.
-- `bun compile:clean`: Executes the steps in `bun clean` and then in `bun compile`.
-- `bun migrate:make`: Creates a new database migration file.
-- `bun migrate:latest`: Runs all the database migrations to the latest.
-- `bun migrate:up`: Runs the next database migration.
-- `bun migrate:down`: Undoes the last database migration.
+- `bun autoinstall`: Assuming an empty DB, this installs the core PG schemas, tables and columns
+- `bun clean`: Drops the DB, recreates the DB, and runs the autoinstallation again
 - `bun start`: Starts the application.
-- `bun start:dev`: Starts the application in development mode.
-- `bun test`: Compiles the project, runs the migrations, and then runs the tests.
+- `bun test`: Runs all `*.spec.ts` files
 
 ## Testing
 
