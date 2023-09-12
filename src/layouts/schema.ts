@@ -2,7 +2,7 @@
 export type SchemaName = string;
 
 /** ... */
-export type SchemaType = SchemaInfo | SchemaName;
+// export type SchemaType = SchemaInfo | SchemaName;
 
 /** Represents the architecture needed to obtain a schema's info. */
 export interface SchemaInfo {

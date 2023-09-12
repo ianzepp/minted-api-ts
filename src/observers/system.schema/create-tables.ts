@@ -5,25 +5,10 @@ import { Knex } from 'knex';
 // Classes
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
+import { ObserverRing } from '@layouts/observer';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
-
-// Layouts
-import { ObserverRing } from '@layouts/observer';
-
-/**
- * This class extends the Observer class and provides methods for creating a schema in Knex.
- * 
- * It is responsible for calling the `knex.schema` interface and creating the actual 
- * table structures in the database, including:
- * - the `<schema_name>` base table
- * - the `<schema_name>_info` table
- * - the `<schema_name>_acls` table
- * - the `<schema_name>_logs` table
- * 
- * @class
- * @extends {Observer}
- */
+import { SchemaType } from '../../classes/schema-type';
 
 export default class extends Observer {
     toName(): string {
@@ -31,7 +16,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return 'schema';
+        return SchemaType.Schema;
     }
 
     onRing(): ObserverRing {
@@ -43,23 +28,17 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        // Generate new schemas based on the records and add them to the meta service
-        for(let record of flow.change) {
-            await this.createTable(flow, record);
-        }
+        await Promise.all(flow.change.map(record => this.one(flow, record)));
     }
 
-    private async createTable(flow: ObserverFlow, record: Record) {
-        let schema_name = record.data.schema_name;
-        let system = flow.system;
+    async one(flow: ObserverFlow, record: Record) {
+        let auto = new AutoInstall(flow.system);
 
-        // Create base table
-        await system.knex.schema.withSchema('system_data').createTable(schema_name, (table) => {
-            table.uuid('id').primary().defaultTo(system.knex.fn.uuid());
-            table.string('ns');
-        });
+        // Create the empty table with no default columns
+        await auto.createTable(record.data.schema_name, table => {});
 
         // Explicitly add the schema data to the local metadata for this execution context
-        system.meta.schemas[record.data.schema_name] = new Schema(record.data);
+        // HACK TODO
+        flow.system.meta.schemas[record.data.schema_name] = new Schema(record.data);
     }
 }
