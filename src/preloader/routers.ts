@@ -6,7 +6,7 @@ import klaw from 'klaw-sync';
 // Import base router class definition
 import { HttpRouter } from '@classes/http-router';
 
-const preload_files = klaw(path.join(__dirname, '@routers'), {
+const preload_files = klaw(path.join(__dirname, '../routers'), {
     nodir: true,
     traverseAll: true
 });
