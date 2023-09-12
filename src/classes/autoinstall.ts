@@ -31,17 +31,11 @@ export class AutoInstall {
         // Start the tx
         await this.knex.raw('BEGIN TRANSACTION;');
 
-        // Save a variable for future use in this tx
         await this.knex.raw(`
-            CREATE TEMPORARY TABLE tx_session_data (
-                user_id UUID, 
-                user_ns TEXT,
-                user_ts TIMESTAMP
-            );
-
-            INSERT INTO tx_session_data (user_id, user_ns, user_ts) 
-            VALUES ('${ System.RootId }', '${ System.RootNs }', CURRENT_TIMESTAMP);
-        `)
+            SET LOCAL minted.current_user_id = '${ this.system.user_id }';
+            SET LOCAL minted.current_user_ns = '${ this.system.user_ns }';
+            SET LOCAL minted.current_user_ts = '${ this.system.time_iso }';
+        `);
 
         // Create the master system table.
         await this.createTable('system.system', (table) => {
@@ -77,7 +71,6 @@ export class AutoInstall {
         await this.insertAll('system.system', [
             { ns: 'test', client_name: 'Minted API System Tests' },
         ]);
-
 
         //
         // Meta definitions
@@ -228,16 +221,12 @@ export class AutoInstall {
             CREATE OR REPLACE FUNCTION ${ns}_${sn}_insert_meta_function()
             RETURNS TRIGGER AS $$
             DECLARE
-                temp_user_id UUID;
-                temp_user_ts TIMESTAMP;
+                temp_user_id uuid;
+                temp_user_ts timestamp;
             BEGIN
-                -- Find the current session vars
-                SELECT COALESCE(user_id, '00000000-0000-0000-0000-000000000000'), COALESCE(user_ts, CURRENT_TIMESTAMP)
-                  INTO temp_user_id, temp_user_ts 
-                  FROM tx_session_data
-                 LIMIT 1;
-        
-                -- Create the meta data
+                temp_user_id := current_setting('minted.current_user_id')::uuid;
+                temp_user_ts := current_setting('minted.current_user_ts')::timestamp;
+                
                 INSERT INTO "${ns}__meta"."${sn}" (id, ns, created_at, created_by)
                 VALUES (NEW.id, NEW.ns, temp_user_ts, temp_user_id);
                 

@@ -62,6 +62,13 @@ export class SystemKnex implements SystemService {
     }
 
     async cleanup(): Promise<void> {
+        // Unset the userinfo
+        await this.db.raw(`
+            RESET minted.current_user_id;
+            RESET minted.current_user_ns;
+            RESET minted.current_user_ts;
+        `);
+
         // Isolated driver. Kill the connection so tests don't hang
         if (this.system.isTest()) {
             await this.db.destroy();
@@ -83,24 +90,21 @@ export class SystemKnex implements SystemService {
         // Initiate a transaction
         this.tx = await this.db.transaction();
 
-        // Save the session inside the transaction context
+        // Set the current user ID for the transaction
         await this.tx.raw(`
-            CREATE TEMPORARY TABLE tx_session_data (
-                user_id UUID, 
-                user_ns TEXT,
-                user_ts TIMESTAMP
-            );
-
-            INSERT INTO tx_session_data (user_id, user_ns, user_ts) 
-            VALUES ('${ this.system.user_id }', '${ this.system.user_ns }', '${ this.system.time_iso }');
+            SET LOCAL minted.current_user_id = '${ this.system.user_id }';
+            SET LOCAL minted.current_user_ns = '${ this.system.user_ns }';
+            SET LOCAL minted.current_user_ts = '${ this.system.time_iso }';
         `);
     }
 
     async commit() {
+        // Commit the transaction
         if (this.tx.isCompleted() === false) {
             await this.tx.commit();
         }
 
+        // Done
         this.tx = undefined;
     }
 
