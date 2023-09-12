@@ -5,10 +5,10 @@ import { System } from './system';
 import { SystemAsRoot } from './system';
 
 export class AutoInstall {
-    public readonly system = new SystemAsRoot();
+    constructor(public readonly system: System = new SystemAsRoot()) {}
 
     get knex() {
-        return this.system.knex.db;
+        return this.system.knex.driver;
     }
     
     async up() {
@@ -18,12 +18,19 @@ export class AutoInstall {
         // Add `pgcrypto` so we can create UUIDs in the DB
         await this.knex.raw('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
 
-        // Create namespace
+        // Create namespace for `system`
         await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "system__data";');
         await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "system__data" TO PUBLIC;');
 
         await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "system__meta";');
         await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "system__meta" TO PUBLIC;');
+
+        // Create namespace for `test`
+        await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "test__data";');
+        await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "test__data" TO PUBLIC;');
+
+        await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "test__meta";');
+        await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "test__meta" TO PUBLIC;');
 
         // System table is always visible
         await this.knex.raw(`ALTER DATABASE "${dn}" SET search_path TO system__data, public;`);
@@ -44,7 +51,7 @@ export class AutoInstall {
         `)
 
         // Create the master client table.
-        await this.tableUp('system.client', (table) => {
+        await this.createTable('system.client', (table) => {
             table.string('client_name').notNullable();
         });
 
@@ -61,7 +68,7 @@ export class AutoInstall {
         // Create table `client`
 
         // Create table `schema`
-        await this.tableUp('system.schema', (table) => {
+        await this.createTable('system.schema', (table) => {
             table.string('schema_name').notNullable();
             table.string('schema_type').notNullable().defaultTo('database');
             table.string('description');
@@ -71,7 +78,7 @@ export class AutoInstall {
         });
 
         // Create table `column`
-        await this.tableUp('system.column', table => {
+        await this.createTable('system.column', table => {
             table.string('schema_name').notNullable();
             table.string('column_name').notNullable();
             table.string('column_type').notNullable().defaultTo('text');
@@ -90,7 +97,7 @@ export class AutoInstall {
         });
 
         // Create table `client_user`
-        await this.tableUp('system.client_user', table => {
+        await this.createTable('system.client_user', table => {
             table.string('name').notNullable();
         });
 
@@ -145,8 +152,8 @@ export class AutoInstall {
     // Helpers
     //
 
-    async tableUp(schema_path: string, columnFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
-        console.warn('autoinstall.tableUp()', schema_path);
+    async createTable(schema_path: string, columnFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
+        console.warn('autoinstall.createTable()', schema_path);
 
         let [ns, sn] = schema_path.split('.');
 
@@ -223,6 +230,19 @@ export class AutoInstall {
             EXECUTE PROCEDURE ${ns}_${sn}_insert_meta_function();
         `);
     }
+
+    async deleteTable(schema_path: string) {
+        console.warn('autoinstall.deleteTable()', schema_path);
+
+        let [ns, sn] = schema_path.split('.');
+
+        await this.knex.schema.withSchema(ns + '__meta').dropTable(sn);
+        await this.knex.schema.withSchema(ns + '__data').dropTable(sn);
+    }
+
+    //
+    // Helpers
+    //
 
     async insertAll(schema_path: string, record_rows: _.Dictionary<any>[]) {
         console.warn('autoinstall.insertAll()', schema_path);
