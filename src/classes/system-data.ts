@@ -49,7 +49,7 @@ export class SystemData implements SystemService {
     //
 
     async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
-        if (process.env.POSTGRES_DEBUG === 'true') {
+        if (Bun.env.POSTGRES_DEBUG === 'true') {
             console.debug('SystemData.onRun()', op, schema_name, filter_data, change_data.length);
         }
 

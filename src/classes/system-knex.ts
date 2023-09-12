@@ -6,14 +6,14 @@ import { RecordFlat } from '@layouts/record';
 
 // Create the driver reference
 export const KnexConfig = {
-    debug: process.env.POSTGRES_DEBUG === 'true',
+    debug: Bun.env.POSTGRES_DEBUG === 'true',
     client: 'postgresql',
     connection: {
-        host:     process.env.POSTGRES_HOST,
-        port:     process.env.POSTGRES_PORT,
-        database: process.env.POSTGRES_DB,
-        user:     process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
+        host:     Bun.env.POSTGRES_HOST,
+        port:     Bun.env.POSTGRES_PORT,
+        database: Bun.env.POSTGRES_DB,
+        user:     Bun.env.POSTGRES_USER,
+        password: Bun.env.POSTGRES_PASSWORD,
         acquireConnectionTimeout: 10000,
     },
     pool: {

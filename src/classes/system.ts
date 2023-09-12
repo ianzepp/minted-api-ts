@@ -101,7 +101,7 @@ export class System {
     } 
 
     isProd() {
-        return process.env.NODE_ENV === 'production';
+        return Bun.env.NODE_ENV === 'production';
     } 
 }
 
