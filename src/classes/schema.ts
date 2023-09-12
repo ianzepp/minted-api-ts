@@ -15,7 +15,7 @@ import { toJSON } from '@classes/helpers';
 
 export class Schema {
     // Public helpers
-    public readonly columns: _.Dictionary<Column> = {};
+    public readonly columns: Map<string, Column> = new Map();
 
     constructor(private readonly source: _.Dictionary<any>) {
         chai.expect(source).property('id').a('string');
@@ -41,6 +41,10 @@ export class Schema {
 
     get metadata(): boolean {
         return this.source.metadata ?? false;
+    }
+
+    is(schema_name: string) {
+        return this.schema_name === schema_name;
     }
     
     toJSON() {

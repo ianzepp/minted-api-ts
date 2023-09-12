@@ -61,7 +61,6 @@ export interface FilterFlags {
 
 /** Represents the filter's JSON representation in object format. */
 export interface FilterJson {
-    using: SchemaName;
     where: _.Dictionary<any>;
     order: _.Dictionary<any>;
     flags: _.Dictionary<any>;
@@ -79,9 +78,6 @@ export interface FilterJson {
 
 /** Represents the architecture needed to obtain a filter's info. */
 export interface FilterInfo extends FilterJson {
-    /** Returns the parent schema table name for this filter */
-    readonly using: SchemaName;
-
     /** Proxy to `system.data.selectAll()` */
     // selectAll(): Promise<RecordInfo[]>;
 

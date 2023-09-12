@@ -10,13 +10,11 @@ import { Record } from '@classes/record';
 import { FilterGroup } from '@layouts/filter';
 import { FilterOrder } from '@layouts/filter';
 import { FilterWhere } from '@layouts/filter';
-import { FilterInfo } from '@layouts/filter';
 import { FilterJson } from '@layouts/filter';
-import { SchemaName } from '@layouts/schema';
 import { toJSON } from '@classes/helpers';
 
 
-export class Filter implements FilterInfo {
+export class Filter implements FilterJson {
     // Static values
     public static LimitDefault = 100;
     public static LimitMaximum = 10000;
@@ -33,18 +31,17 @@ export class Filter implements FilterInfo {
     public readonly flags: _.Dictionary<any> = {};
     public limit: number = Filter.LimitDefault;
 
-    constructor(public readonly using: SchemaName, source?: Partial<FilterJson>) {
-        _.assign(this.where, source?.where);
-        _.assign(this.order, source?.order);
-        _.assign(this.flags, source?.flags);
+    constructor(source: Partial<FilterJson> = {}) {
+        _.assign(this.where, source.where);
+        _.assign(this.order, source.order);
+        _.assign(this.flags, source.flags);
 
         // Set the limit
-        this.limit = source?.limit || Filter.LimitDefault;
+        this.limit = source.limit ?? Filter.LimitDefault;
     }
 
     toJSON(): FilterJson {
         return toJSON({
-            using: this.using,
             where: this.where,
             order: this.order,
             flags: this.flags,

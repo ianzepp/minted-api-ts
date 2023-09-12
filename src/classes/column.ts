@@ -88,6 +88,12 @@ export class Column {
         return this.source.maximum;
     }
 
+    // Bonus
+
+    get column_path(): string {
+        return this.schema.schema_name + ':' + this.column_name;
+    }
+
     toJSON() {
         return toJSON(this.source);
     }

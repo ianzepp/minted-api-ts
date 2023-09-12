@@ -32,7 +32,7 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        for(let column of Object.values(flow.schema.columns)) {
+        for(let column of flow.schema.columns.values()) {
             if (column.required === false) {
                 continue;
             }

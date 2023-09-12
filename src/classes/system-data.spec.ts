@@ -133,9 +133,9 @@ test('selectAny() using limit of 1', async () => {
     chai.expect(select).an('array').length(1);
 });    
 
-test('selectAny() using invalid limit of 0', async () => {
+test('selectAny() using limit of 0', async () => {
     let select = await system.data.selectAny(schema_type, { limit: 0 });
-    chai.expect(select).an('array').length.gte(records.length);
+    chai.expect(select).an('array').length(0);
 });
 
 // selectAll()
