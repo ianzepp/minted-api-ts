@@ -36,9 +36,18 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         for(let record of flow.change) {
-            flow.expect(record.data).property('schema_name').match(/^[a-z_0-9]+$/i);
-            flow.expect(record.data).property('schema_name').not.match(/^[_0-9]/i);
-            flow.expect(record.data).property('schema_name').not.includes('__');
+            flow.expect(record.data).property('schema_name').includes('.');
+
+            let schema_name = record.data.schema_name;
+            let [ns, sn] = schema_name.split('.');
+
+            flow.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).match(/^[a-z_0-9]+$/i);
+            flow.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).not.match(/^[_0-9]/i);
+            flow.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).not.includes('__');
+
+            flow.expect(sn, `schema_name '${schema_name}' (right side '${ns}')`).match(/^[a-z_0-9]+$/i);
+            flow.expect(sn, `schema_name '${schema_name}' (right side '${ns}')`).not.match(/^[_0-9]/i);
+            flow.expect(sn, `schema_name '${schema_name}' (right side '${ns}')`).not.includes('__');
         }
     }
 }
