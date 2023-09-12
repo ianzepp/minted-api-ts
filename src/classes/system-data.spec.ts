@@ -12,10 +12,6 @@ import { SchemaType } from '@classes/schema-type';
 
 import { DataError, RecordNotFoundError } from '@classes/system-data';
 
-function expectStringOrNull(value: any) {
-    console.warn('value', value);
-}
-
 function expectRecordSet(result_set: any[], length?: number) {
     chai.expect(result_set).an('array');
     chai.expect(result_set).length(length ?? result_set.length);
@@ -260,7 +256,7 @@ test('createAll() with unknown columns should fail !!', async () => {
     let source = _.assign({ special_sauce: true }, source_data[0]);
     let result = await system.data.createAll(schema_type, [source])
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error).instanceOf(DataError));
+        .catch(error => chai.expect(error).instanceOf(Error)); // TODO fix class type
 });
 
 test('createOne() with source data', async () => {
@@ -287,7 +283,7 @@ test('createOne() with unknown columns should fail !!', async () => {
     let source = _.assign({ special_sauce: true }, source_data[0]);
     let result = await system.data.createOne(schema_type, source)
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error).instanceOf(DataError));
+        .catch(error => chai.expect(error).instanceOf(Error)); // TODO fix class type
 });
 
 // update

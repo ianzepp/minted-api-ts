@@ -57,7 +57,7 @@ export class SystemMeta implements SystemService {
         // Instantiate
         for(let source of await this.load(SchemaType.Column)) {
             let schema = this.schemas.get(source.schema_name);
-            let column = new Column(source, schema);
+            let column = new Column(source);
 
             // Install
             this.columns.set(column.column_path, column);

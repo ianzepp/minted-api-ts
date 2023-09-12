@@ -44,7 +44,7 @@ export default class extends Observer {
                     continue;
                 }
 
-                throw new RecordColumnRequiredError(column.column_name);
+                throw new RecordColumnRequiredError(`schema '${column.schema_name}' column '${column.column_name}' is required`);
             }
         }
    }

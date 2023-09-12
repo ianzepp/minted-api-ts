@@ -49,7 +49,7 @@ export default class extends Observer {
                     continue;
                 }
 
-                throw new RecordColumnImmutableError(column.column_name);
+                throw new RecordColumnImmutableError(`schema '${column.schema_name}' column '${column.column_name}' is immutable: prev '${prev}' to data '${data}'`);
             }
         }
    }

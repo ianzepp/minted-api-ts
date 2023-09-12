@@ -8,6 +8,7 @@ import { Filter } from '@classes/filter';
 
 // Layouts
 import { ObserverRing } from '@layouts/observer';
+import { Schema } from '@classes/schema';
 
 
 export default class extends Observer {
@@ -43,6 +44,9 @@ export default class extends Observer {
 
         // Build `filter.limit`
         knex = this.limit(knex, flow.filter.limit);
+
+        // Build the list of columns. Based on internal visibility
+        knex = this.columns(knex, flow.schema);
 
         // Wait for the result
         let result = await knex;
@@ -197,5 +201,19 @@ export default class extends Observer {
         }
 
         return knex.limit(limit);
+    }
+
+    private columns(knex: Knex.QueryBuilder, schema: Schema) {
+        // Required columns
+        knex = knex.column(['data.id', 'data.ns']);
+
+        // Meta columns
+        knex = knex.column(['meta.*']);
+
+        // Schema visible columns
+        knex = knex.column(schema.column_keys('data'));
+
+        // Done
+        return knex;
     }
 }
