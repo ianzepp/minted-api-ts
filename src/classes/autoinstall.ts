@@ -153,7 +153,9 @@ export class AutoInstall {
     //
 
     async createTable(schema_path: string, columnFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
-        console.warn('autoinstall.createTable()', schema_path);
+        if (this.system.isTest() === false) {
+            console.warn('autoinstall.createTable()', schema_path);
+        }
 
         let [ns, sn] = schema_path.split('.');
 
@@ -232,7 +234,9 @@ export class AutoInstall {
     }
 
     async deleteTable(schema_path: string) {
-        console.warn('autoinstall.deleteTable()', schema_path);
+        if (this.system.isTest() === false) {
+            console.warn('autoinstall.deleteTable()', schema_path);
+        }
 
         let [ns, sn] = schema_path.split('.');
 
@@ -245,7 +249,9 @@ export class AutoInstall {
     //
 
     async insertAll(schema_path: string, record_rows: _.Dictionary<any>[]) {
-        console.warn('autoinstall.insertAll()', schema_path);
+        if (this.system.isTest() === false) {
+            console.warn('autoinstall.insertAll()', schema_path);
+        }
 
         let [ns, sn] = schema_path.split('.');
 

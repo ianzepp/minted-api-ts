@@ -131,6 +131,14 @@ export class SystemAsTest extends System {
         await this.knex.rollback();
         await super.cleanup();
     }
+
+    toTestSchemaName() {
+        return 'test.' + this.toTestName();
+    }
+
+    toTestName() {
+        return 'test_' + Math.floor(Math.random() * 1000000);
+    }
 }
 
 // TODO process cors data
