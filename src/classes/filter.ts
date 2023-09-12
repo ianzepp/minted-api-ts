@@ -1,18 +1,12 @@
 import _ from 'lodash';
 import chai from 'chai';
 
-// Classes
-import { Schema } from '@classes/schema';
-import { System } from '@classes/system';
-import { Record } from '@classes/record';
-
 // Layouts
 import { FilterGroup } from '@layouts/filter';
 import { FilterOrder } from '@layouts/filter';
 import { FilterWhere } from '@layouts/filter';
 import { FilterJson } from '@layouts/filter';
 import { toJSON } from '@classes/helpers';
-
 
 export class Filter implements FilterJson {
     // Static values
@@ -38,14 +32,5 @@ export class Filter implements FilterJson {
 
         // Set the limit
         this.limit = source.limit ?? Filter.LimitDefault;
-    }
-
-    toJSON(): FilterJson {
-        return toJSON({
-            where: this.where,
-            order: this.order,
-            flags: this.flags,
-            limit: this.limit,
-        });
     }
 }
