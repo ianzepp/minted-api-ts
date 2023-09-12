@@ -24,11 +24,14 @@ export class SystemMeta implements SystemService {
     constructor(private readonly system: System) {}
 
     async startup(): Promise<void> {
+        this.system.emit('system-meta', 'startup');
+        
         // Process system schemas
         for(let schema_data of await this.select('system.schema')) {
             let schema_name = schema_data.schema_name;
             
             this.schemas[schema_name] = new Schema(schema_data);
+            this.system.emit('system-meta', 'startup', `import schema %j`, schema_name);
         }
 
         for(let column_data of await this.select('system.column')) {
@@ -37,16 +40,13 @@ export class SystemMeta implements SystemService {
             let schema = _.get(this.schemas, schema_name);
 
             if (schema === undefined) {
-                console.warn('system-meta.startup()', 
-                    'unknown parent schema:', schema_name,
-                    'for column:', column_name
-                );
-                
+                this.system.emit('system-meta', 'startup', `attempted to load unknown parent schema "${schema_name}" with column "${column_name}"`);
                 continue; // No known parent schema
             }
 
             // Add to schema
             schema.columns[column_name] = new Column(column_data, schema);
+            this.system.emit('system-meta', 'startup', `import column %j:%j`, schema_name, column_name);
         }
     }
     
