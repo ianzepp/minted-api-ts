@@ -15,7 +15,7 @@ import { RecordMeta } from '@layouts/record';
 import { SchemaName } from '@layouts/schema';
 
 // Helpers
-import toJSON from '@helpers/toJSON';
+import { toJSON } from '@classes/helpers';
 
 
 export class Record implements RecordJson {
@@ -66,45 +66,6 @@ export class Record implements RecordJson {
             return _.set(diff, k, dv);
         }, { id: this.data.id } as Partial<RecordData>);
     }
-
-    // // Used for a internal record-to-record copy
-    // fromRecord(source: Record): this {
-    //     _.assign(this.data, source.data);
-    //     _.assign(this.prev, source.prev);
-    //     _.assign(this.meta, source.meta);
-    //     _.assign(this.acls, source.acls);
-    //     return this;
-    // }
-
-    // // Used when importing from API-submitted http requests (partial representation with `.data` values only)
-    // fromRecordData(source: RecordData): this {
-    //     _.assign(this.data, source);
-    //     return this;
-    // }
-
-    // // Used when importing from API-submitted http requests
-    // fromRecordJson(source: Partial<RecordJson>): this {
-    //     _.assign(this.data, source.data);
-    //     _.assign(this.meta, source.meta);
-    //     _.assign(this.acls, source.acls);
-    //     return this;
-    // }
-
-    // // Used when converting from a flat knex data structure to a proper Record
-    // fromRecordFlat(source: RecordFlat): this {
-    //     _.assign(this.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
-    //     _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
-    //     _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
-    //     return this;
-    // }
-
-    // // Used when imported prev data from knex
-    // fromRecordPrev(source: RecordFlat): this {
-    //     _.assign(this.prev, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
-    //     _.assign(this.meta, _.pick(source, Record.ColumnsInfo));
-    //     _.assign(this.acls, _.pick(source, Record.ColumnsAcls));
-    //     return this;
-    // }
 
     toString(): string {
         return `${this.schema.schema_name}#${this.data.id}`;
