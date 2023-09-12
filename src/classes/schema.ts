@@ -3,12 +3,12 @@ import chai from 'chai';
 
 // Classes
 import { Column } from '@classes/column';
-import { Record } from '@classes/record';
+import { ColumnsMeta, Record } from '@classes/record';
 
 // Layouts
-import { RecordData } from '@layouts/record';
-import { RecordFlat } from '@layouts/record';
-import { RecordJson } from '@layouts/record';
+// import { RecordData } from '@layouts/record';
+// import { RecordFlat } from '@layouts/record';
+// import { RecordJson } from '@layouts/record';
 
 // Helpers
 import { toJSON } from '@classes/helpers';
@@ -17,41 +17,34 @@ export class Schema {
     // Public helpers
     public readonly columns: Map<string, Column> = new Map();
 
-    constructor(private readonly source: _.Dictionary<any>) {
-        chai.expect(source).property('id').a('string');
-        chai.expect(source).property('ns').a('string');
-        chai.expect(source).property('schema_name').a('string');
+    // Properties
+    public readonly id: string;
+    public readonly ns: string;
+
+    public readonly schema_name: string;
+    public readonly schema_type: string;
+    public readonly metadata: boolean;
+
+    constructor(flat: _.Dictionary<any>) {
+        this.id = flat.id;
+        this.ns = flat.ns;
+
+        this.schema_name = flat.schema_name;
+        this.schema_type = flat.schema_type;
+        this.metadata = flat.metadata;
     }
 
-    get id(): string {
-        return this.source.id;
-    }
-
-    get ns(): string {
-        return this.source.ns;
-    }
-
-    get schema_name(): string {
-        return this.source.schema_name;
-    }
-
-    get schema_type(): string {
-        return this.source.schema_type ?? 'database';
-    }
-
-    get metadata(): boolean {
-        return this.source.metadata ?? false;
+    column_keys(prefix?: string) {
+        return Array.from(this.columns.keys()).map(k => {
+            return prefix ? prefix + '.' + k : k;
+        });
     }
 
     is(schema_name: string) {
         return this.schema_name === schema_name;
     }
     
-    toJSON() {
-        return toJSON(this.source);
-    }
-
-    toRecord(source?: Record | RecordData | RecordFlat | RecordJson | _.Dictionary<any>) {
+    toRecord(source?: any) {
         let record = new Record(this);
 
         if (source === undefined) {
@@ -70,12 +63,12 @@ export class Schema {
         }
 
         else if (this.isRecordFlat(source)) {
-            _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
-            _.assign(record.meta, _.pick(source, Record.ColumnsInfo));
+            _.assign(record.data, _.omit(source, ColumnsMeta));
+            _.assign(record.meta, _.pick(source, ColumnsMeta));
         }
 
         else if (this.isRecordDict(source)) {
-            _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
+            _.assign(record.data, _.omit(source, ColumnsMeta));
         }
 
         else {
@@ -89,6 +82,12 @@ export class Schema {
         return typeof source === 'object'; 
     }
 
+    isRecordJson(source: unknown) {
+        return typeof source === 'object'
+            && _.has(source, 'data')
+            && _.has(source, 'meta');
+    }
+
     isRecordFlat(source: unknown) {
         return typeof source === 'object'
             && _.has(source, 'id')
@@ -100,12 +99,5 @@ export class Schema {
             && _.has(source, 'acls_edit')
             && _.has(source, 'acls_read')
             && _.has(source, 'acls_deny');
-    }
-
-    isRecordJson(source: unknown) {
-        return typeof source === 'object'
-            && _.has(source, 'data')
-            && _.has(source, 'info')
-            && _.has(source, 'acls');
     }
 }
