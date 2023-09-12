@@ -31,13 +31,16 @@
 - [expireAny](classes_system_data.SystemData.md#expireany)
 - [expireIds](classes_system_data.SystemData.md#expireids)
 - [expireOne](classes_system_data.SystemData.md#expireone)
-- [onRun](classes_system_data.SystemData.md#onrun)
+- [run](classes_system_data.SystemData.md#run)
 - [select404](classes_system_data.SystemData.md#select404)
+- [selectAll](classes_system_data.SystemData.md#selectall)
 - [selectAny](classes_system_data.SystemData.md#selectany)
 - [selectIds](classes_system_data.SystemData.md#selectids)
+- [selectOne](classes_system_data.SystemData.md#selectone)
 - [startup](classes_system_data.SystemData.md#startup)
 - [updateAll](classes_system_data.SystemData.md#updateall)
 - [updateAny](classes_system_data.SystemData.md#updateany)
+- [updateIds](classes_system_data.SystemData.md#updateids)
 - [updateOne](classes_system_data.SystemData.md#updateone)
 - [upsertAll](classes_system_data.SystemData.md#upsertall)
 - [upsertOne](classes_system_data.SystemData.md#upsertone)
@@ -56,7 +59,7 @@
 
 #### Defined in
 
-[src/classes/system-data.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L29)
+[src/classes/system-data.ts:42](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L42)
 
 ## Properties
 
@@ -66,7 +69,7 @@
 
 #### Defined in
 
-[src/classes/system-data.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L29)
+[src/classes/system-data.ts:42](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L42)
 
 ## Methods
 
@@ -84,19 +87,19 @@
 
 #### Defined in
 
-[src/classes/system-data.ts:33](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L33)
+[src/classes/system-data.ts:46](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L46)
 
 ___
 
 ### createAll
 
-▸ **createAll**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **createAll**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata)[] |
 
 #### Returns
@@ -105,19 +108,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:39](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L39)
+[src/classes/system-data.ts:95](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L95)
 
 ___
 
 ### createOne
 
-▸ **createOne**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
+▸ **createOne**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata) |
 
 #### Returns
@@ -126,19 +129,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:63](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L63)
+[src/classes/system-data.ts:123](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L123)
 
 ___
 
 ### deleteAll
 
-▸ **deleteAll**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **deleteAll**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata)[] |
 
 #### Returns
@@ -147,19 +150,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:55](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L55)
+[src/classes/system-data.ts:111](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L111)
 
 ___
 
 ### deleteAny
 
-▸ **deleteAny**(`schema`, `filter_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **deleteAny**(`schema_name`, `filter_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `filter_data` | `Partial`<[`FilterJson`](../interfaces/layouts_filter.FilterJson.md)\> |
 
 #### Returns
@@ -168,19 +171,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:119](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L119)
+[src/classes/system-data.ts:162](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L162)
 
 ___
 
 ### deleteIds
 
-▸ **deleteIds**(`schema`, `record_ids`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **deleteIds**(`schema_name`, `record_ids`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `record_ids` | `string`[] |
 
 #### Returns
@@ -189,19 +192,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:99](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L99)
+[src/classes/system-data.ts:186](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L186)
 
 ___
 
 ### deleteOne
 
-▸ **deleteOne**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
+▸ **deleteOne**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata) |
 
 #### Returns
@@ -210,19 +213,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:79](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L79)
+[src/classes/system-data.ts:139](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L139)
 
 ___
 
 ### expireAll
 
-▸ **expireAll**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **expireAll**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata)[] |
 
 #### Returns
@@ -231,19 +234,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:51](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L51)
+[src/classes/system-data.ts:107](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L107)
 
 ___
 
 ### expireAny
 
-▸ **expireAny**(`schema`, `filter_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **expireAny**(`schema_name`, `filter_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `filter_data` | `Partial`<[`FilterJson`](../interfaces/layouts_filter.FilterJson.md)\> |
 
 #### Returns
@@ -252,19 +255,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:115](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L115)
+[src/classes/system-data.ts:158](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L158)
 
 ___
 
 ### expireIds
 
-▸ **expireIds**(`schema`, `record_ids`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **expireIds**(`schema_name`, `record_ids`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `record_ids` | `string`[] |
 
 #### Returns
@@ -273,19 +276,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:95](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L95)
+[src/classes/system-data.ts:182](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L182)
 
 ___
 
 ### expireOne
 
-▸ **expireOne**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
+▸ **expireOne**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata) |
 
 #### Returns
@@ -294,13 +297,13 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:75](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L75)
+[src/classes/system-data.ts:135](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L135)
 
 ___
 
-### onRun
+### run
 
-▸ `Private` **onRun**(`schema_name`, `change_data`, `filter_data`, `op`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **run**(`schema_name`, `change_data`, `filter_data`, `op`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
@@ -317,20 +320,20 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:127](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L127)
+[src/classes/system-data.ts:52](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L52)
 
 ___
 
 ### select404
 
-▸ **select404**(`schema`, `record_id`): `Promise`<[`Record`](classes_record.Record.md)\>
+▸ **select404**(`schema_name`, `record_one`): `Promise`<[`Record`](classes_record.Record.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
-| `record_id` | `string` |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `record_one` | `string` |
 
 #### Returns
 
@@ -338,19 +341,40 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:87](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L87)
+[src/classes/system-data.ts:170](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L170)
 
 ___
 
-### selectAny
+### selectAll
 
-▸ **selectAny**(`schema`, `filter_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **selectAll**(`schema_name`, `source_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `source_data` | [`ChangeData`](../modules/layouts_record.md#changedata)[] |
+
+#### Returns
+
+`Promise`<[`Record`](classes_record.Record.md)[]\>
+
+#### Defined in
+
+[src/classes/system-data.ts:88](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L88)
+
+___
+
+### selectAny
+
+▸ **selectAny**(`schema_name`, `filter_data?`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `filter_data` | `Partial`<[`FilterJson`](../interfaces/layouts_filter.FilterJson.md)\> |
 
 #### Returns
@@ -359,19 +383,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:107](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L107)
+[src/classes/system-data.ts:147](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L147)
 
 ___
 
 ### selectIds
 
-▸ **selectIds**(`schema`, `record_ids`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **selectIds**(`schema_name`, `record_ids`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `record_ids` | `string`[] |
 
 #### Returns
@@ -380,7 +404,28 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:91](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L91)
+[src/classes/system-data.ts:174](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L174)
+
+___
+
+### selectOne
+
+▸ **selectOne**(`schema_name`, `source_data`): `Promise`<[`Record`](classes_record.Record.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `source_data` | [`ChangeData`](../modules/layouts_record.md#changedata) |
+
+#### Returns
+
+`Promise`<[`Record`](classes_record.Record.md)\>
+
+#### Defined in
+
+[src/classes/system-data.ts:119](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L119)
 
 ___
 
@@ -398,19 +443,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L31)
+[src/classes/system-data.ts:44](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L44)
 
 ___
 
 ### updateAll
 
-▸ **updateAll**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **updateAll**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata)[] |
 
 #### Returns
@@ -419,19 +464,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:43](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L43)
+[src/classes/system-data.ts:99](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L99)
 
 ___
 
 ### updateAny
 
-▸ **updateAny**(`schema`, `filter_data`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **updateAny**(`schema_name`, `filter_data`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `filter_data` | `Partial`<[`FilterJson`](../interfaces/layouts_filter.FilterJson.md)\> |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata) |
 
@@ -441,19 +486,41 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:111](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L111)
+[src/classes/system-data.ts:151](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L151)
 
 ___
 
-### updateOne
+### updateIds
 
-▸ **updateOne**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
+▸ **updateIds**(`schema_name`, `record_ids`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `record_ids` | `string`[] |
+| `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata) |
+
+#### Returns
+
+`Promise`<[`Record`](classes_record.Record.md)[]\>
+
+#### Defined in
+
+[src/classes/system-data.ts:178](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L178)
+
+___
+
+### updateOne
+
+▸ **updateOne**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata) |
 
 #### Returns
@@ -462,19 +529,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L67)
+[src/classes/system-data.ts:127](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L127)
 
 ___
 
 ### upsertAll
 
-▸ **upsertAll**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
+▸ **upsertAll**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)[]\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata)[] |
 
 #### Returns
@@ -483,19 +550,19 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L47)
+[src/classes/system-data.ts:103](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L103)
 
 ___
 
 ### upsertOne
 
-▸ **upsertOne**(`schema`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
+▸ **upsertOne**(`schema_name`, `change_data`): `Promise`<[`Record`](classes_record.Record.md)\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `schema` | `string` \| [`Schema`](classes_schema.Schema.md) |
+| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
 | `change_data` | [`ChangeData`](../modules/layouts_record.md#changedata) |
 
 #### Returns
@@ -504,4 +571,4 @@ ___
 
 #### Defined in
 
-[src/classes/system-data.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-data.ts#L71)
+[src/classes/system-data.ts:131](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-data.ts#L131)

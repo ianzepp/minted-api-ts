@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[src/classes/http-req.ts:6](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-req.ts#L6)
+[src/classes/http-req.ts:6](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-req.ts#L6)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-req.ts:4](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-req.ts#L4)
+[src/classes/http-req.ts:4](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-req.ts#L4)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-req.ts:3](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-req.ts#L3)
+[src/classes/http-req.ts:3](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-req.ts#L3)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-req.ts:5](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-req.ts#L5)
+[src/classes/http-req.ts:5](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-req.ts#L5)
 
 ___
 
@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[src/classes/http-req.ts:2](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-req.ts#L2)
+[src/classes/http-req.ts:2](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-req.ts#L2)

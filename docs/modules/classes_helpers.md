@@ -6,26 +6,58 @@
 
 ### Functions
 
-- [migrationInsertAll](classes_helpers.md#migrationinsertall)
+- [assertReturn](classes_helpers.md#assertreturn)
+- [toJSON](classes_helpers.md#tojson)
 
 ## Functions
 
-### migrationInsertAll
+### assertReturn
 
-▸ **migrationInsertAll**(`knex`, `table_name`, `record_data`): `Promise`<`_.Dictionary`<`any`\>\>
+▸ **assertReturn**<`T`\>(`v`, `message?`): `T`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `v` | `T` | `undefined` |
+| `message` | `any` | `500` |
+
+#### Returns
+
+`T`
+
+#### Defined in
+
+[src/classes/helpers.ts:3](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/helpers.ts#L3)
+
+___
+
+### toJSON
+
+▸ **toJSON**<`T`\>(`something`): `T`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `any` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `knex` | `Knex`<`any`, `any`[]\> |
-| `table_name` | `string` |
-| `record_data` | `Dictionary`<`any`\>[] |
+| `something` | `T` |
 
 #### Returns
 
-`Promise`<`_.Dictionary`<`any`\>\>
+`T`
 
 #### Defined in
 
-[src/classes/helpers.ts:4](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/helpers.ts#L4)
+[src/classes/helpers.ts:12](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/helpers.ts#L12)

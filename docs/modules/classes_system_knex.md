@@ -12,6 +12,10 @@
 - [KnexTransactionMissingError](../classes/classes_system_knex.KnexTransactionMissingError.md)
 - [SystemKnex](../classes/classes_system_knex.SystemKnex.md)
 
+### Interfaces
+
+- [SystemKnexConfig](../interfaces/classes_system_knex.SystemKnexConfig.md)
+
 ### Variables
 
 - [KnexConfig](classes_system_knex.md#knexconfig)
@@ -32,10 +36,12 @@
 | Name | Type |
 | :------ | :------ |
 | `client` | `string` |
-| `connection` | { `database`: `string` = process.env.POSTGRES\_DB; `host`: `string` = process.env.POSTGRES\_HOST; `password`: `string` = process.env.POSTGRES\_PASSWORD; `user`: `string` = process.env.POSTGRES\_USER } |
+| `connection` | { `acquireConnectionTimeout`: `number` = 10000; `database`: `string` = Bun.env.POSTGRES\_DB; `host`: `string` = Bun.env.POSTGRES\_HOST; `password`: `string` = Bun.env.POSTGRES\_PASSWORD; `port`: `string` = Bun.env.POSTGRES\_PORT; `user`: `string` = Bun.env.POSTGRES\_USER } |
+| `connection.acquireConnectionTimeout` | `number` |
 | `connection.database` | `string` |
 | `connection.host` | `string` |
 | `connection.password` | `string` |
+| `connection.port` | `string` |
 | `connection.user` | `string` |
 | `debug` | `boolean` |
 | `pool` | { `max`: `number` = 10; `min`: `number` = 0 } |
@@ -44,17 +50,17 @@
 
 #### Defined in
 
-[src/classes/system-knex.ts:6](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L6)
+[src/classes/system-knex.ts:8](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L8)
 
 ___
 
 ### KnexConfigTest
 
-• `Const` **KnexConfigTest**: `NonNullable`<{ `client`: `string` = 'postgresql'; `connection`: { `database`: `string` = process.env.POSTGRES\_DB; `host`: `string` = process.env.POSTGRES\_HOST; `password`: `string` = process.env.POSTGRES\_PASSWORD; `user`: `string` = process.env.POSTGRES\_USER } ; `debug`: `boolean` ; `pool`: { `max`: `number` = 10; `min`: `number` = 0 }  } & { `pool`: { `max`: `number` = 2; `min`: `number` = 0 }  }\>
+• `Const` **KnexConfigTest**: `NonNullable`<{ `client`: `string` = 'postgresql'; `connection`: { `acquireConnectionTimeout`: `number` = 10000; `database`: `string` = Bun.env.POSTGRES\_DB; `host`: `string` = Bun.env.POSTGRES\_HOST; `password`: `string` = Bun.env.POSTGRES\_PASSWORD; `port`: `string` = Bun.env.POSTGRES\_PORT; `user`: `string` = Bun.env.POSTGRES\_USER } ; `debug`: `boolean` ; `pool`: { `max`: `number` = 10; `min`: `number` = 0 }  } & { `pool`: { `max`: `number` = 2; `min`: `number` = 0 }  }\>
 
 #### Defined in
 
-[src/classes/system-knex.ts:22](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L22)
+[src/classes/system-knex.ts:26](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L26)
 
 ## Functions
 

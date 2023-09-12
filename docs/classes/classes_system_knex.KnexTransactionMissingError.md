@@ -18,6 +18,7 @@
 
 ### Properties
 
+- [cause](classes_system_knex.KnexTransactionMissingError.md#cause)
 - [message](classes_system_knex.KnexTransactionMissingError.md#message)
 - [name](classes_system_knex.KnexTransactionMissingError.md#name)
 - [stack](classes_system_knex.KnexTransactionMissingError.md#stack)
@@ -48,7 +49,38 @@
 
 node_modules/typescript/lib/lib.es5.d.ts:1073
 
+• **new KnexTransactionMissingError**(`message?`, `options?`)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `message?` | `string` |
+| `options?` | `ErrorOptions` |
+
+#### Inherited from
+
+[KnexError](classes_system_knex.KnexError.md).[constructor](classes_system_knex.KnexError.md#constructor)
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es2022.error.d.ts:28
+
 ## Properties
+
+### cause
+
+• `Optional` **cause**: `unknown`
+
+#### Inherited from
+
+[KnexError](classes_system_knex.KnexError.md).[cause](classes_system_knex.KnexError.md#cause)
+
+#### Defined in
+
+node_modules/typescript/lib/lib.es2022.error.d.ts:24
+
+___
 
 ### message
 
@@ -125,6 +157,8 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 node_modules/@types/node/globals.d.ts:11
 
+node_modules/bun-types/types.d.ts:4093
+
 ___
 
 ### stackTraceLimit
@@ -138,6 +172,8 @@ ___
 #### Defined in
 
 node_modules/@types/node/globals.d.ts:13
+
+node_modules/bun-types/types.d.ts:4097
 
 ## Methods
 
@@ -165,3 +201,26 @@ Create .stack property on a target object
 #### Defined in
 
 node_modules/@types/node/globals.d.ts:4
+
+▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
+
+Create .stack property on a target object
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `targetObject` | `object` |
+| `constructorOpt?` | `Function` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[KnexError](classes_system_knex.KnexError.md).[captureStackTrace](classes_system_knex.KnexError.md#capturestacktrace)
+
+#### Defined in
+
+node_modules/bun-types/types.d.ts:4086

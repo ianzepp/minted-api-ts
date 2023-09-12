@@ -4,11 +4,11 @@
 
 [classes/filter](../modules/classes_filter.md).Filter
 
-Represents the architecture needed to obtain a filter's info.
+Represents the filter's JSON representation in object format.
 
 ## Implements
 
-- [`FilterInfo`](../interfaces/layouts_filter.FilterInfo.md)
+- [`FilterJson`](../interfaces/layouts_filter.FilterJson.md)
 
 ## Table of contents
 
@@ -21,7 +21,6 @@ Represents the architecture needed to obtain a filter's info.
 - [flags](classes_filter.Filter.md#flags)
 - [limit](classes_filter.Filter.md#limit)
 - [order](classes_filter.Filter.md#order)
-- [using](classes_filter.Filter.md#using)
 - [where](classes_filter.Filter.md#where)
 - [Group](classes_filter.Filter.md#group)
 - [LimitDefault](classes_filter.Filter.md#limitdefault)
@@ -30,26 +29,21 @@ Represents the architecture needed to obtain a filter's info.
 - [Order](classes_filter.Filter.md#order-1)
 - [Where](classes_filter.Filter.md#where-1)
 
-### Methods
-
-- [toJSON](classes_filter.Filter.md#tojson)
-
 ## Constructors
 
 ### constructor
 
-• **new Filter**(`using`, `source?`)
+• **new Filter**(`source?`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `using` | `string` |
-| `source?` | `Partial`<[`FilterJson`](../interfaces/layouts_filter.FilterJson.md)\> |
+| `source` | `Partial`<[`FilterJson`](../interfaces/layouts_filter.FilterJson.md)\> |
 
 #### Defined in
 
-[src/classes/filter.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L38)
+[src/classes/filter.ts:28](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L28)
 
 ## Properties
 
@@ -59,11 +53,11 @@ Represents the architecture needed to obtain a filter's info.
 
 #### Implementation of
 
-[FilterInfo](../interfaces/layouts_filter.FilterInfo.md).[flags](../interfaces/layouts_filter.FilterInfo.md#flags)
+[FilterJson](../interfaces/layouts_filter.FilterJson.md).[flags](../interfaces/layouts_filter.FilterJson.md#flags)
 
 #### Defined in
 
-[src/classes/filter.ts:35](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L35)
+[src/classes/filter.ts:25](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L25)
 
 ___
 
@@ -73,11 +67,11 @@ ___
 
 #### Implementation of
 
-[FilterInfo](../interfaces/layouts_filter.FilterInfo.md).[limit](../interfaces/layouts_filter.FilterInfo.md#limit)
+[FilterJson](../interfaces/layouts_filter.FilterJson.md).[limit](../interfaces/layouts_filter.FilterJson.md#limit)
 
 #### Defined in
 
-[src/classes/filter.ts:36](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L36)
+[src/classes/filter.ts:26](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L26)
 
 ___
 
@@ -87,27 +81,11 @@ ___
 
 #### Implementation of
 
-[FilterInfo](../interfaces/layouts_filter.FilterInfo.md).[order](../interfaces/layouts_filter.FilterInfo.md#order)
+[FilterJson](../interfaces/layouts_filter.FilterJson.md).[order](../interfaces/layouts_filter.FilterJson.md#order)
 
 #### Defined in
 
-[src/classes/filter.ts:34](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L34)
-
-___
-
-### using
-
-• `Readonly` **using**: `string`
-
-Returns the parent schema table name for this filter
-
-#### Implementation of
-
-[FilterInfo](../interfaces/layouts_filter.FilterInfo.md).[using](../interfaces/layouts_filter.FilterInfo.md#using)
-
-#### Defined in
-
-[src/classes/filter.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L38)
+[src/classes/filter.ts:24](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L24)
 
 ___
 
@@ -117,11 +95,11 @@ ___
 
 #### Implementation of
 
-[FilterInfo](../interfaces/layouts_filter.FilterInfo.md).[where](../interfaces/layouts_filter.FilterInfo.md#where)
+[FilterJson](../interfaces/layouts_filter.FilterJson.md).[where](../interfaces/layouts_filter.FilterJson.md#where)
 
 #### Defined in
 
-[src/classes/filter.ts:33](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L33)
+[src/classes/filter.ts:23](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L23)
 
 ___
 
@@ -131,7 +109,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L28)
+[src/classes/filter.ts:18](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L18)
 
 ___
 
@@ -141,7 +119,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L23)
+[src/classes/filter.ts:13](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L13)
 
 ___
 
@@ -151,7 +129,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:24](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L24)
+[src/classes/filter.ts:14](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L14)
 
 ___
 
@@ -161,7 +139,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L25)
+[src/classes/filter.ts:15](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L15)
 
 ___
 
@@ -171,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L29)
+[src/classes/filter.ts:19](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L19)
 
 ___
 
@@ -181,18 +159,4 @@ ___
 
 #### Defined in
 
-[src/classes/filter.ts:30](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L30)
-
-## Methods
-
-### toJSON
-
-▸ **toJSON**(): [`FilterJson`](../interfaces/layouts_filter.FilterJson.md)
-
-#### Returns
-
-[`FilterJson`](../interfaces/layouts_filter.FilterJson.md)
-
-#### Defined in
-
-[src/classes/filter.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/filter.ts#L47)
+[src/classes/filter.ts:20](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/filter.ts#L20)

@@ -23,6 +23,8 @@
 
 ### Methods
 
+- [cleanup](observers_system_record_knex_select.default.md#cleanup)
+- [columns](observers_system_record_knex_select.default.md#columns)
 - [isFailable](observers_system_record_knex_select.default.md#isfailable)
 - [isRunnable](observers_system_record_knex_select.default.md#isrunnable)
 - [limit](observers_system_record_knex_select.default.md#limit)
@@ -37,12 +39,12 @@
 - [onUpsert](observers_system_record_knex_select.default.md#onupsert)
 - [order](observers_system_record_knex_select.default.md#order)
 - [run](observers_system_record_knex_select.default.md#run)
+- [startup](observers_system_record_knex_select.default.md#startup)
 - [toJSON](observers_system_record_knex_select.default.md#tojson)
 - [toName](observers_system_record_knex_select.default.md#toname)
-- [where](observers_system_record_knex_select.default.md#where)
-- [whereAnd](observers_system_record_knex_select.default.md#whereand)
-- [whereOps](observers_system_record_knex_select.default.md#whereops)
-- [whereOr](observers_system_record_knex_select.default.md#whereor)
+- [whereAll](observers_system_record_knex_select.default.md#whereall)
+- [whereOne](observers_system_record_knex_select.default.md#whereone)
+- [whereOp](observers_system_record_knex_select.default.md#whereop)
 
 ## Constructors
 
@@ -56,7 +58,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L14)
+[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L14)
 
 ## Properties
 
@@ -70,7 +72,7 @@
 
 #### Defined in
 
-[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L11)
+[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L11)
 
 ___
 
@@ -84,9 +86,54 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L12)
+[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L12)
 
 ## Methods
+
+### cleanup
+
+▸ **cleanup**(`flow`): `Promise`<`any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
+
+#### Returns
+
+`Promise`<`any`\>
+
+#### Inherited from
+
+[Observer](classes_observer.Observer.md).[cleanup](classes_observer.Observer.md#cleanup)
+
+#### Defined in
+
+[src/classes/observer.ts:18](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L18)
+
+___
+
+### columns
+
+▸ `Private` **columns**(`knex`, `schema`): `QueryBuilder`<`any`, `any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `knex` | `QueryBuilder`<`any`, `any`\> |
+| `schema` | [`Schema`](classes_schema.Schema.md) |
+
+#### Returns
+
+`QueryBuilder`<`any`, `any`\>
+
+#### Defined in
+
+[src/observers/system.record/knex-select.ts:242](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L242)
+
+___
 
 ### isFailable
 
@@ -102,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L79)
+[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L79)
 
 ___
 
@@ -120,7 +167,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L75)
+[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L75)
 
 ___
 
@@ -141,7 +188,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-select.ts:196](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L196)
+[src/observers/system.record/knex-select.ts:226](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L226)
 
 ___
 
@@ -159,7 +206,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:55](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L55)
+[src/classes/observer.ts:55](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L55)
 
 ___
 
@@ -177,7 +224,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L71)
+[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L71)
 
 ___
 
@@ -195,7 +242,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L67)
+[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L67)
 
 ___
 
@@ -213,7 +260,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L47)
+[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L47)
 
 ___
 
@@ -231,7 +278,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-select.ts:22](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L22)
+[src/observers/system.record/knex-select.ts:23](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L23)
 
 ___
 
@@ -249,7 +296,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-select.ts:18](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L18)
+[src/observers/system.record/knex-select.ts:19](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L19)
 
 ___
 
@@ -267,7 +314,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-select.ts:26](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L26)
+[src/observers/system.record/knex-select.ts:27](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L27)
 
 ___
 
@@ -285,7 +332,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:59](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L59)
+[src/classes/observer.ts:59](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L59)
 
 ___
 
@@ -303,13 +350,13 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:63](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L63)
+[src/classes/observer.ts:63](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L63)
 
 ___
 
 ### order
 
-▸ `Private` **order**(`knex`, `clauses`): `QueryBuilder`<`any`, `any`\>
+▸ `Private` **order**(`knex`, `clauses?`): `QueryBuilder`<`any`, `any`\>
 
 #### Parameters
 
@@ -324,7 +371,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-select.ts:182](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L182)
+[src/observers/system.record/knex-select.ts:213](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L213)
 
 ___
 
@@ -348,7 +395,31 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-select.ts:30](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L30)
+[src/observers/system.record/knex-select.ts:31](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L31)
+
+___
+
+### startup
+
+▸ **startup**(`flow`): `Promise`<`any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
+
+#### Returns
+
+`Promise`<`any`\>
+
+#### Inherited from
+
+[Observer](classes_observer.Observer.md).[startup](classes_observer.Observer.md#startup)
+
+#### Defined in
+
+[src/classes/observer.ts:16](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L16)
 
 ___
 
@@ -366,7 +437,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L20)
+[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L20)
 
 ___
 
@@ -384,13 +455,35 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-select.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L14)
+[src/observers/system.record/knex-select.ts:15](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L15)
 
 ___
 
-### where
+### whereAll
 
-▸ `Private` **where**(`knex`, `clause`): `QueryBuilder`<`any`, `any`\>
+▸ `Private` **whereAll**(`knex`, `conditions?`, `group?`): `QueryBuilder`<`any`, `any`\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `knex` | `QueryBuilder`<`any`, `any`\> | `undefined` |
+| `conditions` | `Dictionary`<`any`\>[] | `[]` |
+| `group` | ``"$and"`` \| ``"$or"`` | `'$and'` |
+
+#### Returns
+
+`QueryBuilder`<`any`, `any`\>
+
+#### Defined in
+
+[src/observers/system.record/knex-select.ts:62](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L62)
+
+___
+
+### whereOne
+
+▸ `Private` **whereOne**(`knex`, `clause?`): `QueryBuilder`<`any`, `any`\>
 
 #### Parameters
 
@@ -405,34 +498,13 @@ ___
 
 #### Defined in
 
-[src/observers/system.record/knex-select.ts:68](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L68)
+[src/observers/system.record/knex-select.ts:89](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L89)
 
 ___
 
-### whereAnd
+### whereOp
 
-▸ `Private` **whereAnd**(`knex`, `data`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `knex` | `QueryBuilder`<`any`, `any`\> |
-| `data` | `any` |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[src/observers/system.record/knex-select.ts:77](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L77)
-
-___
-
-### whereOps
-
-▸ `Private` **whereOps**(`knex`, `name`, `data`): `void` \| `QueryBuilder`<`any`, `any`\>
+▸ `Private` **whereOp**(`knex`, `name`, `data`): `QueryBuilder`<`any`, `any`\>
 
 #### Parameters
 
@@ -444,29 +516,8 @@ ___
 
 #### Returns
 
-`void` \| `QueryBuilder`<`any`, `any`\>
+`QueryBuilder`<`any`, `any`\>
 
 #### Defined in
 
-[src/observers/system.record/knex-select.ts:85](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L85)
-
-___
-
-### whereOr
-
-▸ `Private` **whereOr**(`knex`, `data`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `knex` | `QueryBuilder`<`any`, `any`\> |
-| `data` | `any` |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[src/observers/system.record/knex-select.ts:81](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.record/knex-select.ts#L81)
+[src/observers/system.record/knex-select.ts:101](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.record/knex-select.ts#L101)

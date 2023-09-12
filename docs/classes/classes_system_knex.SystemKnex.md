@@ -29,7 +29,13 @@
 ### Methods
 
 - [cleanup](classes_system_knex.SystemKnex.md#cleanup)
+- [commit](classes_system_knex.SystemKnex.md#commit)
+- [driverTo](classes_system_knex.SystemKnex.md#driverto)
+- [rollback](classes_system_knex.SystemKnex.md#rollback)
+- [selectTo](classes_system_knex.SystemKnex.md#selectto)
 - [startup](classes_system_knex.SystemKnex.md#startup)
+- [transaction](classes_system_knex.SystemKnex.md#transaction)
+- [transactionFn](classes_system_knex.SystemKnex.md#transactionfn)
 
 ## Constructors
 
@@ -45,17 +51,17 @@
 
 #### Defined in
 
-[src/classes/system-knex.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L47)
+[src/classes/system-knex.ts:55](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L55)
 
 ## Properties
 
 ### db
 
-• `Readonly` **db**: `Knex`<`any`, `any`[]\>
+• **db**: `Knex`<`any`, `any`[]\> = `KnexDriver`
 
 #### Defined in
 
-[src/classes/system-knex.ts:44](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L44)
+[src/classes/system-knex.ts:52](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L52)
 
 ___
 
@@ -65,7 +71,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L47)
+[src/classes/system-knex.ts:55](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L55)
 
 ___
 
@@ -75,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:45](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L45)
+[src/classes/system-knex.ts:53](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L53)
 
 ## Accessors
 
@@ -89,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:65](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L65)
+[src/classes/system-knex.ts:127](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L127)
 
 ___
 
@@ -103,7 +109,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:73](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L73)
+[src/classes/system-knex.ts:119](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L119)
 
 ___
 
@@ -117,7 +123,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:57](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L57)
+[src/classes/system-knex.ts:123](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L123)
 
 ## Methods
 
@@ -135,7 +141,88 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:85](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L85)
+[src/classes/system-knex.ts:64](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L64)
+
+___
+
+### commit
+
+▸ **commit**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/classes/system-knex.ts:99](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L99)
+
+___
+
+### driverTo
+
+▸ **driverTo**<`T`\>(`schema_path`, `alias?`): `QueryBuilder`<`T`, `DeferredKeySelection`<`T`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `Dictionary`<`any`\> |
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `schema_path` | `string` | `undefined` |
+| `alias` | ``"data"`` \| ``"meta"`` | `'data'` |
+
+#### Returns
+
+`QueryBuilder`<`T`, `DeferredKeySelection`<`T`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
+
+#### Defined in
+
+[src/classes/system-knex.ts:147](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L147)
+
+___
+
+### rollback
+
+▸ **rollback**(): `Promise`<`any`\>
+
+#### Returns
+
+`Promise`<`any`\>
+
+#### Defined in
+
+[src/classes/system-knex.ts:107](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L107)
+
+___
+
+### selectTo
+
+▸ **selectTo**<`T`\>(`schema_path`): `QueryBuilder`<`any`, `DeferredKeySelection`<`any`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | [`RecordFlat`](../interfaces/layouts_record.RecordFlat.md) |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema_path` | `string` |
+
+#### Returns
+
+`QueryBuilder`<`any`, `DeferredKeySelection`<`any`, `never`, ``false``, {}, ``false``, {}, `never`\>[]\>
+
+#### Defined in
+
+[src/classes/system-knex.ts:131](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L131)
 
 ___
 
@@ -153,4 +240,39 @@ ___
 
 #### Defined in
 
-[src/classes/system-knex.ts:77](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-knex.ts#L77)
+[src/classes/system-knex.ts:57](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L57)
+
+___
+
+### transaction
+
+▸ **transaction**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/classes/system-knex.ts:82](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L82)
+
+___
+
+### transactionFn
+
+▸ **transactionFn**(`runFn`, `config?`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `runFn` | () => `Promise`<`any`\> |
+| `config?` | `TransactionConfig` |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/classes/system-knex.ts:75](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-knex.ts#L75)

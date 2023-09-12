@@ -12,6 +12,10 @@ Represents the filter's JSON representation in object format.
 
   ↳ [`FilterInfo`](layouts_filter.FilterInfo.md)
 
+## Implemented by
+
+- [`Filter`](../classes/classes_filter.Filter.md)
+
 ## Table of contents
 
 ### Properties
@@ -19,7 +23,6 @@ Represents the filter's JSON representation in object format.
 - [flags](layouts_filter.FilterJson.md#flags)
 - [limit](layouts_filter.FilterJson.md#limit)
 - [order](layouts_filter.FilterJson.md#order)
-- [using](layouts_filter.FilterJson.md#using)
 - [where](layouts_filter.FilterJson.md#where)
 
 ## Properties
@@ -30,7 +33,7 @@ Represents the filter's JSON representation in object format.
 
 #### Defined in
 
-[src/layouts/filter.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L67)
+[src/layouts/filter.ts:67](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L67)
 
 ___
 
@@ -40,7 +43,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:68](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L68)
+[src/layouts/filter.ts:68](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L68)
 
 ___
 
@@ -50,17 +53,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:66](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L66)
-
-___
-
-### using
-
-• **using**: `string`
-
-#### Defined in
-
-[src/layouts/filter.ts:64](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L64)
+[src/layouts/filter.ts:66](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L66)
 
 ___
 
@@ -70,4 +63,4 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:65](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L65)
+[src/layouts/filter.ts:65](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L65)

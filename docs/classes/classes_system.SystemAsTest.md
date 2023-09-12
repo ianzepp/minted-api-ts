@@ -19,16 +19,20 @@
 ### Properties
 
 - [auth](classes_system.SystemAsTest.md#auth)
+- [chai](classes_system.SystemAsTest.md#chai)
 - [data](classes_system.SystemAsTest.md#data)
 - [errors](classes_system.SystemAsTest.md#errors)
 - [expect](classes_system.SystemAsTest.md#expect)
 - [knex](classes_system.SystemAsTest.md#knex)
 - [meta](classes_system.SystemAsTest.md#meta)
-- [timestamp](classes_system.SystemAsTest.md#timestamp)
+- [time](classes_system.SystemAsTest.md#time)
+- [time\_iso](classes_system.SystemAsTest.md#time_iso)
 - [user\_id](classes_system.SystemAsTest.md#user_id)
 - [user\_ns](classes_system.SystemAsTest.md#user_ns)
+- [uuid](classes_system.SystemAsTest.md#uuid)
 - [RootId](classes_system.SystemAsTest.md#rootid)
 - [RootNs](classes_system.SystemAsTest.md#rootns)
+- [SchemaType](classes_system.SystemAsTest.md#schematype)
 - [TestId](classes_system.SystemAsTest.md#testid)
 - [TestNs](classes_system.SystemAsTest.md#testns)
 
@@ -36,12 +40,15 @@
 
 - [authenticate](classes_system.SystemAsTest.md#authenticate)
 - [cleanup](classes_system.SystemAsTest.md#cleanup)
+- [emit](classes_system.SystemAsTest.md#emit)
 - [isProd](classes_system.SystemAsTest.md#isprod)
 - [isRoot](classes_system.SystemAsTest.md#isroot)
 - [isTest](classes_system.SystemAsTest.md#istest)
 - [refresh](classes_system.SystemAsTest.md#refresh)
 - [run](classes_system.SystemAsTest.md#run)
 - [startup](classes_system.SystemAsTest.md#startup)
+- [toTestName](classes_system.SystemAsTest.md#totestname)
+- [toTestSchemaName](classes_system.SystemAsTest.md#totestschemaname)
 
 ## Constructors
 
@@ -55,7 +62,7 @@
 
 #### Defined in
 
-[src/classes/system.ts:123](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L123)
+[src/classes/system.ts:127](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L127)
 
 ## Properties
 
@@ -69,7 +76,21 @@
 
 #### Defined in
 
-[src/classes/system.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L25)
+[src/classes/system.ts:34](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L34)
+
+___
+
+### chai
+
+• `Readonly` **chai**: `ChaiStatic` = `chai`
+
+#### Inherited from
+
+[System](classes_system.System.md).[chai](classes_system.System.md#chai)
+
+#### Defined in
+
+[src/classes/system.ts:47](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L47)
 
 ___
 
@@ -83,7 +104,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:26](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L26)
+[src/classes/system.ts:35](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L35)
 
 ___
 
@@ -97,7 +118,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:32](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L32)
+[src/classes/system.ts:41](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L41)
 
 ___
 
@@ -111,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L31)
+[src/classes/system.ts:40](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L40)
 
 ___
 
@@ -125,7 +146,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L28)
+[src/classes/system.ts:37](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L37)
 
 ___
 
@@ -139,21 +160,35 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:27](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L27)
+[src/classes/system.ts:36](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L36)
 
 ___
 
-### timestamp
+### time
 
-• `Readonly` **timestamp**: `string`
+• `Readonly` **time**: `Date`
 
 #### Inherited from
 
-[System](classes_system.System.md).[timestamp](classes_system.System.md#timestamp)
+[System](classes_system.System.md).[time](classes_system.System.md#time)
 
 #### Defined in
 
-[src/classes/system.ts:35](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L35)
+[src/classes/system.ts:44](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L44)
+
+___
+
+### time\_iso
+
+• `Readonly` **time\_iso**: `string`
+
+#### Inherited from
+
+[System](classes_system.System.md).[time_iso](classes_system.System.md#time_iso)
+
+#### Defined in
+
+[src/classes/system.ts:45](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L45)
 
 ___
 
@@ -167,7 +202,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L38)
+[src/classes/system.ts:50](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L50)
 
 ___
 
@@ -181,7 +216,21 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L38)
+[src/classes/system.ts:50](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L50)
+
+___
+
+### uuid
+
+• `Readonly` **uuid**: `v4` = `uuid`
+
+#### Inherited from
+
+[System](classes_system.System.md).[uuid](classes_system.System.md#uuid)
+
+#### Defined in
+
+[src/classes/system.ts:46](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L46)
 
 ___
 
@@ -195,7 +244,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:18](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L18)
+[src/classes/system.ts:24](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L24)
 
 ___
 
@@ -209,7 +258,21 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:19](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L19)
+[src/classes/system.ts:25](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L25)
+
+___
+
+### SchemaType
+
+▪ `Static` **SchemaType**: typeof [`SchemaType`](../enums/classes_schema_type.SchemaType.md) = `SchemaType`
+
+#### Inherited from
+
+[System](classes_system.System.md).[SchemaType](classes_system.System.md#schematype)
+
+#### Defined in
+
+[src/classes/system.ts:31](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L31)
 
 ___
 
@@ -223,7 +286,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L21)
+[src/classes/system.ts:27](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L27)
 
 ___
 
@@ -237,17 +300,17 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:22](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L22)
+[src/classes/system.ts:28](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L28)
 
 ## Methods
 
 ### authenticate
 
-▸ **authenticate**(): `Promise`<[`SystemAsTest`](classes_system.SystemAsTest.md)\>
+▸ **authenticate**(): `Promise`<`void`\>
 
 #### Returns
 
-`Promise`<[`SystemAsTest`](classes_system.SystemAsTest.md)\>
+`Promise`<`void`\>
 
 #### Inherited from
 
@@ -255,25 +318,51 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L47)
+[src/classes/system.ts:59](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L59)
 
 ___
 
 ### cleanup
 
-▸ **cleanup**(): `Promise`<[`SystemAsTest`](classes_system.SystemAsTest.md)\>
+▸ **cleanup**(): `Promise`<`void`\>
 
 #### Returns
 
-`Promise`<[`SystemAsTest`](classes_system.SystemAsTest.md)\>
+`Promise`<`void`\>
 
-#### Inherited from
+#### Overrides
 
 [System](classes_system.System.md).[cleanup](classes_system.System.md#cleanup)
 
 #### Defined in
 
-[src/classes/system.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L67)
+[src/classes/system.ts:136](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L136)
+
+___
+
+### emit
+
+▸ **emit**(`cn`, `fn`, `...messages`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `cn` | `any` |
+| `fn` | `any` |
+| `...messages` | `any`[] |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[System](classes_system.System.md).[emit](classes_system.System.md#emit)
+
+#### Defined in
+
+[src/classes/system.ts:103](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L103)
 
 ___
 
@@ -291,7 +380,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:111](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L111)
+[src/classes/system.ts:115](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L115)
 
 ___
 
@@ -309,7 +398,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:103](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L103)
+[src/classes/system.ts:107](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L107)
 
 ___
 
@@ -327,17 +416,17 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:107](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L107)
+[src/classes/system.ts:111](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L111)
 
 ___
 
 ### refresh
 
-▸ **refresh**(): `Promise`<[`SystemAsTest`](classes_system.SystemAsTest.md)\>
+▸ **refresh**(): `Promise`<`void`\>
 
 #### Returns
 
-`Promise`<[`SystemAsTest`](classes_system.SystemAsTest.md)\>
+`Promise`<`void`\>
 
 #### Inherited from
 
@@ -345,7 +434,7 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:80](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L80)
+[src/classes/system.ts:83](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L83)
 
 ___
 
@@ -369,22 +458,50 @@ ___
 
 #### Defined in
 
-[src/classes/system.ts:88](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L88)
+[src/classes/system.ts:88](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L88)
 
 ___
 
 ### startup
 
-▸ **startup**(): `Promise`<[`SystemAsTest`](classes_system.SystemAsTest.md)\>
+▸ **startup**(): `Promise`<`void`\>
 
 #### Returns
 
-`Promise`<[`SystemAsTest`](classes_system.SystemAsTest.md)\>
+`Promise`<`void`\>
 
-#### Inherited from
+#### Overrides
 
 [System](classes_system.System.md).[startup](classes_system.System.md#startup)
 
 #### Defined in
 
-[src/classes/system.ts:54](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system.ts#L54)
+[src/classes/system.ts:131](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L131)
+
+___
+
+### toTestName
+
+▸ **toTestName**(): `string`
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[src/classes/system.ts:145](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L145)
+
+___
+
+### toTestSchemaName
+
+▸ **toTestSchemaName**(): `string`
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[src/classes/system.ts:141](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system.ts#L141)

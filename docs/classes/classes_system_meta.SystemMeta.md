@@ -16,18 +16,21 @@
 
 ### Properties
 
+- [columns](classes_system_meta.SystemMeta.md#columns)
 - [schemas](classes_system_meta.SystemMeta.md#schemas)
+- [sources](classes_system_meta.SystemMeta.md#sources)
 - [system](classes_system_meta.SystemMeta.md#system)
 
 ### Methods
 
 - [cleanup](classes_system_meta.SystemMeta.md#cleanup)
-- [isSchema](classes_system_meta.SystemMeta.md#isschema)
+- [describe](classes_system_meta.SystemMeta.md#describe)
+- [find\_column](classes_system_meta.SystemMeta.md#find_column)
+- [find\_schema](classes_system_meta.SystemMeta.md#find_schema)
+- [find\_source](classes_system_meta.SystemMeta.md#find_source)
+- [load](classes_system_meta.SystemMeta.md#load)
 - [refresh](classes_system_meta.SystemMeta.md#refresh)
-- [select](classes_system_meta.SystemMeta.md#select)
 - [startup](classes_system_meta.SystemMeta.md#startup)
-- [toFilter](classes_system_meta.SystemMeta.md#tofilter)
-- [toSchema](classes_system_meta.SystemMeta.md#toschema)
 
 ## Constructors
 
@@ -43,17 +46,37 @@
 
 #### Defined in
 
-[src/classes/system-meta.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L23)
+[src/classes/system-meta.ts:31](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L31)
 
 ## Properties
 
-### schemas
+### columns
 
-• `Readonly` **schemas**: `Dictionary`<[`Schema`](classes_schema.Schema.md)\> = `{}`
+• `Readonly` **columns**: [`MapColumns`](classes_system_meta.MapColumns.md)
 
 #### Defined in
 
-[src/classes/system-meta.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L21)
+[src/classes/system-meta.ts:29](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L29)
+
+___
+
+### schemas
+
+• `Readonly` **schemas**: [`MapSchemas`](classes_system_meta.MapSchemas.md)
+
+#### Defined in
+
+[src/classes/system-meta.ts:28](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L28)
+
+___
+
+### sources
+
+• `Readonly` **sources**: `Map`<`string`, [`RecordFlat`](../interfaces/layouts_record.RecordFlat.md)[]\>
+
+#### Defined in
+
+[src/classes/system-meta.ts:27](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L27)
 
 ___
 
@@ -63,7 +86,7 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L23)
+[src/classes/system-meta.ts:31](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L31)
 
 ## Methods
 
@@ -81,13 +104,48 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:42](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L42)
+[src/classes/system-meta.ts:70](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L70)
 
 ___
 
-### isSchema
+### describe
 
-▸ **isSchema**(`schema_name`): `boolean`
+▸ **describe**(): `Promise`<`void`\>
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/classes/system-meta.ts:81](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L81)
+
+___
+
+### find\_column
+
+▸ **find_column**(`schema_name`, `column_name`): [`RecordFlat`](../interfaces/layouts_record.RecordFlat.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema_name` | `string` |
+| `column_name` | `string` |
+
+#### Returns
+
+[`RecordFlat`](../interfaces/layouts_record.RecordFlat.md)
+
+#### Defined in
+
+[src/classes/system-meta.ts:116](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L116)
+
+___
+
+### find\_schema
+
+▸ **find_schema**(`schema_name`): [`RecordFlat`](../interfaces/layouts_record.RecordFlat.md)
 
 #### Parameters
 
@@ -97,11 +155,53 @@ ___
 
 #### Returns
 
-`boolean`
+[`RecordFlat`](../interfaces/layouts_record.RecordFlat.md)
 
 #### Defined in
 
-[src/classes/system-meta.ts:62](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L62)
+[src/classes/system-meta.ts:110](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L110)
+
+___
+
+### find\_source
+
+▸ **find_source**(`schema_path`, `match`, `k?`): [`RecordFlat`](../interfaces/layouts_record.RecordFlat.md)
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `schema_path` | `string` | `undefined` |
+| `match` | `string` | `undefined` |
+| `k` | `string` | `'name'` |
+
+#### Returns
+
+[`RecordFlat`](../interfaces/layouts_record.RecordFlat.md)
+
+#### Defined in
+
+[src/classes/system-meta.ts:104](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L104)
+
+___
+
+### load
+
+▸ **load**(`schema_path`): `Promise`<`any`[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema_path` | `string` |
+
+#### Returns
+
+`Promise`<`any`[]\>
+
+#### Defined in
+
+[src/classes/system-meta.ts:89](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L89)
 
 ___
 
@@ -115,33 +215,21 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:48](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L48)
-
-___
-
-### select
-
-▸ `Private` **select**(`schema_name`): `Promise`<`any`[]\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema_name` | `string` |
-
-#### Returns
-
-`Promise`<`any`[]\>
-
-#### Defined in
-
-[src/classes/system-meta.ts:53](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L53)
+[src/classes/system-meta.ts:76](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L76)
 
 ___
 
 ### startup
 
 ▸ **startup**(): `Promise`<`void`\>
+
+The `startup` method loads all the core metadata from the DB into a local
+service cache. At present, it does the following:
+
+1. Load all `system.schema` records
+2. Load all `system.column` records
+
+Once the data is here, we store it in the metadata cache.
 
 #### Returns
 
@@ -153,45 +241,4 @@ ___
 
 #### Defined in
 
-[src/classes/system-meta.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L25)
-
-___
-
-### toFilter
-
-▸ **toFilter**(`schema_name`, `filter_data`): [`Filter`](classes_filter.Filter.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
-| `filter_data` | `Dictionary`<`any`\> |
-
-#### Returns
-
-[`Filter`](classes_filter.Filter.md)
-
-#### Defined in
-
-[src/classes/system-meta.ts:84](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L84)
-
-___
-
-### toSchema
-
-▸ **toSchema**(`schema_name`): [`Schema`](classes_schema.Schema.md)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `schema_name` | `string` \| [`Schema`](classes_schema.Schema.md) |
-
-#### Returns
-
-[`Schema`](classes_schema.Schema.md)
-
-#### Defined in
-
-[src/classes/system-meta.ts:66](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/system-meta.ts#L66)
+[src/classes/system-meta.ts:46](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/system-meta.ts#L46)

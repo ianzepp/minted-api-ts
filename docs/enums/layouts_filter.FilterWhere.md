@@ -21,6 +21,7 @@ The filter operations that can be conducted for 'where' logic.
 - [Min](layouts_filter.FilterWhere.md#min)
 - [Neq](layouts_filter.FilterWhere.md#neq)
 - [Nin](layouts_filter.FilterWhere.md#nin)
+- [Not](layouts_filter.FilterWhere.md#not)
 
 ## Enumeration Members
 
@@ -30,7 +31,7 @@ The filter operations that can be conducted for 'where' logic.
 
 #### Defined in
 
-[src/layouts/filter.ts:35](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L35)
+[src/layouts/filter.ts:35](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L35)
 
 ___
 
@@ -40,7 +41,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:36](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L36)
+[src/layouts/filter.ts:36](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L36)
 
 ___
 
@@ -50,7 +51,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:37](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L37)
+[src/layouts/filter.ts:37](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L37)
 
 ___
 
@@ -60,7 +61,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:38](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L38)
+[src/layouts/filter.ts:38](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L38)
 
 ___
 
@@ -70,7 +71,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:39](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L39)
+[src/layouts/filter.ts:39](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L39)
 
 ___
 
@@ -80,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:40](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L40)
+[src/layouts/filter.ts:40](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L40)
 
 ___
 
@@ -90,7 +91,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:41](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L41)
+[src/layouts/filter.ts:41](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L41)
 
 ___
 
@@ -100,7 +101,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:42](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L42)
+[src/layouts/filter.ts:42](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L42)
 
 ___
 
@@ -110,7 +111,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:43](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L43)
+[src/layouts/filter.ts:43](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L43)
 
 ___
 
@@ -120,7 +121,7 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:44](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L44)
+[src/layouts/filter.ts:44](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L44)
 
 ___
 
@@ -130,4 +131,14 @@ ___
 
 #### Defined in
 
-[src/layouts/filter.ts:45](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/filter.ts#L45)
+[src/layouts/filter.ts:45](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L45)
+
+___
+
+### Not
+
+• **Not** = ``"$not"``
+
+#### Defined in
+
+[src/layouts/filter.ts:46](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/filter.ts#L46)

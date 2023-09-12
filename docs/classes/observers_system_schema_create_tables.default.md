@@ -4,15 +4,6 @@
 
 [observers/system.schema/create-tables](../modules/observers_system_schema_create_tables.md).default
 
-This class extends the Observer class and provides methods for creating a schema in Knex.
-
-It is responsible for calling the `knex.schema` interface and creating the actual 
-table structures in the database, including:
-- the `<schema_name>` base table
-- the `<schema_name>_info` table
-- the `<schema_name>_acls` table
-- the `<schema_name>_logs` table
-
 ## Hierarchy
 
 - [`Observer`](classes_observer.Observer.md)
@@ -32,7 +23,7 @@ table structures in the database, including:
 
 ### Methods
 
-- [createTable](observers_system_schema_create_tables.default.md#createtable)
+- [cleanup](observers_system_schema_create_tables.default.md#cleanup)
 - [isFailable](observers_system_schema_create_tables.default.md#isfailable)
 - [isRunnable](observers_system_schema_create_tables.default.md#isrunnable)
 - [onCreate](observers_system_schema_create_tables.default.md#oncreate)
@@ -44,7 +35,9 @@ table structures in the database, including:
 - [onSelect](observers_system_schema_create_tables.default.md#onselect)
 - [onUpdate](observers_system_schema_create_tables.default.md#onupdate)
 - [onUpsert](observers_system_schema_create_tables.default.md#onupsert)
+- [one](observers_system_schema_create_tables.default.md#one)
 - [run](observers_system_schema_create_tables.default.md#run)
+- [startup](observers_system_schema_create_tables.default.md#startup)
 - [toJSON](observers_system_schema_create_tables.default.md#tojson)
 - [toName](observers_system_schema_create_tables.default.md#toname)
 
@@ -60,7 +53,7 @@ table structures in the database, including:
 
 #### Defined in
 
-[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L14)
+[src/classes/observer.ts:14](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L14)
 
 ## Properties
 
@@ -74,7 +67,7 @@ table structures in the database, including:
 
 #### Defined in
 
-[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L11)
+[src/classes/observer.ts:11](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L11)
 
 ___
 
@@ -88,28 +81,31 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L12)
+[src/classes/observer.ts:12](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L12)
 
 ## Methods
 
-### createTable
+### cleanup
 
-▸ `Private` **createTable**(`flow`, `record`): `Promise`<`void`\>
+▸ **cleanup**(`flow`): `Promise`<`any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
-| `record` | [`Record`](classes_record.Record.md) |
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`<`any`\>
+
+#### Inherited from
+
+[Observer](classes_observer.Observer.md).[cleanup](classes_observer.Observer.md#cleanup)
 
 #### Defined in
 
-[src/observers/system.schema/create-tables.ts:55](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.schema/create-tables.ts#L55)
+[src/classes/observer.ts:18](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L18)
 
 ___
 
@@ -127,7 +123,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L79)
+[src/classes/observer.ts:79](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L79)
 
 ___
 
@@ -145,7 +141,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L75)
+[src/classes/observer.ts:75](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L75)
 
 ___
 
@@ -163,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.schema/create-tables.ts:44](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.schema/create-tables.ts#L44)
+[src/observers/system.schema/create-tables.ts:27](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.schema/create-tables.ts#L27)
 
 ___
 
@@ -181,7 +177,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L71)
+[src/classes/observer.ts:71](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L71)
 
 ___
 
@@ -199,7 +195,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L67)
+[src/classes/observer.ts:67](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L67)
 
 ___
 
@@ -217,7 +213,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L47)
+[src/classes/observer.ts:47](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L47)
 
 ___
 
@@ -235,7 +231,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.schema/create-tables.ts:40](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.schema/create-tables.ts#L40)
+[src/observers/system.schema/create-tables.ts:23](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.schema/create-tables.ts#L23)
 
 ___
 
@@ -253,7 +249,7 @@ ___
 
 #### Defined in
 
-[src/observers/system.schema/create-tables.ts:36](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.schema/create-tables.ts#L36)
+[src/observers/system.schema/create-tables.ts:19](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.schema/create-tables.ts#L19)
 
 ___
 
@@ -271,7 +267,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L51)
+[src/classes/observer.ts:51](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L51)
 
 ___
 
@@ -289,7 +285,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:59](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L59)
+[src/classes/observer.ts:59](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L59)
 
 ___
 
@@ -307,7 +303,28 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:63](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L63)
+[src/classes/observer.ts:63](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L63)
+
+___
+
+### one
+
+▸ **one**(`flow`, `record`): `Promise`<`void`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
+| `record` | [`Record`](classes_record.Record.md) |
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Defined in
+
+[src/observers/system.schema/create-tables.ts:35](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.schema/create-tables.ts#L35)
 
 ___
 
@@ -331,7 +348,31 @@ ___
 
 #### Defined in
 
-[src/observers/system.schema/create-tables.ts:48](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.schema/create-tables.ts#L48)
+[src/observers/system.schema/create-tables.ts:31](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.schema/create-tables.ts#L31)
+
+___
+
+### startup
+
+▸ **startup**(`flow`): `Promise`<`any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `flow` | [`ObserverFlow`](classes_observer_flow.ObserverFlow.md) |
+
+#### Returns
+
+`Promise`<`any`\>
+
+#### Inherited from
+
+[Observer](classes_observer.Observer.md).[startup](classes_observer.Observer.md#startup)
+
+#### Defined in
+
+[src/classes/observer.ts:16](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L16)
 
 ___
 
@@ -349,7 +390,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer.ts#L20)
+[src/classes/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer.ts#L20)
 
 ___
 
@@ -367,4 +408,4 @@ ___
 
 #### Defined in
 
-[src/observers/system.schema/create-tables.ts:32](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/observers/system.schema/create-tables.ts#L32)
+[src/observers/system.schema/create-tables.ts:15](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/observers/system.schema/create-tables.ts#L15)
