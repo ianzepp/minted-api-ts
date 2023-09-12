@@ -8,6 +8,9 @@ import { SystemData } from '../classes/system-data';
 import { SystemMeta } from '../classes/system-meta';
 import { SystemKnex } from '../classes/system-knex';
 
+// Enums
+import { SchemaType } from './schema-type';
+
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
 export interface SystemService {
@@ -21,6 +24,9 @@ export class System {
 
     public static TestId = "99999999-9999-4999-9999-999999999999"; // v4 UUID
     public static TestNs = "test";
+
+    // Enums
+    public static SchemaType = SchemaType;
 
     // Services
     public readonly auth = new SystemAuth(this);

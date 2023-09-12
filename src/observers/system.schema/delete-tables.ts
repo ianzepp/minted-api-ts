@@ -3,35 +3,21 @@ import chai from 'chai';
 import { Knex } from 'knex';
 
 // Classes
+import { AutoInstall } from '../../classes/autoinstall';
 import { Observer } from '../../classes/observer';
 import { ObserverFlow } from '../../classes/observer-flow';
+import { ObserverRing } from '../../layouts/observer';
 import { Record } from '../../classes/record';
 import { Schema } from '../../classes/schema';
-
-// Layouts
-import { ObserverRing } from '../../layouts/observer';
-
-/**
- * This class extends the Observer class and provides methods for creating a schema in Knex.
- * 
- * It is responsible for calling the `knex.schema` interface and creating the actual 
- * table structures in the database, including:
- * - the `<schema_name>` base table
- * - the `<schema_name>_info` table
- * - the `<schema_name>_acls` table
- * - the `<schema_name>_logs` table
- * 
- * @class
- * @extends {Observer}
- */
+import { SchemaType } from '../../classes/schema-type';
 
 export default class extends Observer {
     toName(): string {
-        return 'schema.delete-tables';
+        return 'schema.post-create';
     }
     
     onSchema(): string {
-        return 'schema';
+        return SchemaType.Schema;
     }
 
     onRing(): ObserverRing {
@@ -43,15 +29,17 @@ export default class extends Observer {
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        for(let record of flow.change) {
-            let system = flow.system;
-            let schema_name = record.data.schema_name;
+        await Promise.all(flow.change.map(record => this.one(flow, record)));
+    }
 
-            // Delete base table
-            await system.knex.schema.dropTable(schema_name);
+    async one(flow: ObserverFlow, record: Record) {
+        let auto = new AutoInstall(flow.system);
 
-            // Explicitly delete the schema data from the local metadata for this execution context
-            delete system.meta.schemas[record.data.schema_name];
-        }
+        // Drop the table
+        await auto.deleteTable(record.data.schema_name);
+
+        // Explicitly delete the schema data from the local metadata this execution context
+        // HACK TODO
+        delete flow.system.meta.schemas[record.data.schema_name];
     }
 }
