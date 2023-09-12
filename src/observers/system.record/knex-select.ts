@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { cond } from 'lodash';
 import { Knex } from 'knex';
 
 // Classes
@@ -37,10 +37,10 @@ export default class extends Observer {
         knex = knex.whereNull('meta.deleted_at');
         
         // Build `filter.where` conditions
-        knex = this.where(knex, flow.filter.where);
+        knex = this.whereOne(knex, flow.filter.where);
 
         // Build `filter.order` conditions
-        // knex = this.order(knex, flow.filter.order);
+        knex = this.order(knex, flow.filter.order);
 
         // Build `filter.limit`
         knex = this.limit(knex, flow.filter.limit);
@@ -59,30 +59,54 @@ export default class extends Observer {
         flow.change.push(... select);
     }
 
-    private where(knex: Knex.QueryBuilder, clause: _.Dictionary<any> | undefined) {
-        if (clause === undefined) {
-            return knex;
+    private whereAll(knex: Knex.QueryBuilder, conditions: _.Dictionary<any>[] = [], group: '$and' | '$or' = '$and') {
+        // console.warn('this.whereAll()', group, conditions);
+        let self = this;
+
+        return knex.where(function() {
+            for(let i = 0; i < conditions.length; i++) {
+                let clause = conditions[0];
+                
+                function callFn() {
+                    self.whereOne(this, clause);
+                }
+
+                if (i === 0 || group === '$and') {
+                    this.where(callFn)
+                }
+
+                else if (group === '$or') {
+                    this.orWhere(callFn);
+                }
+
+                else {
+                    // ?
+                }
+            }
+        });
+    }
+
+    private whereOne(knex: Knex.QueryBuilder, clause: _.Dictionary<any> = {}) {
+        // console.warn('this.where()', clause);
+
+        for(let name in clause) {
+            let data = clause[name];
+
+            knex = this.whereOp(knex, name, data)
         }
 
-        _.forEach(clause, (data, name) => this.whereOps(knex, name, data));
         return knex;
     }
 
-    private whereAnd(knex: Knex.QueryBuilder, data: any) {
-        throw 'Unsupported filter where "$and" grouping';
-    }
+    private whereOp(knex: Knex.QueryBuilder, name: string, data: any) {
+        // console.warn('this.whereOp()', name, data);
 
-    private whereOr(knex: Knex.QueryBuilder, data: any) {
-        throw 'Unsupported filter where "$and" grouping';
-    }
-
-    private whereOps(knex: Knex.QueryBuilder, name: string, data: any) {
         if (name == Filter.Group.And) {
-            return this.whereAnd(knex, data);
+            return this.whereAll(knex, data, '$and');
         }
 
         if (name == Filter.Group.Or) {
-            return this.whereOr(knex, data);
+            return this.whereAll(knex, data, '$or');
         }
 
         if (name.startsWith('$')) {
@@ -130,6 +154,14 @@ export default class extends Observer {
             throw 'Invalid filter "where" operation type: ' + typeof op;
         }
 
+        if (op == Filter.Where.Not && op_data === null) {
+            return knex.whereNotNull(column_name);
+        }
+
+        if (op == Filter.Where.Not || op == Filter.Where.Neq) {
+            return knex.whereNot(column_name, op_data);
+        }
+
         if (op == Filter.Where.Eq && op_data === null) {
             return knex.whereNull(column_name);
         }
@@ -170,21 +202,25 @@ export default class extends Observer {
             return knex.where(column_name, '<=', op_data);
         }
 
+        if (op == Filter.Where.Find) {
+            return knex.whereILike(column_name, op_data);
+        }
+
         throw 'Unknown filter "where" operator: ' + op;
     }
 
-    private order(knex: Knex.QueryBuilder, clauses: _.Dictionary<any> | undefined) {
-        if (clauses === undefined) {
-            return knex;
-        }
 
-        let [[name, sort]] = Object.entries(clauses);
+    private order(knex: Knex.QueryBuilder, clauses: _.Dictionary<any> = {}) {
+        _.each(clauses, (sort, column_name) => {
+            sort = sort || '';
+            sort = sort.toLowerCase().trim();
 
-        if (sort === 'asc' || sort === 'desc') {
-            return knex.orderBy(name, sort);
-        }
+            if (sort === 'asc' || sort === 'desc') {
+                knex = knex.orderBy(column_name, sort);
+            }
+        });
 
-        throw 'Unknown filter "order" sorting: ' + sort;
+        return knex;
     }
 
     private limit(knex: Knex.QueryBuilder, limit: number | undefined) {

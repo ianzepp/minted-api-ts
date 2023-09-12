@@ -43,6 +43,7 @@ export enum FilterWhere {
     Min = '$min',
     Neq = '$ne',
     Nin = '$nin',
+    Not = '$not',
 }
 
 
