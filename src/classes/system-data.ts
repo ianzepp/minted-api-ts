@@ -1,18 +1,18 @@
 import _ from 'lodash';
 
 // Classes
-import { ObserverFlow } from '../classes/observer-flow';
-import { Record } from '../classes/record';
-import { System } from '../classes/system';
-import { SystemService } from '../classes/system';
-import { Schema } from '../classes/schema';
+import { ObserverFlow } from '@classes/observer-flow';
+import { Record } from '@classes/record';
+import { System } from '@classes/system';
+import { SystemService } from '@classes/system';
+import { Schema } from '@classes/schema';
 
 // Layouts
-import { ChangeData } from '../layouts/record';
-import { FilterJson } from '../layouts/filter';
-import { ObserverRing } from '../layouts/observer';
-import { SchemaName } from '../layouts/schema';
-import { SystemVerb } from '../layouts/system';
+import { ChangeData } from '@layouts/record';
+import { FilterJson } from '@layouts/filter';
+import { ObserverRing } from '@layouts/observer';
+import { SchemaName } from '@layouts/schema';
+import { SystemVerb } from '@layouts/system';
 
 // Data API errors
 export class DataError extends Error {};

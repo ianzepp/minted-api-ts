@@ -3,8 +3,8 @@ import chai from 'chai';
 import jwt from 'jsonwebtoken';
 
 // Classes
-import { System } from './system';
-import { SystemService } from './system';
+import { System } from '@classes/system';
+import { SystemService } from '@classes/system';
 
 // User API errors
 export class AuthError extends Error {};

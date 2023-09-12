@@ -11,17 +11,17 @@ const jsonBody = Util.promisify(require('body/json'));
 const formBody = Util.promisify(require('body/form'));
 
 // Classes
-import { HttpReq } from '../classes/http-req';
-import { HttpRes } from '../classes/http-res';
-import { System } from '../classes/system';
-import { SystemAsCors } from '../classes/system';
+import { HttpReq } from '@classes/http-req';
+import { HttpRes } from '@classes/http-res';
+import { System } from '@classes/system';
+import { SystemAsCors } from '@classes/system';
 
 // Error
 export class HttpError extends Error {};
 export class HttpRouteNotFoundError extends HttpError {};
 
 // Import pre-loaded routers
-import HttpRouters from '../preloader/routers';
+import HttpRouters from '@preloader/routers';
 
 export class HttpServer {
     // Start the server

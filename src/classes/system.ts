@@ -3,10 +3,10 @@ import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
 // System services
-import { SystemAuth } from '../classes/system-auth';
-import { SystemData } from '../classes/system-data';
-import { SystemMeta } from '../classes/system-meta';
-import { SystemKnex } from '../classes/system-knex';
+import { SystemAuth } from '@classes/system-auth';
+import { SystemData } from '@classes/system-data';
+import { SystemMeta } from '@classes/system-meta';
+import { SystemKnex } from '@classes/system-knex';
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
