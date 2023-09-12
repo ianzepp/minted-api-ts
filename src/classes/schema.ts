@@ -42,6 +42,10 @@ export class Schema {
     get metadata(): boolean {
         return this.source.metadata ?? false;
     }
+
+    is(schema_name: string) {
+        return this.schema_name === schema_name;
+    }
     
     toJSON() {
         return toJSON(this.source);
