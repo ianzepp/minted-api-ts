@@ -40,6 +40,14 @@ export class HttpRouter {
         return assert<HttpRes>(this.__res);
     }
 
+    get params(): _.Dictionary<string> {
+        return this.req.params;
+    }
+
+    get search(): _.Dictionary<string> {
+        return this.req.search;
+    }
+
     async runsafe(system: System, req: HttpReq, res: HttpRes): Promise<any> {
         // Default body values
         if (req.verb == HttpRouter.Verb.Get) {

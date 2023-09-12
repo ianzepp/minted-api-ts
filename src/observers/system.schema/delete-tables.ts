@@ -32,13 +32,18 @@ export default class extends Observer {
     }
 
     async one(flow: ObserverFlow, record: Record) {
+        let { schema_name, schema_type } = record.data;
         let auto = new AutoInstall(flow.system);
 
-        // Drop the table
-        await auto.deleteTable(record.data.schema_name);
+        // Only delete schemas that are marked as `database` types
+        if (schema_type !== 'database') {
+            return;
+        }
 
-        // Explicitly delete the schema data from the local metadata this execution context
-        // HACK TODO
-        delete flow.system.meta.schemas[record.data.schema_name];
+        // Drop the table
+        await auto.deleteTable(schema_name);
+
+        // Remove from system metadata
+        flow.system.meta.schemas.delete(schema_name);
     }
 }

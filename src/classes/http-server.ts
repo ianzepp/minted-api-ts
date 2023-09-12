@@ -14,7 +14,7 @@ const formBody = Util.promisify(require('body/form'));
 import { HttpReq } from '@classes/http-req';
 import { HttpRes } from '@classes/http-res';
 import { System } from '@classes/system';
-import { SystemAsCors } from '@classes/system';
+import { SystemAsRoot } from '@classes/system';
 
 // Error
 export class HttpError extends Error {};
@@ -67,12 +67,6 @@ export class HttpServer {
             throw new HttpRouteNotFoundError(req.url);
         }
 
-        // Process the request
-        let system = new SystemAsCors(req.headers.get('Authorization'));
-
-        // Authenticate the user in a lightweight fashion before we go too far
-        await system.authenticate();
-
         // Extract the body data
         let content_type = (req.headers.get('Content-Type') || '').split(';');
 
@@ -89,7 +83,7 @@ export class HttpServer {
         }
 
         // Run the router
-        await new SystemAsCors().run(async system => {
+        await new SystemAsRoot().run(async system => {
             try {
                 let result = await router.runsafe(system, httpReq, httpRes);
 
@@ -110,7 +104,7 @@ export class HttpServer {
                 }
                 else if (error instanceof Error) {
                     httpRes.status = 500;
-                    httpRes.result = error.name + ': ' + error.message;
+                    httpRes.result = 'error: ' + error.message;
                 }
 
                 else {

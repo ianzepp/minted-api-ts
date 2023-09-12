@@ -6,6 +6,7 @@ import { Record } from '@classes/record';
 import { System } from '@classes/system';
 import { SystemService } from '@classes/system';
 import { Schema } from '@classes/schema';
+import { Filter } from '@classes/filter';
 
 // Layouts
 import { ChangeData } from '@layouts/record';
@@ -57,8 +58,8 @@ export class SystemData implements SystemService {
         this.system.expect(filter_data, 'filter_data').an('object');
         this.system.expect(op, 'op').a('string');
 
-        let schema = this.system.meta.toSchema(schema_name);
-        let filter = this.system.meta.toFilter(schema_name, filter_data);
+        let schema = this.system.meta.schemas.get(schema_name);
+        let filter = new Filter(filter_data);
 
         // Is this something other than a select op, and the change data is empty?
         if (change_data.length === 0 && op !== SystemVerb.Select) {
@@ -85,7 +86,7 @@ export class SystemData implements SystemService {
     //
 
     async selectAll(schema_name: Schema | SchemaName, source_data: ChangeData[]): Promise<Record[]> {
-        let schema = this.system.meta.toSchema(schema_name);
+        let schema = this.system.meta.schemas.get(schema_name);
         let source = source_data.map(change => schema.toRecord(change).data.id);
 
         return this.selectIds(schema, _.uniq(_.compact(source)));

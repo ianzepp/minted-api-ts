@@ -33,13 +33,19 @@ export default class extends Observer {
     }
 
     async one(flow: ObserverFlow, record: Record) {
+        // Setup
+        let { schema_name, schema_type } = record.data;
         let auto = new AutoInstall(flow.system);
 
-        // Create the empty table with no default columns
-        await auto.createTable(record.data.schema_name, table => {});
+        // Only create schemas that are marked as `database` types
+        if (schema_type !== 'database') {
+            return;
+        }
 
-        // Explicitly add the schema data to the local metadata for this execution context
-        // HACK TODO
-        flow.system.meta.schemas[record.data.schema_name] = new Schema(record.data);
+        // Create the empty table with no default columns
+        await auto.createTable(schema_name, table => {});
+
+        // Add to system metadata
+        flow.system.meta.schemas.set(schema_name, new Schema(record.data));
     }
 }
