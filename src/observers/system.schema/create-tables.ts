@@ -13,7 +13,7 @@ import { SchemaType } from '@classes/schema-type';
 
 export default class extends Observer {
     toName(): string {
-        return 'schema.post-create';
+        return __filename;
     }
     
     onSchema(): string {

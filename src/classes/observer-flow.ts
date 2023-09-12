@@ -43,7 +43,7 @@ export class ObserverFlow {
     async run(ring: number): Promise<void> {
         // Get the master list of observers for this execution context
         let observers: Observer[] = []; 
-        observers.push(... _.get(Observers, 'record') || []);
+        observers.push(... _.get(Observers, '*') || []);
         observers.push(... _.get(Observers, this.schema.schema_name) || []);
 
         // Filter in a single loop

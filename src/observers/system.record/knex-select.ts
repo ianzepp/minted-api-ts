@@ -13,11 +13,11 @@ import { Schema } from '@classes/schema';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.knex-select';
+        return __filename;
     }
     
     onSchema(): string {
-        return 'record';
+        return '*';
     }
 
     onRing(): ObserverRing {

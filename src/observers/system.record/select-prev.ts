@@ -11,11 +11,11 @@ import { RecordFlat } from '@layouts/record';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.select-prev';
+        return __filename;
     }
     
     onSchema(): string {
-        return 'record';
+        return '*';
     }
 
     onRing(): ObserverRing {

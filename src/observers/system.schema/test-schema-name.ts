@@ -3,19 +3,19 @@ import _ from 'lodash';
 // Classes
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
-import { Schema } from '@classes/schema';
 
 // Layouts
 import { ObserverRing } from '@layouts/observer';
+import { SchemaType } from '@classes/schema-type';
 
 
 export default class extends Observer {
     toName(): string {
-        return 'schema.test-schema-name';
+        return __filename;
     }
     
     onSchema(): string {
-        return 'schema';
+        return SchemaType.Schema;
     }
 
     onRing(): ObserverRing {
