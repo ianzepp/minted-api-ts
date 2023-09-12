@@ -25,15 +25,8 @@ export class AutoInstall {
         await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "system__meta";');
         await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "system__meta" TO PUBLIC;');
 
-        // Create namespace for `test`
-        await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "test__data";');
-        await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "test__data" TO PUBLIC;');
-
-        await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "test__meta";');
-        await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "test__meta" TO PUBLIC;');
-
         // System table is always visible
-        await this.knex.raw(`ALTER DATABASE "${dn}" SET search_path TO system__data, public;`);
+        await this.knex.raw(`ALTER DATABASE "${dn}" SET search_path TO system__data, system__meta;`);
 
         // Start the tx
         await this.knex.raw('BEGIN TRANSACTION;');
@@ -50,22 +43,45 @@ export class AutoInstall {
             VALUES ('${ System.RootId }', '${ System.RootNs }', CURRENT_TIMESTAMP);
         `)
 
-        // Create the master client table.
-        await this.createTable('system.client', (table) => {
+        // Create the master system table.
+        await this.createTable('system.system', (table) => {
             table.string('client_name').notNullable();
         });
 
-        // Create the master client data records.
-        await this.insertAll('system.client', [
+        // Create the master system record.
+        await this.insertAll('system.system', [
             { ns: 'system', client_name: 'Minted API System' },
-            { ns: 'test', client_name: 'Minted API Test Runner' },
         ]);
+
+        //
+        // Define the trigger that adds new schemas when a new client is created.
+        //
+        await this.knex.raw(`
+            CREATE OR REPLACE FUNCTION new_system_create_schema_trigger()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__data";';
+                EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__meta";';
+                
+                RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+
+            CREATE TRIGGER new_system_create_schema
+            AFTER INSERT ON "system__data"."system"
+            FOR EACH ROW
+            EXECUTE PROCEDURE new_system_create_schema_trigger();
+        `);
+        
+        // Create the master test system record. This tests that the trigger works.
+        await this.insertAll('system.system', [
+            { ns: 'test', client_name: 'Minted API System Tests' },
+        ]);
+
 
         //
         // Meta definitions
         //
-
-        // Create table `client`
 
         // Create table `schema`
         await this.createTable('system.schema', (table) => {
@@ -97,7 +113,7 @@ export class AutoInstall {
         });
 
         // Create table `client_user`
-        await this.createTable('system.client_user', table => {
+        await this.createTable('system.client', table => {
             table.string('name').notNullable();
         });
 
@@ -109,7 +125,7 @@ export class AutoInstall {
         await this.insertAll('system.schema', [
             { ns: 'system', schema_name: 'system.schema', schema_type: 'database', metadata: true },
             { ns: 'system', schema_name: 'system.column', schema_type: 'database', metadata: true },
-            { ns: 'system', schema_name: 'system.client_user', schema_type: 'database', metadata: false },
+            { ns: 'system', schema_name: 'system.client', schema_type: 'database', metadata: false },
         ]);
 
         // Add data for `column`
@@ -139,11 +155,11 @@ export class AutoInstall {
             { ns: 'system', schema_name: 'system.column', column_name: 'precision', column_type: 'integer' },
 
             // Columns for 'user'
-            { ns: 'system', schema_name: 'system.client_user', column_name: 'name', column_type: 'text' },
+            { ns: 'system', schema_name: 'system.client', column_name: 'name', column_type: 'text' },
         ]);
 
         // Add data for `client_user`
-        await this.insertAll('system.client_user', [
+        await this.insertAll('system.client', [
             { ns: System.RootNs, id: System.RootId, name: 'root' },
             { ns: System.TestNs, id: System.TestId, name: 'test' },
         ]);
@@ -168,12 +184,12 @@ export class AutoInstall {
             table.uuid('id').primary().notNullable().defaultTo(this.knex.fn.uuid());
 
             // Only applies to the very first one
-            if (schema_path === 'system.client') {
+            if (schema_path === 'system.system') {
                 table.string('ns').notNullable().unique();
             }
 
             else {
-                table.string('ns').notNullable().references('ns').inTable('system__data.client').onDelete('CASCADE');
+                table.string('ns').notNullable().references('ns').inTable('system__data.system').onDelete('CASCADE');
             }
 
             // Apply extra columns
