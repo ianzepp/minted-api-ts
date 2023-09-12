@@ -6,6 +6,7 @@ import { ObserverFlow } from '@classes/observer-flow';
 
 // Layouts
 import { ObserverRing } from '@layouts/observer';
+import { DataError } from '@classes/system-data';
 
 
 export default class extends Observer {
@@ -55,7 +56,7 @@ export default class extends Observer {
                 }
 
                 // Failed test
-                flow.fail(300, `"${column.column_name}" value "${data}" > maximum of "${column.maximum}"`, record);
+                throw new DataError(`"${column.column_name}" value "${data}" > maximum of "${column.maximum}"`);
             }
         }
    }

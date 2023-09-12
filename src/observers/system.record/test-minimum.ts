@@ -7,6 +7,7 @@ import { Column } from '@classes/column';
 
 // Layouts
 import { ObserverRing } from '@layouts/observer';
+import { DataError } from '@classes/system-data';
 
 
 export default class extends Observer {
@@ -56,7 +57,7 @@ export default class extends Observer {
                 }
 
                 // Failed test
-                flow.fail(300, `"${column.column_name}" value "${data}" < minimum of "${column.minimum}"`, record);
+                throw new DataError(`"${column.column_name}" value "${data}" < minimum of "${column.minimum}"`);
             }
         }
    }

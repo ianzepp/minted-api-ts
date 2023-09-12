@@ -117,14 +117,4 @@ export class ObserverFlow {
 
         throw this.failures;
     }
-
-    fail(code: number, message: string, record?: Record): void {
-        console.warn('ObserverFlow: FAIL %j message=%j record=%j', code, message, record);
-        
-        this.failures.push({
-            code: code,
-            message: message,
-            record: record
-        });
-    }
 }

@@ -115,13 +115,17 @@ export class AutoInstall {
         // Add data for `column`
         await this.insertAll('system.column', [
             // Columns for 'schema'
-            { ns: 'system', schema_name: 'system.schema', column_name: 'schema_name' },
+            { ns: 'system', schema_name: 'system.schema', column_name: 'schema_name', required: true },
+            { ns: 'system', schema_name: 'system.schema', column_name: 'schema_type' },
+            { ns: 'system', schema_name: 'system.schema', column_name: 'description' },
+            { ns: 'system', schema_name: 'system.schema', column_name: 'external', column_type: 'boolean' },
             { ns: 'system', schema_name: 'system.schema', column_name: 'metadata', column_type: 'boolean' },
 
             // Columns for 'column'
             { ns: 'system', schema_name: 'system.column', column_name: 'schema_name', required: true, immutable: true, indexed: true },
             { ns: 'system', schema_name: 'system.column', column_name: 'column_name', required: true, immutable: true, indexed: true },
             { ns: 'system', schema_name: 'system.column', column_name: 'column_type', required: true, immutable: true, indexed: true },
+            { ns: 'system', schema_name: 'system.column', column_name: 'description' },
 
             { ns: 'system', schema_name: 'system.column', column_name: 'audited', column_type: 'boolean' },
             { ns: 'system', schema_name: 'system.column', column_name: 'immutable', column_type: 'boolean' },

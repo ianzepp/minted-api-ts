@@ -1,100 +1,45 @@
 import _ from 'lodash';
-import chai from 'chai';
-
-// Classes
-import { Schema } from '@classes/schema';
-
-// Layouts
-import { ColumnType } from '@layouts/column';
-
-// Helpers
-import { toJSON } from '@classes/helpers';
-
 
 export class Column {
-    public readonly system_name: string;
+    public readonly id: string;
+    public readonly ns: string;
 
-    constructor(private readonly source: _.Dictionary<any>, public readonly schema: Schema) {
-        chai.expect(source).property('id').a('string');
-        chai.expect(source).property('ns').a('string');
+    public readonly schema_name: string;
+    public readonly column_name: string;
+    public readonly column_type: string;
+    
+    public readonly audited: boolean;
+    public readonly immutable: boolean;
+    public readonly indexed: boolean;
+    public readonly internal: boolean;
+    public readonly required: boolean;
+    public readonly unique: boolean;
 
-        chai.expect(source).property('schema_name').a('string');
-        chai.expect(source).property('column_name').a('string');
-        chai.expect(source).property('column_type').a('string');
-        
-        chai.expect(source).property('audited').a('boolean');
-        chai.expect(source).property('immutable').a('boolean');
-        chai.expect(source).property('indexed').a('boolean');
-        chai.expect(source).property('internal').a('boolean');
-        chai.expect(source).property('required').a('boolean');
-        chai.expect(source).property('unique').a('boolean');
-        
-        chai.expect(source).property('minimum');
-        chai.expect(source).property('maximum');
+    public readonly minimum: number | null;
+    public readonly maximum: number | null;
 
-        // Set system name
-        this.system_name = `${ source.ns }__${ source.schema_name }`;
-    }
+    constructor(flat: _.Dictionary<any>) {
+        this.id = flat.id;
+        this.ns = flat.ns;
 
-    get id(): string {
-        return this.source.id;
-    }
+        this.schema_name = flat.schema_name;
+        this.column_name = flat.column_name;
+        this.column_type = flat.column_type;
 
-    get ns(): string {
-        return this.source.ns;
-    }
+        this.audited = flat.audited;
+        this.immutable = flat.immutable;
+        this.indexed = flat.indexed;
+        this.internal = flat.internal;
+        this.required = flat.required;
+        this.unique = flat.unique;
 
-    get schema_name(): string {
-        return this.source.schema_name;
-    }
-
-    get column_name(): string {
-        return this.source.column_name;
-    }
-
-    get column_type(): string {
-        return this.source.column_type;
-    }
-
-    get audited(): boolean {
-        return this.source.audited;
-    }
-
-    get immutable(): boolean {
-        return this.source.immutable;
-    }
-
-    get indexed(): boolean {
-        return this.source.indexed;
-    }
-
-    get internal(): boolean {
-        return this.source.internal;
-    }
-
-    get required(): boolean {
-        return this.source.required;
-    }
-
-    get unique(): boolean {
-        return this.source.unique;
-    }
-
-    get minimum(): number | null {
-        return this.source.minimum;
-    }
-
-    get maximum(): number | null {
-        return this.source.maximum;
+        this.minimum = flat.minimum;
+        this.maximum = flat.maximum;
     }
 
     // Bonus
 
     get column_path(): string {
-        return this.schema.schema_name + ':' + this.column_name;
-    }
-
-    toJSON() {
-        return toJSON(this.source);
+        return this.schema_name + ':' + this.column_name;
     }
 }

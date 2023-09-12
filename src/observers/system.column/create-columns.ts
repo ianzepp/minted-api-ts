@@ -64,7 +64,7 @@ export default class extends Observer {
 
         // Setup
         let schema = flow.system.meta.schemas.get(schema_name);
-        let column = new Column(record.data, schema);
+        let column = new Column(record.data);
 
         // Add the column data to the parent schema
         schema.columns.set(column_name, column);
