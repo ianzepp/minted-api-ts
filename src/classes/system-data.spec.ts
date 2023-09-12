@@ -41,7 +41,7 @@ function expectRecord(result: any) {
 
 // Test suite
 let system = new SystemAsTest();
-let schema_type = SchemaType.ClientUser;
+let schema_type = SchemaType.Client;
 let source_data = [
     { ns: 'test', name: 'test-user-0' },
     { ns: 'test', name: 'test-user-1' },
