@@ -9,7 +9,7 @@ import { SchemaType } from '@classes/schema-type';
 
 export default class extends Observer {
     toName(): string {
-        return 'column.knex-delete-columns';
+        return __filename;
     }
     
     onSchema(): string {

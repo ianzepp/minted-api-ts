@@ -1,6 +1,4 @@
 import _ from 'lodash';
-import chai from 'chai';
-import { Knex } from 'knex';
 
 // Classes
 import { AutoInstall } from '@classes/autoinstall';
@@ -12,7 +10,7 @@ import { SchemaType } from '@classes/schema-type';
 
 export default class extends Observer {
     toName(): string {
-        return 'schema.post-create';
+        return __filename;
     }
     
     onSchema(): string {

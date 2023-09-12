@@ -13,11 +13,11 @@ import { DataError } from '@classes/system-data';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.knex-create';
+        return __filename;
     }
     
     onSchema(): string {
-        return 'record';
+        return '*';
     }
 
     onRing(): ObserverRing {

@@ -10,11 +10,11 @@ import { ObserverRing } from '@layouts/observer';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.knex-delete';
+        return __filename;
     }
     
     onSchema(): string {
-        return 'record';
+        return '*';
     }
 
     onRing(): ObserverRing {
