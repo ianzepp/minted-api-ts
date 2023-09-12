@@ -4,21 +4,21 @@ import path from 'path';
 import chai from 'chai';
 
 // Classes
-import { Filter } from '../classes/filter';
-import { Observer } from '../classes/observer';
-import { Record } from '../classes/record';
-import { Schema } from '../classes/schema';
-import { System } from '../classes/system';
+import { Filter } from '@classes/filter';
+import { Observer } from '@classes/observer';
+import { Record } from '@classes/record';
+import { Schema } from '@classes/schema';
+import { System } from '@classes/system';
 
 // Layouts
-import { ObserverFlowFailure } from '../layouts/observer';
-import { RecordJson } from '../layouts/record';
-import { SystemVerb } from '../layouts/system';
+import { ObserverFlowFailure } from '@layouts/observer';
+import { RecordJson } from '@layouts/record';
+import { SystemVerb } from '@layouts/system';
 
 // Import pre-loaded routers
-import Observers from '../preloader/observers';
+import Observers from '@preloader/observers';
 import { fail } from 'assert';
-import { DataError } from './system-data';
+import { DataError } from '@classes/system-data';
 
 
 export class ObserverFlow {

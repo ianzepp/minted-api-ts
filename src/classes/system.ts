@@ -3,10 +3,10 @@ import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
 // System services
-import { SystemAuth } from '../classes/system-auth';
-import { SystemData } from '../classes/system-data';
-import { SystemMeta } from '../classes/system-meta';
-import { SystemKnex } from '../classes/system-knex';
+import { SystemAuth } from '@classes/system-auth';
+import { SystemData } from '@classes/system-data';
+import { SystemMeta } from '@classes/system-meta';
+import { SystemKnex } from '@classes/system-knex';
 
 // Enums
 import { SchemaType } from './schema-type';
@@ -107,7 +107,7 @@ export class System {
     } 
 
     isProd() {
-        return process.env.NODE_ENV === 'production';
+        return Bun.env.NODE_ENV === 'production';
     } 
 }
 

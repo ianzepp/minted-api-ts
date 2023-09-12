@@ -1,4 +1,4 @@
-import { HttpRouter } from '../classes/http-router';
+import { HttpRouter } from '@classes/http-router';
 
 export interface HttpServerRoute {
     verb: string;

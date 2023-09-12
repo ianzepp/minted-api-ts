@@ -2,14 +2,14 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
-import { Schema } from '../classes/schema';
+import { Schema } from '@classes/schema';
 
 // Layouts
-import { ColumnType } from '../layouts/column';
+import { ColumnType } from '@layouts/column';
 
 // Helpers
-import assertReturn from '../helpers/assertReturn';
-import toJSON from '../helpers/toJSON';
+import assertReturn from '@helpers/assertReturn';
+import toJSON from '@helpers/toJSON';
 
 
 export class Column {

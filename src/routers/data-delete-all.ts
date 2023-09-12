@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 // API
-import { Filter } from '../classes/filter';
-import { HttpRouter } from '../classes/http-router';
+import { Filter } from '@classes/filter';
+import { HttpRouter } from '@classes/http-router';
 
 // Implementation
 export default class extends HttpRouter {

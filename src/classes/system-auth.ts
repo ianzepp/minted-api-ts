@@ -3,8 +3,8 @@ import chai from 'chai';
 import jwt from 'jsonwebtoken';
 
 // Classes
-import { System } from './system';
-import { SystemService } from './system';
+import { System } from '@classes/system';
+import { SystemService } from '@classes/system';
 
 // User API errors
 export class AuthError extends Error {};
@@ -12,13 +12,13 @@ export class AuthUserNotFoundError extends AuthError {};
 export class AuthClientNotFoundError extends AuthError {};
 
 // Sanity
-if (process.env.NODE_ENV === 'production') {
-    chai.assert(process.env.JWT_SECRET, '"process.env.JWT_SECRET" is missing');
+if (Bun.env.NODE_ENV === 'production') {
+    chai.assert(Bun.env.JWT_SECRET, '"Bun.env.JWT_SECRET" is missing');
 }
 
 export class SystemAuth implements SystemService {
     // JWT secret used for dev
-    private static JWT_SECRET = process.env.JWT_SECRET || 'development-password';
+    private static JWT_SECRET = Bun.env.JWT_SECRET || 'development-password';
     private static JWT_OPTION = { expiresIn: '1h' };
 
     constructor(private readonly system: System) {}

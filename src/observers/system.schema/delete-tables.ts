@@ -3,12 +3,11 @@ import chai from 'chai';
 import { Knex } from 'knex';
 
 // Classes
-import { AutoInstall } from '../../classes/autoinstall';
-import { Observer } from '../../classes/observer';
-import { ObserverFlow } from '../../classes/observer-flow';
-import { ObserverRing } from '../../layouts/observer';
-import { Record } from '../../classes/record';
-import { Schema } from '../../classes/schema';
+import { Observer } from '@classes/observer';
+import { ObserverFlow } from '@classes/observer-flow';
+import { ObserverRing } from '@layouts/observer';
+import { Record } from '@classes/record';
+import { Schema } from '@classes/schema';
 import { SchemaType } from '../../classes/schema-type';
 
 export default class extends Observer {

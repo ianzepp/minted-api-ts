@@ -5,12 +5,12 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { Record } from '../classes/record';
-import { Schema } from '../classes/schema';
-import { SystemAsTest } from '../classes/system';
-import { SchemaType } from './schema-type';
+import { Record } from '@classes/record';
+import { Schema } from '@classes/schema';
+import { SystemAsTest } from '@classes/system';
+import { SchemaType } from '@classes/schema-type';
 
-import { DataError, RecordNotFoundError } from './system-data';
+import { DataError, RecordNotFoundError } from '@classes/system-data';
 
 function expectStringOrNull(value: any) {
     console.warn('value', value);

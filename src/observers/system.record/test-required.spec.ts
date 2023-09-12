@@ -5,8 +5,8 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { SystemAsTest } from '../../classes/system';
-import { RecordColumnRequiredError } from '../../classes/system-data';
+import { SystemAsTest } from '@classes/system';
+import { RecordColumnRequiredError } from '@classes/system-data';
 
 describe('test-required', () => {
     let system = new SystemAsTest();

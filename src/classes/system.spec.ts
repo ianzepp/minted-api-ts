@@ -6,8 +6,8 @@ import { v4 as uuid } from 'uuid';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { System } from '../classes/system';
-import { SystemAsTest } from '../classes/system';
+import { System } from '@classes/system';
+import { SystemAsTest } from '@classes/system';
 
 describe('System', () => {
     let system = new SystemAsTest();

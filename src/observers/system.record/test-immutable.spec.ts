@@ -6,8 +6,8 @@ import { v4 as uuid } from 'uuid';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { SystemAsTest } from '../../classes/system';
-import { RecordColumnImmutableError } from '../../classes/system-data';
+import { SystemAsTest } from '@classes/system';
+import { RecordColumnImmutableError } from '@classes/system-data';
 
 describe('test-immutable', () => {
     let schema_name = 'test_' + process.hrtime().join('_');

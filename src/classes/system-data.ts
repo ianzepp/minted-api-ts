@@ -1,18 +1,18 @@
 import _ from 'lodash';
 
 // Classes
-import { ObserverFlow } from '../classes/observer-flow';
-import { Record } from '../classes/record';
-import { System } from '../classes/system';
-import { SystemService } from '../classes/system';
-import { Schema } from '../classes/schema';
+import { ObserverFlow } from '@classes/observer-flow';
+import { Record } from '@classes/record';
+import { System } from '@classes/system';
+import { SystemService } from '@classes/system';
+import { Schema } from '@classes/schema';
 
 // Layouts
-import { ChangeData } from '../layouts/record';
-import { FilterJson } from '../layouts/filter';
-import { ObserverRing } from '../layouts/observer';
-import { SchemaName } from '../layouts/schema';
-import { SystemVerb } from '../layouts/system';
+import { ChangeData } from '@layouts/record';
+import { FilterJson } from '@layouts/filter';
+import { ObserverRing } from '@layouts/observer';
+import { SchemaName } from '@layouts/schema';
+import { SystemVerb } from '@layouts/system';
 
 // Data API errors
 export class DataError extends Error {};
@@ -49,7 +49,7 @@ export class SystemData implements SystemService {
     //
 
     async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
-        if (process.env.POSTGRES_DEBUG === 'true') {
+        if (Bun.env.POSTGRES_DEBUG === 'true') {
             console.debug('SystemData.onRun()', op, schema_name, filter_data, change_data.length);
         }
 

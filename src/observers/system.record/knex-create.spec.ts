@@ -6,8 +6,8 @@ import { v4 as uuid } from 'uuid';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { Record } from '../../classes/record';
-import { SystemAsTest } from '../../classes/system';
+import { Record } from '@classes/record';
+import { SystemAsTest } from '@classes/system';
 
 describe('knex-create', () => {
     let system = new SystemAsTest();

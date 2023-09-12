@@ -1,10 +1,10 @@
 
 // Classes
-import { ObserverFlow } from '../classes/observer-flow';
+import { ObserverFlow } from '@classes/observer-flow';
 
 // Layouts
-import { ObserverRank } from '../layouts/observer';
-import { ObserverRing } from '../layouts/observer';
+import { ObserverRank } from '@layouts/observer';
+import { ObserverRing } from '@layouts/observer';
 
 export class Observer {
     // Re-export aliases
