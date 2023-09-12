@@ -15,56 +15,8 @@ brew install bun
 ```
 - Please read Bun's installation page for more information: https://bun.sh/docs/installation
 
-## Setup Bun For TypeScript
-
-Bun requires additional steps in order to configure it for use with TypeScript. The steps are taken from Bun's installation page. Please refer to the aforementioned website for more information.
-
-1. Install TypeScript definitions for Bun's built-in APIs: `bun add -d bun-types # dev dependency`
-2. Include `"bun-types"` in the `compilerOptions.types` of your `tsconfig.json`:
-```json
-{
-  "compilerOptions": {
-     "types": ["bun-types"]
-  }
-}
-```
-3. To use the recommended `compilerOptions` (via https://bun.sh/docs/runtime/typescript) alongside necessary ones:
-```json
-{
-  "compilerOptions": {
-     // required for minted-api
-     "outDir": "dst",
-     "sourceMap": true,
-
-     // add Bun type definitions
-     "types": ["bun-types"],
- 
-     // enable latest features
-     "lib": ["esnext"],
-     "module": "esnext",
-     "target": "esnext",
- 
-     // if TS 5.x+
-     "moduleResolution": "bundler",
-     "noEmit": true,
-     "allowImportingTsExtensions": true,
-     "moduleDetection": "force",
- 
-     // other 
-     "allowJs": true, // allow importing `.js` from `.ts`
-     "esModuleInterop": true, // allow default imports for CommonJS modules
- 
-     // best practices
-     "strict": true,
-     "forceConsistentCasingInFileNames": true,
-     "skipLibCheck": true
-  }
-}
-```
-
 ## Quick Start
 
-1. Install `Bun` at a global level using `npm install -g bun`
 1. Install the project dependencies by running `bun install`.
 1. Define your database connection by setting the following environment variables:
    - `POSTGRES_HOST`: The host of your PostgreSQL database.
@@ -87,6 +39,10 @@ Here are some of the bun scripts that you can run:
 ## Testing
 
 Tests are use Bun's framework for testing, which is akin to Jest testing. You can run these tests by running `bun test`.
+
+## Documentation
+
+There are `Typedoc` generated documentation files located at `docs/*`. These are formatted as markdown.
 
 ## Dependencies
 
