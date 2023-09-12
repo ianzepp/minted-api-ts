@@ -83,13 +83,13 @@ export class ObserverFlow {
         });
 
         for(let observer of observers) {
-            // console.debug('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
-            //     this.schema.schema_name, 
-            //     this.op, 
-            //     observer.onRing(),
-            //     observer.onRank(),
-            //     observer.toName()
-            // );
+            console.debug('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
+                this.schema.schema_name, 
+                this.op, 
+                observer.onRing(),
+                observer.onRank(),
+                observer.toName()
+            );
 
             try {
                 await observer.startup(this);
@@ -116,15 +116,5 @@ export class ObserverFlow {
         }
 
         throw this.failures;
-    }
-
-    fail(code: number, message: string, record?: Record): void {
-        console.warn('ObserverFlow: FAIL %j message=%j record=%j', code, message, record);
-        
-        this.failures.push({
-            code: code,
-            message: message,
-            record: record
-        });
     }
 }
