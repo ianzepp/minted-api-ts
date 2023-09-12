@@ -8,8 +8,7 @@ import { Schema } from '@classes/schema';
 import { ColumnType } from '@layouts/column';
 
 // Helpers
-import assertReturn from '@helpers/assertReturn';
-import toJSON from '@helpers/toJSON';
+import { toJSON } from '@classes/helpers';
 
 
 export class Column {

@@ -11,10 +11,7 @@ import { RecordFlat } from '@layouts/record';
 import { RecordJson } from '@layouts/record';
 
 // Helpers
-import isRecordDict from '@helpers/isRecordDict';
-import isRecordFlat from '@helpers/isRecordFlat';
-import isRecordJson from '@helpers/isRecordJson';
-import toJSON from '@helpers/toJSON';
+import { toJSON } from '@classes/helpers';
 
 export class Schema {
     // Public helpers
@@ -63,17 +60,17 @@ export class Schema {
             _.assign(record.meta, source.meta);
         }
 
-        else if (isRecordJson(source)) {
+        else if (this.isRecordJson(source)) {
             _.assign(record.data, source.data);
             _.assign(record.meta, source.meta);
         }
 
-        else if (isRecordFlat(source)) {
+        else if (this.isRecordFlat(source)) {
             _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
             _.assign(record.meta, _.pick(source, Record.ColumnsInfo));
         }
 
-        else if (isRecordDict(source)) {
+        else if (this.isRecordDict(source)) {
             _.assign(record.data, _.omit(source, Record.ColumnsInfo, Record.ColumnsAcls));
         }
 
@@ -82,5 +79,29 @@ export class Schema {
         }
 
         return record;
+    }
+
+    isRecordDict(source: unknown) {
+        return typeof source === 'object'; 
+    }
+
+    isRecordFlat(source: unknown) {
+        return typeof source === 'object'
+            && _.has(source, 'id')
+            && _.has(source, 'ns')
+            && _.has(source, 'created_at')
+            && _.has(source, 'updated_at')
+            && _.has(source, 'expired_at')
+            && _.has(source, 'acls_full')
+            && _.has(source, 'acls_edit')
+            && _.has(source, 'acls_read')
+            && _.has(source, 'acls_deny');
+    }
+
+    isRecordJson(source: unknown) {
+        return typeof source === 'object'
+            && _.has(source, 'data')
+            && _.has(source, 'info')
+            && _.has(source, 'acls');
     }
 }

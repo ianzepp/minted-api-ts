@@ -1,5 +1,7 @@
 import _ from 'lodash';
+import util from 'util';
 import chai from 'chai';
+import debug from 'debug';
 import { v4 as uuid } from 'uuid';
 
 // System services
@@ -96,6 +98,10 @@ export class System {
         finally {
             await this.cleanup();
         }
+    }
+
+    emit(cn, fn, ... messages) {
+        debug(cn + ':' + fn)(util.format(... messages));
     }
 
     isRoot() {

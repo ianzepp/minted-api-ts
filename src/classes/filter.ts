@@ -13,9 +13,7 @@ import { FilterWhere } from '@layouts/filter';
 import { FilterInfo } from '@layouts/filter';
 import { FilterJson } from '@layouts/filter';
 import { SchemaName } from '@layouts/schema';
-
-// Helpers
-import toJSON from '@helpers/toJSON';
+import { toJSON } from '@classes/helpers';
 
 
 export class Filter implements FilterInfo {
