@@ -31,8 +31,8 @@ let preloads = _.chain(preload_files)
     // Sort in ascending order by ring priority. Easier to do once here, then every time when executing
     .sortBy(observer => observer.onRank())
 
-    // Group the observers by their runtime schema
-    .groupBy(observer => observer.onSchema())
+    // Group the observers by their runtime ring
+    .groupBy(observer => observer.onRing())
 
     // Done, return the _.Dictionary<Observer[]>
     .value();

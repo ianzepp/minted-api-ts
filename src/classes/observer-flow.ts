@@ -41,19 +41,38 @@ export class ObserverFlow {
     }
 
     async run(ring: number): Promise<void> {
-        // Get the master list of observers for this execution context
-        let observers: Observer[] = []; 
-        observers.push(... _.get(Observers, '*') || []);
-        observers.push(... _.get(Observers, this.schema.schema_name) || []);
+        let observers = Observers[ring] || [];
 
         // Filter in a single loop
         observers = observers.filter(observer => {
-            // Wrong ring?
-            if (observer.onRing() != ring) {
+            //
+            // Negetive checks
+            //
+
+            // Wrong client namespace?
+            if (observer.onClient() != '*' && observer.onClient() !== this.system.user_ns) {
                 return false;
             }
 
-            // Accept if the operation matches
+            // Wrong schema name?
+            if (observer.onSchema() != '*' && observer.onSchema() !== this.schema.schema_name) {
+                return false;
+            }
+
+            // Don't run for root?
+            if (observer.onRoot() === false && this.system.isRoot()) {
+                return false;
+            }
+
+            // Don't run for test cases?
+            if (observer.onTest() === false && this.system.isTest()) {
+                return false;
+            }
+
+            //
+            // Positive checks
+            //
+
             if (observer.onSelect() && this.op == SystemVerb.Select) {
                 return true;
             }
@@ -83,38 +102,20 @@ export class ObserverFlow {
         });
 
         for(let observer of observers) {
-            // console.debug('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
-            //     this.schema.schema_name, 
-            //     this.op, 
-            //     observer.onRing(),
-            //     observer.onRank(),
-            //     observer.toName()
-            // );
-
-            try {
-                await observer.startup(this);
-                await observer.run(this);
-                await observer.cleanup(this);
+            if (this.system.isTest() === false) {
+                console.debug('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
+                    this.schema.schema_name, 
+                    this.op, 
+                    observer.onRing(),
+                    observer.onRank(),
+                    observer.toName()
+                );
             }
 
-            catch (error) {
-                if (this.system.isTest() === false) {
-                    console.error('ObserverFlow:', error.message);
-                }
-
-                if (error instanceof DataError) {
-                    throw error;
-                }
-
-                throw new DataError(error);
-            }
+            // Run the full cycle
+            await observer.startup(this);
+            await observer.run(this);
+            await observer.cleanup(this);
         }
-
-        // Check for failurs
-        if (this.failures.length === 0) {
-            return;
-        }
-
-        throw this.failures;
     }
 }
