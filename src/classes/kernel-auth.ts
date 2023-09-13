@@ -3,8 +3,8 @@ import chai from 'chai';
 import jwt from 'jsonwebtoken';
 
 // Classes
-import { System } from '@classes/system';
-import { SystemService } from '@classes/system';
+import { Kernel } from '@classes/kernel';
+import { KernelService } from '@classes/kernel';
 
 // User API errors
 export class AuthError extends Error {};
@@ -16,19 +16,19 @@ if (Bun.env.NODE_ENV === 'production') {
     chai.assert(Bun.env.JWT_SECRET, '"Bun.env.JWT_SECRET" is missing');
 }
 
-export class SystemAuth implements SystemService {
+export class KernelAuth implements KernelService {
     // JWT secret used for dev
     private static JWT_SECRET = Bun.env.JWT_SECRET || 'development-password';
     private static JWT_OPTION = { expiresIn: '1h' };
 
-    constructor(private readonly system: System) {}
+    constructor(private readonly kernel: Kernel) {}
 
     get id() {
-        return this.system.user_id;
+        return this.kernel.user_id;
     }
 
     get ns() {
-        return this.system.user_ns;
+        return this.kernel.user_ns;
     }
 
     get namespaces() {
@@ -39,14 +39,14 @@ export class SystemAuth implements SystemService {
     async cleanup(): Promise<void> {}
 
     async authenticate() {
-        // Verify user record exists and has access to the system
-        let user = this.system.knex.driverTo('system.client')
-            .where('id', this.system.user_id)
+        // Verify user record exists and has access to the kernel
+        let user = this.kernel.knex.driverTo('system.client')
+            .where('id', this.kernel.user_id)
             .column(['id', 'ns'])
             .first();
 
         if (user === undefined) {
-            throw new AuthUserNotFoundError(this.system.user_id);
+            throw new AuthUserNotFoundError(this.kernel.user_id);
         }
 
         return user;
@@ -54,9 +54,9 @@ export class SystemAuth implements SystemService {
 
     async signin() {
         return jwt.sign({
-            id: this.system.user_id,
-            ns: this.system.user_ns,
-        }, SystemAuth.JWT_SECRET, SystemAuth.JWT_OPTION);
+            id: this.kernel.user_id,
+            ns: this.kernel.user_ns,
+        }, KernelAuth.JWT_SECRET, KernelAuth.JWT_OPTION);
     }
 
     async signup() {

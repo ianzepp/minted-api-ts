@@ -8,14 +8,14 @@ import { ColumnsMeta, Record } from '@classes/record';
 
 // Layouts
 import { ObserverRing } from '@layouts/observer';
-import { DataError } from '@classes/system-data';
+import { DataError } from '@classes/kernel-data';
 import { Column } from '@classes/column';
 
 /**
  * This observer performs all the record prechecks/validations. This is done in one file
  * so that we don't have many small files doing duplicate loops over the same data.
  * 
- * @event SystemVerb.Create
+ * @event KernelVerb.Create
  */
 export default class extends Observer {
     toName(): string {
@@ -76,7 +76,7 @@ export default class extends Observer {
             return;
         }
 
-        if (flow.system.isRoot()) {
+        if (flow.kernel.isRoot()) {
             return;
         }
 
@@ -88,11 +88,11 @@ export default class extends Observer {
             return;
         }
 
-        if (record.data.ns === flow.system.user_ns) {
+        if (record.data.ns === flow.kernel.user_ns) {
             return;
         }
 
-        if (flow.system.isRoot()) {
+        if (flow.kernel.isRoot()) {
             return;
         }
 

@@ -32,18 +32,18 @@ export default class extends Observer {
         let { schema_name, column_name, column_type } = record.data;
         let [ ns, sn ] = record.data.schema_name.split('.');
 
-        await flow.system.knex.schema.table(`${ns}__data.${sn}`, t => {            
+        await flow.kernel.knex.schema.table(`${ns}__data.${sn}`, t => {            
             return t.dropColumn(column_name);
         });
 
         // Setup
-        let schema = flow.system.meta.schemas.get(schema_name);
+        let schema = flow.kernel.meta.schemas.get(schema_name);
         let column = schema.columns.get(column_name);
 
         // Delete the column data from the parent schema
         schema.columns.delete(column_name);
 
-        // Delete the column data from the system metadata
-        flow.system.meta.columns.delete(column.column_path);
+        // Delete the column data from the kernel metadata
+        flow.kernel.meta.columns.delete(column.column_path);
     }
 }

@@ -7,11 +7,11 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { SchemaType } from '@classes/schema-type';
-import { System } from '@classes/system';
-import { SystemAsTest } from '@classes/system';
+import { Kernel } from '@classes/kernel';
+import { KernelAsTest } from '@classes/kernel';
 import { Schema } from '@classes/schema';
 
-let system = new SystemAsTest();
+let kernel = new KernelAsTest();
 let source_data = { 
     schema_name: SchemaType.Client, 
     column_name: 'something', 
@@ -19,27 +19,27 @@ let source_data = {
 };
 
 beforeEach(async () => {
-    await system.startup();
+    await kernel.startup();
 });
 
 afterEach(async () => {
-    await system.cleanup();
+    await kernel.cleanup();
 });
 
 test('should create a knex column', async () => {
-    let record = await system.data.createOne(SchemaType.Column, source_data);
+    let record = await kernel.data.createOne(SchemaType.Column, source_data);
 
     // Make sure we can insert records
-    await system.data.createOne(SchemaType.Client, {
+    await kernel.data.createOne(SchemaType.Client, {
         name: 'username',
         something: 'this is some type of value'
     });
 
     // Delete column
-    let remove = await system.data.deleteOne(SchemaType.Column, record);
+    let remove = await kernel.data.deleteOne(SchemaType.Column, record);
 
     // Check using direct knex
-    let select = await system.knex.driverTo(SchemaType.Client).select().first();
+    let select = await kernel.knex.driverTo(SchemaType.Client).select().first();
 
     chai.expect(select).a('object');
     chai.expect(select).property('id').string;

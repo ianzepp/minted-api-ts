@@ -7,7 +7,7 @@ import { RecordJson } from "@layouts/record";
 
 /** The priority levels an observer can have. */
 export enum ObserverRank {
-    SystemMax = 0,
+    KernelMax = 0,
     Max = 1,
     Avg = 5,
     Min = 9,
@@ -15,7 +15,7 @@ export enum ObserverRank {
 
 /** The levels of operations for an observer. */
 export enum ObserverRing {
-    Init = 0, // System init
+    Init = 0, // Kernel init
     Prep = 1, // Logic prep
     Load = 2, // Load in any data dependencies
     Work = 3, // Run logic
@@ -24,7 +24,7 @@ export enum ObserverRing {
     Post = 6, // Post-db changes
     Flow = 7, // Cascade down to more flow operations
     Http = 8, // External HTTP updates, non-blocking
-    Done = 9, // System cleanup
+    Done = 9, // Kernel cleanup
 }
 
 

@@ -7,7 +7,7 @@ import { HttpRouter } from '@classes/http-router';
 // Implementation
 export default class extends HttpRouter {
     async run() {
-        return this.system.data.deleteAll(this.req.params.schema, this.req.body);
+        return this.kernel.data.deleteAll(this.req.params.schema, this.req.body);
     }
 
     onHttpVerb() {

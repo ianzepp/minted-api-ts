@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import { Knex } from 'knex';
 
-import { System } from '@classes/system';
-import { SystemAsRoot } from '@classes/system';
+import { Kernel } from '@classes/kernel';
+import { KernelAsRoot } from '@classes/kernel';
 
 export class AutoInstall {
-    constructor(public readonly system: System = new SystemAsRoot()) {}
+    constructor(public readonly kernel: Kernel = new KernelAsRoot()) {}
 
     get knex() {
-        return this.system.knex.driver;
+        return this.kernel.knex.driver;
     }
     
     async up() {
@@ -33,9 +33,9 @@ export class AutoInstall {
 
         // Set user vars
         await this.knex.raw(`
-            SET LOCAL minted.userinfo_id = '${ this.system.user_id }';
-            SET LOCAL minted.userinfo_ns = '${ this.system.user_ns }';
-            SET LOCAL minted.userinfo_ts = '${ this.system.time_iso }';
+            SET LOCAL minted.userinfo_id = '${ this.kernel.user_id }';
+            SET LOCAL minted.userinfo_ns = '${ this.kernel.user_ns }';
+            SET LOCAL minted.userinfo_ts = '${ this.kernel.time_iso }';
         `);
 
         // Create the userinfo scopes function
@@ -168,8 +168,8 @@ export class AutoInstall {
 
         // Add data for `client`
         await this.insertAll('system.client', [
-            { ns: System.RootNs, id: System.RootId, name: 'root' },
-            { ns: System.TestNs, id: System.TestId, name: 'test' },
+            { ns: Kernel.RootNs, id: Kernel.RootId, name: 'root' },
+            { ns: Kernel.TestNs, id: Kernel.TestId, name: 'test' },
         ]);
 
         // Commit the transaction
@@ -181,7 +181,7 @@ export class AutoInstall {
     //
 
     async createTable(schema_path: string, columnFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
-        if (this.system.isTest() === false) {
+        if (this.kernel.isTest() === false) {
             console.warn('autoinstall.createTable()', schema_path);
         }
 
@@ -279,7 +279,7 @@ export class AutoInstall {
     }
 
     async deleteTable(schema_path: string) {
-        if (this.system.isTest() === false) {
+        if (this.kernel.isTest() === false) {
             console.warn('autoinstall.deleteTable()', schema_path);
         }
 
@@ -294,7 +294,7 @@ export class AutoInstall {
     //
 
     async insertAll(schema_path: string, record_rows: _.Dictionary<any>[]) {
-        if (this.system.isTest() === false) {
+        if (this.kernel.isTest() === false) {
             console.warn('autoinstall.insertAll()', schema_path);
         }
 

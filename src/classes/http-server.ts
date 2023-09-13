@@ -13,8 +13,8 @@ const formBody = Util.promisify(require('body/form'));
 // Classes
 import { HttpReq } from '@classes/http-req';
 import { HttpRes } from '@classes/http-res';
-import { System } from '@classes/system';
-import { SystemAsRoot } from '@classes/system';
+import { Kernel } from '@classes/kernel';
+import { KernelAsRoot } from '@classes/kernel';
 
 // Error
 export class HttpError extends Error {};
@@ -28,7 +28,7 @@ export class HttpServer {
         // Process URL data
         let request_url = new UrlParse(req.url, true);
 
-        // Build the structures of httpReq and httpRes to be passed into system-http
+        // Build the structures of httpReq and httpRes to be passed into kernel-http
         let httpReq: HttpReq = {
             verb: req.method,
             path: request_url.pathname,
@@ -83,9 +83,9 @@ export class HttpServer {
         }
 
         // Run the router
-        await new SystemAsRoot().run(async system => {
+        await new KernelAsRoot().run(async kernel => {
             try {
-                let result = await router.runsafe(system, httpReq, httpRes);
+                let result = await router.runsafe(kernel, httpReq, httpRes);
 
                 if (result === undefined) {
                     result = null;

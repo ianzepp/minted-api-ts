@@ -35,7 +35,7 @@ export default class extends Observer {
     async one(flow: ObserverFlow, record: Record) {
         // Setup
         let { schema_name, schema_type } = record.data;
-        let auto = new AutoInstall(flow.system);
+        let auto = new AutoInstall(flow.kernel);
 
         // Only create schemas that are marked as `database` types
         if (schema_type !== 'database') {
@@ -45,7 +45,7 @@ export default class extends Observer {
         // Create the empty table with no default columns
         await auto.createTable(schema_name, table => {});
 
-        // Add to system metadata
-        flow.system.meta.schemas.set(schema_name, new Schema(record.data));
+        // Add to kernel metadata
+        flow.kernel.meta.schemas.set(schema_name, new Schema(record.data));
     }
 }
