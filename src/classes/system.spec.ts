@@ -15,12 +15,12 @@ beforeEach(() => system.startup());
 afterEach(() => system.cleanup());
 
 test('tx test: insert a user => should rollback', async () => {
-    let result = await system.data.createOne('system.client_user', { name: 'system-tx-test' });
+    let result = await system.data.createOne('system.client', { name: 'system-tx-test' });
     chai.expect(result).an('object').not.empty;
 });
 
 test('tx test: verify the user does not exist', async () => {
-    let result = await system.data.selectAny('system.client_user', { where: { name: 'system-tx-test' }});
+    let result = await system.data.selectAny('system.client', { where: { name: 'system-tx-test' }});
     chai.expect(result).an('array').empty;
 });
 

@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "autoinstall": "bash ./scripts/autoinstall.sh",
+    "ci:local": "bash ./scripts/ci:local.sh",
     "clean": "bash ./scripts/clean.sh",
+    "clean:test": "bash ./scripts/clean:test.sh",
     "start": "bash ./scripts/start.sh",
     "tsc": "bash ./scripts/tsc.sh",
     "typedoc": "bash ./scripts/typedoc.sh"

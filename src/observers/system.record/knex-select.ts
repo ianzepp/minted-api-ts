@@ -9,6 +9,7 @@ import { Filter } from '@classes/filter';
 // Layouts
 import { ObserverRing } from '@layouts/observer';
 import { Schema } from '@classes/schema';
+import { System } from '@classes/system';
 
 
 export default class extends Observer {
@@ -38,6 +39,9 @@ export default class extends Observer {
         
         // Build `filter.where` conditions
         knex = this.whereOne(knex, flow.filter.where);
+
+        // Add the ACL conditions
+        // knex = this.whereAcl(knex, flow.system);
 
         // Build `filter.order` conditions
         knex = this.order(knex, flow.filter.order);
@@ -209,6 +213,54 @@ export default class extends Observer {
         throw 'Unknown filter "where" operator: ' + op;
     }
 
+    private whereAcl(knex: Knex.QueryBuilder, system: System) {
+        //
+        // NOTE: This was moved to RLS in PG directly. See `Autoinstall`
+        //
+
+
+        // if (system.isRoot()) {
+        //     return;
+        // }
+
+        // // The record ACLs live in the `<schema_name>__meta` table as:
+        // // - acls_full UUID[]
+        // // - acls_edit UUID[]
+        // // - acls_read UUID[]
+        // // - acls_deny UUID[]
+        // //
+        // // Each user has a user ID (found in `system.user_id`)
+        // //
+        // // The following rules define whether a user can access a record or not (in this order):
+        // // 1. If the user's ID is in `acls_deny`, then no.
+        // // 2. If the user's ID is in `acls_full`, or `acls_edit`, or `acls_read`, then yes.
+        // // 3. If all of `acls_full`, `acls_edit`, and `acls_read` are `null`, then yes.
+
+        // let user_id = system.user_id;
+
+        // // Handle the deny case
+        // knex = knex.where(function() {
+        //     this.whereRaw('NOT meta.acls_deny @> ARRAY[?]::uuid[]', [user_id]);
+        //     this.orWhereNull('meta.acls_deny');
+        // });
+
+        // // Handle the view case
+        // knex = knex.where(function() {
+        //     this.whereRaw('meta.acls_full @> ARRAY[?]::uuid[]', [user_id]);
+        //     this.orWhereRaw('meta.acls_edit @> ARRAY[?]::uuid[]', [user_id]);
+        //     this.orWhereRaw('meta.acls_read @> ARRAY[?]::uuid[]', [user_id]);
+        //     this.orWhere(function() {
+        //         this.whereNull('meta.acls_full');
+        //         this.whereNull('meta.acls_edit');
+        //         this.whereNull('meta.acls_read');
+        //     });
+        // });
+
+        // console.warn('query', knex.toSQL());
+
+        // // Done
+        // return knex;
+    }
 
     private order(knex: Knex.QueryBuilder, clauses: _.Dictionary<any> = {}) {
         _.each(clauses, (sort, column_name) => {

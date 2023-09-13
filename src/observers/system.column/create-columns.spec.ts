@@ -12,7 +12,7 @@ import { SystemAsTest } from '@classes/system';
 
 let system = new SystemAsTest();
 let source_data = { 
-    schema_name: SchemaType.ClientUser, 
+    schema_name: SchemaType.Client, 
     column_name: 'something', 
     column_type: 'text' 
 };
@@ -29,13 +29,13 @@ test('should create a knex column', async () => {
     await system.data.createOne(SchemaType.Column, source_data);
 
     // // Make sure we can insert records
-    // await system.data.createOne(SchemaType.ClientUser, {
+    // await system.data.createOne(SchemaType.Client, {
     //     name: 'username',
     //     something: 'this is some type of value'
     // });
 
     // // Check using direct knex
-    // let select = await system.knex.driverTo(SchemaType.ClientUser).select().first();
+    // let select = await system.knex.driverTo(SchemaType.Client).select().first();
 
     // chai.expect(select).a('object');
     // chai.expect(select).property('id').string;

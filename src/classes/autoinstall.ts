@@ -25,47 +25,67 @@ export class AutoInstall {
         await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "system__meta";');
         await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "system__meta" TO PUBLIC;');
 
-        // Create namespace for `test`
-        await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "test__data";');
-        await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "test__data" TO PUBLIC;');
-
-        await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "test__meta";');
-        await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "test__meta" TO PUBLIC;');
-
         // System table is always visible
-        await this.knex.raw(`ALTER DATABASE "${dn}" SET search_path TO system__data, public;`);
+        await this.knex.raw(`ALTER DATABASE "${dn}" SET search_path TO system__data, system__meta;`);
 
         // Start the tx
         await this.knex.raw('BEGIN TRANSACTION;');
 
-        // Save a variable for future use in this tx
+        // Set user vars
         await this.knex.raw(`
-            CREATE TEMPORARY TABLE tx_session_data (
-                user_id UUID, 
-                user_ns TEXT,
-                user_ts TIMESTAMP
-            );
+            SET LOCAL minted.userinfo_id = '${ this.system.user_id }';
+            SET LOCAL minted.userinfo_ns = '${ this.system.user_ns }';
+            SET LOCAL minted.userinfo_ts = '${ this.system.time_iso }';
+        `);
 
-            INSERT INTO tx_session_data (user_id, user_ns, user_ts) 
-            VALUES ('${ System.RootId }', '${ System.RootNs }', CURRENT_TIMESTAMP);
-        `)
+        // Create the userinfo scopes function
+        await this.knex.raw(`
+            CREATE OR REPLACE FUNCTION get_userinfo_ns_read() 
+            RETURNS text[] AS $$
+            BEGIN
+                RETURN string_to_array(current_setting('minted.userinfo_ns_read'), ',');
+            END;
+            $$ LANGUAGE plpgsql;
+        `);
 
-        // Create the master client table.
-        await this.createTable('system.client', (table) => {
-            table.string('client_name').notNullable();
+        // Create the master system table.
+        await this.createTable('system.system', (table) => {
+            table.string('description').notNullable();
         });
 
-        // Create the master client data records.
-        await this.insertAll('system.client', [
-            { ns: 'system', client_name: 'Minted API System' },
-            { ns: 'test', client_name: 'Minted API Test Runner' },
+        // Create the master system record.
+        await this.insertAll('system.system', [
+            { ns: 'system', description: 'Minted API System' },
+        ]);
+
+        //
+        // Define the trigger that adds new schemas when a new client is created.
+        //
+        await this.knex.raw(`
+            CREATE OR REPLACE FUNCTION new_system_create_schema_trigger()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__data";';
+                EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__meta";';
+                
+                RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+
+            CREATE TRIGGER new_system_create_schema
+            AFTER INSERT ON "system__data"."system"
+            FOR EACH ROW
+            EXECUTE PROCEDURE new_system_create_schema_trigger();
+        `);
+        
+        // Create the master test system record. This tests that the trigger works.
+        await this.insertAll('system.system', [
+            { ns: 'test', description: 'Minted API Test Suite' },
         ]);
 
         //
         // Meta definitions
         //
-
-        // Create table `client`
 
         // Create table `schema`
         await this.createTable('system.schema', (table) => {
@@ -96,8 +116,8 @@ export class AutoInstall {
             table.integer('precision');
         });
 
-        // Create table `client_user`
-        await this.createTable('system.client_user', table => {
+        // Create table `client`
+        await this.createTable('system.client', table => {
             table.string('name').notNullable();
         });
 
@@ -107,13 +127,17 @@ export class AutoInstall {
 
         // Add data for `schema`
         await this.insertAll('system.schema', [
+            { ns: 'system', schema_name: 'system.system', schema_type: 'database' },
             { ns: 'system', schema_name: 'system.schema', schema_type: 'database', metadata: true },
             { ns: 'system', schema_name: 'system.column', schema_type: 'database', metadata: true },
-            { ns: 'system', schema_name: 'system.client_user', schema_type: 'database', metadata: false },
+            { ns: 'system', schema_name: 'system.client', schema_type: 'database', metadata: false },
         ]);
 
         // Add data for `column`
         await this.insertAll('system.column', [
+            // Columns for 'system'
+            { ns: 'system', schema_name: 'system.system', column_name: 'description' },
+
             // Columns for 'schema'
             { ns: 'system', schema_name: 'system.schema', column_name: 'schema_name', required: true },
             { ns: 'system', schema_name: 'system.schema', column_name: 'schema_type' },
@@ -139,11 +163,11 @@ export class AutoInstall {
             { ns: 'system', schema_name: 'system.column', column_name: 'precision', column_type: 'integer' },
 
             // Columns for 'user'
-            { ns: 'system', schema_name: 'system.client_user', column_name: 'name', column_type: 'text' },
+            { ns: 'system', schema_name: 'system.client', column_name: 'name', column_type: 'text', required: true },
         ]);
 
-        // Add data for `client_user`
-        await this.insertAll('system.client_user', [
+        // Add data for `client`
+        await this.insertAll('system.client', [
             { ns: System.RootNs, id: System.RootId, name: 'root' },
             { ns: System.TestNs, id: System.TestId, name: 'test' },
         ]);
@@ -168,12 +192,12 @@ export class AutoInstall {
             table.uuid('id').primary().notNullable().defaultTo(this.knex.fn.uuid());
 
             // Only applies to the very first one
-            if (schema_path === 'system.client') {
+            if (schema_path === 'system.system') {
                 table.string('ns').notNullable().unique();
             }
 
             else {
-                table.string('ns').notNullable().references('ns').inTable('system__data.client').onDelete('CASCADE');
+                table.string('ns').notNullable().references('ns').inTable('system__data.system').onDelete('CASCADE');
             }
 
             // Apply extra columns
@@ -204,6 +228,27 @@ export class AutoInstall {
         });
 
         //
+        // Row level security
+        // 
+
+        await this.knex.raw(`
+            ALTER TABLE "${ns}__meta"."${sn}" ENABLE ROW LEVEL SECURITY;
+
+            CREATE POLICY ${ns}_${sn}_rls_policy ON "${ns}__meta"."${sn}"
+            USING (
+                (
+                    (acls_deny IS NULL) OR 
+                    (NOT acls_deny @> ARRAY[current_setting('minted.userinfo_id')]::uuid[])
+                ) AND (
+                    (acls_full @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
+                    (acls_edit @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
+                    (acls_read @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
+                    (acls_full IS NULL AND acls_edit IS NULL AND acls_read IS NULL)
+                )
+            );
+        `);
+
+        //
         // Auto-insert metadata table
         //
 
@@ -212,16 +257,12 @@ export class AutoInstall {
             CREATE OR REPLACE FUNCTION ${ns}_${sn}_insert_meta_function()
             RETURNS TRIGGER AS $$
             DECLARE
-                temp_user_id UUID;
-                temp_user_ts TIMESTAMP;
+                temp_user_id uuid;
+                temp_user_ts timestamp;
             BEGIN
-                -- Find the current session vars
-                SELECT COALESCE(user_id, '00000000-0000-0000-0000-000000000000'), COALESCE(user_ts, CURRENT_TIMESTAMP)
-                  INTO temp_user_id, temp_user_ts 
-                  FROM tx_session_data
-                 LIMIT 1;
-        
-                -- Create the meta data
+                temp_user_id := current_setting('minted.userinfo_id')::uuid;
+                temp_user_ts := current_setting('minted.userinfo_ts')::timestamp;
+                
                 INSERT INTO "${ns}__meta"."${sn}" (id, ns, created_at, created_by)
                 VALUES (NEW.id, NEW.ns, temp_user_ts, temp_user_id);
                 

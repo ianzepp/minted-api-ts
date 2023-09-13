@@ -46,13 +46,17 @@ export class System {
     public readonly uuid = uuid;
     public readonly chai = chai;
 
+    // Sudo root
+    private sudo_chain: string[] = [];
+
     // Setup the user-specific system, or default to a root user.
     constructor(readonly user_id: string, readonly user_ns: string) {
-        if (user_id === System.RootId) {
-            return; // Root can be placed into any NS
+        // Nil UUID doesn't technically meet UUID version format requirements
+        if (user_id !== System.RootId) {
+            chai.expect(user_id).a('string').match(UUID_REGEX);
         }
 
-        chai.expect(user_id).a('string').match(UUID_REGEX);
+        // NS should always exist
         chai.expect(user_ns).a('string').not.empty;
     }
 
@@ -105,7 +109,8 @@ export class System {
     }
 
     isRoot() {
-        return System.RootId === this.user_id;
+        return System.RootId === this.user_id 
+            || System.RootId === _.last(this.sudo_chain);
     }
 
     isTest() {
@@ -115,6 +120,18 @@ export class System {
     isProd() {
         return Bun.env.NODE_ENV === 'production';
     } 
+
+    //
+    // Root sudo contest
+    //
+
+    sudoRoot() {
+        this.sudo_chain.push(System.RootId);
+    }
+
+    sudoExit() {
+        this.sudo_chain.pop();
+    }
 }
 
 export class SystemAsRoot extends System {
@@ -144,6 +161,14 @@ export class SystemAsTest extends System {
 
     toTestName() {
         return 'test_' + Math.floor(Math.random() * 1000000);
+    }
+
+    async createTestTable()  {
+        let record = await this.data.createOne(SchemaType.Schema, { 
+            schema_name: this.toTestSchemaName()
+        });
+
+        return this.meta.schemas.get(record.data.schema_name);
     }
 }
 

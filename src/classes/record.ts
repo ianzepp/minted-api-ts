@@ -87,7 +87,7 @@ function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
             if (column_name === 'constructor') return undefined;
             if (column_name === 'length') return undefined;
             assertFn(column_name);
-            return target[column_name];
+            return target[column_name] ?? null;
         },
 
         set(target: _.Dictionary<any>, column_name: string, data: any) {

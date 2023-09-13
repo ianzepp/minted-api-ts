@@ -8,7 +8,10 @@ import { ObserverFlow } from '@classes/observer-flow';
 import { ObserverRing } from '@layouts/observer';
 import { RecordFlat } from '@layouts/record';
 
-
+/**
+ * This observer runs on Update to reload prior data from the DB, so the `Record` has a full view of
+ * all previous state.
+ */
 export default class extends Observer {
     toName(): string {
         return __filename;
