@@ -1,3 +1,4 @@
+import path from 'path';
 
 // Classes
 import { ObserverFlow } from '@classes/observer-flow';
@@ -39,7 +40,11 @@ export class Observer {
      * @returns {string} - The name of the observer file
      */
     toName(): string {
-        return __filename;
+        return '<undefined>';
+    }
+
+    toFileName(): string {
+        return path.basename(this.toName());
     }
 
     /**
@@ -76,7 +81,7 @@ export class Observer {
 
     /**
      * Method to get if the observer should run when `root` is executing
-     * @returns {ObserverRank} - True by default
+     * @returns {boolean} - True by default
      */
     onRoot(): boolean {
         return true;
@@ -84,10 +89,18 @@ export class Observer {
 
     /**
      * Method to get if the observer should run when `test` is executing
-     * @returns {ObserverRank} - True by default
+     * @returns {boolean} - True by default
      */
     onTest(): boolean {
         return true;
+    }
+
+    /**  
+     * Specifies if the observer should switch to root context before executing. 
+     * @returns {boolean} - False by default
+     */
+    asRoot(): boolean {
+        return false;
     }
 
     /**
