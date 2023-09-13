@@ -3,8 +3,8 @@ import _ from 'lodash';
 // Classes
 import { ObserverFlow } from '@classes/observer-flow';
 import { Record } from '@classes/record';
-import { System } from '@classes/system';
-import { SystemService } from '@classes/system';
+import { System } from '@classes/kernel';
+import { SystemService } from '@classes/kernel';
 import { Schema } from '@classes/schema';
 import { Filter } from '@classes/filter';
 

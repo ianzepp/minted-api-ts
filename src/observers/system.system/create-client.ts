@@ -8,7 +8,7 @@ import { Record } from '@classes/record';
 
 // Layouts
 import { ObserverRing } from '@layouts/observer';
-import { DataError } from '@classes/system-data';
+import { DataError } from '@classes/kernel-data';
 import { SchemaType } from '@classes/schema-type';
 
 /**

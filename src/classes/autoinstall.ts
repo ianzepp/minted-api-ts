@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { Knex } from 'knex';
 
-import { System } from '@classes/system';
-import { SystemAsRoot } from '@classes/system';
+import { System } from '@classes/kernel';
+import { SystemAsRoot } from '@classes/kernel';
 
 export class AutoInstall {
     constructor(public readonly system: System = new SystemAsRoot()) {}

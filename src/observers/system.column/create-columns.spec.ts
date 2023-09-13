@@ -7,8 +7,8 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { SchemaType } from '@classes/schema-type';
-import { System } from '@classes/system';
-import { SystemAsTest } from '@classes/system';
+import { System } from '@classes/kernel';
+import { SystemAsTest } from '@classes/kernel';
 
 let system = new SystemAsTest();
 let source_data = { 

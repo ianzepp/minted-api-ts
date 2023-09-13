@@ -6,9 +6,9 @@ import { v4 as uuid } from 'uuid';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { RecordColumnImmutableError } from '@classes/system-data';
+import { RecordColumnImmutableError } from '@classes/kernel-data';
 import { SchemaType } from '@classes/schema-type';
-import { SystemAsTest } from '@classes/system';
+import { SystemAsTest } from '@classes/kernel';
 
 let system = new SystemAsTest();
 

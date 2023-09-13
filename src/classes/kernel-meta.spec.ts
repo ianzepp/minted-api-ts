@@ -10,7 +10,7 @@ import { Column } from '@classes/column';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 import { SchemaType } from './schema-type';
-import { SystemAsTest } from '@classes/system';
+import { SystemAsTest } from '@classes/kernel';
 
 let system = new SystemAsTest();
 

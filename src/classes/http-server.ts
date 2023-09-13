@@ -13,8 +13,8 @@ const formBody = Util.promisify(require('body/form'));
 // Classes
 import { HttpReq } from '@classes/http-req';
 import { HttpRes } from '@classes/http-res';
-import { System } from '@classes/system';
-import { SystemAsRoot } from '@classes/system';
+import { System } from '@classes/kernel';
+import { SystemAsRoot } from '@classes/kernel';
 
 // Error
 export class HttpError extends Error {};

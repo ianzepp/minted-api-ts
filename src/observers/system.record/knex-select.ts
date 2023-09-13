@@ -9,7 +9,7 @@ import { Filter } from '@classes/filter';
 // Layouts
 import { ObserverRing } from '@layouts/observer';
 import { Schema } from '@classes/schema';
-import { System } from '@classes/system';
+import { System } from '@classes/kernel';
 
 
 export default class extends Observer {

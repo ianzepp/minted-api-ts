@@ -5,10 +5,10 @@ import debug from 'debug';
 import { v4 as uuid } from 'uuid';
 
 // System services
-import { SystemAuth } from '@classes/system-auth';
-import { SystemData } from '@classes/system-data';
-import { SystemMeta } from '@classes/system-meta';
-import { SystemKnex } from '@classes/system-knex';
+import { SystemAuth } from '@classes/kernel-auth';
+import { SystemData } from '@classes/kernel-data';
+import { SystemMeta } from '@classes/kernel-meta';
+import { SystemKnex } from '@classes/kernel-knex';
 
 // Enums
 import { SchemaType } from './schema-type';

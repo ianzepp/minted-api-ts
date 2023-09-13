@@ -34,8 +34,8 @@ export const KnexConfigTest = _.defaults({
 export const KnexDriver = knex(KnexConfig);
 
 // Classes
-import { System } from '@classes/system';
-import { SystemService } from '@classes/system';
+import { System } from '@classes/kernel';
+import { SystemService } from '@classes/kernel';
 
 // Errors
 export class KnexError extends Error {};

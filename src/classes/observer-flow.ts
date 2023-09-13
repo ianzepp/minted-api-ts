@@ -9,7 +9,7 @@ import { Filter } from '@classes/filter';
 import { Observer } from '@classes/observer';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
-import { System } from '@classes/system';
+import { System } from '@classes/kernel';
 
 // Layouts
 import { ObserverFlowFailure } from '@layouts/observer';
@@ -19,7 +19,7 @@ import { SystemVerb } from '@layouts/system';
 // Import pre-loaded routers
 import Observers from '@preloader/observers';
 import { fail } from 'assert';
-import { DataError } from '@classes/system-data';
+import { DataError } from '@classes/kernel-data';
 
 
 export class ObserverFlow {

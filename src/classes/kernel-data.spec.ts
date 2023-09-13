@@ -7,10 +7,10 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 // Classes
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
-import { SystemAsTest } from '@classes/system';
+import { SystemAsTest } from '@classes/kernel';
 import { SchemaType } from '@classes/schema-type';
 
-import { DataError, RecordNotFoundError } from '@classes/system-data';
+import { DataError, RecordNotFoundError } from '@classes/kernel-data';
 
 function expectRecordSet(result_set: any[], length?: number) {
     chai.expect(result_set).an('array');

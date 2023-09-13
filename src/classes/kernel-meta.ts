@@ -6,8 +6,8 @@ import { Schema } from '@classes/schema';
 import { Column } from '@classes/column';
 import { Record } from '@classes/record';
 import { RecordFlat } from '@layouts/record';
-import { System } from '@classes/system';
-import { SystemService } from '@classes/system';
+import { System } from '@classes/kernel';
+import { SystemService } from '@classes/kernel';
 
 // Meta API errors
 export class MetaError extends Error {};

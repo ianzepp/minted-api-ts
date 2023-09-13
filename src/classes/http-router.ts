@@ -5,7 +5,7 @@ import { pathToRegexp, match } from 'path-to-regexp';
 // Classes
 import { HttpReq } from '@classes/http-req';
 import { HttpRes } from '@classes/http-res';
-import { System } from '@classes/system';
+import { System } from '@classes/kernel';
 
 // Helper to assert a value is not undefined
 function assert<T>(v: T | undefined): T {

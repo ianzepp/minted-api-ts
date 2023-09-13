@@ -3,9 +3,9 @@ import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
 // Classes
-import { System } from '@classes/system';
-import { SystemAsTest } from '@classes/system';
-import { SystemAsRoot } from '@classes/system';
+import { System } from '@classes/kernel';
+import { SystemAsTest } from '@classes/kernel';
+import { SystemAsRoot } from '@classes/kernel';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
