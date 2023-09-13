@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import fs from 'fs-extra';
-import path from 'path';
+import util from 'util';
 import chai from 'chai';
+import { expect } from 'chai';
 
 // Classes
 import { Filter } from '@classes/filter';
@@ -23,7 +24,7 @@ import { DataError } from '@classes/system-data';
 
 export class ObserverFlow {
     readonly expect = chai.expect;
-    readonly failures: ObserverFlowFailure[] = [];
+    readonly failures: string[] = [];
 
     constructor(
         readonly system: System,
@@ -102,20 +103,40 @@ export class ObserverFlow {
         });
 
         for(let observer of observers) {
-            if (this.system.isTest() === false) {
-                console.debug('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
-                    this.schema.schema_name, 
-                    this.op, 
-                    observer.onRing(),
-                    observer.onRank(),
-                    observer.toName()
-                );
+            // console.info(util.format('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
+            //     this.schema.schema_name, 
+            //     this.op, 
+            //     observer.onRing(),
+            //     observer.onRank(),
+            //     observer.toFileName()
+            // ));
+
+            // Switch to root?
+            try {
+                // Switch into root?
+                if (observer.asRoot()) {
+                    this.system.sudoRoot();
+                }
+
+                // There should be no error when tested
+                let sanity = () => {
+                    chai.assert(this.failures.length === 0, observer.toFileName() + ': ' + this.failures.join(' / '));
+                }
+
+                // Run the full cycle
+                await observer.startup(this).then(sanity);
+                await observer.run(this).then(sanity);
+                await observer.cleanup(this).then(sanity);
+
+                // If we get here we are good.
             }
 
-            // Run the full cycle
-            await observer.startup(this);
-            await observer.run(this);
-            await observer.cleanup(this);
+            finally {
+                // Switch out of root?
+                if (observer.asRoot()) {
+                    this.system.sudoExit();
+                }
+            }
         }
     }
 }
