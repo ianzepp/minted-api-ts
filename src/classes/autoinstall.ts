@@ -31,10 +31,21 @@ export class AutoInstall {
         // Start the tx
         await this.knex.raw('BEGIN TRANSACTION;');
 
+        // Set user vars
         await this.knex.raw(`
-            SET LOCAL minted.current_user_id = '${ this.system.user_id }';
-            SET LOCAL minted.current_user_ns = '${ this.system.user_ns }';
-            SET LOCAL minted.current_user_ts = '${ this.system.time_iso }';
+            SET LOCAL minted.userinfo_id = '${ this.system.user_id }';
+            SET LOCAL minted.userinfo_ns = '${ this.system.user_ns }';
+            SET LOCAL minted.userinfo_ts = '${ this.system.time_iso }';
+        `);
+
+        // Create the userinfo scopes function
+        await this.knex.raw(`
+            CREATE OR REPLACE FUNCTION get_userinfo_ns_read() 
+            RETURNS text[] AS $$
+            BEGIN
+                RETURN string_to_array(current_setting('minted.userinfo_ns_read'), ',');
+            END;
+            $$ LANGUAGE plpgsql;
         `);
 
         // Create the master system table.
@@ -224,8 +235,8 @@ export class AutoInstall {
                 temp_user_id uuid;
                 temp_user_ts timestamp;
             BEGIN
-                temp_user_id := current_setting('minted.current_user_id')::uuid;
-                temp_user_ts := current_setting('minted.current_user_ts')::timestamp;
+                temp_user_id := current_setting('minted.userinfo_id')::uuid;
+                temp_user_ts := current_setting('minted.userinfo_ts')::timestamp;
                 
                 INSERT INTO "${ns}__meta"."${sn}" (id, ns, created_at, created_by)
                 VALUES (NEW.id, NEW.ns, temp_user_ts, temp_user_id);

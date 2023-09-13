@@ -64,9 +64,9 @@ export class SystemKnex implements SystemService {
     async cleanup(): Promise<void> {
         // Unset the userinfo
         await this.db.raw(`
-            RESET minted.current_user_id;
-            RESET minted.current_user_ns;
-            RESET minted.current_user_ts;
+            RESET minted.userinfo_id;
+            RESET minted.userinfo_ns;
+            RESET minted.userinfo_ts;
         `);
 
         // Isolated driver. Kill the connection so tests don't hang
@@ -92,9 +92,9 @@ export class SystemKnex implements SystemService {
 
         // Set the current user ID for the transaction
         await this.tx.raw(`
-            SET LOCAL minted.current_user_id = '${ this.system.user_id }';
-            SET LOCAL minted.current_user_ns = '${ this.system.user_ns }';
-            SET LOCAL minted.current_user_ts = '${ this.system.time_iso }';
+            SET LOCAL minted.userinfo_id = '${ this.system.user_id }';
+            SET LOCAL minted.userinfo_ns = '${ this.system.user_ns }';
+            SET LOCAL minted.userinfo_ts = '${ this.system.time_iso }';
         `);
     }
 
