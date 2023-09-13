@@ -17,15 +17,19 @@ import { SystemVerb } from '@layouts/system';
 
 // Data API errors
 export class DataError extends Error {};
+export class RecordFoundError extends DataError {};
 export class RecordNotFoundError extends DataError {};
 export class RecordColumnImmutableError extends DataError {};
 export class RecordColumnRequiredError extends DataError {};
+
+import { toJSON } from './helpers';
 
 // Local helpers
 function headOne<T>(result: T[]): T | undefined {
     return _.head(result);
 }
 
+// Throws and error if no results
 function head404<T>(result: T[]): T {
     let r = _.head(result);
 
@@ -34,6 +38,15 @@ function head404<T>(result: T[]): T {
     }
 
     return r;
+}
+
+// Opposite of `head404`. Throws an error if a result is found
+function headNot<T>(result: T[]): void {
+    let r = _.head(result);
+
+    if (r !== undefined) {
+        throw new RecordFoundError();
+    }
 }
 
 
@@ -51,7 +64,7 @@ export class SystemData implements SystemService {
 
     async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
         if (Bun.env.POSTGRES_DEBUG === 'true') {
-            console.debug('SystemData.onRun()', op, schema_name, filter_data, change_data.length);
+            console.debug(`SystemData.run(): op="${op}" schema_name="${schema_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
         }
 
         this.system.expect(change_data, 'change_data').an('array');
@@ -138,6 +151,26 @@ export class SystemData implements SystemService {
 
     async deleteOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
         return this.deleteAll(schema_name, [change_data]).then(headOne<Record>);
+    }
+
+    //
+    // Search ops. Basically a `select` but with a filter to support a slightly different API
+    // 
+
+    async searchAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
+        return this.selectAny(schema_name, filter_data);
+    }
+
+    async searchOne(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record | undefined> {
+        return this.selectAny(schema_name, filter_data).then(headOne);
+    }
+
+    async search404(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record> {
+        return this.selectAny(schema_name, filter_data).then(head404);
+    }
+
+    async searchNot(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<void> {
+        return this.selectAny(schema_name, filter_data).then(headNot);
     }
 
     //
