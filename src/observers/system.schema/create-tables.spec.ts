@@ -6,35 +6,35 @@ import { v4 as uuid } from 'uuid';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { System } from '@classes/kernel';
-import { SystemAsTest } from '@classes/kernel';
+import { Kernel } from '@classes/kernel';
+import { KernelAsTest } from '@classes/kernel';
 
-let system = new SystemAsTest();
+let kernel = new KernelAsTest();
 let source_name = 'test.test_' + process.hrtime().join('_');
 let source_data = { schema_name: source_name };
 
 beforeEach(async () => {
-    await system.startup();
+    await kernel.startup();
 });
 
 afterEach(async () => {
-    await system.cleanup();
+    await kernel.cleanup();
 });
 
 test.skip('should create a knex table', async () => {
-    let schema_name = system.toTestSchemaName();    
-    let schema_data = await system.data.createOne(System.SchemaType.Schema, {
+    let schema_name = kernel.toTestSchemaName();    
+    let schema_data = await kernel.data.createOne(Kernel.SchemaType.Schema, {
         schema_name: schema_name
     });
 
     // Make sure the schema was inserted
-    let schema = system.meta.schemas.get(schema_name);
+    let schema = kernel.meta.schemas.get(schema_name);
 
     // Make sure we can insert records
-    let create = await system.data.createOne(schema, {});
+    let create = await kernel.data.createOne(schema, {});
 
     // Check using direct knex
-    let select = await system.knex.driverTo(schema_name, 'data').first();
+    let select = await kernel.knex.driverTo(schema_name, 'data').first();
 
     chai.expect(select).not.empty;
     chai.expect(select).property('id');

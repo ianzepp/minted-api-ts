@@ -34,13 +34,13 @@ export default class extends Observer {
         //
         // See the testing / precheck login in `test-create.ts`.
         flow.change.forEach(record => {
-            record.data.id = record.data.id || flow.system.uuid();
-            record.data.ns = record.data.ns || flow.system.user_ns;
+            record.data.id = record.data.id || flow.kernel.uuid();
+            record.data.ns = record.data.ns || flow.kernel.user_ns;
         });
     }
 
     async run(flow: ObserverFlow): Promise<void> {
-        let creates = await flow.system.knex
+        let creates = await flow.kernel.knex
             .driverTo(flow.schema.schema_name, 'data')
             .insert(flow.change_data)
             .returning('*');
@@ -55,8 +55,8 @@ export default class extends Observer {
 
     async cleanup(flow: ObserverFlow): Promise<void> {
         flow.change.forEach(record => {
-            record.meta.created_at = flow.system.time;
-            record.meta.created_by = flow.system.user_id;
+            record.meta.created_at = flow.kernel.time;
+            record.meta.created_by = flow.kernel.user_id;
         });
     }
 

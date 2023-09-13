@@ -4,23 +4,32 @@ import chai from 'chai';
 import debug from 'debug';
 import { v4 as uuid } from 'uuid';
 
-// System services
-import { SystemAuth } from '@classes/kernel-auth';
-import { SystemData } from '@classes/kernel-data';
-import { SystemMeta } from '@classes/kernel-meta';
-import { SystemKnex } from '@classes/kernel-knex';
+// Kernel services
+import { KernelAuth } from '@classes/kernel-auth';
+import { KernelData } from '@classes/kernel-data';
+import { KernelMeta } from '@classes/kernel-meta';
+import { KernelKnex } from '@classes/kernel-knex';
 
 // Enums
 import { SchemaType } from './schema-type';
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
-export interface SystemService {
+export enum KernelVerb {
+    Create = 'create',
+    Delete = 'delete',
+    Expire = 'expire',
+    Select = 'select',
+    Update = 'update',
+    Upsert = 'upsert',
+}
+
+export interface KernelService {
     startup(): Promise<void>;
     cleanup(): Promise<void>;
 }
 
-export class System {
+export class Kernel {
     public static RootId = "00000000-0000-0000-0000-000000000000";
     public static RootNs = "system";
 
@@ -31,16 +40,16 @@ export class System {
     public static SchemaType = SchemaType;
 
     // Services
-    public readonly auth = new SystemAuth(this);
-    public readonly data = new SystemData(this);
-    public readonly meta = new SystemMeta(this);
-    public readonly knex = new SystemKnex(this);
+    public readonly auth = new KernelAuth(this);
+    public readonly data = new KernelData(this);
+    public readonly meta = new KernelMeta(this);
+    public readonly knex = new KernelKnex(this);
 
     // Error management
     public readonly expect = chai.expect;
     public readonly errors: Error[] = [];
 
-    // System constants
+    // Kernel constants
     public readonly time: Date = new Date(); // timestamp
     public readonly time_iso = this.time.toISOString();
     public readonly uuid = uuid;
@@ -49,10 +58,10 @@ export class System {
     // Sudo root
     private sudo_chain: string[] = [];
 
-    // Setup the user-specific system, or default to a root user.
+    // Setup the user-specific kernel, or default to a root user.
     constructor(readonly user_id: string, readonly user_ns: string) {
         // Nil UUID doesn't technically meet UUID version format requirements
-        if (user_id !== System.RootId) {
+        if (user_id !== Kernel.RootId) {
             chai.expect(user_id).a('string').match(UUID_REGEX);
         }
 
@@ -89,7 +98,7 @@ export class System {
         await this.startup();
     }
 
-    async run(executeFn: (system: System) => Promise<any>) {
+    async run(executeFn: (kernel: Kernel) => Promise<any>) {
         try {
             // Startup
             await this.authenticate();
@@ -109,12 +118,12 @@ export class System {
     }
 
     isRoot() {
-        return System.RootId === this.user_id 
-            || System.RootId === _.last(this.sudo_chain);
+        return Kernel.RootId === this.user_id 
+            || Kernel.RootId === _.last(this.sudo_chain);
     }
 
     isTest() {
-        return this instanceof SystemAsTest;
+        return this instanceof KernelAsTest;
     } 
 
     isProd() {
@@ -126,7 +135,7 @@ export class System {
     //
 
     sudoRoot() {
-        this.sudo_chain.push(System.RootId);
+        this.sudo_chain.push(Kernel.RootId);
     }
 
     sudoExit() {
@@ -134,15 +143,15 @@ export class System {
     }
 }
 
-export class SystemAsRoot extends System {
+export class KernelAsRoot extends Kernel {
     constructor() {
-        super(System.RootId, System.RootNs);
+        super(Kernel.RootId, Kernel.RootNs);
     }
 }
 
-export class SystemAsTest extends System {
+export class KernelAsTest extends Kernel {
     constructor() {
-        super(System.TestId, System.TestNs);
+        super(Kernel.TestId, Kernel.TestNs);
     }
 
     async startup() {
@@ -173,10 +182,10 @@ export class SystemAsTest extends System {
 }
 
 // TODO process cors data
-export class SystemAsCors extends System {
+export class KernelAsCors extends Kernel {
     constructor(cookie?: string) {
-        let user_id = System.TestId;
-        let user_ns = System.TestNs;
+        let user_id = Kernel.TestId;
+        let user_ns = Kernel.TestNs;
 
         super(user_id, user_ns);
     }

@@ -41,7 +41,7 @@ export default class extends Observer {
     }
 
     async one(flow: ObserverFlow, record: Record) {
-        return flow.system.knex
+        return flow.kernel.knex
             .driverTo(flow.schema.schema_name, 'data')
             .whereIn('data.id', [record.data.id])
             .update(record.diff);
@@ -49,8 +49,8 @@ export default class extends Observer {
 
     async cleanup(flow: ObserverFlow) {
         flow.change.forEach(record => {
-            record.meta.updated_at = flow.system.time;
-            record.meta.updated_by = flow.system.user_id;
+            record.meta.updated_at = flow.kernel.time;
+            record.meta.updated_by = flow.kernel.user_id;
         });
     }
 }

@@ -6,21 +6,21 @@ import { v4 as uuid } from 'uuid';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { System } from '@classes/kernel';
-import { SystemAsTest } from '@classes/kernel';
+import { Kernel } from '@classes/kernel';
+import { KernelAsTest } from '@classes/kernel';
 
-let system = new SystemAsTest();
+let kernel = new KernelAsTest();
 
-beforeEach(() => system.startup());
-afterEach(() => system.cleanup());
+beforeEach(() => kernel.startup());
+afterEach(() => kernel.cleanup());
 
 test('tx test: insert a user => should rollback', async () => {
-    let result = await system.data.createOne('system.client', { name: 'system-tx-test' });
+    let result = await kernel.data.createOne('system.client', { name: 'kernel-tx-test' });
     chai.expect(result).an('object').not.empty;
 });
 
 test('tx test: verify the user does not exist', async () => {
-    let result = await system.data.selectAny('system.client', { where: { name: 'system-tx-test' }});
+    let result = await kernel.data.selectAny('system.client', { where: { name: 'kernel-tx-test' }});
     chai.expect(result).an('array').empty;
 });
 

@@ -5,7 +5,7 @@ import { pathToRegexp, match } from 'path-to-regexp';
 // Classes
 import { HttpReq } from '@classes/http-req';
 import { HttpRes } from '@classes/http-res';
-import { System } from '@classes/kernel';
+import { Kernel } from '@classes/kernel';
 
 // Helper to assert a value is not undefined
 function assert<T>(v: T | undefined): T {
@@ -24,12 +24,12 @@ export class HttpRouter {
     // Re-export aliases
     public static Verb = HttpVerb;
 
-    private __system: System | undefined;
+    private __kernel: Kernel | undefined;
     private __req: HttpReq | undefined;
     private __res: HttpRes | undefined;
 
-    get system(): System {
-        return assert<System>(this.__system);
+    get kernel(): Kernel {
+        return assert<Kernel>(this.__kernel);
     }
 
     get req(): HttpReq {
@@ -48,7 +48,7 @@ export class HttpRouter {
         return this.req.search;
     }
 
-    async runsafe(system: System, req: HttpReq, res: HttpRes): Promise<any> {
+    async runsafe(kernel: Kernel, req: HttpReq, res: HttpRes): Promise<any> {
         // Default body values
         if (req.verb == HttpRouter.Verb.Get) {
             req.body = req.body || {};
@@ -71,7 +71,7 @@ export class HttpRouter {
         }
 
         // Import references
-        this.__system = system;
+        this.__kernel = kernel;
         this.__req = req;
         this.__res = res;
 

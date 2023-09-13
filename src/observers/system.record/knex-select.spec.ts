@@ -8,20 +8,20 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 // Classes
 import { RecordColumnImmutableError } from '@classes/kernel-data';
 import { SchemaType } from '@classes/schema-type';
-import { SystemAsTest } from '@classes/kernel';
+import { KernelAsTest } from '@classes/kernel';
 
-let system = new SystemAsTest();
+let kernel = new KernelAsTest();
 
 beforeEach(async () => {
-    await system.startup();
+    await kernel.startup();
 });
 
 afterEach(async () => {
-    await system.cleanup();
+    await kernel.cleanup();
 });
 
 function selectAny({ where, order, limit }) {
-    return system.data.selectAny(SchemaType.Column, {
+    return kernel.data.selectAny(SchemaType.Column, {
         where: where,
         order: order,
         limit: limit,

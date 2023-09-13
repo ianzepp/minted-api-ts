@@ -12,7 +12,7 @@ import { DataError } from '@classes/kernel-data';
 import { SchemaType } from '@classes/schema-type';
 
 /**
- * This observer lstens to inserts on the `system.system` table (which represents an organization or namespace),
+ * This observer lstens to inserts on the `system.kernel` table (which represents an organization or namespace),
  * and generates an associated `Client` record with admin permissions.
  */
 export default class extends Observer {
@@ -21,7 +21,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return SchemaType.System;
+        return SchemaType.Kernel;
     }
 
     onRing(): ObserverRing {
@@ -42,6 +42,6 @@ export default class extends Observer {
         });
 
         // Insert the clients
-        await flow.system.data.createAll(SchemaType.Client, clients);
+        await flow.kernel.data.createAll(SchemaType.Client, clients);
     }
 }

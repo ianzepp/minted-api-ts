@@ -9,12 +9,12 @@ import { Filter } from '@classes/filter';
 import { Observer } from '@classes/observer';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
-import { System } from '@classes/kernel';
+import { Kernel } from '@classes/kernel';
+import { KernelVerb } from '@classes/kernel';
 
 // Layouts
 import { ObserverFlowFailure } from '@layouts/observer';
 import { RecordJson } from '@layouts/record';
-import { SystemVerb } from '@layouts/system';
 
 // Import pre-loaded routers
 import Observers from '@preloader/observers';
@@ -27,7 +27,7 @@ export class ObserverFlow {
     readonly failures: string[] = [];
 
     constructor(
-        readonly system: System,
+        readonly kernel: Kernel,
         readonly schema: Schema,
         readonly change: Record[],
         readonly filter: Filter,
@@ -51,7 +51,7 @@ export class ObserverFlow {
             //
 
             // Wrong client namespace?
-            if (observer.onClient() != '*' && observer.onClient() !== this.system.user_ns) {
+            if (observer.onClient() != '*' && observer.onClient() !== this.kernel.user_ns) {
                 return false;
             }
 
@@ -61,12 +61,12 @@ export class ObserverFlow {
             }
 
             // Don't run for root?
-            if (observer.onRoot() === false && this.system.isRoot()) {
+            if (observer.onRoot() === false && this.kernel.isRoot()) {
                 return false;
             }
 
             // Don't run for test cases?
-            if (observer.onTest() === false && this.system.isTest()) {
+            if (observer.onTest() === false && this.kernel.isTest()) {
                 return false;
             }
 
@@ -74,27 +74,27 @@ export class ObserverFlow {
             // Positive checks
             //
 
-            if (observer.onSelect() && this.op == SystemVerb.Select) {
+            if (observer.onSelect() && this.op == KernelVerb.Select) {
                 return true;
             }
 
-            if (observer.onCreate() && this.op == SystemVerb.Create) {
+            if (observer.onCreate() && this.op == KernelVerb.Create) {
                 return true;
             }
 
-            if (observer.onUpdate() && this.op == SystemVerb.Update) {
+            if (observer.onUpdate() && this.op == KernelVerb.Update) {
                 return true;
             }
 
-            if (observer.onUpsert() && this.op == SystemVerb.Upsert) {
+            if (observer.onUpsert() && this.op == KernelVerb.Upsert) {
                 return true;
             }
 
-            if (observer.onExpire() && this.op == SystemVerb.Expire) {
+            if (observer.onExpire() && this.op == KernelVerb.Expire) {
                 return true;
             }
 
-            if (observer.onDelete() && this.op == SystemVerb.Delete) {
+            if (observer.onDelete() && this.op == KernelVerb.Delete) {
                 return true;
             }
 
@@ -115,7 +115,7 @@ export class ObserverFlow {
             try {
                 // Switch into root?
                 if (observer.asRoot()) {
-                    this.system.sudoRoot();
+                    this.kernel.sudoRoot();
                 }
 
                 // There should be no error when tested
@@ -134,7 +134,7 @@ export class ObserverFlow {
             finally {
                 // Switch out of root?
                 if (observer.asRoot()) {
-                    this.system.sudoExit();
+                    this.kernel.sudoExit();
                 }
             }
         }

@@ -34,7 +34,7 @@ export default class extends Observer {
         let { schema_name, column_name, column_type } = record.data;
         let [ ns, sn ] = record.data.schema_name.split('.');
 
-        await flow.system.knex.schema.table(`${ns}__data.${sn}`, t => {            
+        await flow.kernel.knex.schema.table(`${ns}__data.${sn}`, t => {            
             if (column_type === ColumnType.Text) {
                 return t.text(column_name);
             }
@@ -63,13 +63,13 @@ export default class extends Observer {
         });
 
         // Setup
-        let schema = flow.system.meta.schemas.get(schema_name);
+        let schema = flow.kernel.meta.schemas.get(schema_name);
         let column = new Column(record.data);
 
         // Add the column data to the parent schema
         schema.columns.set(column_name, column);
 
-        // Add the column data to the system metadata
-        flow.system.meta.columns.set(column.column_path, column);
+        // Add the column data to the kernel metadata
+        flow.kernel.meta.columns.set(column.column_path, column);
     }
 }

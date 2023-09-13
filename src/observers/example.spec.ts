@@ -3,21 +3,21 @@ import chai from 'chai';
 import { v4 as uuid } from 'uuid';
 
 // Classes
-import { System } from '@classes/kernel';
-import { SystemAsTest } from '@classes/kernel';
-import { SystemAsRoot } from '@classes/kernel';
+import { Kernel } from '@classes/kernel';
+import { KernelAsTest } from '@classes/kernel';
+import { KernelAsRoot } from '@classes/kernel';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
-let system = new SystemAsTest();
+let kernel = new KernelAsTest();
 
 beforeEach(async () => {
-    await system.startup();
+    await kernel.startup();
 });
 
 afterEach(async () => {
-    await system.cleanup();
+    await kernel.cleanup();
 });
 
 test('runs', async () => {

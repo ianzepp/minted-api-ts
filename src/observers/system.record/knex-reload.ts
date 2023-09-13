@@ -31,7 +31,7 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         // Easiest to use the existing data service to reselect record data
-        let result = await flow.system.data.selectAll(flow.schema, flow.change);
+        let result = await flow.kernel.data.selectAll(flow.schema, flow.change);
         let result_map = _.keyBy(result, 'data.id');
 
         // Assign the raw knex data for previous values to the records

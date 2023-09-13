@@ -4,5 +4,5 @@ export enum SchemaType {
     Schema = 'system.schema',
     Column = 'system.column',
     Client = 'system.client',
-    System = 'system.system',
+    Kernel = 'system.system',
 };

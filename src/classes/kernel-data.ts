@@ -3,8 +3,9 @@ import _ from 'lodash';
 // Classes
 import { ObserverFlow } from '@classes/observer-flow';
 import { Record } from '@classes/record';
-import { System } from '@classes/kernel';
-import { SystemService } from '@classes/kernel';
+import { Kernel } from '@classes/kernel';
+import { KernelService } from '@classes/kernel';
+import { KernelVerb } from '@classes/kernel';
 import { Schema } from '@classes/schema';
 import { Filter } from '@classes/filter';
 
@@ -13,7 +14,6 @@ import { ChangeData } from '@layouts/record';
 import { FilterJson } from '@layouts/filter';
 import { ObserverRing } from '@layouts/observer';
 import { SchemaName } from '@layouts/schema';
-import { SystemVerb } from '@layouts/system';
 
 // Data API errors
 export class DataError extends Error {};
@@ -51,8 +51,8 @@ function headNot<T>(result: T[]): void {
 
 
 // Implementation
-export class SystemData implements SystemService {
-    constructor(private readonly system: System) {}
+export class KernelData implements KernelService {
+    constructor(private readonly kernel: Kernel) {}
 
     async startup(): Promise<void> {}
 
@@ -64,18 +64,18 @@ export class SystemData implements SystemService {
 
     async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
         if (Bun.env.POSTGRES_DEBUG === 'true') {
-            console.debug(`SystemData.run(): op="${op}" schema_name="${schema_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
+            console.debug(`KernelData.run(): op="${op}" schema_name="${schema_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
         }
 
-        this.system.expect(change_data, 'change_data').an('array');
-        this.system.expect(filter_data, 'filter_data').an('object');
-        this.system.expect(op, 'op').a('string');
+        this.kernel.expect(change_data, 'change_data').an('array');
+        this.kernel.expect(filter_data, 'filter_data').an('object');
+        this.kernel.expect(op, 'op').a('string');
 
-        let schema = this.system.meta.schemas.get(schema_name);
+        let schema = this.kernel.meta.schemas.get(schema_name);
         let filter = new Filter(filter_data);
 
         // Is this something other than a select op, and the change data is empty?
-        if (change_data.length === 0 && op !== SystemVerb.Select) {
+        if (change_data.length === 0 && op !== KernelVerb.Select) {
             return [];
         }
 
@@ -83,7 +83,7 @@ export class SystemData implements SystemService {
         let change = change_data.map(change => schema.toRecord(change));
 
         // Build the flow
-        let flow = new ObserverFlow(this.system, schema, change, filter, op);
+        let flow = new ObserverFlow(this.kernel, schema, change, filter, op);
 
         // Cycle through rings 0 - 9
         for (let ring = 0 as ObserverRing; ring <= 9; ring++) {
@@ -99,30 +99,30 @@ export class SystemData implements SystemService {
     //
 
     async selectAll(schema_name: Schema | SchemaName, source_data: ChangeData[]): Promise<Record[]> {
-        let schema = this.system.meta.schemas.get(schema_name);
+        let schema = this.kernel.meta.schemas.get(schema_name);
         let source = source_data.map(change => schema.toRecord(change).data.id);
 
         return this.selectIds(schema, _.uniq(_.compact(source)));
     }
 
     async createAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SystemVerb.Create);
+        return this.run(schema_name, change_data, {}, KernelVerb.Create);
     }
 
     async updateAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SystemVerb.Update);
+        return this.run(schema_name, change_data, {}, KernelVerb.Update);
     }
 
     async upsertAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SystemVerb.Upsert);
+        return this.run(schema_name, change_data, {}, KernelVerb.Upsert);
     }
 
     async expireAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SystemVerb.Expire);
+        return this.run(schema_name, change_data, {}, KernelVerb.Expire);
     }
 
     async deleteAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SystemVerb.Delete);
+        return this.run(schema_name, change_data, {}, KernelVerb.Delete);
     }
 
     //
@@ -178,7 +178,7 @@ export class SystemData implements SystemService {
     //
 
     async selectAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
-        return this.run(schema_name, [], filter_data, SystemVerb.Select);
+        return this.run(schema_name, [], filter_data, KernelVerb.Select);
     }
 
     async updateAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {

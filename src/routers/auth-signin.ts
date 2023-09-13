@@ -6,7 +6,7 @@ import { HttpRouter } from '@classes/http-router';
 // Implementation
 export default class extends HttpRouter {
     async run() {
-        return this.system.auth.signin();
+        return this.kernel.auth.signin();
     }
 
     onHttpVerb() {

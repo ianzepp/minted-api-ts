@@ -34,8 +34,8 @@ export const KnexConfigTest = _.defaults({
 export const KnexDriver = knex(KnexConfig);
 
 // Classes
-import { System } from '@classes/kernel';
-import { SystemService } from '@classes/kernel';
+import { Kernel } from '@classes/kernel';
+import { KernelService } from '@classes/kernel';
 
 // Errors
 export class KnexError extends Error {};
@@ -44,19 +44,19 @@ export class KnexTransactionAlreadyStartedError extends KnexError {};
 export class KnexDriverMissingError extends KnexError {};
 
 // Implementation
-export interface SystemKnexConfig {
+export interface KernelKnexConfig {
     isolate: boolean;
 }
 
-export class SystemKnex implements SystemService {
+export class KernelKnex implements KernelService {
     public db: Knex = KnexDriver;
     public tx: Knex.Transaction | undefined;
 
-    constructor(private readonly system: System) {}
+    constructor(private readonly kernel: Kernel) {}
 
     async startup(): Promise<void> {
         // Isolated driver for test suites
-        if (this.system.isTest()) {
+        if (this.kernel.isTest()) {
             this.db = knex(KnexConfig);
         }
     }
@@ -70,7 +70,7 @@ export class SystemKnex implements SystemService {
         `);
 
         // Isolated driver. Kill the connection so tests don't hang
-        if (this.system.isTest()) {
+        if (this.kernel.isTest()) {
             await this.db.destroy();
         }
     }
@@ -92,9 +92,9 @@ export class SystemKnex implements SystemService {
 
         // Set the current user ID for the transaction
         await this.tx.raw(`
-            SET LOCAL minted.userinfo_id = '${ this.system.user_id }';
-            SET LOCAL minted.userinfo_ns = '${ this.system.user_ns }';
-            SET LOCAL minted.userinfo_ts = '${ this.system.time_iso }';
+            SET LOCAL minted.userinfo_id = '${ this.kernel.user_id }';
+            SET LOCAL minted.userinfo_ns = '${ this.kernel.user_ns }';
+            SET LOCAL minted.userinfo_ts = '${ this.kernel.time_iso }';
         `);
     }
 
@@ -137,7 +137,7 @@ export class SystemKnex implements SystemService {
 
         // For example, using a `schema_path` of `system.client`, then:
         //
-        // 1. split the path into ns=system and sn=client
+        // 1. split the path into ns=kernel and sn=client
         // 2. start from a top-level table of `system.client`
         // 3. pull in timestamps from `system__meta.client`
         // 4. restrict to only the running user's visible namespaces
@@ -147,8 +147,8 @@ export class SystemKnex implements SystemService {
             .join({ meta: `${ ns }__meta.${ sn }` }, 'meta.id', 'data.id');
 
         // Root ignores namespace visiblity by default. This may change with RLS.
-        if (this.system.isRoot() === false) {
-            knex = knex.whereIn('data.ns', this.system.auth.namespaces);
+        if (this.kernel.isRoot() === false) {
+            knex = knex.whereIn('data.ns', this.kernel.auth.namespaces);
         }
 
         return knex;
@@ -160,8 +160,8 @@ export class SystemKnex implements SystemService {
         let knex = this.driver<T>(`${ ns }__${ alias }.${ sn } as ${ alias }`);
 
         // Root ignores namespace visiblity by default. This may change with RLS.
-        if (this.system.isRoot() === false) {
-            knex = knex.whereIn(`${ alias }.ns`, this.system.auth.namespaces);
+        if (this.kernel.isRoot() === false) {
+            knex = knex.whereIn(`${ alias }.ns`, this.kernel.auth.namespaces);
         }
 
         return knex;

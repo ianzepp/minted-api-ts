@@ -106,7 +106,7 @@ export class Observer {
     /**
      * Base method to check if the observer is selectable. The actual value will be defined in child classes.
      * For example, see @knex-select.ts or @test-immutable.ts.
-     * @returns {boolean} - True if the observer should run for `SystemVerb.Select` operations, false otherwise
+     * @returns {boolean} - True if the observer should run for `KernelVerb.Select` operations, false otherwise
      */
     onSelect(): boolean {
         return false;
@@ -115,7 +115,7 @@ export class Observer {
     /**
      * Base method to check if the observer is creatable. The actual value will be defined in child classes.
      * For example, see @knex-select.ts or @test-immutable.ts.
-     * @returns {boolean} - True if the observer should run for `SystemVerb.Create` operations, false otherwise
+     * @returns {boolean} - True if the observer should run for `KernelVerb.Create` operations, false otherwise
      */
     onCreate(): boolean {
         return false;
@@ -124,7 +124,7 @@ export class Observer {
     /**
      * Base method to check if the observer is updatable. The actual value will be defined in child classes.
      * For example, see @knex-select.ts or @test-immutable.ts.
-     * @returns {boolean} - True if the observer should run for `SystemVerb.Update` operations, false otherwise
+     * @returns {boolean} - True if the observer should run for `KernelVerb.Update` operations, false otherwise
      */
     onUpdate(): boolean {
         return false;
@@ -133,7 +133,7 @@ export class Observer {
     /**
      * Base method to check if the observer is upsertable. The actual value will be defined in child classes.
      * For example, see @knex-select.ts or @test-immutable.ts.
-     * @returns {boolean} - True if the observer should run for `SystemVerb.Upsert` operations, false otherwise
+     * @returns {boolean} - True if the observer should run for `KernelVerb.Upsert` operations, false otherwise
      */
     onUpsert(): boolean {
         return false;
@@ -142,7 +142,7 @@ export class Observer {
     /**
      * Base method to check if the observer is expirable. The actual value will be defined in child classes.
      * For example, see @knex-select.ts or @test-immutable.ts.
-     * @returns {boolean} - True if the observer should run for `SystemVerb.Expire` operations, false otherwise
+     * @returns {boolean} - True if the observer should run for `KernelVerb.Expire` operations, false otherwise
      */
     onExpire(): boolean {
         return false;
@@ -151,7 +151,7 @@ export class Observer {
     /**
      * Base method to check if the observer is deletable. The actual value will be defined in child classes.
      * For example, see @knex-select.ts or @test-immutable.ts.
-     * @returns {boolean} - True if the observer should run for `SystemVerb.Delete` operations, false otherwise
+     * @returns {boolean} - True if the observer should run for `KernelVerb.Delete` operations, false otherwise
      */
     onDelete(): boolean {
         return false;

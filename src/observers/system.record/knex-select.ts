@@ -9,7 +9,7 @@ import { Filter } from '@classes/filter';
 // Layouts
 import { ObserverRing } from '@layouts/observer';
 import { Schema } from '@classes/schema';
-import { System } from '@classes/kernel';
+import { Kernel } from '@classes/kernel';
 
 
 export default class extends Observer {
@@ -31,7 +31,7 @@ export default class extends Observer {
 
     async run(flow: ObserverFlow): Promise<void> {
         let schema = flow.schema;
-        let knex = flow.system.knex.selectTo(schema.schema_name);
+        let knex = flow.kernel.knex.selectTo(schema.schema_name);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');
@@ -41,7 +41,7 @@ export default class extends Observer {
         knex = this.whereOne(knex, flow.filter.where);
 
         // Add the ACL conditions
-        // knex = this.whereAcl(knex, flow.system);
+        // knex = this.whereAcl(knex, flow.kernel);
 
         // Build `filter.order` conditions
         knex = this.order(knex, flow.filter.order);
@@ -213,13 +213,13 @@ export default class extends Observer {
         throw 'Unknown filter "where" operator: ' + op;
     }
 
-    private whereAcl(knex: Knex.QueryBuilder, system: System) {
+    private whereAcl(knex: Knex.QueryBuilder, kernel: Kernel) {
         //
         // NOTE: This was moved to RLS in PG directly. See `Autoinstall`
         //
 
 
-        // if (system.isRoot()) {
+        // if (kernel.isRoot()) {
         //     return;
         // }
 
@@ -236,7 +236,7 @@ export default class extends Observer {
         // // 2. If the user's ID is in `acls_full`, or `acls_edit`, or `acls_read`, then yes.
         // // 3. If all of `acls_full`, `acls_edit`, and `acls_read` are `null`, then yes.
 
-        // let user_id = system.user_id;
+        // let user_id = kernel.user_id;
 
         // // Handle the deny case
         // knex = knex.where(function() {
