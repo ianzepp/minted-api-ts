@@ -7,6 +7,7 @@
   "scripts": {
     "autoinstall": "bash ./scripts/autoinstall.sh",
     "clean": "bash ./scripts/clean.sh",
+    "clean:test": "bash ./scripts/clean:test.sh",
     "start": "bash ./scripts/start.sh",
     "tsc": "bash ./scripts/tsc.sh",
     "typedoc": "bash ./scripts/typedoc.sh"
