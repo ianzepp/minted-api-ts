@@ -11,7 +11,6 @@
 ### Type Aliases
 
 - [SchemaName](layouts_schema.md#schemaname)
-- [SchemaType](layouts_schema.md#schematype)
 
 ## Type Aliases
 
@@ -23,16 +22,4 @@
 
 #### Defined in
 
-[src/layouts/schema.ts:2](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/schema.ts#L2)
-
-___
-
-### SchemaType
-
-Ƭ **SchemaType**: [`SchemaInfo`](../interfaces/layouts_schema.SchemaInfo.md) \| [`SchemaName`](layouts_schema.md#schemaname)
-
-...
-
-#### Defined in
-
-[src/layouts/schema.ts:5](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/schema.ts#L5)
+[src/layouts/schema.ts:2](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/schema.ts#L2)

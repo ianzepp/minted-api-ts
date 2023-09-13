@@ -8,11 +8,11 @@ import { RecordColumnImmutableError } from '@classes/system-data';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.test-immutable';
+        return __filename;
     }
     
     onSchema(): string {
-        return 'record';
+        return '*';
     }
 
     onRing(): ObserverRing {

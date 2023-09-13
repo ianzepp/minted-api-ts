@@ -12,11 +12,11 @@ import { DataError } from '@classes/system-data';
 
 export default class extends Observer {
     toName(): string {
-        return 'record.test-minimum';
+        return __filename;
     }
     
     onSchema(): string {
-        return 'record';
+        return '*';
     }
 
     onRing(): ObserverRing {

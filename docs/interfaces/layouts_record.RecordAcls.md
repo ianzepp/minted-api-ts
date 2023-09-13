@@ -25,7 +25,7 @@ The User IDs denied access.
 
 #### Defined in
 
-[src/layouts/record.ts:74](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L74)
+[src/layouts/record.ts:73](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/record.ts#L73)
 
 ___
 
@@ -37,7 +37,7 @@ The User IDs with edit access.
 
 #### Defined in
 
-[src/layouts/record.ts:68](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L68)
+[src/layouts/record.ts:67](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/record.ts#L67)
 
 ___
 
@@ -49,7 +49,7 @@ The User IDs with full access.
 
 #### Defined in
 
-[src/layouts/record.ts:65](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L65)
+[src/layouts/record.ts:64](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/record.ts#L64)
 
 ___
 
@@ -61,4 +61,4 @@ The User IDs with read access.
 
 #### Defined in
 
-[src/layouts/record.ts:71](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L71)
+[src/layouts/record.ts:70](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/record.ts#L70)

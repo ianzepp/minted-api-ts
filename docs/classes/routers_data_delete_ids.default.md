@@ -22,8 +22,10 @@
 
 ### Accessors
 
+- [params](routers_data_delete_ids.default.md#params)
 - [req](routers_data_delete_ids.default.md#req)
 - [res](routers_data_delete_ids.default.md#res)
+- [search](routers_data_delete_ids.default.md#search)
 - [system](routers_data_delete_ids.default.md#system)
 
 ### Methods
@@ -59,9 +61,27 @@
 
 #### Defined in
 
-[src/classes/http-router.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L25)
+[src/classes/http-router.ts:25](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L25)
 
 ## Accessors
+
+### params
+
+• `get` **params**(): `Dictionary`<`string`\>
+
+#### Returns
+
+`Dictionary`<`string`\>
+
+#### Inherited from
+
+HttpRouter.params
+
+#### Defined in
+
+[src/classes/http-router.ts:43](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L43)
+
+___
 
 ### req
 
@@ -77,7 +97,7 @@ HttpRouter.req
 
 #### Defined in
 
-[src/classes/http-router.ts:35](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L35)
+[src/classes/http-router.ts:35](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L35)
 
 ___
 
@@ -95,7 +115,25 @@ HttpRouter.res
 
 #### Defined in
 
-[src/classes/http-router.ts:39](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L39)
+[src/classes/http-router.ts:39](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L39)
+
+___
+
+### search
+
+• `get` **search**(): `Dictionary`<`string`\>
+
+#### Returns
+
+`Dictionary`<`string`\>
+
+#### Inherited from
+
+HttpRouter.search
+
+#### Defined in
+
+[src/classes/http-router.ts:47](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L47)
 
 ___
 
@@ -113,7 +151,7 @@ HttpRouter.system
 
 #### Defined in
 
-[src/classes/http-router.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L31)
+[src/classes/http-router.ts:31](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L31)
 
 ## Methods
 
@@ -138,7 +176,7 @@ HttpRouter.system
 
 #### Defined in
 
-[src/classes/http-router.ts:101](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L101)
+[src/classes/http-router.ts:109](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L109)
 
 ___
 
@@ -162,7 +200,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:97](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L97)
+[src/classes/http-router.ts:105](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L105)
 
 ___
 
@@ -186,7 +224,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:93](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L93)
+[src/classes/http-router.ts:101](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L101)
 
 ___
 
@@ -204,7 +242,7 @@ ___
 
 #### Defined in
 
-[src/routers/data-delete-ids.ts:16](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/routers/data-delete-ids.ts#L16)
+[src/routers/data-delete-ids.ts:16](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/routers/data-delete-ids.ts#L16)
 
 ___
 
@@ -222,7 +260,7 @@ ___
 
 #### Defined in
 
-[src/routers/data-delete-ids.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/routers/data-delete-ids.ts#L12)
+[src/routers/data-delete-ids.ts:12](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/routers/data-delete-ids.ts#L12)
 
 ___
 
@@ -240,7 +278,7 @@ ___
 
 #### Defined in
 
-[src/routers/data-delete-ids.ts:8](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/routers/data-delete-ids.ts#L8)
+[src/routers/data-delete-ids.ts:8](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/routers/data-delete-ids.ts#L8)
 
 ___
 
@@ -266,7 +304,7 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:43](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L43)
+[src/classes/http-router.ts:51](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L51)
 
 ___
 
@@ -284,4 +322,4 @@ ___
 
 #### Defined in
 
-[src/classes/http-router.ts:81](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/http-router.ts#L81)
+[src/classes/http-router.ts:89](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/http-router.ts#L89)

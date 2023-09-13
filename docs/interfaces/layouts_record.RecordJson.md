@@ -12,32 +12,15 @@ Represents the record's JSON representation in object format.
 
   ↳ [`RecordInfo`](layouts_record.RecordInfo.md)
 
-## Implemented by
-
-- [`Record`](../classes/classes_record.Record.md)
-
 ## Table of contents
 
 ### Properties
 
-- [acls](layouts_record.RecordJson.md#acls)
 - [data](layouts_record.RecordJson.md#data)
 - [meta](layouts_record.RecordJson.md#meta)
 - [type](layouts_record.RecordJson.md#type)
 
 ## Properties
-
-### acls
-
-• **acls**: [`RecordAcls`](layouts_record.RecordAcls.md)
-
-Accessor to the set of access control list data.
-
-#### Defined in
-
-[src/layouts/record.ts:89](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L89)
-
-___
 
 ### data
 
@@ -47,7 +30,7 @@ Accessor to the key/value mapping of record properties with their values.
 
 #### Defined in
 
-[src/layouts/record.ts:83](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L83)
+[src/layouts/record.ts:82](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/record.ts#L82)
 
 ___
 
@@ -59,7 +42,7 @@ Accessor to the set of timestamp and access information describing this record.
 
 #### Defined in
 
-[src/layouts/record.ts:86](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L86)
+[src/layouts/record.ts:85](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/record.ts#L85)
 
 ___
 
@@ -71,4 +54,4 @@ Returns the string name of the parent schema type.
 
 #### Defined in
 
-[src/layouts/record.ts:80](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/record.ts#L80)
+[src/layouts/record.ts:79](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/record.ts#L79)

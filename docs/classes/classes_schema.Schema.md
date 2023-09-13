@@ -13,10 +13,6 @@
 ### Properties
 
 - [columns](classes_schema.Schema.md#columns)
-- [source](classes_schema.Schema.md#source)
-
-### Accessors
-
 - [id](classes_schema.Schema.md#id)
 - [metadata](classes_schema.Schema.md#metadata)
 - [ns](classes_schema.Schema.md#ns)
@@ -25,64 +21,120 @@
 
 ### Methods
 
-- [toJSON](classes_schema.Schema.md#tojson)
+- [column\_keys](classes_schema.Schema.md#column_keys)
+- [is](classes_schema.Schema.md#is)
+- [isRecordDict](classes_schema.Schema.md#isrecorddict)
+- [isRecordFlat](classes_schema.Schema.md#isrecordflat)
+- [isRecordJson](classes_schema.Schema.md#isrecordjson)
 - [toRecord](classes_schema.Schema.md#torecord)
 
 ## Constructors
 
 ### constructor
 
-• **new Schema**(`source`)
+• **new Schema**(`flat`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `source` | `Dictionary`<`any`\> |
+| `flat` | `Dictionary`<`any`\> |
 
 #### Defined in
 
-[src/classes/schema.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L23)
+[src/classes/schema.ts:28](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L28)
 
 ## Properties
 
 ### columns
 
-• `Readonly` **columns**: `Dictionary`<[`Column`](classes_column.Column.md)\> = `{}`
+• `Readonly` **columns**: `Map`<`string`, [`Column`](classes_column.Column.md)\>
 
 #### Defined in
 
-[src/classes/schema.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L21)
+[src/classes/schema.ts:18](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L18)
 
 ___
 
-### source
-
-• `Private` `Readonly` **source**: `Dictionary`<`any`\>
-
-#### Defined in
-
-[src/classes/schema.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L23)
-
-## Accessors
-
 ### id
 
-• `get` **id**(): `string`
-
-#### Returns
-
-`string`
+• `Readonly` **id**: `string`
 
 #### Defined in
 
-[src/classes/schema.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L29)
+[src/classes/schema.ts:21](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L21)
 
 ___
 
 ### metadata
 
-• `get` **metadata**(): `boolean`
+• `Readonly` **metadata**: `boolean`
+
+#### Defined in
+
+[src/classes/schema.ts:26](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L26)
+
+___
+
+### ns
+
+• `Readonly` **ns**: `string`
+
+#### Defined in
+
+[src/classes/schema.ts:22](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L22)
+
+___
+
+### schema\_name
+
+• `Readonly` **schema\_name**: `string`
+
+#### Defined in
+
+[src/classes/schema.ts:24](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L24)
+
+___
+
+### schema\_type
+
+• `Readonly` **schema\_type**: `string`
+
+#### Defined in
+
+[src/classes/schema.ts:25](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L25)
+
+## Methods
+
+### column\_keys
+
+▸ **column_keys**(`prefix?`): `string`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `prefix?` | `string` |
+
+#### Returns
+
+`string`[]
+
+#### Defined in
+
+[src/classes/schema.ts:37](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L37)
+
+___
+
+### is
+
+▸ **is**(`schema_name`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `schema_name` | `string` |
 
 #### Returns
 
@@ -90,63 +142,67 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:45](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L45)
+[src/classes/schema.ts:43](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L43)
 
 ___
 
-### ns
+### isRecordDict
 
-• `get` **ns**(): `string`
+▸ **isRecordDict**(`source`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `source` | `unknown` |
 
 #### Returns
 
-`string`
+`boolean`
 
 #### Defined in
 
-[src/classes/schema.ts:33](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L33)
+[src/classes/schema.ts:81](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L81)
 
 ___
 
-### schema\_name
+### isRecordFlat
 
-• `get` **schema_name**(): `string`
+▸ **isRecordFlat**(`source`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `source` | `unknown` |
 
 #### Returns
 
-`string`
+`boolean`
 
 #### Defined in
 
-[src/classes/schema.ts:37](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L37)
+[src/classes/schema.ts:91](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L91)
 
 ___
 
-### schema\_type
+### isRecordJson
 
-• `get` **schema_type**(): `string`
+▸ **isRecordJson**(`source`): `boolean`
 
-#### Returns
+#### Parameters
 
-`string`
-
-#### Defined in
-
-[src/classes/schema.ts:41](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L41)
-
-## Methods
-
-### toJSON
-
-▸ **toJSON**(): `Dictionary`<`any`\>
+| Name | Type |
+| :------ | :------ |
+| `source` | `unknown` |
 
 #### Returns
 
-`Dictionary`<`any`\>
+`boolean`
 
 #### Defined in
 
-[src/classes/schema.ts:49](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L49)
+[src/classes/schema.ts:85](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L85)
 
 ___
 
@@ -158,7 +214,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `source?` | `Dictionary`<`any`\> \| [`RecordFlat`](../interfaces/layouts_record.RecordFlat.md) \| [`RecordData`](../interfaces/layouts_record.RecordData.md) \| [`RecordJson`](../interfaces/layouts_record.RecordJson.md) \| [`Record`](classes_record.Record.md) |
+| `source?` | `any` |
 
 #### Returns
 
@@ -166,4 +222,4 @@ ___
 
 #### Defined in
 
-[src/classes/schema.ts:53](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/schema.ts#L53)
+[src/classes/schema.ts:47](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/schema.ts#L47)

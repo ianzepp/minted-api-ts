@@ -25,7 +25,7 @@ The system verbs associated with system operations.
 
 #### Defined in
 
-[src/layouts/system.ts:8](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L8)
+[src/layouts/system.ts:8](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/system.ts#L8)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 #### Defined in
 
-[src/layouts/system.ts:9](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L9)
+[src/layouts/system.ts:9](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/system.ts#L9)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[src/layouts/system.ts:10](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L10)
+[src/layouts/system.ts:10](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/system.ts#L10)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[src/layouts/system.ts:11](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L11)
+[src/layouts/system.ts:11](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/system.ts#L11)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/layouts/system.ts:12](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L12)
+[src/layouts/system.ts:12](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/system.ts#L12)
 
 ___
 
@@ -75,4 +75,4 @@ ___
 
 #### Defined in
 
-[src/layouts/system.ts:13](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/system.ts#L13)
+[src/layouts/system.ts:13](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/system.ts#L13)

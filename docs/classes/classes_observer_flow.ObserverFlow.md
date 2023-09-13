@@ -22,12 +22,11 @@
 
 ### Accessors
 
-- [change\_ids](classes_observer_flow.ObserverFlow.md#change_ids)
-- [change\_map](classes_observer_flow.ObserverFlow.md#change_map)
+- [change\_data](classes_observer_flow.ObserverFlow.md#change_data)
+- [change\_meta](classes_observer_flow.ObserverFlow.md#change_meta)
 
 ### Methods
 
-- [fail](classes_observer_flow.ObserverFlow.md#fail)
 - [run](classes_observer_flow.ObserverFlow.md#run)
 
 ## Constructors
@@ -48,7 +47,7 @@
 
 #### Defined in
 
-[src/classes/observer-flow.ts:26](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L26)
+[src/classes/observer-flow.ts:28](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L28)
 
 ## Properties
 
@@ -58,7 +57,7 @@
 
 #### Defined in
 
-[src/classes/observer-flow.ts:29](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L29)
+[src/classes/observer-flow.ts:31](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L31)
 
 ___
 
@@ -68,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer-flow.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L23)
+[src/classes/observer-flow.ts:25](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L25)
 
 ___
 
@@ -78,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer-flow.ts:24](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L24)
+[src/classes/observer-flow.ts:26](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L26)
 
 ___
 
@@ -88,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer-flow.ts:30](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L30)
+[src/classes/observer-flow.ts:32](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L32)
 
 ___
 
@@ -98,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer-flow.ts:31](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L31)
+[src/classes/observer-flow.ts:33](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L33)
 
 ___
 
@@ -108,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/classes/observer-flow.ts:28](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L28)
+[src/classes/observer-flow.ts:30](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L30)
 
 ___
 
@@ -118,59 +117,37 @@ ___
 
 #### Defined in
 
-[src/classes/observer-flow.ts:27](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L27)
+[src/classes/observer-flow.ts:29](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L29)
 
 ## Accessors
 
-### change\_ids
+### change\_data
 
-• `get` **change_ids**(): `any`[]
+• `get` **change_data**(): `Dictionary`<`any`\>[]
 
 #### Returns
 
-`any`[]
+`Dictionary`<`any`\>[]
 
 #### Defined in
 
-[src/classes/observer-flow.ts:37](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L37)
+[src/classes/observer-flow.ts:35](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L35)
 
 ___
 
-### change\_map
+### change\_meta
 
-• `get` **change_map**(): `Dictionary`<[`Record`](classes_record.Record.md)\>
+• `get` **change_meta**(): `Dictionary`<`any`\>[]
 
 #### Returns
 
-`Dictionary`<[`Record`](classes_record.Record.md)\>
+`Dictionary`<`any`\>[]
 
 #### Defined in
 
-[src/classes/observer-flow.ts:33](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L33)
+[src/classes/observer-flow.ts:39](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L39)
 
 ## Methods
-
-### fail
-
-▸ **fail**(`code`, `message`, `record?`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `code` | `number` |
-| `message` | `string` |
-| `record?` | [`Record`](classes_record.Record.md) |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[src/classes/observer-flow.ts:115](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L115)
-
-___
 
 ### run
 
@@ -188,4 +165,4 @@ ___
 
 #### Defined in
 
-[src/classes/observer-flow.ts:41](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/classes/observer-flow.ts#L41)
+[src/classes/observer-flow.ts:43](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/classes/observer-flow.ts#L43)

@@ -29,7 +29,7 @@ The levels of operations for an observer.
 
 #### Defined in
 
-[src/layouts/observer.ts:27](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L27)
+[src/layouts/observer.ts:27](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L27)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:25](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L25)
+[src/layouts/observer.ts:25](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L25)
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:26](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L26)
+[src/layouts/observer.ts:26](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L26)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:18](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L18)
+[src/layouts/observer.ts:18](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L18)
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:23](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L23)
+[src/layouts/observer.ts:23](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L23)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L20)
+[src/layouts/observer.ts:20](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L20)
 
 ___
 
@@ -89,7 +89,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:24](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L24)
+[src/layouts/observer.ts:24](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L24)
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:19](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L19)
+[src/layouts/observer.ts:19](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L19)
 
 ___
 
@@ -109,7 +109,7 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:22](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L22)
+[src/layouts/observer.ts:22](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L22)
 
 ___
 
@@ -119,4 +119,4 @@ ___
 
 #### Defined in
 
-[src/layouts/observer.ts:21](https://github.com/ianzepp/minted-api-ts/blob/05123f2/src/layouts/observer.ts#L21)
+[src/layouts/observer.ts:21](https://github.com/ianzepp/minted-api-ts/blob/ce6db2f/src/layouts/observer.ts#L21)
