@@ -23,6 +23,8 @@ export class Observer {
             'on_schema': this.onSchema(),
             'on_ring': this.onRing(),
             'on_rank': this.onRank(),
+            'on_root': this.onRoot(),
+            'on_test': this.onTest(),
             'on_select': this.onSelect(),
             'on_create': this.onCreate(),
             'on_update': this.onUpdate(),
@@ -41,11 +43,19 @@ export class Observer {
     }
 
     /**
-     * Method to get the schema
-     * @returns {string} - The schema
+     * Method to get the `Client` namespace that this observer targets, or `*` if it applies to all clients
+     * @returns {string} - The targeted `Client` namespace
+     */
+    onClient(): string {
+        return '*';
+    }
+
+    /**
+     * Method to get the `Schema` that this observer targets, or `*` if it applies to all schemas
+     * @returns {string} - The targeted `Schema` name
      */
     onSchema(): string {
-        throw 500;
+        return '*';
     }
 
     /**
@@ -63,6 +73,23 @@ export class Observer {
     onRank(): ObserverRank {
         return ObserverRank.Avg;
     }
+
+    /**
+     * Method to get if the observer should run when `root` is executing
+     * @returns {ObserverRank} - True by default
+     */
+    onRoot(): boolean {
+        return true;
+    }
+
+    /**
+     * Method to get if the observer should run when `test` is executing
+     * @returns {ObserverRank} - True by default
+     */
+    onTest(): boolean {
+        return true;
+    }
+
     /**
      * Base method to check if the observer is selectable. The actual value will be defined in child classes.
      * For example, see @knex-select.ts or @test-immutable.ts.
