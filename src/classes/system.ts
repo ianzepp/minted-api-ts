@@ -145,6 +145,14 @@ export class SystemAsTest extends System {
     toTestName() {
         return 'test_' + Math.floor(Math.random() * 1000000);
     }
+
+    async createTestTable()  {
+        let record = await this.data.createOne(SchemaType.Schema, { 
+            schema_name: this.toTestSchemaName()
+        });
+
+        return this.meta.schemas.get(record.data.schema_name);
+    }
 }
 
 // TODO process cors data
