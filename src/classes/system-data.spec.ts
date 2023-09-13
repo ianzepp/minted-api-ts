@@ -242,14 +242,14 @@ test('createAll() with a single source and an ID should fail !!', async () => {
     let source = _.assign({ id: system.uuid() }, source_data[0]);
     let result = await system.data.createAll(schema_type, [source])
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error).instanceOf(DataError));
+        .catch(error => chai.expect(error.message).includes('E_ID_EXISTS'));
 });
 
 test('createAll() missing required data should fail !!', async () => {
     let source = _.assign({}, _.omit(source_data[0], 'name'));
     let result = await system.data.createAll(schema_type, [source])
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error).instanceOf(DataError));
+        .catch(error => chai.expect(error.message).includes('E_DATA_REQUIRED'));
 });
 
 test('createAll() with unknown columns should fail !!', async () => {
@@ -269,14 +269,14 @@ test('createOne() with an existing ID should fail !!', async () => {
     let source = _.assign({ id: system.uuid() }, source_data[0]);
     let result = await system.data.createOne(schema_type, source)
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error).instanceOf(DataError));
+        .catch(error => chai.expect(error.message).includes('E_ID_EXISTS'));
 });
 
 test('createOne() missing required data should fail !!', async () => {
     let source = _.assign({}, _.omit(source_data[0], 'name'));
     let result = await system.data.createOne(schema_type, source)
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error).instanceOf(DataError));
+        .catch(error => chai.expect(error.message).includes('E_DATA_REQUIRED'));
 });
 
 test('createOne() with unknown columns should fail !!', async () => {

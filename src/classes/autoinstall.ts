@@ -50,12 +50,12 @@ export class AutoInstall {
 
         // Create the master system table.
         await this.createTable('system.system', (table) => {
-            table.string('client_name').notNullable();
+            table.string('description').notNullable();
         });
 
         // Create the master system record.
         await this.insertAll('system.system', [
-            { ns: 'system', client_name: 'Minted API System' },
+            { ns: 'system', description: 'Minted API System' },
         ]);
 
         //
@@ -80,7 +80,7 @@ export class AutoInstall {
         
         // Create the master test system record. This tests that the trigger works.
         await this.insertAll('system.system', [
-            { ns: 'test', client_name: 'Minted API System Tests' },
+            { ns: 'test', description: 'Minted API Test Suite' },
         ]);
 
         //
@@ -116,7 +116,7 @@ export class AutoInstall {
             table.integer('precision');
         });
 
-        // Create table `client_user`
+        // Create table `client`
         await this.createTable('system.client', table => {
             table.string('name').notNullable();
         });
@@ -127,6 +127,7 @@ export class AutoInstall {
 
         // Add data for `schema`
         await this.insertAll('system.schema', [
+            { ns: 'system', schema_name: 'system.system', schema_type: 'database' },
             { ns: 'system', schema_name: 'system.schema', schema_type: 'database', metadata: true },
             { ns: 'system', schema_name: 'system.column', schema_type: 'database', metadata: true },
             { ns: 'system', schema_name: 'system.client', schema_type: 'database', metadata: false },
@@ -134,6 +135,9 @@ export class AutoInstall {
 
         // Add data for `column`
         await this.insertAll('system.column', [
+            // Columns for 'system'
+            { ns: 'system', schema_name: 'system.system', column_name: 'description' },
+
             // Columns for 'schema'
             { ns: 'system', schema_name: 'system.schema', column_name: 'schema_name', required: true },
             { ns: 'system', schema_name: 'system.schema', column_name: 'schema_type' },
@@ -159,10 +163,10 @@ export class AutoInstall {
             { ns: 'system', schema_name: 'system.column', column_name: 'precision', column_type: 'integer' },
 
             // Columns for 'user'
-            { ns: 'system', schema_name: 'system.client', column_name: 'name', column_type: 'text' },
+            { ns: 'system', schema_name: 'system.client', column_name: 'name', column_type: 'text', required: true },
         ]);
 
-        // Add data for `client_user`
+        // Add data for `client`
         await this.insertAll('system.client', [
             { ns: System.RootNs, id: System.RootId, name: 'root' },
             { ns: System.TestNs, id: System.TestId, name: 'test' },

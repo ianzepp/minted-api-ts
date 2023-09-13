@@ -29,16 +29,13 @@ export default class extends Observer {
     }
 
     async startup(flow: ObserverFlow): Promise<void> {
-        let exceptions = flow.change.filter(record => record.data.id);
-
-        if (exceptions.length) {
-            throw new DataError('One or more records are already assigned IDs');
-        }
-
-        // Set ID and namespace
+        // Set ID and namespace. It is possible they are already set, if we are running as root and
+        // the root user supplied the IDs. 
+        //
+        // See the testing / precheck login in `test-create.ts`.
         flow.change.forEach(record => {
-            record.data.id = flow.system.uuid();
-            record.data.ns = flow.system.user_ns;
+            record.data.id = record.data.id || flow.system.uuid();
+            record.data.ns = record.data.ns || flow.system.user_ns;
         });
     }
 
