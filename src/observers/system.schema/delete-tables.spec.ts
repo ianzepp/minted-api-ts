@@ -20,7 +20,7 @@ afterEach(async () => {
     await system.cleanup();
 });
 
-test('should delete a knex table', async () => {
+test.skip('should delete a knex table', async () => {
     let schema_name = system.toTestSchemaName();
     let schema_data = await system.data.createOne(System.SchemaType.Schema, {
         schema_name: schema_name

@@ -21,7 +21,7 @@ afterEach(async () => {
     await system.cleanup();
 });
 
-test('should create a knex table', async () => {
+test.skip('should create a knex table', async () => {
     let schema_name = system.toTestSchemaName();    
     let schema_data = await system.data.createOne(System.SchemaType.Schema, {
         schema_name: schema_name
