@@ -224,6 +224,27 @@ export class AutoInstall {
         });
 
         //
+        // Row level security
+        // 
+
+        await this.knex.raw(`
+            ALTER TABLE "${ns}__meta"."${sn}" ENABLE ROW LEVEL SECURITY;
+
+            CREATE POLICY ${ns}_${sn}_rls_policy ON "${ns}__meta"."${sn}"
+            USING (
+                (
+                    (acls_deny IS NULL) OR 
+                    (NOT acls_deny @> ARRAY[current_setting('minted.userinfo_id')]::uuid[])
+                ) AND (
+                    (acls_full @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
+                    (acls_edit @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
+                    (acls_read @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
+                    (acls_full IS NULL AND acls_edit IS NULL AND acls_read IS NULL)
+                )
+            );
+        `);
+
+        //
         // Auto-insert metadata table
         //
 
