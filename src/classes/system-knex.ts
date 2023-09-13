@@ -135,25 +135,35 @@ export class SystemKnex implements SystemService {
     selectTo<T = RecordFlat>(schema_path: string) {
         let [ns, sn] = schema_path.split('.');
 
-        // For example, using a `schema_path` of `system.client_user`, then:
+        // For example, using a `schema_path` of `system.client`, then:
         //
-        // 1. split the path into ns=system and sn=client_user
-        // 2. start from a top-level table of `system.client_user`
-        // 3. pull in timestamps from `system__meta.client_user`
+        // 1. split the path into ns=system and sn=client
+        // 2. start from a top-level table of `system.client`
+        // 3. pull in timestamps from `system__meta.client`
         // 4. restrict to only the running user's visible namespaces
         
-        return this
+        let knex = this
             .driver<T>({ data: `${ ns }__data.${ sn }` })
-            .join({ meta: `${ ns }__meta.${ sn }` }, 'meta.id', 'data.id')
-            .whereIn('data.ns', this.system.auth.namespaces);
+            .join({ meta: `${ ns }__meta.${ sn }` }, 'meta.id', 'data.id');
+
+        // Root ignores namespace visiblity by default. This may change with RLS.
+        if (this.system.isRoot() === false) {
+            knex = knex.whereIn('data.ns', this.system.auth.namespaces);
+        }
+
+        return knex;
     }
 
     driverTo<T = _.Dictionary<any>>(schema_path: string, alias: 'data' | 'meta' = 'data') {
         let [ns, sn] = schema_path.split('.');
 
-        return this
-            .driver<T>(`${ ns }__${ alias }.${ sn } as ${ alias }`)
-            .whereIn(`${ alias }.ns`, this.system.auth.namespaces);
-    }
+        let knex = this.driver<T>(`${ ns }__${ alias }.${ sn } as ${ alias }`);
 
+        // Root ignores namespace visiblity by default. This may change with RLS.
+        if (this.system.isRoot() === false) {
+            knex = knex.whereIn(`${ alias }.ns`, this.system.auth.namespaces);
+        }
+
+        return knex;
+    }
 }
