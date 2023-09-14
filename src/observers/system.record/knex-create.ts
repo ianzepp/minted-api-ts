@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { v4 as uuid } from 'uuid';
 
 // Classes
 import { Observer } from '@classes/observer';

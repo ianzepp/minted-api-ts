@@ -2,6 +2,8 @@ import _ from 'lodash';
 import util from 'util';
 import chai from 'chai';
 import debug from 'debug';
+
+// UUID is a common requirement
 import { v4 as uuid } from 'uuid';
 
 // Classes
@@ -12,22 +14,17 @@ import { KernelKnex } from '@classes/kernel-knex';
 
 // Layouts
 import { Service } from "@layouts/kernel";
-import { KernelVerb } from "@layouts/kernel";
-import { SchemaType } from '@layouts/schema';
 
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
 export class Kernel implements Service {
+    // Import aliases
+    public readonly uuid = uuid;
+
     // General
     public static ID = '00000000-0000-0000-0000-000000000000';
     public static NS = 'system';
-
-    // Re-export aliases
-    public static Chai = chai;
-    public static Verb = KernelVerb;
-    public static Type = SchemaType;
-    public static UUID = uuid;
 
     // Services
     public readonly auth = new KernelAuth(this);
@@ -106,10 +103,6 @@ export class Kernel implements Service {
         finally {
             await this.cleanup();
         }
-    }
-
-    uuid() {
-        return Kernel.UUID();
     }
 
     emit(cn, fn, ... messages) {

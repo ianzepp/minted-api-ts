@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import chai from 'chai';
-import { v4 as uuid } from 'uuid';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";

@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import chai from 'chai';
-import { v4 as uuid } from 'uuid';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
@@ -8,6 +7,7 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 // Classes
 import { Kernel } from '@classes/kernel';
 import { Tester } from '@classes/tester';
+import { SchemaType } from '@layouts/schema';
 
 
 let kernel = new Tester();
@@ -24,7 +24,7 @@ afterEach(async () => {
 
 test.skip('should create a knex table', async () => {
     let schema_name = kernel.toTestSchemaName();    
-    let schema_data = await kernel.data.createOne(Kernel.Type.Schema, {
+    let schema_data = await kernel.data.createOne(SchemaType.Schema, {
         schema_name: schema_name
     });
 
