@@ -23,7 +23,7 @@ afterEach(async () => {
     await kernel.cleanup();
 });
 
-test('auto-creates a new `system.client` admin user', async () => {
+test('auto-creates a new `system.user` admin user', async () => {
     let test_ns = kernel.toTestName();
 
     // Create the new domain & namespace
@@ -36,7 +36,7 @@ test('auto-creates a new `system.client` admin user', async () => {
 
     // Assert the client exists in the right namespace
     await kernel.data
-        .search404(SchemaType.Client, { where: { ns: test_ns, name: 'admin' }})
-        .catch(error => chai.assert.fail('Client record not found.'));
+        .search404(SchemaType.User, { where: { ns: test_ns, name: 'admin' }})
+        .catch(error => chai.assert.fail('User record not found.'));
 });
 

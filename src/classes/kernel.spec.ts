@@ -15,12 +15,12 @@ beforeEach(() => kernel.startup());
 afterEach(() => kernel.cleanup());
 
 test('tx test: insert a user => should rollback', async () => {
-    let result = await kernel.data.createOne('system.client', { name: 'kernel-tx-test' });
+    let result = await kernel.data.createOne('system.user', { name: 'kernel-tx-test' });
     chai.expect(result).an('object').not.empty;
 });
 
 test('tx test: verify the user does not exist', async () => {
-    let result = await kernel.data.selectAny('system.client', { where: { name: 'kernel-tx-test' }});
+    let result = await kernel.data.selectAny('system.user', { where: { name: 'kernel-tx-test' }});
     chai.expect(result).an('array').empty;
 });
 

@@ -13,7 +13,7 @@ import { SchemaType } from '@classes/schema-type';
 
 /**
  * This observer lstens to inserts on the `system.domain` table (which represents an organization or namespace),
- * and generates an associated `Client` record with admin permissions.
+ * and generates an associated `User` record with admin permissions.
  */
 export default class extends Observer {
     toName(): string {
@@ -42,6 +42,6 @@ export default class extends Observer {
         });
 
         // Insert the clients
-        await flow.kernel.data.createAll(SchemaType.Client, clients);
+        await flow.kernel.data.createAll(SchemaType.User, clients);
     }
 }
