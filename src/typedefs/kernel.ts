@@ -1,18 +1,4 @@
 //
-// Enums
-//
-
-export enum KernelVerb {
-    Create = 'create',
-    Delete = 'delete',
-    Expire = 'expire',
-    Select = 'select',
-    Update = 'update',
-    Upsert = 'upsert',
-}
-
-
-//
 // Interfaces
 //
 
