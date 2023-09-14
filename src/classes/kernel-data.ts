@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Thread } from '@classes/thread';
+import { ThreadOp } from '@classes/thread';
 import { Record } from '@classes/record';
 import { Kernel } from '@classes/kernel';
 
@@ -12,7 +13,6 @@ import { Filter } from '@classes/filter';
 import { ChangeData } from '@typedefs/record';
 import { FilterJson } from '@typedefs/filter';
 import { Service } from '@typedefs/kernel';
-import { KernelVerb } from '@typedefs/kernel';
 import { ObserverRing } from '@typedefs/observer';
 import { SchemaName } from '@typedefs/schema';
 
@@ -64,7 +64,7 @@ export class KernelData implements Service {
     // Core runtime
     //
 
-    async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
+    async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: ThreadOp): Promise<Record[]> {
         if (Bun.env.POSTGRES_DEBUG === 'true') {
             console.debug(`KernelData.run(): op="${op}" schema_name="${schema_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
         }
@@ -77,7 +77,7 @@ export class KernelData implements Service {
         let filter = new Filter(filter_data);
 
         // Is this something other than a select op, and the change data is empty?
-        if (change_data.length === 0 && op !== KernelVerb.Select) {
+        if (change_data.length === 0 && op !== ThreadOp.Select) {
             return [];
         }
 
@@ -108,23 +108,23 @@ export class KernelData implements Service {
     }
 
     async createAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, KernelVerb.Create);
+        return this.run(schema_name, change_data, {}, ThreadOp.Create);
     }
 
     async updateAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, KernelVerb.Update);
+        return this.run(schema_name, change_data, {}, ThreadOp.Update);
     }
 
     async upsertAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, KernelVerb.Upsert);
+        return this.run(schema_name, change_data, {}, ThreadOp.Upsert);
     }
 
     async expireAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, KernelVerb.Expire);
+        return this.run(schema_name, change_data, {}, ThreadOp.Expire);
     }
 
     async deleteAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, KernelVerb.Delete);
+        return this.run(schema_name, change_data, {}, ThreadOp.Delete);
     }
 
     //
@@ -180,7 +180,7 @@ export class KernelData implements Service {
     //
 
     async selectAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
-        return this.run(schema_name, [], filter_data, KernelVerb.Select);
+        return this.run(schema_name, [], filter_data, ThreadOp.Select);
     }
 
     async updateAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {

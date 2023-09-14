@@ -11,15 +11,17 @@ import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 import { Kernel } from '@classes/kernel';
 
-// Typedefs
-import { KernelVerb } from '@typedefs/kernel';
-import { ThreadFailure } from '@typedefs/observer';
-import { RecordJson } from '@typedefs/record';
-
 // Import pre-loaded routers
 import Observers from '@preloader/observers';
-import { fail } from 'assert';
-import { DataError } from '@classes/kernel-data';
+
+export enum ThreadOp {
+    Create = 'create',
+    Delete = 'delete',
+    Expire = 'expire',
+    Select = 'select',
+    Update = 'update',
+    Upsert = 'upsert',
+}
 
 export class Thread {
     readonly expect = chai.expect;
@@ -73,27 +75,27 @@ export class Thread {
             // Positive checks
             //
 
-            if (observer.onSelect() && this.op == KernelVerb.Select) {
+            if (observer.onSelect() && this.op == ThreadOp.Select) {
                 return true;
             }
 
-            if (observer.onCreate() && this.op == KernelVerb.Create) {
+            if (observer.onCreate() && this.op == ThreadOp.Create) {
                 return true;
             }
 
-            if (observer.onUpdate() && this.op == KernelVerb.Update) {
+            if (observer.onUpdate() && this.op == ThreadOp.Update) {
                 return true;
             }
 
-            if (observer.onUpsert() && this.op == KernelVerb.Upsert) {
+            if (observer.onUpsert() && this.op == ThreadOp.Upsert) {
                 return true;
             }
 
-            if (observer.onExpire() && this.op == KernelVerb.Expire) {
+            if (observer.onExpire() && this.op == ThreadOp.Expire) {
                 return true;
             }
 
-            if (observer.onDelete() && this.op == KernelVerb.Delete) {
+            if (observer.onDelete() && this.op == ThreadOp.Delete) {
                 return true;
             }
 
