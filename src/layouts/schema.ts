@@ -14,9 +14,9 @@ export type SchemaName = string;
 //
 
 export enum SchemaType {
+    Domain = 'system.domain',
     Schema = 'system.schema',
     Column = 'system.column',
-    Kernel = 'system.system',
     User = 'system.user',
 };
 
