@@ -44,7 +44,7 @@ function expectRecord(result: any) {
 
 // Test suite
 let kernel = new Tester();
-let schema_type = SchemaType.Client;
+let schema_type = SchemaType.User;
 let source_data = [
     { ns: 'test', name: 'test-user-0' },
     { ns: 'test', name: 'test-user-1' },

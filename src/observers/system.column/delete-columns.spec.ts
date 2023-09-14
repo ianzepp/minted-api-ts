@@ -15,7 +15,7 @@ import { SchemaType } from '@layouts/schema';
 
 let kernel = new Tester();
 let source_data = { 
-    schema_name: SchemaType.Client, 
+    schema_name: SchemaType.User, 
     column_name: 'something', 
     column_type: 'text' 
 };
@@ -32,7 +32,7 @@ test('should create a knex column', async () => {
     let record = await kernel.data.createOne(SchemaType.Column, source_data);
 
     // Make sure we can insert records
-    await kernel.data.createOne(SchemaType.Client, {
+    await kernel.data.createOne(SchemaType.User, {
         name: 'username',
         something: 'this is some type of value'
     });
@@ -41,7 +41,7 @@ test('should create a knex column', async () => {
     let remove = await kernel.data.deleteOne(SchemaType.Column, record);
 
     // Check using direct knex
-    let select = await kernel.knex.driverTo(SchemaType.Client).select().first();
+    let select = await kernel.knex.driverTo(SchemaType.User).select().first();
 
     chai.expect(select).a('object');
     chai.expect(select).property('id').string;

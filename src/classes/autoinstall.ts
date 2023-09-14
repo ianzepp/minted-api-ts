@@ -48,13 +48,13 @@ export class AutoInstall {
             $$ LANGUAGE plpgsql;
         `);
 
-        // Create the master system table.
-        await this.createTable('system.system', (table) => {
+        // Create the master domain table.
+        await this.createTable('system.domain', (table) => {
             table.string('description').notNullable();
         });
 
-        // Create the master system record.
-        await this.insertAll('system.system', [
+        // Create the master domain record.
+        await this.insertAll('system.domain', [
             { ns: 'system', description: 'Minted API System' },
         ]);
 
@@ -62,7 +62,7 @@ export class AutoInstall {
         // Define the trigger that adds new schemas when a new client is created.
         //
         await this.knex.raw(`
-            CREATE OR REPLACE FUNCTION new_system_create_schema_trigger()
+            CREATE OR REPLACE FUNCTION new_domain_create_schemas_trigger()
             RETURNS TRIGGER AS $$
             BEGIN
                 EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__data";';
@@ -72,14 +72,14 @@ export class AutoInstall {
             END;
             $$ LANGUAGE plpgsql;
 
-            CREATE TRIGGER new_system_create_schema
-            AFTER INSERT ON "system__data"."system"
+            CREATE TRIGGER new_domain_create_schemas
+            AFTER INSERT ON "system__data"."domain"
             FOR EACH ROW
-            EXECUTE PROCEDURE new_system_create_schema_trigger();
+            EXECUTE PROCEDURE new_domain_create_schemas_trigger();
         `);
         
-        // Create the master test system record. This tests that the trigger works.
-        await this.insertAll('system.system', [
+        // Create the master test domain record. This tests that the trigger works.
+        await this.insertAll('system.domain', [
             { ns: 'test', description: 'Minted API Test Suite' },
         ]);
 
@@ -116,8 +116,8 @@ export class AutoInstall {
             table.integer('precision');
         });
 
-        // Create table `client`
-        await this.createTable('system.client', table => {
+        // Create table `user`
+        await this.createTable('system.user', table => {
             table.string('name').notNullable();
         });
 
@@ -127,16 +127,16 @@ export class AutoInstall {
 
         // Add data for `schema`
         await this.insertAll('system.schema', [
-            { ns: 'system', schema_name: 'system.system', schema_type: 'database' },
+            { ns: 'system', schema_name: 'system.domain', schema_type: 'database' },
             { ns: 'system', schema_name: 'system.schema', schema_type: 'database', metadata: true },
             { ns: 'system', schema_name: 'system.column', schema_type: 'database', metadata: true },
-            { ns: 'system', schema_name: 'system.client', schema_type: 'database', metadata: false },
+            { ns: 'system', schema_name: 'system.user', schema_type: 'database', metadata: false },
         ]);
 
         // Add data for `column`
         await this.insertAll('system.column', [
             // Columns for 'system'
-            { ns: 'system', schema_name: 'system.system', column_name: 'description' },
+            { ns: 'system', schema_name: 'system.domain', column_name: 'description' },
 
             // Columns for 'schema'
             { ns: 'system', schema_name: 'system.schema', column_name: 'schema_name', required: true },
@@ -163,11 +163,11 @@ export class AutoInstall {
             { ns: 'system', schema_name: 'system.column', column_name: 'precision', column_type: 'integer' },
 
             // Columns for 'user'
-            { ns: 'system', schema_name: 'system.client', column_name: 'name', column_type: 'text', required: true },
+            { ns: 'system', schema_name: 'system.user', column_name: 'name', column_type: 'text', required: true },
         ]);
 
         // Add data for `client`
-        await this.insertAll('system.client', [
+        await this.insertAll('system.user', [
             { ns: Kernel.NS, id: Kernel.ID, name: 'root' },
             { ns: Tester.NS, id: Tester.ID, name: 'test' },
         ]);
@@ -192,12 +192,12 @@ export class AutoInstall {
             table.uuid('id').primary().notNullable().defaultTo(this.knex.fn.uuid());
 
             // Only applies to the very first one
-            if (schema_path === 'system.system') {
+            if (schema_path === 'system.domain') {
                 table.string('ns').notNullable().unique();
             }
 
             else {
-                table.string('ns').notNullable().references('ns').inTable('system__data.system').onDelete('CASCADE');
+                table.string('ns').notNullable().references('ns').inTable('system__data.domain').onDelete('CASCADE');
             }
 
             // Apply extra columns

@@ -137,10 +137,10 @@ export class KernelKnex implements Service {
     selectTo<T = RecordFlat>(schema_path: string) {
         let [ns, sn] = schema_path.split('.');
 
-        // For example, using a `schema_path` of `system.client`, then:
+        // For example, using a `schema_path` of `system.user`, then:
         //
         // 1. split the path into ns=kernel and sn=client
-        // 2. start from a top-level table of `system.client`
+        // 2. start from a top-level table of `system.user`
         // 3. pull in timestamps from `system__meta.client`
         // 4. restrict to only the running user's visible namespaces
         
