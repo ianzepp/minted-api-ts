@@ -21,6 +21,7 @@ export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[8
 export class Kernel implements Service {
     // Import aliases
     public readonly uuid = uuid;
+    public readonly expect = chai.expect;
 
     // General
     public static ID = '00000000-0000-0000-0000-000000000000';
@@ -31,10 +32,6 @@ export class Kernel implements Service {
     public readonly data = new KernelData(this);
     public readonly meta = new KernelMeta(this);
     public readonly knex = new KernelKnex(this);
-
-    // Error management
-    public readonly expect = chai.expect;
-    public readonly errors: Error[] = [];
 
     // Kernel constants
     public readonly time = new Date();
