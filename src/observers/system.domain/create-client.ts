@@ -12,7 +12,7 @@ import { DataError } from '@classes/kernel-data';
 import { SchemaType } from '@classes/schema-type';
 
 /**
- * This observer lstens to inserts on the `system.kernel` table (which represents an organization or namespace),
+ * This observer lstens to inserts on the `system.domain` table (which represents an organization or namespace),
  * and generates an associated `Client` record with admin permissions.
  */
 export default class extends Observer {
@@ -21,7 +21,7 @@ export default class extends Observer {
     }
     
     onSchema(): string {
-        return SchemaType.Kernel;
+        return SchemaType.Domain;
     }
 
     onRing(): ObserverRing {

@@ -26,13 +26,13 @@ afterEach(async () => {
 test('auto-creates a new `system.client` admin user', async () => {
     let test_ns = kernel.toTestName();
 
-    // Create the new kernel & namespace
-    await kernel.data.createOne(SchemaType.Kernel, { ns: test_ns, description: test_ns });
+    // Create the new domain & namespace
+    await kernel.data.createOne(SchemaType.Domain, { ns: test_ns, description: test_ns });
 
-    // Assert the kernel exists in the right namespace
+    // Assert the domain exists in the right namespace
     await kernel.data
-        .search404(SchemaType.Kernel, { where: { ns: test_ns }})
-        .catch(error => chai.assert.fail('Kernel record not found.'));
+        .search404(SchemaType.Domain, { where: { ns: test_ns }})
+        .catch(error => chai.assert.fail('Domain record not found.'));
 
     // Assert the client exists in the right namespace
     await kernel.data
