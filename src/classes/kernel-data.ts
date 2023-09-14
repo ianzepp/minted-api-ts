@@ -64,7 +64,7 @@ export class KernelData implements Service {
     // Core runtime
     //
 
-    async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: string): Promise<Record[]> {
+    async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: ThreadOp): Promise<Record[]> {
         if (Bun.env.POSTGRES_DEBUG === 'true') {
             console.debug(`KernelData.run(): op="${op}" schema_name="${schema_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
         }
