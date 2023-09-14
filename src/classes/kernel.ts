@@ -7,6 +7,7 @@ import debug from 'debug';
 import { v4 as uuid } from 'uuid';
 
 // Classes
+import { KernelAcls } from '@classes/kernel-acls';
 import { KernelAuth } from '@classes/kernel-auth';
 import { KernelData } from '@classes/kernel-data';
 import { KernelMeta } from '@classes/kernel-meta';
@@ -28,6 +29,7 @@ export class Kernel implements Service {
     public static NS = 'system';
 
     // Services
+    public readonly acls = new KernelAcls(this);
     public readonly auth = new KernelAuth(this);
     public readonly data = new KernelData(this);
     public readonly meta = new KernelMeta(this);
@@ -62,6 +64,7 @@ export class Kernel implements Service {
         await this.data.startup();
         await this.meta.startup();
         await this.auth.startup();
+        await this.acls.startup();
     }
 
     async cleanup(): Promise<void> {
@@ -69,6 +72,7 @@ export class Kernel implements Service {
         await this.data.cleanup();
         await this.meta.cleanup();
         await this.auth.cleanup();
+        await this.acls.cleanup();
 
         // Shutdown knex last so the transaction commits/rollbacks
         await this.knex.cleanup();
