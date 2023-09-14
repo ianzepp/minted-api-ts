@@ -3,24 +3,19 @@ import chai from 'chai';
 import { pathToRegexp, match } from 'path-to-regexp';
 
 // Classes
-import { HttpReq } from '@classes/http-req';
-import { HttpRes } from '@classes/http-res';
 import { Kernel } from '@classes/kernel';
+
+// Typedefs
+import { HttpReq } from '@typedefs/http-req';
+import { HttpRes } from '@typedefs/http-res';
+import { HttpVerb } from '@typedefs/http-verb';
 
 // Helper to assert a value is not undefined
 function assert<T>(v: T | undefined): T {
     chai.assert(v); return v;
 }
 
-export enum HttpVerb {
-    Delete = 'DELETE',
-    Get = 'GET',
-    Patch = 'PATCH',
-    Post = 'POST',
-    Put = 'PUT',
-}
-
-export class HttpRouter {
+export class Router {
     // Re-export aliases
     public static Verb = HttpVerb;
 
@@ -50,23 +45,23 @@ export class HttpRouter {
 
     async runsafe(kernel: Kernel, req: HttpReq, res: HttpRes): Promise<any> {
         // Default body values
-        if (req.verb == HttpRouter.Verb.Get) {
+        if (req.verb == Router.Verb.Get) {
             req.body = req.body || {};
         }
 
-        else if (req.verb == HttpRouter.Verb.Delete) {
+        else if (req.verb == Router.Verb.Delete) {
             req.body = req.body || [];
         }
 
-        else if (req.verb == HttpRouter.Verb.Patch) {
+        else if (req.verb == Router.Verb.Patch) {
             req.body = req.body || [];
         }
 
-        else if (req.verb == HttpRouter.Verb.Post) {
+        else if (req.verb == Router.Verb.Post) {
             req.body = req.body || [];
         }
 
-        else if (req.verb == HttpRouter.Verb.Put) {
+        else if (req.verb == Router.Verb.Put) {
             req.body = req.body || [];
         }
 

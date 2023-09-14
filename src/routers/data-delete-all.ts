@@ -2,16 +2,16 @@ import _ from 'lodash';
 
 // API
 import { Filter } from '@classes/filter';
-import { HttpRouter } from '@classes/http-router';
+import { Router } from '@classes/router';
 
 // Implementation
-export default class extends HttpRouter {
+export default class extends Router {
     async run() {
         return this.kernel.data.deleteAll(this.req.params.schema, this.req.body);
     }
 
     onHttpVerb() {
-        return HttpRouter.Verb.Delete;
+        return Router.Verb.Delete;
     }
 
     onHttpPath() {

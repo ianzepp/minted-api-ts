@@ -11,8 +11,8 @@ const jsonBody = Util.promisify(require('body/json'));
 const formBody = Util.promisify(require('body/form'));
 
 // Classes
-import { HttpReq } from '@classes/http-req';
-import { HttpRes } from '@classes/http-res';
+import { HttpReq } from '@typedefs/http-req';
+import { HttpRes } from '@typedefs/http-res';
 import { Kernel } from '@classes/kernel';
 import { Tester } from '@classes/tester';
 
@@ -21,9 +21,9 @@ export class HttpError extends Error {};
 export class HttpRouteNotFoundError extends HttpError {};
 
 // Import pre-loaded routers
-import HttpRouters from '@preloader/routers';
+import Routers from '@preloader/routers';
 
-export class HttpServer {
+export class Server {
     async route(req: Request) {
         // Process URL data
         let request_url = new UrlParse(req.url, true);
@@ -61,7 +61,7 @@ export class HttpServer {
         }
 
         // Find a router that matches the request
-        let router = _.find(HttpRouters, router => router.is(httpReq.verb, httpReq.path));
+        let router = _.find(Routers, router => router.is(httpReq.verb, httpReq.path));
 
         if (router === undefined) {
             throw new HttpRouteNotFoundError(req.url);

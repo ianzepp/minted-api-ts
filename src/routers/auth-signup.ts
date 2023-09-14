@@ -1,16 +1,16 @@
 import _ from 'lodash';
 
 // API
-import { HttpRouter } from '@classes/http-router';
+import { Router } from '@classes/router';
 
 // Implementation
-export default class extends HttpRouter {
+export default class extends Router {
     async run() {
         return this.kernel.auth.signup();
     }
 
     onHttpVerb() {
-        return HttpRouter.Verb.Post;
+        return Router.Verb.Post;
     }
 
     onHttpPath() {
