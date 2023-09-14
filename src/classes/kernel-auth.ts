@@ -4,7 +4,9 @@ import jwt from 'jsonwebtoken';
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { KernelService } from '@classes/kernel';
+
+// Typedefs
+import { Service } from '@typedefs/kernel';
 
 // User API errors
 export class AuthError extends Error {};
@@ -16,7 +18,7 @@ if (Bun.env.NODE_ENV === 'production') {
     chai.assert(Bun.env.JWT_SECRET, '"Bun.env.JWT_SECRET" is missing');
 }
 
-export class KernelAuth implements KernelService {
+export class KernelAuth implements Service {
     // JWT secret used for dev
     private static JWT_SECRET = Bun.env.JWT_SECRET || 'development-password';
     private static JWT_OPTION = { expiresIn: '1h' };

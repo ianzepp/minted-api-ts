@@ -1,16 +1,17 @@
 import _ from 'lodash';
 import chai from 'chai';
-import { v4 as uuid } from 'uuid';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { SchemaType } from '@classes/schema-type';
 import { Kernel } from '@classes/kernel';
-import { KernelAsTest } from '@classes/kernel';
+import { Tester } from '@classes/tester';
 
-let kernel = new KernelAsTest();
+// Typedefs
+import { SchemaType } from '@typedefs/schema';
+
+let kernel = new Tester();
 let source_data = { 
     schema_name: SchemaType.User, 
     column_name: 'something', 

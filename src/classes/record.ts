@@ -5,9 +5,9 @@ import { assert, expect } from 'chai';
 import { Column } from '@classes/column';
 import { Schema } from '@classes/schema';
 
-// Layouts
-import { ColumnType } from '@layouts/column';
-import { SchemaName } from '@layouts/schema';
+// Typedefs
+import { ColumnType } from '@typedefs/column';
+import { SchemaName } from '@typedefs/schema';
 
 // Helpers
 import { toJSON } from '@classes/helpers';

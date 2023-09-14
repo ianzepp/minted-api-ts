@@ -1,17 +1,18 @@
 import _ from 'lodash';
 import chai from 'chai';
-import { v4 as uuid } from 'uuid';
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { KernelAsTest } from '@classes/kernel';
-import { KernelAsRoot } from '@classes/kernel';
+import { Tester } from '@classes/tester';
+
+// Typedefs
+import { SchemaType } from '@typedefs/schema';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
-import { SchemaType } from '@classes/schema-type';
 
-let kernel = new KernelAsTest();
+
+let kernel = new Tester();
 
 beforeEach(async () => {
     await kernel.startup();

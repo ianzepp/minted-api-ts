@@ -1,16 +1,18 @@
 import _ from 'lodash';
 import chai from 'chai';
-import { v4 as uuid } from 'uuid';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { RecordColumnImmutableError } from '@classes/kernel-data';
-import { SchemaType } from '@classes/schema-type';
-import { KernelAsTest } from '@classes/kernel';
+import { Tester } from '@classes/tester';
 
-let kernel = new KernelAsTest();
+// Typedefs
+import { SchemaType } from '@typedefs/schema';
+
+
+let kernel = new Tester();
 
 beforeEach(async () => {
     await kernel.startup();

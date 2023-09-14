@@ -1,8 +1,29 @@
+//
+// Types
+//
+
 /** ... */
 export type SchemaName = string;
 
 /** ... */
 // export type SchemaType = SchemaInfo | SchemaName;
+
+
+//
+// Enums
+//
+
+export enum SchemaType {
+    Domain = 'system.domain',
+    Schema = 'system.schema',
+    Column = 'system.column',
+    User = 'system.user',
+};
+
+
+//
+// Interfaces
+//
 
 /** Represents the architecture needed to obtain a schema's info. */
 export interface SchemaInfo {

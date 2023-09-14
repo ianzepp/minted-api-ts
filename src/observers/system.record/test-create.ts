@@ -1,13 +1,12 @@
 import _ from 'lodash';
-import { v4 as uuid } from 'uuid';
 
 // Classes
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
 import { ColumnsMeta, Record } from '@classes/record';
 
-// Layouts
-import { ObserverRing } from '@layouts/observer';
+// Typedefs
+import { ObserverRing } from '@typedefs/observer';
 import { DataError } from '@classes/kernel-data';
 import { Column } from '@classes/column';
 

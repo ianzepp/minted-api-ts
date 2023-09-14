@@ -1,15 +1,14 @@
 import _ from 'lodash';
 import chai from 'chai';
-import { v4 as uuid } from 'uuid';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { KernelAsTest } from '@classes/kernel';
+import { Tester } from '@classes/tester';
 
-let kernel = new KernelAsTest();
+let kernel = new Tester();
 
 beforeEach(() => kernel.startup());
 afterEach(() => kernel.cleanup());

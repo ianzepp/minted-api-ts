@@ -2,12 +2,15 @@ import _ from 'lodash';
 
 // Classes
 import { Column } from '@classes/column';
-import { ColumnType } from '@layouts/column';
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
-import { ObserverRing } from '@layouts/observer';
+import { ObserverRing } from '@typedefs/observer';
 import { Record } from '@classes/record';
-import { SchemaType } from '@classes/schema-type';
+
+// Typedefs
+import { ColumnType } from '@typedefs/column';
+import { SchemaType } from '@typedefs/schema';
+
 
 export default class extends Observer {
     toName(): string {
