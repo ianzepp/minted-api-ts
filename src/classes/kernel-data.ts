@@ -84,7 +84,7 @@ export class KernelData implements Service {
         // Convert the raw change data into records
         let change = change_data.map(change => schema.toRecord(change));
 
-        // Build the flow
+        // Build the thread
         let thread = new Thread(this.kernel, schema, change, filter, op);
 
         // Cycle through rings 0 - 9

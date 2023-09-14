@@ -22,7 +22,7 @@ export enum ObserverRing {
     Test = 4, // Validations
     Knex = 5, // Database changes
     Post = 6, // Post-db changes
-    Flow = 7, // Cascade down to more flow operations
+    Flow = 7, // Cascade to workflow operations
     Http = 8, // External HTTP updates, non-blocking
     Done = 9, // Kernel cleanup
 }
