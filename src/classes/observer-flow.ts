@@ -51,7 +51,7 @@ export class ObserverFlow {
             //
 
             // Wrong client namespace?
-            if (observer.onClient() != '*' && observer.onClient() !== this.kernel.user_ns) {
+            if (observer.onDomain() != '*' && observer.onDomain() !== this.kernel.user_ns) {
                 return false;
             }
 

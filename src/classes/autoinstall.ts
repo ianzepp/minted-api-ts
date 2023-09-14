@@ -116,8 +116,8 @@ export class AutoInstall {
             table.integer('precision');
         });
 
-        // Create table `client`
-        await this.createTable('system.client', table => {
+        // Create table `user`
+        await this.createTable('system.user', table => {
             table.string('name').notNullable();
         });
 
@@ -130,7 +130,7 @@ export class AutoInstall {
             { ns: 'system', schema_name: 'system.domain', schema_type: 'database' },
             { ns: 'system', schema_name: 'system.schema', schema_type: 'database', metadata: true },
             { ns: 'system', schema_name: 'system.column', schema_type: 'database', metadata: true },
-            { ns: 'system', schema_name: 'system.client', schema_type: 'database', metadata: false },
+            { ns: 'system', schema_name: 'system.user', schema_type: 'database', metadata: false },
         ]);
 
         // Add data for `column`
@@ -163,11 +163,11 @@ export class AutoInstall {
             { ns: 'system', schema_name: 'system.column', column_name: 'precision', column_type: 'integer' },
 
             // Columns for 'user'
-            { ns: 'system', schema_name: 'system.client', column_name: 'name', column_type: 'text', required: true },
+            { ns: 'system', schema_name: 'system.user', column_name: 'name', column_type: 'text', required: true },
         ]);
 
         // Add data for `client`
-        await this.insertAll('system.client', [
+        await this.insertAll('system.user', [
             { ns: Kernel.RootNs, id: Kernel.RootId, name: 'root' },
             { ns: Kernel.TestNs, id: Kernel.TestId, name: 'test' },
         ]);

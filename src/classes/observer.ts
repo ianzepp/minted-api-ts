@@ -48,10 +48,10 @@ export class Observer {
     }
 
     /**
-     * Method to get the `Client` namespace that this observer targets, or `*` if it applies to all clients
+     * Method to get the `Domain` namespace that this observer targets, or `*` if it applies to all clients
      * @returns {string} - The targeted `Client` namespace
      */
-    onClient(): string {
+    onDomain(): string {
         return '*';
     }
 
