@@ -23,7 +23,7 @@ export class HttpRouteNotFoundError extends HttpError {};
 // Import pre-loaded routers
 import HttpRouters from '@preloader/routers';
 
-export class HttpServer {
+export class Server {
     async route(req: Request) {
         // Process URL data
         let request_url = new UrlParse(req.url, true);
