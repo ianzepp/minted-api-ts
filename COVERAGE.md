@@ -116,7 +116,7 @@ All files                                        |   84.49 |   83.29 |
  src/classes/column.ts                           |  100.00 |  100.00 | 
  src/classes/filter.ts                           |  100.00 |  100.00 | 
  src/classes/helpers.ts                          |    0.00 |   12.50 | 3-8
- src/classes/observer-flow.ts                    |   83.33 |   93.85 | 36-39
+ src/classes/observer-thread.ts                    |   83.33 |   93.85 | 36-39
  src/classes/observer.ts                         |   63.16 |   58.14 | 16,20-31,35,39,43,75
  src/classes/record.ts                           |   55.56 |   80.91 | 133-144,148,152-155,159,163-164
  src/classes/schema-type.ts                      |  100.00 |  100.00 | 

@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 
 // Typedefs
 import { ObserverRing } from '@typedefs/observer';
@@ -25,20 +25,20 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        return flow.kernel.knex
-            .driverTo(flow.schema.schema_name, 'meta')
-            .whereIn('id', _.map(flow.change_data, 'id'))
+    async run(thread: Thread): Promise<void> {
+        return thread.kernel.knex
+            .driverTo(thread.schema.schema_name, 'meta')
+            .whereIn('id', _.map(thread.change_data, 'id'))
             .update({
-                deleted_at: flow.kernel.time,
-                deleted_by: flow.kernel.user_id
+                deleted_at: thread.kernel.time,
+                deleted_by: thread.kernel.user_id
             });
     }
 
-    async cleanup(flow: ObserverFlow) {
-        flow.change.forEach(record => {
-            record.meta.deleted_at = flow.kernel.time;
-            record.meta.deleted_by = flow.kernel.user_id;
+    async cleanup(thread: Thread) {
+        thread.change.forEach(record => {
+            record.meta.deleted_at = thread.kernel.time;
+            record.meta.deleted_by = thread.kernel.user_id;
         })
     }
 }

@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -27,35 +27,35 @@ export default class extends Observer {
         return true;
     }
 
-    async startup(flow: ObserverFlow): Promise<void> {
+    async startup(thread: Thread): Promise<void> {
         // Set ID and namespace. It is possible they are already set, if we are running as root and
         // the root user supplied the IDs. 
         //
         // See the testing / precheck login in `test-create.ts`.
-        flow.change.forEach(record => {
-            record.data.id = record.data.id || flow.kernel.uuid();
-            record.data.ns = record.data.ns || flow.kernel.user_ns;
+        thread.change.forEach(record => {
+            record.data.id = record.data.id || thread.kernel.uuid();
+            record.data.ns = record.data.ns || thread.kernel.user_ns;
         });
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        let creates = await flow.kernel.knex
-            .driverTo(flow.schema.schema_name, 'data')
-            .insert(flow.change_data)
+    async run(thread: Thread): Promise<void> {
+        let creates = await thread.kernel.knex
+            .driverTo(thread.schema.schema_name, 'data')
+            .insert(thread.change_data)
             .returning('*');
 
-        for(let i in flow.change) {
+        for(let i in thread.change) {
             let create = creates[i];
-            let change = flow.change[i];
+            let change = thread.change[i];
 
             _.assign(change.data, create);
         }
     }
 
-    async cleanup(flow: ObserverFlow): Promise<void> {
-        flow.change.forEach(record => {
-            record.meta.created_at = flow.kernel.time;
-            record.meta.created_by = flow.kernel.user_id;
+    async cleanup(thread: Thread): Promise<void> {
+        thread.change.forEach(record => {
+            record.meta.created_at = thread.kernel.time;
+            record.meta.created_by = thread.kernel.user_id;
         });
     }
 

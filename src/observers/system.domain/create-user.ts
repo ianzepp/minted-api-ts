@@ -3,7 +3,7 @@ import _ from 'lodash';
 // Classes
 import { DataError } from '@classes/kernel-data';
 import { Observer } from '@classes/observer';
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -35,12 +35,12 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        let users = flow.change.map(record => {
+    async run(thread: Thread): Promise<void> {
+        let users = thread.change.map(record => {
             return { ns: record.data.ns, name: 'admin' };
         });
 
         // Insert the users
-        await flow.kernel.data.createAll(SchemaType.User, users);
+        await thread.kernel.data.createAll(SchemaType.User, users);
     }
 }

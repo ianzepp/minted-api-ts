@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 
 // Typedefs
 import { ObserverRing } from '@typedefs/observer';
@@ -34,20 +34,20 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        for(let record of flow.change) {
-            flow.expect(record.data).property('schema_name').includes('.');
+    async run(thread: Thread): Promise<void> {
+        for(let record of thread.change) {
+            thread.expect(record.data).property('schema_name').includes('.');
 
             let schema_name = record.data.schema_name;
             let [ns, sn] = schema_name.split('.');
 
-            flow.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).match(/^[a-z_0-9]+$/i);
-            flow.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).not.match(/^[_0-9]/i);
-            flow.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).not.includes('__');
+            thread.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).match(/^[a-z_0-9]+$/i);
+            thread.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).not.match(/^[_0-9]/i);
+            thread.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).not.includes('__');
 
-            flow.expect(sn, `schema_name '${schema_name}' (right side '${ns}')`).match(/^[a-z_0-9]+$/i);
-            flow.expect(sn, `schema_name '${schema_name}' (right side '${ns}')`).not.match(/^[_0-9]/i);
-            flow.expect(sn, `schema_name '${schema_name}' (right side '${ns}')`).not.includes('__');
+            thread.expect(sn, `schema_name '${schema_name}' (right side '${ns}')`).match(/^[a-z_0-9]+$/i);
+            thread.expect(sn, `schema_name '${schema_name}' (right side '${ns}')`).not.match(/^[_0-9]/i);
+            thread.expect(sn, `schema_name '${schema_name}' (right side '${ns}')`).not.includes('__');
         }
     }
 }

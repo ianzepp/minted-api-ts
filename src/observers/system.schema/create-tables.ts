@@ -5,7 +5,7 @@ import { Knex } from 'knex';
 // Classes
 import { AutoInstall } from '@classes/autoinstall';
 import { Observer } from '@classes/observer';
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 
@@ -31,14 +31,14 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        await Promise.all(flow.change.map(record => this.one(flow, record)));
+    async run(thread: Thread): Promise<void> {
+        await Promise.all(thread.change.map(record => this.one(thread, record)));
     }
 
-    async one(flow: ObserverFlow, record: Record) {
+    async one(thread: Thread, record: Record) {
         // Setup
         let { schema_name, schema_type } = record.data;
-        let auto = new AutoInstall(flow.kernel);
+        let auto = new AutoInstall(thread.kernel);
 
         // Only create schemas that are marked as `database` types
         if (schema_type !== 'database') {
@@ -49,6 +49,6 @@ export default class extends Observer {
         await auto.createTable(schema_name, table => {});
 
         // Add to kernel metadata
-        flow.kernel.meta.schemas.set(schema_name, new Schema(record.data));
+        thread.kernel.meta.schemas.set(schema_name, new Schema(record.data));
     }
 }

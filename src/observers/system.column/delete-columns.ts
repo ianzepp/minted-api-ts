@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -27,26 +27,26 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        await Promise.all(flow.change.map(record => this.one(flow, record)));
+    async run(thread: Thread): Promise<void> {
+        await Promise.all(thread.change.map(record => this.one(thread, record)));
     }
 
-    async one(flow: ObserverFlow, record: Record) {
+    async one(thread: Thread, record: Record) {
         let { schema_name, column_name, column_type } = record.data;
         let [ ns, sn ] = record.data.schema_name.split('.');
 
-        await flow.kernel.knex.schema.table(`${ns}__data.${sn}`, t => {            
+        await thread.kernel.knex.schema.table(`${ns}__data.${sn}`, t => {            
             return t.dropColumn(column_name);
         });
 
         // Setup
-        let schema = flow.kernel.meta.schemas.get(schema_name);
+        let schema = thread.kernel.meta.schemas.get(schema_name);
         let column = schema.columns.get(column_name);
 
         // Delete the column data from the parent schema
         schema.columns.delete(column_name);
 
         // Delete the column data from the kernel metadata
-        flow.kernel.meta.columns.delete(column.column_path);
+        thread.kernel.meta.columns.delete(column.column_path);
     }
 }
