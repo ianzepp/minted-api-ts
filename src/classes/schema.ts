@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import chai from 'chai';
+import util from 'util';
 
 // Classes
 import { Column } from '@classes/column';
@@ -23,6 +23,7 @@ export class Schema {
 
     public readonly schema_name: string;
     public readonly schema_type: string;
+    public readonly description: string | null;
     public readonly metadata: boolean;
 
     constructor(flat: _.Dictionary<any>) {
@@ -31,7 +32,8 @@ export class Schema {
 
         this.schema_name = flat.schema_name;
         this.schema_type = flat.schema_type;
-        this.metadata = flat.metadata;
+        this.description = flat.description ?? null;
+        this.metadata = flat.metadata ?? false;
     }
 
     column_keys(prefix?: string) {
@@ -99,5 +101,58 @@ export class Schema {
             && _.has(source, 'acls_edit')
             && _.has(source, 'acls_read')
             && _.has(source, 'acls_deny');
+    }
+
+    /**
+     * Describes the `Schema` data structure in the common format
+     * @returns object
+     */
+
+    describe() {
+        return {
+            type: SchemaType.Schema,
+            data: {
+                schema_name: this.schema_name,
+                description: this.description,
+            },
+
+            columns: [] // TODO
+        }
+    }
+
+    //
+    // Export as GraphQL
+    //
+
+    describeGQL() {
+        let schema_format = `type %s {\n%s\n}`;
+        let column_format = `\t%s: %s%s;`;
+
+        // Convert columns to GQL format
+        let columns = this.column_keys().map(column_name => {
+            let column = this.columns.get(column_name);
+
+            // Setup
+            let n = column.column_name;
+            let r = column.required ? '!' : '';
+            let t = column.column_type;
+
+            if (t === 'text') {
+                return util.format(column_format, n, 'String', r);
+            }
+
+            if (t === 'boolean') {
+                return util.format(column_format, n, 'Boolean', r);
+            }
+
+            if (t === 'integer') {
+                return util.format(column_format, n, 'Int', r);
+            }
+
+            return '';
+        });
+        
+        // Generate format
+        return util.format(schema_format, this.schema_name, columns.join('\n'));
     }
 }
