@@ -7,9 +7,9 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { KernelAsTest } from '@classes/kernel';
+import { Tester } from '@classes/kernel';
 
-let kernel = new KernelAsTest();
+let kernel = new Tester();
 
 beforeEach(() => kernel.startup());
 afterEach(() => kernel.cleanup());

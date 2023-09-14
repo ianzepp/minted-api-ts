@@ -5,12 +5,15 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
+import { Tester } from '@classes/kernel';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
-import { KernelAsTest } from '@classes/kernel';
-import { SchemaType } from '@classes/schema-type';
+import { DataError } from '@classes/kernel-data';
+import { RecordNotFoundError } from '@classes/kernel-data';
 
-import { DataError, RecordNotFoundError } from '@classes/kernel-data';
+// Layouts
+import { SchemaType } from '@layouts/schema';
+
 
 function expectRecordSet(result_set: any[], length?: number) {
     chai.expect(result_set).an('array');
@@ -40,7 +43,7 @@ function expectRecord(result: any) {
 }
 
 // Test suite
-let kernel = new KernelAsTest();
+let kernel = new Tester();
 let schema_type = SchemaType.Client;
 let source_data = [
     { ns: 'test', name: 'test-user-0' },

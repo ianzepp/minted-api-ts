@@ -1,4 +1,4 @@
-import _ from 'lodash';
+/*import _ from 'lodash';
 import util from 'util';
 import chai from 'chai';
 import debug from 'debug';
@@ -11,8 +11,8 @@ import { KernelMeta } from '@classes/kernel-meta';
 import { KernelKnex } from '@classes/kernel-knex';
 
 // Layouts
-import { Service } from "@layouts/kernel";
-import { KernelVerb } from "@layouts/kernel";
+import { Service } from "@layouts/system";
+import { SystemVerb } from "@layouts/system";
 import { SchemaType } from '@layouts/schema';
 
 
@@ -25,7 +25,7 @@ export class Kernel implements Service {
 
     // Re-export aliases
     public static Chai = chai;
-    public static Verb = KernelVerb;
+    public static Verb = SystemVerb;
     public static Type = SchemaType;
     public static UUID = uuid;
 
@@ -108,10 +108,6 @@ export class Kernel implements Service {
         }
     }
 
-    uuid() {
-        return Kernel.UUID();
-    }
-
     emit(cn, fn, ... messages) {
         debug(cn + ':' + fn)(util.format(... messages));
     }
@@ -148,10 +144,6 @@ export class Kernel implements Service {
 export class Tester extends Kernel {
     public static ID = '99999999-9999-4999-9999-999999999999'; // v4 UUID
     public static NS = 'test';
-
-    constructor() {
-        super(Tester.ID, Tester.NS);
-    }
 
     //
     // Kernel Methods
@@ -191,3 +183,4 @@ export class Tester extends Kernel {
         return 'test_' + Math.floor(Math.random() * 1000000);
     }
 }
+*/

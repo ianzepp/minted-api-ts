@@ -14,7 +14,7 @@ const formBody = Util.promisify(require('body/form'));
 import { HttpReq } from '@classes/http-req';
 import { HttpRes } from '@classes/http-res';
 import { Kernel } from '@classes/kernel';
-import { KernelAsRoot } from '@classes/kernel';
+import { Tester } from '@classes/kernel';
 
 // Error
 export class HttpError extends Error {};
@@ -83,7 +83,7 @@ export class HttpServer {
         }
 
         // Run the router
-        await new KernelAsRoot().run(async kernel => {
+        await new Tester().run(async kernel => {
             try {
                 let result = await router.runsafe(kernel, httpReq, httpRes);
 

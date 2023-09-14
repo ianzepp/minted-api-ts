@@ -5,24 +5,25 @@ import { Filter } from '@classes/filter';
 import { Schema } from '@classes/schema';
 import { Column } from '@classes/column';
 import { Record } from '@classes/record';
-import { RecordFlat } from '@layouts/record';
 import { Kernel } from '@classes/kernel';
-import { KernelService } from '@classes/kernel';
+import { toJSON } from '@classes/helpers';
+
+// Layouts
+import { Service } from '@layouts/kernel';
+import { RecordFlat } from '@layouts/record';
+import { SchemaType } from '@layouts/schema';
+
 
 // Meta API errors
 export class MetaError extends Error {};
 export class SchemaNotFoundError extends MetaError {};
 export class ColumnNotFoundError extends MetaError {};
 
-// Helpers
-import { toJSON } from '@classes/helpers';
-import { SchemaType } from './schema-type';
-
 // Extract the predefined list of schema names
 export const KernelSchemaTypes = _.values(SchemaType) as string[];
 
 // Implementation
-export class KernelMeta implements KernelService {
+export class KernelMeta implements Service {
     // Source data for known schema and column names
     public readonly sources: Map<string, RecordFlat[]> = new Map();
     public readonly schemas: MapSchemas;

@@ -3,9 +3,12 @@ import _ from 'lodash';
 // Classes
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
-import { ObserverRing } from '@layouts/observer';
 import { Record } from '@classes/record';
-import { SchemaType } from '@classes/schema-type';
+
+// Layouts
+import { ObserverRing } from '@layouts/observer';
+import { SchemaType } from '@layouts/schema';
+
 
 export default class extends Observer {
     toName(): string {

@@ -2,14 +2,14 @@ import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 
 // Classes
+import { DataError } from '@classes/kernel-data';
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
 import { Record } from '@classes/record';
 
 // Layouts
 import { ObserverRing } from '@layouts/observer';
-import { DataError } from '@classes/kernel-data';
-import { SchemaType } from '@classes/schema-type';
+import { SchemaType } from '@layouts/schema';
 
 /**
  * This observer lstens to inserts on the `system.kernel` table (which represents an organization or namespace),

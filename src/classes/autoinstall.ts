@@ -2,10 +2,10 @@ import _ from 'lodash';
 import { Knex } from 'knex';
 
 import { Kernel } from '@classes/kernel';
-import { KernelAsRoot } from '@classes/kernel';
+import { Tester } from '@classes/kernel';
 
 export class AutoInstall {
-    constructor(public readonly kernel: Kernel = new KernelAsRoot()) {}
+    constructor(public readonly kernel: Kernel = new Tester()) {}
 
     get knex() {
         return this.kernel.knex.driver;
@@ -35,7 +35,7 @@ export class AutoInstall {
         await this.knex.raw(`
             SET LOCAL minted.userinfo_id = '${ this.kernel.user_id }';
             SET LOCAL minted.userinfo_ns = '${ this.kernel.user_ns }';
-            SET LOCAL minted.userinfo_ts = '${ this.kernel.time_iso }';
+            SET LOCAL minted.userinfo_ts = '${ this.kernel.timeISO() }';
         `);
 
         // Create the userinfo scopes function
@@ -168,8 +168,8 @@ export class AutoInstall {
 
         // Add data for `client`
         await this.insertAll('system.client', [
-            { ns: Kernel.RootNs, id: Kernel.RootId, name: 'root' },
-            { ns: Kernel.TestNs, id: Kernel.TestId, name: 'test' },
+            { ns: Kernel.NS, id: Kernel.ID, name: 'root' },
+            { ns: Tester.NS, id: Tester.ID, name: 'test' },
         ]);
 
         // Commit the transaction

@@ -6,7 +6,7 @@ import { ObserverFlow } from '@classes/observer-flow';
 
 // Layouts
 import { ObserverRing } from '@layouts/observer';
-import { SchemaType } from '@classes/schema-type';
+import { SchemaType } from '@layouts/schema';
 
 
 export default class extends Observer {

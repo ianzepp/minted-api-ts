@@ -4,16 +4,16 @@ import chai from 'chai';
 // Classes
 import { Column } from '@classes/column';
 import { ColumnsMeta, Record } from '@classes/record';
-
-// Layouts
-// import { RecordData } from '@layouts/record';
-// import { RecordFlat } from '@layouts/record';
-// import { RecordJson } from '@layouts/record';
-
-// Helpers
 import { toJSON } from '@classes/helpers';
 
+// Layouts
+import { SchemaType } from '@layouts/schema';
+
+
 export class Schema {
+    // Re-export aliases
+    public static Type = SchemaType;
+
     // Public helpers
     public readonly columns: Map<string, Column> = new Map();
 

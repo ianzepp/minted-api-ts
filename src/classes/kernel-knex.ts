@@ -35,7 +35,9 @@ export const KnexDriver = knex(KnexConfig);
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { KernelService } from '@classes/kernel';
+
+// Layouts
+import { Service } from '@layouts/kernel';
 
 // Errors
 export class KnexError extends Error {};
@@ -48,7 +50,7 @@ export interface KernelKnexConfig {
     isolate: boolean;
 }
 
-export class KernelKnex implements KernelService {
+export class KernelKnex implements Service {
     public db: Knex = KnexDriver;
     public tx: Knex.Transaction | undefined;
 
@@ -94,7 +96,7 @@ export class KernelKnex implements KernelService {
         await this.tx.raw(`
             SET LOCAL minted.userinfo_id = '${ this.kernel.user_id }';
             SET LOCAL minted.userinfo_ns = '${ this.kernel.user_ns }';
-            SET LOCAL minted.userinfo_ts = '${ this.kernel.time_iso }';
+            SET LOCAL minted.userinfo_ts = '${ this.kernel.timeISO() }';
         `);
     }
 

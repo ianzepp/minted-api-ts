@@ -10,9 +10,9 @@ import { Observer } from '@classes/observer';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 import { Kernel } from '@classes/kernel';
-import { KernelVerb } from '@classes/kernel';
 
 // Layouts
+import { KernelVerb } from '@layouts/kernel';
 import { ObserverFlowFailure } from '@layouts/observer';
 import { RecordJson } from '@layouts/record';
 

@@ -7,10 +7,10 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { KernelAsTest } from '@classes/kernel';
+import { Tester } from '@classes/kernel';
 import { Record } from '@classes/record';
 
-let kernel = new KernelAsTest();
+let kernel = new Tester();
 
 beforeEach(async () => {
     await kernel.startup();
@@ -22,7 +22,7 @@ afterEach(async () => {
 
 test.skip('should delete a knex table', async () => {
     let schema_name = kernel.toTestSchemaName();
-    let schema_data = await kernel.data.createOne(Kernel.SchemaType.Schema, {
+    let schema_data = await kernel.data.createOne(Kernel.Type.Schema, {
         schema_name: schema_name
     });
 
@@ -37,7 +37,7 @@ test.skip('should delete a knex table', async () => {
     chai.expect(create.data).property('ns');
 
     // Delete the schema
-    let remove = await kernel.data.deleteOne(Kernel.SchemaType.Schema, schema_data);
+    let remove = await kernel.data.deleteOne(Kernel.Type.Schema, schema_data);
 
     chai.expect(create).instanceOf(Record);
     chai.expect(create.data).property('id');

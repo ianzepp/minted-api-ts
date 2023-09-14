@@ -6,11 +6,13 @@ import { v4 as uuid } from 'uuid';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { SchemaType } from '@classes/schema-type';
 import { Kernel } from '@classes/kernel';
-import { KernelAsTest } from '@classes/kernel';
+import { Tester } from '@classes/kernel';
 
-let kernel = new KernelAsTest();
+// Layouts
+import { SchemaType } from '@layouts/schema';
+
+let kernel = new Tester();
 let source_data = { 
     schema_name: SchemaType.Client, 
     column_name: 'something', 

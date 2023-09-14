@@ -4,16 +4,18 @@ import _ from 'lodash';
 import { ObserverFlow } from '@classes/observer-flow';
 import { Record } from '@classes/record';
 import { Kernel } from '@classes/kernel';
-import { KernelService } from '@classes/kernel';
-import { KernelVerb } from '@classes/kernel';
+
 import { Schema } from '@classes/schema';
 import { Filter } from '@classes/filter';
 
 // Layouts
 import { ChangeData } from '@layouts/record';
 import { FilterJson } from '@layouts/filter';
+import { Service } from '@layouts/kernel';
+import { KernelVerb } from '@layouts/kernel';
 import { ObserverRing } from '@layouts/observer';
 import { SchemaName } from '@layouts/schema';
+
 
 // Data API errors
 export class DataError extends Error {};
@@ -51,7 +53,7 @@ function headNot<T>(result: T[]): void {
 
 
 // Implementation
-export class KernelData implements KernelService {
+export class KernelData implements Service {
     constructor(private readonly kernel: Kernel) {}
 
     async startup(): Promise<void> {}

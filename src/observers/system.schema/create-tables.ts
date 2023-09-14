@@ -6,10 +6,13 @@ import { Knex } from 'knex';
 import { AutoInstall } from '@classes/autoinstall';
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
-import { ObserverRing } from '@layouts/observer';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
-import { SchemaType } from '@classes/schema-type';
+
+// Layouts
+import { ObserverRing } from '@layouts/observer';
+import { SchemaType } from '@layouts/schema';
+
 
 export default class extends Observer {
     toName(): string {

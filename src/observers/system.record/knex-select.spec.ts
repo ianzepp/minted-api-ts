@@ -7,10 +7,13 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { RecordColumnImmutableError } from '@classes/kernel-data';
-import { SchemaType } from '@classes/schema-type';
-import { KernelAsTest } from '@classes/kernel';
+import { Tester } from '@classes/kernel';
 
-let kernel = new KernelAsTest();
+// Layouts
+import { SchemaType } from '@layouts/schema';
+
+
+let kernel = new Tester();
 
 beforeEach(async () => {
     await kernel.startup();
