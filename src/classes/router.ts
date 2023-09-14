@@ -3,21 +3,16 @@ import chai from 'chai';
 import { pathToRegexp, match } from 'path-to-regexp';
 
 // Classes
-import { HttpReq } from '@classes/http-req';
-import { HttpRes } from '@classes/http-res';
 import { Kernel } from '@classes/kernel';
+
+// Typedefs
+import { HttpReq } from '@typedefs/http-req';
+import { HttpRes } from '@typedefs/http-res';
+import { HttpVerb } from '@typedefs/http-verb';
 
 // Helper to assert a value is not undefined
 function assert<T>(v: T | undefined): T {
     chai.assert(v); return v;
-}
-
-export enum HttpVerb {
-    Delete = 'DELETE',
-    Get = 'GET',
-    Patch = 'PATCH',
-    Post = 'POST',
-    Put = 'PUT',
 }
 
 export class Router {

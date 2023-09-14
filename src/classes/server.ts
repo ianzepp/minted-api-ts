@@ -11,8 +11,8 @@ const jsonBody = Util.promisify(require('body/json'));
 const formBody = Util.promisify(require('body/form'));
 
 // Classes
-import { HttpReq } from '@classes/http-req';
-import { HttpRes } from '@classes/http-res';
+import { HttpReq } from '@typedefs/http-req';
+import { HttpRes } from '@typedefs/http-res';
 import { Kernel } from '@classes/kernel';
 import { Tester } from '@classes/tester';
 
