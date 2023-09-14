@@ -14,7 +14,7 @@ const formBody = Util.promisify(require('body/form'));
 import { HttpReq } from '@classes/http-req';
 import { HttpRes } from '@classes/http-res';
 import { Kernel } from '@classes/kernel';
-import { Tester } from '@classes/kernel';
+import { Tester } from '@classes/tester';
 
 // Error
 export class HttpError extends Error {};

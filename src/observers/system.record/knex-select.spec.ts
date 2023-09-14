@@ -7,7 +7,7 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { RecordColumnImmutableError } from '@classes/kernel-data';
-import { Tester } from '@classes/kernel';
+import { Tester } from '@classes/tester';
 
 // Layouts
 import { SchemaType } from '@layouts/schema';

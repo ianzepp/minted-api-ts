@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { Tester } from '@classes/kernel';
+import { Tester } from '@classes/tester';
 
 // Layouts
 import { SchemaType } from '@layouts/schema';

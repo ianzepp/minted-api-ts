@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Knex } from 'knex';
 
 import { Kernel } from '@classes/kernel';
-import { Tester } from '@classes/kernel';
+import { Tester } from '@classes/tester';
 
 export class AutoInstall {
     constructor(public readonly kernel: Kernel = new Tester()) {}

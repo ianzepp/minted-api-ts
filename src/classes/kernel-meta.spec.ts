@@ -7,7 +7,7 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Column } from '@classes/column';
-import { Tester } from '@classes/kernel';
+import { Tester } from '@classes/tester';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 
