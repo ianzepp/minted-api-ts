@@ -21,7 +21,7 @@ export class HttpError extends Error {};
 export class HttpRouteNotFoundError extends HttpError {};
 
 // Import pre-loaded routers
-import HttpRouters from '@preloader/routers';
+import Routers from '@preloader/routers';
 
 export class Server {
     async route(req: Request) {
@@ -61,7 +61,7 @@ export class Server {
         }
 
         // Find a router that matches the request
-        let router = _.find(HttpRouters, router => router.is(httpReq.verb, httpReq.path));
+        let router = _.find(Routers, router => router.is(httpReq.verb, httpReq.path));
 
         if (router === undefined) {
             throw new HttpRouteNotFoundError(req.url);

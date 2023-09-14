@@ -4,7 +4,7 @@ import path from 'path';
 import klaw from 'klaw-sync';
 
 // Import base router class definition
-import { HttpRouter } from '@classes/http-router';
+import { Router } from '@classes/router';
 
 const preload_files = klaw(path.join(__dirname, '../routers'), {
     nodir: true,
@@ -27,7 +27,7 @@ let preloads = _.chain(preload_files)
     .map(preload_path => require(preload_path).default)
 
     // Instantiate each observer
-    .map(preload_type => new preload_type() as HttpRouter)
+    .map(preload_type => new preload_type() as Router)
 
     // Done
     .value();

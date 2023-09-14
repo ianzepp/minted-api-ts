@@ -20,7 +20,7 @@ export enum HttpVerb {
     Put = 'PUT',
 }
 
-export class HttpRouter {
+export class Router {
     // Re-export aliases
     public static Verb = HttpVerb;
 
@@ -50,23 +50,23 @@ export class HttpRouter {
 
     async runsafe(kernel: Kernel, req: HttpReq, res: HttpRes): Promise<any> {
         // Default body values
-        if (req.verb == HttpRouter.Verb.Get) {
+        if (req.verb == Router.Verb.Get) {
             req.body = req.body || {};
         }
 
-        else if (req.verb == HttpRouter.Verb.Delete) {
+        else if (req.verb == Router.Verb.Delete) {
             req.body = req.body || [];
         }
 
-        else if (req.verb == HttpRouter.Verb.Patch) {
+        else if (req.verb == Router.Verb.Patch) {
             req.body = req.body || [];
         }
 
-        else if (req.verb == HttpRouter.Verb.Post) {
+        else if (req.verb == Router.Verb.Post) {
             req.body = req.body || [];
         }
 
-        else if (req.verb == HttpRouter.Verb.Put) {
+        else if (req.verb == Router.Verb.Put) {
             req.body = req.body || [];
         }
 
