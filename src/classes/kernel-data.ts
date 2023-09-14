@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Classes
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 import { Record } from '@classes/record';
 import { Kernel } from '@classes/kernel';
 
@@ -84,16 +84,16 @@ export class KernelData implements Service {
         // Convert the raw change data into records
         let change = change_data.map(change => schema.toRecord(change));
 
-        // Build the flow
-        let flow = new ObserverFlow(this.kernel, schema, change, filter, op);
+        // Build the thread
+        let thread = new Thread(this.kernel, schema, change, filter, op);
 
         // Cycle through rings 0 - 9
         for (let ring = 0 as ObserverRing; ring <= 9; ring++) {
-            await flow.run(ring);
+            await thread.run(ring);
         }
 
         // Done
-        return flow.change;
+        return thread.change;
     }
     
     //

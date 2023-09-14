@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 
 // Typedefs
 import { ObserverRing } from '@typedefs/observer';
@@ -29,13 +29,13 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
+    async run(thread: Thread): Promise<void> {
         // Easiest to use the existing data service to reselect record data
-        let result = await flow.kernel.data.selectAll(flow.schema, flow.change);
+        let result = await thread.kernel.data.selectAll(thread.schema, thread.change);
         let result_map = _.keyBy(result, 'data.id');
 
         // Assign the raw knex data for previous values to the records
-        for(let record of flow.change) {
+        for(let record of thread.change) {
             let record_prev = result_map[record.data.id];
 
             if (record_prev === undefined) {

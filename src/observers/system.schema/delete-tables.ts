@@ -3,7 +3,7 @@ import _ from 'lodash';
 // Classes
 import { AutoInstall } from '@classes/autoinstall';
 import { Observer } from '@classes/observer';
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -27,13 +27,13 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        await Promise.all(flow.change.map(record => this.one(flow, record)));
+    async run(thread: Thread): Promise<void> {
+        await Promise.all(thread.change.map(record => this.one(thread, record)));
     }
 
-    async one(flow: ObserverFlow, record: Record) {
+    async one(thread: Thread, record: Record) {
         let { schema_name, schema_type } = record.data;
-        let auto = new AutoInstall(flow.kernel);
+        let auto = new AutoInstall(thread.kernel);
 
         // Only delete schemas that are marked as `database` types
         if (schema_type !== 'database') {
@@ -44,6 +44,6 @@ export default class extends Observer {
         await auto.deleteTable(schema_name);
 
         // Remove from kernel metadata
-        flow.kernel.meta.schemas.delete(schema_name);
+        thread.kernel.meta.schemas.delete(schema_name);
     }
 }

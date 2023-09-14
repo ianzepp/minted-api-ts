@@ -1,7 +1,7 @@
 import path from 'path';
 
 // Classes
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 
 // Typedefs
 import { ObserverRank } from '@typedefs/observer';
@@ -14,9 +14,9 @@ export class Observer {
 
     constructor() {}
 
-    async startup(flow: ObserverFlow): Promise<any> {}
-    async run(flow: ObserverFlow): Promise<any> {}
-    async cleanup(flow: ObserverFlow): Promise<any> {}
+    async startup(thread: Thread): Promise<any> {}
+    async run(thread: Thread): Promise<any> {}
+    async cleanup(thread: Thread): Promise<any> {}
 
     toJSON(): Object {
         return {

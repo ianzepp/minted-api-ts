@@ -3,7 +3,7 @@ import { Knex } from 'knex';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { ObserverFlow } from '@classes/observer-flow';
+import { Thread } from '@classes/thread';
 import { Filter } from '@classes/filter';
 
 // Typedefs
@@ -29,38 +29,38 @@ export default class extends Observer {
         return true;
     }
 
-    async run(flow: ObserverFlow): Promise<void> {
-        let schema = flow.schema;
-        let knex = flow.kernel.knex.selectTo(schema.schema_name);
+    async run(thread: Thread): Promise<void> {
+        let schema = thread.schema;
+        let knex = thread.kernel.knex.selectTo(schema.schema_name);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');
         knex = knex.whereNull('meta.deleted_at');
         
         // Build `filter.where` conditions
-        knex = this.whereOne(knex, flow.filter.where);
+        knex = this.whereOne(knex, thread.filter.where);
 
         // Add the ACL conditions
-        // knex = this.whereAcl(knex, flow.kernel);
+        // knex = this.whereAcl(knex, thread.kernel);
 
         // Build `filter.order` conditions
-        knex = this.order(knex, flow.filter.order);
+        knex = this.order(knex, thread.filter.order);
 
         // Build `filter.limit`
-        knex = this.limit(knex, flow.filter.limit);
+        knex = this.limit(knex, thread.filter.limit);
 
         // Build the list of columns. Based on internal visibility
-        knex = this.columns(knex, flow.schema);
+        knex = this.columns(knex, thread.schema);
 
         // Wait for the result
         let result = await knex;
 
         // Convert the raw results into records
-        let select = _.map(result, record_flat => flow.schema.toRecord(record_flat));
+        let select = _.map(result, record_flat => thread.schema.toRecord(record_flat));
 
         // Reset change list and add to results
-        flow.change.length = 0;
-        flow.change.push(... select);
+        thread.change.length = 0;
+        thread.change.push(... select);
     }
 
     private whereAll(knex: Knex.QueryBuilder, conditions: _.Dictionary<any>[] = [], group: '$and' | '$or' = '$and') {

@@ -13,7 +13,7 @@ import { Kernel } from '@classes/kernel';
 
 // Typedefs
 import { KernelVerb } from '@typedefs/kernel';
-import { ObserverFlowFailure } from '@typedefs/observer';
+import { ThreadFailure } from '@typedefs/observer';
 import { RecordJson } from '@typedefs/record';
 
 // Import pre-loaded routers
@@ -21,8 +21,7 @@ import Observers from '@preloader/observers';
 import { fail } from 'assert';
 import { DataError } from '@classes/kernel-data';
 
-
-export class ObserverFlow {
+export class Thread {
     readonly expect = chai.expect;
     readonly failures: string[] = [];
 
@@ -103,7 +102,7 @@ export class ObserverFlow {
         });
 
         for(let observer of observers) {
-            // console.info(util.format('ObserverFlow: schema=%j op=%j ring=%j rank=%j observer=%j', 
+            // console.info(util.format('Thread: schema=%j op=%j ring=%j rank=%j observer=%j', 
             //     this.schema.schema_name, 
             //     this.op, 
             //     observer.onRing(),
