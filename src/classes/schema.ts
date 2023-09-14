@@ -6,8 +6,8 @@ import { Column } from '@classes/column';
 import { ColumnsMeta, Record } from '@classes/record';
 import { toJSON } from '@classes/helpers';
 
-// Layouts
-import { SchemaType } from '@layouts/schema';
+// Typedefs
+import { SchemaType } from '@typedefs/schema';
 
 
 export class Schema {

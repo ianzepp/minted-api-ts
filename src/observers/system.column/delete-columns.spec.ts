@@ -9,8 +9,8 @@ import { Kernel } from '@classes/kernel';
 import { Tester } from '@classes/tester';
 import { Schema } from '@classes/schema';
 
-// Layouts
-import { SchemaType } from '@layouts/schema';
+// Typedefs
+import { SchemaType } from '@typedefs/schema';
 
 let kernel = new Tester();
 let source_data = { 

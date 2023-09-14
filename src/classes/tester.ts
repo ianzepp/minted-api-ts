@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Kernel } from "@classes/kernel";
-import { SchemaType } from "@layouts/schema";
+import { SchemaType } from "@typedefs/schema";
 
 export class Tester extends Kernel {
     public static ID = '99999999-9999-4999-9999-999999999999'; // v4 UUID

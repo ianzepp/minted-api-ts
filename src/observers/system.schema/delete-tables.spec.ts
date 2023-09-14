@@ -8,7 +8,7 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 import { Kernel } from '@classes/kernel';
 import { Tester } from '@classes/tester';
 import { Record } from '@classes/record';
-import { SchemaType } from '@layouts/schema';
+import { SchemaType } from '@typedefs/schema';
 
 let kernel = new Tester();
 

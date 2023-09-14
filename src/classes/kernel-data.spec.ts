@@ -11,8 +11,8 @@ import { Schema } from '@classes/schema';
 import { DataError } from '@classes/kernel-data';
 import { RecordNotFoundError } from '@classes/kernel-data';
 
-// Layouts
-import { SchemaType } from '@layouts/schema';
+// Typedefs
+import { SchemaType } from '@typedefs/schema';
 
 
 function expectRecordSet(result_set: any[], length?: number) {

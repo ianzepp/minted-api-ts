@@ -4,12 +4,12 @@ import _ from 'lodash';
 import { Column } from '@classes/column';
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
-import { ObserverRing } from '@layouts/observer';
+import { ObserverRing } from '@typedefs/observer';
 import { Record } from '@classes/record';
 
-// Layouts
-import { ColumnType } from '@layouts/column';
-import { SchemaType } from '@layouts/schema';
+// Typedefs
+import { ColumnType } from '@typedefs/column';
+import { SchemaType } from '@typedefs/schema';
 
 
 export default class extends Observer {

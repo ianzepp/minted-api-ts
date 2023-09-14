@@ -4,9 +4,9 @@ import _ from 'lodash';
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
 
-// Layouts
-import { ObserverRing } from '@layouts/observer';
-import { RecordFlat } from '@layouts/record';
+// Typedefs
+import { ObserverRing } from '@typedefs/observer';
+import { RecordFlat } from '@typedefs/record';
 
 /**
  * This observer runs on Update to reload prior data from the DB, so the `Record` has a full view of

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-// Layouts
-import { SchemaName } from '@layouts/schema';
+// Typedefs
+import { SchemaName } from './schema';
 
 
 //

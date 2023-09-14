@@ -4,8 +4,8 @@ import _ from 'lodash';
 import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
 
-// Layouts
-import { ObserverRing } from '@layouts/observer';
+// Typedefs
+import { ObserverRing } from '@typedefs/observer';
 
 
 export default class extends Observer {

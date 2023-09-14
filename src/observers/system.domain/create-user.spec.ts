@@ -5,8 +5,8 @@ import chai from 'chai';
 import { Kernel } from '@classes/kernel';
 import { Tester } from '@classes/tester';
 
-// Layouts
-import { SchemaType } from '@layouts/schema';
+// Typedefs
+import { SchemaType } from '@typedefs/schema';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";

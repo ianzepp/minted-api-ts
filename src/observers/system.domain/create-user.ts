@@ -6,9 +6,9 @@ import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
 import { Record } from '@classes/record';
 
-// Layouts
-import { ObserverRing } from '@layouts/observer';
-import { SchemaType } from '@layouts/schema';
+// Typedefs
+import { ObserverRing } from '@typedefs/observer';
+import { SchemaType } from '@typedefs/schema';
 
 /**
  * This observer lstens to inserts on the `system.domain` table (which represents an organization or namespace),

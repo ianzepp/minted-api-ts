@@ -5,8 +5,8 @@ import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
 import { Record } from '@classes/record';
 
-// Layouts
-import { ObserverRing } from '@layouts/observer';
+// Typedefs
+import { ObserverRing } from '@typedefs/observer';
 import { DataError } from '@classes/kernel-data';
 
 

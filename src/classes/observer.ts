@@ -3,9 +3,9 @@ import path from 'path';
 // Classes
 import { ObserverFlow } from '@classes/observer-flow';
 
-// Layouts
-import { ObserverRank } from '@layouts/observer';
-import { ObserverRing } from '@layouts/observer';
+// Typedefs
+import { ObserverRank } from '@typedefs/observer';
+import { ObserverRing } from '@typedefs/observer';
 
 export class Observer {
     // Re-export aliases

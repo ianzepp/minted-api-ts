@@ -8,10 +8,10 @@ import { Record } from '@classes/record';
 import { Kernel } from '@classes/kernel';
 import { toJSON } from '@classes/helpers';
 
-// Layouts
-import { Service } from '@layouts/kernel';
-import { RecordFlat } from '@layouts/record';
-import { SchemaType } from '@layouts/schema';
+// Typedefs
+import { Service } from '@typedefs/kernel';
+import { RecordFlat } from '@typedefs/record';
+import { SchemaType } from '@typedefs/schema';
 
 
 // Meta API errors

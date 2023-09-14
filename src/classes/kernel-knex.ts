@@ -2,7 +2,7 @@ import _ from 'lodash';
 import knex from 'knex';
 import { Knex } from 'knex';
 
-import { RecordFlat } from '@layouts/record';
+import { RecordFlat } from '@typedefs/record';
 
 // Create the driver reference
 export const KnexConfig = {
@@ -36,8 +36,8 @@ export const KnexDriver = knex(KnexConfig);
 // Classes
 import { Kernel } from '@classes/kernel';
 
-// Layouts
-import { Service } from '@layouts/kernel';
+// Typedefs
+import { Service } from '@typedefs/kernel';
 
 // Errors
 export class KnexError extends Error {};

@@ -8,8 +8,8 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 import { RecordColumnImmutableError } from '@classes/kernel-data';
 import { Tester } from '@classes/tester';
 
-// Layouts
-import { SchemaType } from '@layouts/schema';
+// Typedefs
+import { SchemaType } from '@typedefs/schema';
 
 
 let kernel = new Tester();

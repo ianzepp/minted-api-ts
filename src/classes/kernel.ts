@@ -12,8 +12,8 @@ import { KernelData } from '@classes/kernel-data';
 import { KernelMeta } from '@classes/kernel-meta';
 import { KernelKnex } from '@classes/kernel-knex';
 
-// Layouts
-import { Service } from "@layouts/kernel";
+// Typedefs
+import { Service } from "@typedefs/kernel";
 
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;

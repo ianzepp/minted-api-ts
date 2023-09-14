@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import chai from 'chai';
 
-// Layouts
-import { FilterGroup } from '@layouts/filter';
-import { FilterOrder } from '@layouts/filter';
-import { FilterWhere } from '@layouts/filter';
-import { FilterJson } from '@layouts/filter';
+// Typedefs
+import { FilterGroup } from '@typedefs/filter';
+import { FilterOrder } from '@typedefs/filter';
+import { FilterWhere } from '@typedefs/filter';
+import { FilterJson } from '@typedefs/filter';
 import { toJSON } from '@classes/helpers';
 
 export class Filter implements FilterJson {

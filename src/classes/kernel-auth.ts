@@ -5,8 +5,8 @@ import jwt from 'jsonwebtoken';
 // Classes
 import { Kernel } from '@classes/kernel';
 
-// Layouts
-import { Service } from '@layouts/kernel';
+// Typedefs
+import { Service } from '@typedefs/kernel';
 
 // User API errors
 export class AuthError extends Error {};

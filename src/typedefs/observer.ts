@@ -1,5 +1,5 @@
-// Layouts
-import { RecordJson } from "@layouts/record";
+// Typedefs
+import { RecordJson } from "./record";
 
 //
 // Enums

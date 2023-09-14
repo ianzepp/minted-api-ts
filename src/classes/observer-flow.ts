@@ -11,10 +11,10 @@ import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 import { Kernel } from '@classes/kernel';
 
-// Layouts
-import { KernelVerb } from '@layouts/kernel';
-import { ObserverFlowFailure } from '@layouts/observer';
-import { RecordJson } from '@layouts/record';
+// Typedefs
+import { KernelVerb } from '@typedefs/kernel';
+import { ObserverFlowFailure } from '@typedefs/observer';
+import { RecordJson } from '@typedefs/record';
 
 // Import pre-loaded routers
 import Observers from '@preloader/observers';

@@ -6,8 +6,8 @@ import { Observer } from '@classes/observer';
 import { ObserverFlow } from '@classes/observer-flow';
 import { Filter } from '@classes/filter';
 
-// Layouts
-import { ObserverRing } from '@layouts/observer';
+// Typedefs
+import { ObserverRing } from '@typedefs/observer';
 import { Schema } from '@classes/schema';
 import { Kernel } from '@classes/kernel';
 

@@ -8,13 +8,13 @@ import { Kernel } from '@classes/kernel';
 import { Schema } from '@classes/schema';
 import { Filter } from '@classes/filter';
 
-// Layouts
-import { ChangeData } from '@layouts/record';
-import { FilterJson } from '@layouts/filter';
-import { Service } from '@layouts/kernel';
-import { KernelVerb } from '@layouts/kernel';
-import { ObserverRing } from '@layouts/observer';
-import { SchemaName } from '@layouts/schema';
+// Typedefs
+import { ChangeData } from '@typedefs/record';
+import { FilterJson } from '@typedefs/filter';
+import { Service } from '@typedefs/kernel';
+import { KernelVerb } from '@typedefs/kernel';
+import { ObserverRing } from '@typedefs/observer';
+import { SchemaName } from '@typedefs/schema';
 
 
 // Data API errors
