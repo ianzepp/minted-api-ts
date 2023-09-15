@@ -13,11 +13,6 @@ import { Schema } from '@classes/schema';
 import { SchemaType } from '@typedefs/schema';
 
 let kernel = new Tester();
-let source_data = { 
-    schema_name: SchemaType.User, 
-    name: 'something', 
-    type: 'text' 
-};
 
 beforeEach(async () => {
     await kernel.startup();
@@ -27,8 +22,11 @@ afterEach(async () => {
     await kernel.cleanup();
 });
 
-test('should create a knex column', async () => {
-    let record = await kernel.data.createOne(SchemaType.Column, source_data);
+test('should delete a knex column', async () => {
+    let record = await kernel.data.createOne(SchemaType.Column, { 
+        name: SchemaType.User + ':something', 
+        type: 'text' 
+    });
 
     // Make sure we can insert records
     await kernel.data.createOne(SchemaType.User, {

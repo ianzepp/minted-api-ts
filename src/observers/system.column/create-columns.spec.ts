@@ -12,11 +12,6 @@ import { Tester } from '@classes/tester';
 import { SchemaType } from '@typedefs/schema';
 
 let kernel = new Tester();
-let source_data = { 
-    schema_name: SchemaType.User, 
-    name: 'something', 
-    type: 'text' 
-};
 
 beforeEach(async () => {
     await kernel.startup();
@@ -27,19 +22,22 @@ afterEach(async () => {
 });
 
 test('should create a knex column', async () => {
-    await kernel.data.createOne(SchemaType.Column, source_data);
+    await kernel.data.createOne(SchemaType.Column, { 
+        name: SchemaType.User + ':something', 
+        type: 'text' 
+    });
 
-    // // Make sure we can insert records
-    // await kernel.data.createOne(SchemaType.User, {
-    //     name: 'username',
-    //     something: 'this is some type of value'
-    // });
+    // Make sure we can insert records
+    await kernel.data.createOne(SchemaType.User, {
+        name: 'username',
+        something: 'this is some type of value'
+    });
 
-    // // Check using direct knex
-    // let select = await kernel.knex.driverTo(SchemaType.User).select().first();
+    // Check using direct knex
+    let select = await kernel.knex.driverTo(SchemaType.User).select().first();
 
-    // chai.expect(select).a('object');
-    // chai.expect(select).property('id').string;
-    // chai.expect(select).property('something');
+    chai.expect(select).a('object');
+    chai.expect(select).property('id').string;
+    chai.expect(select).property('something');
 });
 

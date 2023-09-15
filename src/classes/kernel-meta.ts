@@ -57,14 +57,14 @@ export class KernelMeta implements Service {
 
         // Instantiate
         for(let source of await this.load(SchemaType.Column)) {
-            let schema = this.schemas.get(source.schema_name);
             let column = new Column(source);
+            let schema = this.schemas.get(column.schema_name);
 
             // Install
-            this.columns.set(column.column_path, column);
+            this.columns.set(column.name, column);
 
             // Cross reference
-            schema.columns.set(source.name, column);
+            schema.columns.set(column.column_name, column);
         }
     }
     
@@ -105,19 +105,6 @@ export class KernelMeta implements Service {
     find_source(schema_path: string, match: string, k: string = 'name') {
         return _.find(this.sources.get(schema_path), source => {
             return source[k] === match;
-        });
-    }
-
-    find_schema(schema_name: string) {
-        return _.find(this.sources.get(SchemaType.Schema), source => {
-            return source.name === schema_name;
-        });
-    }
-
-    find_column(schema_name: string, name: string) {
-        return _.find(this.sources.get(SchemaType.Column), source => {
-            return source.schema_name === schema_name
-                && source.name === name;
         });
     }
 }

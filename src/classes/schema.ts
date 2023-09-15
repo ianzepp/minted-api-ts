@@ -34,14 +34,25 @@ export class Schema {
         this.metadata = flat.metadata;
     }
 
+    /**
+     * Returns the two path parts of the schema name. For example, if the schema's full name is `system.domain`, then
+     * calling the `path()` function will return an array `['system', 'domain']`.
+     * @returns 
+     */
+    path() {
+        return this.name.split('.');
+    }
+
     column_keys(prefix?: string) {
         return Array.from(this.columns.keys()).map(k => {
             return prefix ? prefix + '.' + k : k;
         });
     }
 
-    is(schema_name: string) {
-        return this.name === schema_name;
+
+
+    is(name: string) {
+        return this.name === name;
     }
     
     toRecord(source?: any) {

@@ -161,19 +161,19 @@ export class Record {
     }
 
     has(column: Column): boolean {
-        return this.data[column.name]
-            || this.prev[column.name];
+        return this.data[column.column_name]
+            || this.prev[column.column_name];
     }
 
     get(column: Column) {
-        return this.data[column.name] ?? null;
+        return this.data[column.column_name] ?? null;
     }
 
     old(column: Column) {
-        return this.prev[column.name] ?? null;
+        return this.prev[column.column_name] ?? null;
     }
 
     set(column: Column, data: any) {
-        return this.data[column.name] = data;
+        return this.data[column.column_name] = data;
     }
 }
