@@ -23,7 +23,7 @@ export default class extends Router {
         // Is this a `system.column`?
         if (schema.is(SchemaType.Column)) {
             let parts = this.params.record.split(':');
-            return this.kernel.data.search404(schema, { where: { schema_name: parts[0], column_name: parts[1] }});
+            return this.kernel.data.search404(schema, { where: { schema_name: parts[0], name: parts[1] }});
         }
 
         // Otherwise, if the schema has a `name` property, then search by the name

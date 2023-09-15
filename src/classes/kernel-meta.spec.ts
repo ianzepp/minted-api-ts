@@ -121,7 +121,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(parent.meta).property('deleted_by').null;
 
     // Setup the column
-    let record_data = { schema_name: parent.data.schema_name, column_name: 'test_text', column_type: 'text' };
+    let record_data = { schema_name: parent.data.schema_name, name: 'test_text', column_type: 'text' };
 
     // Insert the new column record
     let record = await kernel.data.createOne(SchemaType.Column, record_data);
@@ -131,7 +131,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(record.data).property('id').string;
     chai.expect(record.data).property('ns', kernel.user_ns);
     chai.expect(record.data).property('schema_name', record_data.schema_name);
-    chai.expect(record.data).property('column_name', record_data.column_name);
+    chai.expect(record.data).property('name', record_data.name);
     chai.expect(record.data).property('column_type', record_data.column_type);
     chai.expect(record.meta).property('created_at');
     chai.expect(record.meta).property('created_by', kernel.user_id);

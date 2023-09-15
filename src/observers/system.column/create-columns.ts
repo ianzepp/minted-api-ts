@@ -34,7 +34,10 @@ export default class extends Observer {
     }
 
     async one(thread: Thread, record: Record) {
-        let { schema_name, column_name, column_type } = record.data;
+        let schema_name = record.data.schema_name;
+        let column_name = record.data.name;
+        let column_type = record.data.column_type;
+
         let [ ns, sn ] = record.data.schema_name.split('.');
 
         await thread.kernel.knex.schema.table(`${ns}__data.${sn}`, t => {            

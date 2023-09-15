@@ -56,24 +56,24 @@ function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
         source.acls_deny = null;
     }
 
-    let assertFn = (column_name: string) => {
-        if (source_type === 'data' && column_name === 'id') {
+    let assertFn = (name: string) => {
+        if (source_type === 'data' && name === 'id') {
             return;
         }
 
-        if (source_type === 'data' && column_name === 'ns') {
+        if (source_type === 'data' && name === 'ns') {
             return;
         }
 
-        if (source_type === 'data' && schema.columns.has(column_name)) {
+        if (source_type === 'data' && schema.columns.has(name)) {
             return;
         }
 
-        if (source_type === 'meta' && ColumnsMeta.includes(column_name)) {
+        if (source_type === 'meta' && ColumnsMeta.includes(name)) {
             return;
         }
 
-        assert.fail(`schema '${schema.schema_name}' column '${column_name}' is invalid for 'record.${source_type}'`);
+        assert.fail(`schema '${schema.schema_name}' column '${name}' is invalid for 'record.${source_type}'`);
     }
 
     // Build and return the new Proxy
@@ -82,17 +82,17 @@ function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
             return Reflect.ownKeys(target);
         },
 
-        get(target: _.Dictionary<any>, column_name: string) {
-            if (column_name === 'toJSON') return target;
-            if (column_name === 'constructor') return undefined;
-            if (column_name === 'length') return undefined;
-            assertFn(column_name);
-            return target[column_name] ?? null;
+        get(target: _.Dictionary<any>, name: string) {
+            if (name === 'toJSON') return target;
+            if (name === 'constructor') return undefined;
+            if (name === 'length') return undefined;
+            assertFn(name);
+            return target[name] ?? null;
         },
 
-        set(target: _.Dictionary<any>, column_name: string, data: any) {
-            assertFn(column_name);
-            target[column_name] = data;
+        set(target: _.Dictionary<any>, name: string, data: any) {
+            assertFn(name);
+            target[name] = data;
             return true;
         }
     });
@@ -161,19 +161,19 @@ export class Record {
     }
 
     has(column: Column): boolean {
-        return this.data[column.column_name]
-            || this.prev[column.column_name];
+        return this.data[column.name]
+            || this.prev[column.name];
     }
 
     get(column: Column) {
-        return this.data[column.column_name] ?? null;
+        return this.data[column.name] ?? null;
     }
 
     old(column: Column) {
-        return this.prev[column.column_name] ?? null;
+        return this.prev[column.name] ?? null;
     }
 
     set(column: Column, data: any) {
-        return this.data[column.column_name] = data;
+        return this.data[column.name] = data;
     }
 }

@@ -100,7 +100,7 @@ export class AutoInstall {
         // Create table `column`
         await this.createTable('system.column', table => {
             table.string('schema_name').notNullable();
-            table.string('column_name').notNullable();
+            table.string('name').notNullable();
             table.string('column_type').notNullable().defaultTo('text');
             table.string('description');
 
@@ -136,34 +136,34 @@ export class AutoInstall {
         // Add data for `column`
         await this.insertAll('system.column', [
             // Columns for 'system'
-            { ns: 'system', schema_name: 'system.domain', column_name: 'description' },
+            { ns: 'system', schema_name: 'system.domain', name: 'description' },
 
             // Columns for 'schema'
-            { ns: 'system', schema_name: 'system.schema', column_name: 'schema_name', required: true },
-            { ns: 'system', schema_name: 'system.schema', column_name: 'schema_type' },
-            { ns: 'system', schema_name: 'system.schema', column_name: 'description' },
-            { ns: 'system', schema_name: 'system.schema', column_name: 'external', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'system.schema', column_name: 'metadata', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.schema', name: 'schema_name', required: true },
+            { ns: 'system', schema_name: 'system.schema', name: 'schema_type' },
+            { ns: 'system', schema_name: 'system.schema', name: 'description' },
+            { ns: 'system', schema_name: 'system.schema', name: 'external', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.schema', name: 'metadata', column_type: 'boolean' },
 
             // Columns for 'column'
-            { ns: 'system', schema_name: 'system.column', column_name: 'schema_name', required: true, immutable: true, indexed: true },
-            { ns: 'system', schema_name: 'system.column', column_name: 'column_name', required: true, immutable: true, indexed: true },
-            { ns: 'system', schema_name: 'system.column', column_name: 'column_type', required: true, immutable: true, indexed: true },
-            { ns: 'system', schema_name: 'system.column', column_name: 'description' },
+            { ns: 'system', schema_name: 'system.column', name: 'schema_name', required: true, immutable: true, indexed: true },
+            { ns: 'system', schema_name: 'system.column', name: 'name', required: true, immutable: true, indexed: true },
+            { ns: 'system', schema_name: 'system.column', name: 'column_type', required: true, immutable: true, indexed: true },
+            { ns: 'system', schema_name: 'system.column', name: 'description' },
 
-            { ns: 'system', schema_name: 'system.column', column_name: 'audited', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'system.column', column_name: 'immutable', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'system.column', column_name: 'indexed', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'system.column', column_name: 'internal', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'system.column', column_name: 'required', column_type: 'boolean' },
-            { ns: 'system', schema_name: 'system.column', column_name: 'unique', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', name: 'audited', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', name: 'immutable', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', name: 'indexed', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', name: 'internal', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', name: 'required', column_type: 'boolean' },
+            { ns: 'system', schema_name: 'system.column', name: 'unique', column_type: 'boolean' },
 
-            { ns: 'system', schema_name: 'system.column', column_name: 'minimum', column_type: 'integer' },
-            { ns: 'system', schema_name: 'system.column', column_name: 'maximum', column_type: 'integer' },
-            { ns: 'system', schema_name: 'system.column', column_name: 'precision', column_type: 'integer' },
+            { ns: 'system', schema_name: 'system.column', name: 'minimum', column_type: 'integer' },
+            { ns: 'system', schema_name: 'system.column', name: 'maximum', column_type: 'integer' },
+            { ns: 'system', schema_name: 'system.column', name: 'precision', column_type: 'integer' },
 
             // Columns for 'user'
-            { ns: 'system', schema_name: 'system.user', column_name: 'name', column_type: 'text', required: true },
+            { ns: 'system', schema_name: 'system.user', name: 'name', column_type: 'text', required: true },
         ]);
 
         // Add data for `client`

@@ -15,7 +15,7 @@ import { SchemaType } from '@typedefs/schema';
 let kernel = new Tester();
 let source_data = { 
     schema_name: SchemaType.User, 
-    column_name: 'something', 
+    name: 'something', 
     column_type: 'text' 
 };
 

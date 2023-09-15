@@ -5,7 +5,7 @@ export class Column {
     public readonly ns: string;
 
     public readonly schema_name: string;
-    public readonly column_name: string;
+    public readonly name: string;
     public readonly column_type: string;
     
     public readonly audited: boolean;
@@ -23,7 +23,7 @@ export class Column {
         this.ns = flat.ns;
 
         this.schema_name = flat.schema_name;
-        this.column_name = flat.column_name;
+        this.name = flat.name;
         this.column_type = flat.column_type;
 
         this.audited = flat.audited;
@@ -40,6 +40,6 @@ export class Column {
     // Bonus
 
     get column_path(): string {
-        return this.schema_name + ':' + this.column_name;
+        return this.schema_name + ':' + this.name;
     }
 }

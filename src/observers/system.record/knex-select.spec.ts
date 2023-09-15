@@ -53,12 +53,12 @@ test('"where" with 1 column', async () => {
 });
 
 test('"where" with 3 columns', async () => {
-    let result = await selectWhere({ schema_name: 'system.column', column_name: 'required', column_type: 'boolean' });
+    let result = await selectWhere({ schema_name: 'system.column', name: 'required', column_type: 'boolean' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 3 columns where 1 is incorrect', async () => {
-    let result = await selectWhere({ schema_name: 'system.column', column_name: 'required', column_type: 'text' });
+    let result = await selectWhere({ schema_name: 'system.column', name: 'required', column_type: 'text' });
     chai.expect(result).an('array').empty;
 });
 
@@ -155,12 +155,12 @@ test('"order" is empty', async () => {
 });
 
 test('"order" has 1 column with sort $asc', async () => {
-    let result = await selectOrder({ column_name: 'asc' });
+    let result = await selectOrder({ name: 'asc' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"order" has multiple columns with mixed sort', async () => {
-    let result = await selectOrder({ column_name: 'asc', column_type: 'desc'});
+    let result = await selectOrder({ name: 'asc', column_type: 'desc'});
     chai.expect(result).an('array').not.empty;
 });
 

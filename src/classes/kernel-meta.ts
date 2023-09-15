@@ -64,7 +64,7 @@ export class KernelMeta implements Service {
             this.columns.set(column.column_path, column);
 
             // Cross reference
-            schema.columns.set(source.column_name, column);
+            schema.columns.set(source.name, column);
         }
     }
     
@@ -114,10 +114,10 @@ export class KernelMeta implements Service {
         });
     }
 
-    find_column(schema_name: string, column_name: string) {
+    find_column(schema_name: string, name: string) {
         return _.find(this.sources.get(SchemaType.Column), source => {
             return source.schema_name === schema_name
-                && source.column_name === column_name;
+                && source.name === name;
         });
     }
 }

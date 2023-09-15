@@ -51,8 +51,8 @@ export default class extends Observer {
             // Per record, per Column
             //
 
-            for(let column_name of thread.schema.column_keys()) {
-                let column = thread.schema.columns.get(column_name);
+            for(let name of thread.schema.column_keys()) {
+                let column = thread.schema.columns.get(name);
                 
                 // Columns marked as `required=true` must have a value set
                 this.test_data_required(thread, record, column);
@@ -109,7 +109,7 @@ export default class extends Observer {
             return;
         }
 
-        thread.failures.push(`E_DATA_REQUIRED: A record of type '${ column.schema_name}' requires a value in '${ column.column_name }`);
+        thread.failures.push(`E_DATA_REQUIRED: A record of type '${ column.schema_name}' requires a value in '${ column.name }`);
     }
 
     test_data_minimum(thread: Thread, record: Record, column: Column) {
@@ -127,7 +127,7 @@ export default class extends Observer {
             return;
         }
 
-        thread.failures.push(`On create: a record of type '${ column.schema_name}' with a value in '${ column.column_name }' must have a value greater-or-equal to '${ column.minimum }`);
+        thread.failures.push(`On create: a record of type '${ column.schema_name}' with a value in '${ column.name }' must have a value greater-or-equal to '${ column.minimum }`);
     }
 
     test_data_maximum(thread: Thread, record: Record, column: Column) {
@@ -145,6 +145,6 @@ export default class extends Observer {
             return;
         }
 
-        thread.failures.push(`On create: a record of type '${ column.schema_name}' with a value in '${ column.column_name }' must have a value less-or-equal to '${ column.maximum }`);
+        thread.failures.push(`On create: a record of type '${ column.schema_name}' with a value in '${ column.name }' must have a value less-or-equal to '${ column.maximum }`);
     }
 }
