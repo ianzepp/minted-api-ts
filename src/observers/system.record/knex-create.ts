@@ -40,7 +40,7 @@ export default class extends Observer {
 
     async run(thread: Thread): Promise<void> {
         let creates = await thread.kernel.knex
-            .driverTo(thread.schema.schema_name, 'data')
+            .driverTo(thread.schema.name, 'data')
             .insert(thread.change_data)
             .returning('*');
 

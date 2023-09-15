@@ -4,9 +4,8 @@ export class Column {
     public readonly id: string;
     public readonly ns: string;
 
-    public readonly schema_name: string;
-    public readonly column_name: string;
-    public readonly column_type: string;
+    public readonly name: string;
+    public readonly type: string;
     
     public readonly audited: boolean;
     public readonly immutable: boolean;
@@ -22,9 +21,8 @@ export class Column {
         this.id = flat.id;
         this.ns = flat.ns;
 
-        this.schema_name = flat.schema_name;
-        this.column_name = flat.column_name;
-        this.column_type = flat.column_type;
+        this.name = flat.name;
+        this.type = flat.type;
 
         this.audited = flat.audited;
         this.immutable = flat.immutable;
@@ -37,9 +35,30 @@ export class Column {
         this.maximum = flat.maximum;
     }
 
-    // Bonus
-
-    get column_path(): string {
-        return this.schema_name + ':' + this.column_name;
+    /**
+     * Returns only the `schema_name` portion of the full name property. For example, if the column's name
+     * property is set to `system.domain:name`, then `schema_name` returns `system.domain`.
+     */
+    get schema_name() {
+        return _.head(this.name.split(':'));
     }
+
+    /**
+     * Returns only the `column_name` portion of the full name property. For example, if the column's name
+     * property is set to `system.domain:name`, then `column_name` returns `name`.
+     */
+    get column_name() {
+        return _.last(this.name.split(':'));
+    }
+
+    /**
+     * Returns the two path parts of the column name. For example, if the column is `system.domain:name`,
+     * then the `path()` function will return an array `[undefined, 'name']`. If the column is in namespace
+     * itself, such as `package.myobj:customer.field`, then `path()` will return `['customer', 'field']`.
+     * @returns An array with two parts
+     */
+    path() {
+        return this.name.includes('.') ? this.name.split('.') : [undefined, this.name];
+    }
+
 }

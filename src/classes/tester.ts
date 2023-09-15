@@ -36,10 +36,10 @@ export class Tester extends Kernel {
 
     async createTestTable()  {
         let record = await this.data.createOne(SchemaType.Schema, { 
-            schema_name: this.toTestSchemaName()
+            name: this.toTestSchemaName()
         });
 
-        return this.meta.schemas.get(record.data.schema_name);
+        return this.meta.schemas.get(record.data.name);
     }
 
     toTestSchemaName() {

@@ -48,89 +48,89 @@ test('"where" empty search', async () => {
 });
 
 test('"where" with 1 column', async () => {
-    let result = await selectWhere({ schema_name: 'system.column' });
+    let result = await selectWhere({ name: 'system.column:required' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 3 columns', async () => {
-    let result = await selectWhere({ schema_name: 'system.column', column_name: 'required', column_type: 'boolean' });
+    let result = await selectWhere({ name: 'system.column:required', type: 'boolean' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 3 columns where 1 is incorrect', async () => {
-    let result = await selectWhere({ schema_name: 'system.column', column_name: 'required', column_type: 'text' });
+    let result = await selectWhere({ name: 'system.column:required', type: 'text' });
     chai.expect(result).an('array').empty;
 });
 
 test('"where" with 1 column using null', async () => {
-    let result = await selectWhere({ schema_name: null});
+    let result = await selectWhere({ name: null});
     chai.expect(result).an('array').empty;
 });
 
 test('"where" with 1 column using $not and null', async () => {
-    let result = await selectWhere({ schema_name: { $not: null }});
+    let result = await selectWhere({ name: { $not: null }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $eq and null', async () => {
-    let result = await selectWhere({ schema_name: { $eq: null }});
+    let result = await selectWhere({ name: { $eq: null }});
     chai.expect(result).an('array').empty;
 });
 
 test('"where" with 1 column using $eq', async () => {
-    let result = await selectWhere({ schema_name: { $eq: 'system.column' }});
+    let result = await selectWhere({ name: { $eq: 'system.column:required' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $ne and null', async () => {
-    let result = await selectWhere({ schema_name: { $ne: null }});
+    let result = await selectWhere({ name: { $ne: null }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $ne', async () => {
-    let result = await selectWhere({ schema_name: { $ne: 'system.column' }});
+    let result = await selectWhere({ name: { $ne: 'system.column:required' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $gt', async () => {
-    let result = await selectWhere({ schema_name: { $gt: 'system.column' }});
+    let result = await selectWhere({ name: { $gt: 'system.column' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $gte', async () => {
-    let result = await selectWhere({ schema_name: { $gte: 'system.column' }});
+    let result = await selectWhere({ name: { $gte: 'system.column' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $lt', async () => {
-    let result = await selectWhere({ schema_name: { $lt: 'system.schema' }});
+    let result = await selectWhere({ name: { $lt: 'system.schema' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $lte', async () => {
-    let result = await selectWhere({ schema_name: { $lte: 'system.schema' }});
+    let result = await selectWhere({ name: { $lte: 'system.schema' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $in', async () => {
-    let result = await selectWhere({ schema_name: { $in: ['system.schema'] }});
+    let result = await selectWhere({ name: { $in: ['system.column:required'] }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $nin', async () => {
-    let result = await selectWhere({ schema_name: { $in: ['system.schema'] }});
+    let result = await selectWhere({ name: { $nin: ['system.column:required'] }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $find', async () => {
-    let result = await selectWhere({ schema_name: { $find: '%schema%' }});
+    let result = await selectWhere({ name: { $find: '%schema%' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with $and', async () => {
     let result = await selectWhere({ $and: [
-        { schema_name: 'system.column' },
-        { column_type: 'text' }
+        { name: 'system.column:required' },
+        { type: 'text' }
     ]});
 
     chai.expect(result).an('array').not.empty;
@@ -138,8 +138,8 @@ test('"where" with $and', async () => {
 
 test('"where" with $or', async () => {
     let result = await selectWhere({ $or: [
-        { schema_name: 'system.column' },
-        { schema_name: 'system.schema' }
+        { name: 'system.column:required' },
+        { name: 'system.schema:indexed' }
     ]});
 
     chai.expect(result).an('array').not.empty;
@@ -155,12 +155,12 @@ test('"order" is empty', async () => {
 });
 
 test('"order" has 1 column with sort $asc', async () => {
-    let result = await selectOrder({ column_name: 'asc' });
+    let result = await selectOrder({ name: 'asc' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"order" has multiple columns with mixed sort', async () => {
-    let result = await selectOrder({ column_name: 'asc', column_type: 'desc'});
+    let result = await selectOrder({ name: 'asc', type: 'desc'});
     chai.expect(result).an('array').not.empty;
 });
 

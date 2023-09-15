@@ -37,7 +37,8 @@ export default class extends Observer {
 
     async one(thread: Thread, record: Record) {
         // Setup
-        let { schema_name, schema_type } = record.data;
+        let schema_name = record.data.name;
+        let schema_type = record.data.type;
         let auto = new AutoInstall(thread.kernel);
 
         // Only create schemas that are marked as `database` types

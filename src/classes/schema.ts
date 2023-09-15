@@ -21,17 +21,26 @@ export class Schema {
     public readonly id: string;
     public readonly ns: string;
 
-    public readonly schema_name: string;
-    public readonly schema_type: string;
+    public readonly name: string;
+    public readonly type: string;
     public readonly metadata: boolean;
 
     constructor(flat: _.Dictionary<any>) {
         this.id = flat.id;
         this.ns = flat.ns;
 
-        this.schema_name = flat.schema_name;
-        this.schema_type = flat.schema_type;
+        this.name = flat.name;
+        this.type = flat.type;
         this.metadata = flat.metadata;
+    }
+
+    /**
+     * Returns the two path parts of the schema name. For example, if the schema's full name is `system.domain`, then
+     * calling the `path()` function will return an array `['system', 'domain']`.
+     * @returns 
+     */
+    path() {
+        return this.name.split('.');
     }
 
     column_keys(prefix?: string) {
@@ -40,8 +49,10 @@ export class Schema {
         });
     }
 
-    is(schema_name: string) {
-        return this.schema_name === schema_name;
+
+
+    is(name: string) {
+        return this.name === name;
     }
     
     toRecord(source?: any) {

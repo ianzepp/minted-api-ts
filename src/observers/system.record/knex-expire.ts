@@ -27,7 +27,7 @@ export default class extends Observer {
 
     async run(thread: Thread): Promise<void> {
         return thread.kernel.knex
-            .driverTo(thread.schema.schema_name, 'meta')
+            .driverTo(thread.schema.name, 'meta')
             .whereIn('id', _.map(thread.change_data, 'id'))
             .update({
                 expired_at: thread.kernel.time,

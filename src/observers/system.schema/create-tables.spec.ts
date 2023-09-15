@@ -11,8 +11,6 @@ import { SchemaType } from '@typedefs/schema';
 
 
 let kernel = new Tester();
-let source_name = 'test.test_' + process.hrtime().join('_');
-let source_data = { schema_name: source_name };
 
 beforeEach(async () => {
     await kernel.startup();
@@ -25,7 +23,7 @@ afterEach(async () => {
 test.skip('should create a knex table', async () => {
     let schema_name = kernel.toTestSchemaName();    
     let schema_data = await kernel.data.createOne(SchemaType.Schema, {
-        schema_name: schema_name
+        name: schema_name
     });
 
     // Make sure the schema was inserted

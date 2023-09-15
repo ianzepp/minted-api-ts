@@ -51,8 +51,8 @@ export default class extends Observer {
             // Per record, per Column
             //
 
-            for(let column_name of thread.schema.column_keys()) {
-                let column = thread.schema.columns.get(column_name);
+            for(let name of thread.schema.column_keys()) {
+                let column = thread.schema.columns.get(name);
                 
                 // Columns marked as `required=true` must have a value set
                 this.test_data_required(thread, record, column);

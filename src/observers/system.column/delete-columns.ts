@@ -8,6 +8,7 @@ import { Record } from '@classes/record';
 // Typedefs
 import { ObserverRing } from '@typedefs/observer';
 import { SchemaType } from '@typedefs/schema';
+import { Column } from '@classes/column';
 
 
 export default class extends Observer {
@@ -32,21 +33,20 @@ export default class extends Observer {
     }
 
     async one(thread: Thread, record: Record) {
-        let { schema_name, column_name, column_type } = record.data;
-        let [ ns, sn ] = record.data.schema_name.split('.');
+        // Create temporary refs
+        let column = new Column(record.data);
+        let schema = thread.kernel.meta.schemas.get(column.schema_name);
+
+        let [ ns, sn ] = schema.path();
 
         await thread.kernel.knex.schema.table(`${ns}__data.${sn}`, t => {            
-            return t.dropColumn(column_name);
+            return t.dropColumn(column.column_name);
         });
 
-        // Setup
-        let schema = thread.kernel.meta.schemas.get(schema_name);
-        let column = schema.columns.get(column_name);
-
         // Delete the column data from the parent schema
-        schema.columns.delete(column_name);
+        schema.columns.delete(column.column_name);
 
         // Delete the column data from the kernel metadata
-        thread.kernel.meta.columns.delete(column.column_path);
+        thread.kernel.meta.columns.delete(column.name);
     }
 }

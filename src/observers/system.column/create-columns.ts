@@ -34,10 +34,16 @@ export default class extends Observer {
     }
 
     async one(thread: Thread, record: Record) {
-        let { schema_name, column_name, column_type } = record.data;
-        let [ ns, sn ] = record.data.schema_name.split('.');
+        // Create temporary refs
+        let column = new Column(record.data);
+        let schema = thread.kernel.meta.schemas.get(column.schema_name);
+
+        let [ ns, sn ] = schema.name.split('.');
 
         await thread.kernel.knex.schema.table(`${ns}__data.${sn}`, t => {            
+            let column_type = column.type;
+            let column_name = column.column_name;
+
             if (column_type === ColumnType.Text) {
                 return t.text(column_name);
             }
@@ -65,14 +71,10 @@ export default class extends Observer {
             // Invalid column type
         });
 
-        // Setup
-        let schema = thread.kernel.meta.schemas.get(schema_name);
-        let column = new Column(record.data);
-
         // Add the column data to the parent schema
-        schema.columns.set(column_name, column);
+        schema.columns.set(column.column_name, column);
 
         // Add the column data to the kernel metadata
-        thread.kernel.meta.columns.set(column.column_path, column);
+        thread.kernel.meta.columns.set(column.name, column);
     }
 }

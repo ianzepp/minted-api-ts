@@ -10,8 +10,13 @@ import { Tester } from '@classes/tester';
 
 let kernel = new Tester();
 
-beforeEach(() => kernel.startup());
-afterEach(() => kernel.cleanup());
+beforeEach(async () => {
+    await kernel.startup();
+});
+
+afterEach(async () => {
+    await kernel.cleanup();
+});
 
 test('tx test: insert a user => should rollback', async () => {
     let result = await kernel.data.createOne('system.user', { name: 'kernel-tx-test' });
