@@ -6,7 +6,7 @@ export class Column {
 
     public readonly schema_name: string;
     public readonly name: string;
-    public readonly column_type: string;
+    public readonly type: string;
     
     public readonly audited: boolean;
     public readonly immutable: boolean;
@@ -24,7 +24,7 @@ export class Column {
 
         this.schema_name = flat.schema_name;
         this.name = flat.name;
-        this.column_type = flat.column_type;
+        this.type = flat.type;
 
         this.audited = flat.audited;
         this.immutable = flat.immutable;

@@ -16,7 +16,7 @@ let kernel = new Tester();
 let source_data = { 
     schema_name: SchemaType.User, 
     name: 'something', 
-    column_type: 'text' 
+    type: 'text' 
 };
 
 beforeEach(async () => {

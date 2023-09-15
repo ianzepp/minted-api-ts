@@ -34,7 +34,7 @@ export default class extends Observer {
     async one(thread: Thread, record: Record) {
         let schema_name = record.data.schema_name;
         let column_name = record.data.name;
-        let column_type = record.data.column_type;
+        let column_type = record.data.type;
 
         let [ ns, sn ] = record.data.schema_name.split('.');
 
