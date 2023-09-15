@@ -42,7 +42,7 @@ export default class extends Observer {
 
     async one(thread: Thread, record: Record) {
         return thread.kernel.knex
-            .driverTo(thread.schema.schema_name, 'data')
+            .driverTo(thread.schema.name, 'data')
             .whereIn('data.id', [record.data.id])
             .update(record.diff);
     }

@@ -52,7 +52,7 @@ export class KernelMeta implements Service {
             let schema = new Schema(source);
 
             // Install
-            this.schemas.set(source.schema_name, schema);
+            this.schemas.set(source.name, schema);
         }
 
         // Instantiate
@@ -110,7 +110,7 @@ export class KernelMeta implements Service {
 
     find_schema(schema_name: string) {
         return _.find(this.sources.get(SchemaType.Schema), source => {
-            return source.schema_name === schema_name;
+            return source.name === schema_name;
         });
     }
 

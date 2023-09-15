@@ -57,7 +57,7 @@ export class Thread {
             }
 
             // Wrong schema name?
-            if (observer.onSchema() != '*' && observer.onSchema() !== this.schema.schema_name) {
+            if (observer.onSchema() != '*' && observer.onSchema() !== this.schema.name) {
                 return false;
             }
 
@@ -105,7 +105,7 @@ export class Thread {
 
         for(let observer of observers) {
             // console.info(util.format('Thread: schema=%j op=%j ring=%j rank=%j observer=%j', 
-            //     this.schema.schema_name, 
+            //     this.schema.name, 
             //     this.op, 
             //     observer.onRing(),
             //     observer.onRank(),

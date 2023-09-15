@@ -89,7 +89,7 @@ export class AutoInstall {
 
         // Create table `schema`
         await this.createTable('system.schema', (table) => {
-            table.string('schema_name').notNullable();
+            table.string('name').notNullable();
             table.string('type').notNullable().defaultTo('database');
             table.string('description');
 
@@ -127,10 +127,10 @@ export class AutoInstall {
 
         // Add data for `schema`
         await this.insertAll('system.schema', [
-            { ns: 'system', schema_name: 'system.domain', type: 'database' },
-            { ns: 'system', schema_name: 'system.schema', type: 'database', metadata: true },
-            { ns: 'system', schema_name: 'system.column', type: 'database', metadata: true },
-            { ns: 'system', schema_name: 'system.user', type: 'database', metadata: false },
+            { ns: 'system', name: 'system.domain', type: 'database' },
+            { ns: 'system', name: 'system.schema', type: 'database', metadata: true },
+            { ns: 'system', name: 'system.column', type: 'database', metadata: true },
+            { ns: 'system', name: 'system.user', type: 'database', metadata: false },
         ]);
 
         // Add data for `column`
@@ -139,7 +139,7 @@ export class AutoInstall {
             { ns: 'system', schema_name: 'system.domain', name: 'description' },
 
             // Columns for 'schema'
-            { ns: 'system', schema_name: 'system.schema', name: 'schema_name', required: true },
+            { ns: 'system', schema_name: 'system.schema', name: 'name', required: true },
             { ns: 'system', schema_name: 'system.schema', name: 'type' },
             { ns: 'system', schema_name: 'system.schema', name: 'description' },
             { ns: 'system', schema_name: 'system.schema', name: 'external', type: 'boolean' },

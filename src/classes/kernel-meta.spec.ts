@@ -25,7 +25,7 @@ afterEach(async () => {
 
 test.skip('schema => database table lifecycle', async () => {
     let schema_name = kernel.toTestSchemaName();
-    let record_data = { schema_name: schema_name, type: 'database' };
+    let record_data = { name: schema_name, type: 'database' };
     let record: Record;
 
     // Insert the new schema record
@@ -102,7 +102,7 @@ test.skip('schema => database table lifecycle', async () => {
 test.skip('column => database table lifecycle', async () => {
     // Setup the schema
     let schema_name = kernel.toTestSchemaName();
-    let parent_data = { schema_name: schema_name, type: 'database' };
+    let parent_data = { name: schema_name, type: 'database' };
 
     // Insert the new schema record
     let parent = await kernel.data.createOne(SchemaType.Schema, parent_data);
@@ -111,7 +111,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(parent).property('data').a('object');
     chai.expect(parent.data).property('id').string;
     chai.expect(parent.data).property('ns', kernel.user_ns);
-    chai.expect(parent.data).property('schema_name', parent_data.schema_name);
+    chai.expect(parent.data).property('name', parent_data.name);
     chai.expect(parent.data).property('type', parent_data.type);
     chai.expect(parent.meta).property('created_at');
     chai.expect(parent.meta).property('created_by', kernel.user_id);
@@ -121,7 +121,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(parent.meta).property('deleted_by').null;
 
     // Setup the column
-    let record_data = { schema_name: parent.data.schema_name, name: 'test_text', type: 'text' };
+    let record_data = { schema_name: parent.data.name, name: 'test_text', type: 'text' };
 
     // Insert the new column record
     let record = await kernel.data.createOne(SchemaType.Column, record_data);
@@ -141,11 +141,11 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(record.meta).property('deleted_by').null;
 
     // Column should be present in the meta service
-    chai.expect(kernel.meta.schemas).property(parent_data.schema_name).instanceOf(Schema);
-    chai.expect(kernel.meta.schemas[parent_data.schema_name].columns).property('test_text').instanceOf(Column);
+    chai.expect(kernel.meta.schemas).property(parent_data.name).instanceOf(Schema);
+    chai.expect(kernel.meta.schemas[parent_data.name].columns).property('test_text').instanceOf(Column);
 
     // We should have the test schema available
-    let tested_schema = kernel.meta.schemas[parent.data.schema_name];
+    let tested_schema = kernel.meta.schemas[parent.data.name];
     let tested = await kernel.data.createOne(tested_schema, { test_text: 'this is a column' });
 
     chai.expect(tested).instanceOf(Record);
@@ -207,8 +207,8 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(record.meta).property('deleted_by', kernel.user_id);
 
     // Column should not be present in the meta service
-    chai.expect(kernel.meta.schemas).property(parent_data.schema_name).instanceOf(Schema);
-    chai.expect(kernel.meta.schemas[parent_data.schema_name].columns).not.property('test_text');
+    chai.expect(kernel.meta.schemas).property(parent_data.name).instanceOf(Schema);
+    chai.expect(kernel.meta.schemas[parent_data.name].columns).not.property('test_text');
 
     // Column should be deleted, so we shouldn't see the data when selected
     let [retest] = await kernel.data.selectAny(tested_schema, { limit: 1 });

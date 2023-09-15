@@ -73,7 +73,7 @@ function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
             return;
         }
 
-        assert.fail(`schema '${schema.schema_name}' column '${name}' is invalid for 'record.${source_type}'`);
+        assert.fail(`schema '${schema.name}' column '${name}' is invalid for 'record.${source_type}'`);
     }
 
     // Build and return the new Proxy
@@ -146,7 +146,7 @@ export class Record {
     }
 
     toString(): string {
-        return `${this.schema.schema_name}#${this.data.id}`;
+        return `${this.schema.name}#${this.data.id}`;
     }
 
     toJSON() {

@@ -32,7 +32,7 @@ export default class extends Observer {
     }
 
     async one(thread: Thread, record: Record) {
-        let schema_name = record.data.schema_name;
+        let schema_name = record.data.name;
         let schema_type = record.data.type;
         let auto = new AutoInstall(thread.kernel);
 

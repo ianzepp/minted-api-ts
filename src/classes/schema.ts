@@ -21,7 +21,7 @@ export class Schema {
     public readonly id: string;
     public readonly ns: string;
 
-    public readonly schema_name: string;
+    public readonly name: string;
     public readonly type: string;
     public readonly metadata: boolean;
 
@@ -29,7 +29,7 @@ export class Schema {
         this.id = flat.id;
         this.ns = flat.ns;
 
-        this.schema_name = flat.schema_name;
+        this.name = flat.name;
         this.type = flat.type;
         this.metadata = flat.metadata;
     }
@@ -41,7 +41,7 @@ export class Schema {
     }
 
     is(schema_name: string) {
-        return this.schema_name === schema_name;
+        return this.name === schema_name;
     }
     
     toRecord(source?: any) {

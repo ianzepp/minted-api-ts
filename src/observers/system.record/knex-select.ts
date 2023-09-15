@@ -31,7 +31,7 @@ export default class extends Observer {
 
     async run(thread: Thread): Promise<void> {
         let schema = thread.schema;
-        let knex = thread.kernel.knex.selectTo(schema.schema_name);
+        let knex = thread.kernel.knex.selectTo(schema.name);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');
