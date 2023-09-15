@@ -22,7 +22,7 @@ export class Schema {
     public readonly ns: string;
 
     public readonly schema_name: string;
-    public readonly schema_type: string;
+    public readonly type: string;
     public readonly metadata: boolean;
 
     constructor(flat: _.Dictionary<any>) {
@@ -30,7 +30,7 @@ export class Schema {
         this.ns = flat.ns;
 
         this.schema_name = flat.schema_name;
-        this.schema_type = flat.schema_type;
+        this.type = flat.type;
         this.metadata = flat.metadata;
     }
 

@@ -25,7 +25,7 @@ afterEach(async () => {
 
 test.skip('schema => database table lifecycle', async () => {
     let schema_name = kernel.toTestSchemaName();
-    let record_data = { schema_name: schema_name, schema_type: 'database' };
+    let record_data = { schema_name: schema_name, type: 'database' };
     let record: Record;
 
     // Insert the new schema record
@@ -102,7 +102,7 @@ test.skip('schema => database table lifecycle', async () => {
 test.skip('column => database table lifecycle', async () => {
     // Setup the schema
     let schema_name = kernel.toTestSchemaName();
-    let parent_data = { schema_name: schema_name, schema_type: 'database' };
+    let parent_data = { schema_name: schema_name, type: 'database' };
 
     // Insert the new schema record
     let parent = await kernel.data.createOne(SchemaType.Schema, parent_data);
@@ -112,7 +112,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(parent.data).property('id').string;
     chai.expect(parent.data).property('ns', kernel.user_ns);
     chai.expect(parent.data).property('schema_name', parent_data.schema_name);
-    chai.expect(parent.data).property('schema_type', parent_data.schema_type);
+    chai.expect(parent.data).property('type', parent_data.type);
     chai.expect(parent.meta).property('created_at');
     chai.expect(parent.meta).property('created_by', kernel.user_id);
     chai.expect(parent.meta).property('expired_at').null;
