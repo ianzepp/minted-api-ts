@@ -23,6 +23,19 @@ export class HttpRouteNotFoundError extends HttpError {};
 // Import pre-loaded routers
 import Routers from '@preloader/routers';
 
+function newResponse(data?: any) {
+    let res = new Response(data);
+
+    // Always send CORS headers
+    res.headers.set('Access-Control-Allow-Origin', '*');
+    res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+    res.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.headers.set('Access-Control-Allow-Credentials', 'true');
+
+    // Done
+    return res;
+}
+
 export class Server {
     async route(req: Request) {
         // Process URL data
@@ -46,18 +59,9 @@ export class Server {
             result: undefined,
         }
 
-        // // Build the outer response object
-        // let res = new Response();
-
-        // // Always send CORS headers
-        // res.headers.set('Access-Control-Allow-Origin', '*');
-        // res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-        // res.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-        // res.headers.set('Access-Control-Allow-Credentials', 'true');
-
         // Is this an OPTIONS request? All they want is CORS info..
         if (req.method === 'OPTIONS') {
-            return new Response();
+            return newResponse();
         }
 
         // Find a router that matches the request
@@ -118,12 +122,6 @@ export class Server {
         });
 
         // Return the response
-        return new Response(JSON.stringify(httpRes));
-        
-        // res.statusCode = httpRes.status;
-        // res.setHeader('Content-Type', 'application/json');
-        // res.setHeader('Content-Length', Buffer.byteLength(res_json, 'utf8').toString());
-        // res.write(res_json);
-        // return res.end();
+        return newResponse(JSON.stringify(httpRes));
     }
 }
