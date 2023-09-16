@@ -49,7 +49,7 @@ export class KernelMeta implements Service {
 
         // Instantiate
         for(let source of await this.load(SchemaType.Schema)) {
-            let schema = new Schema(source);
+            let schema = Schema.from(source);
 
             // Install
             this.schemas.set(source.name, schema);
@@ -57,14 +57,14 @@ export class KernelMeta implements Service {
 
         // Instantiate
         for(let source of await this.load(SchemaType.Column)) {
-            let column = new Column(source);
+            let column = Column.from(source);
             let schema = this.schemas.get(column.schema_name);
 
             // Install
             this.columns.set(column.name, column);
 
             // Cross reference
-            schema.columns.set(column.column_name, column);
+            schema.insert(column);
         }
     }
     

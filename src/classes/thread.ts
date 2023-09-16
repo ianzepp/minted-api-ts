@@ -5,23 +5,20 @@ import chai from 'chai';
 import { expect } from 'chai';
 
 // Classes
+import { Corpus } from '@classes/corpus';
 import { Filter } from '@classes/filter';
+import { Kernel } from '@classes/kernel';
 import { Observer } from '@classes/observer';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
-import { Kernel } from '@classes/kernel';
+
+// Typedefs
+import { ThreadOp } from '@typedefs/thread';
 
 // Import pre-loaded routers
 import Observers from '@preloader/observers';
 
-export enum ThreadOp {
-    Create = 'create',
-    Delete = 'delete',
-    Expire = 'expire',
-    Select = 'select',
-    Update = 'update',
-    Upsert = 'upsert',
-}
+
 
 export class Thread {
     readonly expect = chai.expect;
@@ -29,13 +26,21 @@ export class Thread {
 
     constructor(
         readonly kernel: Kernel,
-        readonly schema: Schema,
-        readonly change: Record[],
+        readonly corpus: Corpus,
         readonly filter: Filter,
-        readonly op: string) {}
+        readonly op: ThreadOp) {}
+
+    get schema() {
+        return this.corpus.schema;
+    }
+
+    get change() {
+        return this.corpus.records;
+    }
 
     get change_data() {
         return _.map(this.change, 'data');
+
     }
 
     get change_meta() {

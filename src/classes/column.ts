@@ -1,39 +1,62 @@
 import _ from 'lodash';
 
+// Typedefs
+import { ColumnName } from '@typedefs/column';
+import { ColumnForm } from '@typedefs/column';
+import { ColumnType } from '@typedefs/column';
+
+
+/**
+ * The `Column` class represents a column in a database table.
+ * It provides functionalities to:
+ * - Generate a new `Column` instance from provided flat data.
+ * - Access properties of the column such as `id`, `ns` (namespace), `name`, `type`, `forms`, `minimum` and `maximum`.
+ * - Get the `schema_name` and `column_name` from the full name of the column.
+ * - Check if the column is of a specific type or has a specific form.
+ * - Get the two path parts of the column name.
+ */
 export class Column {
-    public readonly id: string;
-    public readonly ns: string;
+    //
+    // Static
+    //
 
-    public readonly name: string;
-    public readonly type: string;
-    
-    public readonly audited: boolean;
-    public readonly immutable: boolean;
-    public readonly indexed: boolean;
-    public readonly internal: boolean;
-    public readonly required: boolean;
-    public readonly unique: boolean;
+    // Re-export aliases
+    public static Form = ColumnForm;
+    public static Type = ColumnType;
 
-    public readonly minimum: number | null;
-    public readonly maximum: number | null;
 
-    constructor(flat: _.Dictionary<any>) {
-        this.id = flat.id;
-        this.ns = flat.ns;
-
-        this.name = flat.name;
-        this.type = flat.type;
-
-        this.audited = flat.audited;
-        this.immutable = flat.immutable;
-        this.indexed = flat.indexed;
-        this.internal = flat.internal;
-        this.required = flat.required;
-        this.unique = flat.unique;
-
-        this.minimum = flat.minimum;
-        this.maximum = flat.maximum;
+    /**
+     * Generates a new `Column` instance from provided flat data.
+     * 
+     * @param {_.Dictionary<any>} flat - The flat data to generate the column from.
+     * @returns {Column} Returns a new `Column` instance.
+     */
+    static from(flat: _.Dictionary<any>): Column {
+        let forms: ColumnForm[] = _.filter(ColumnForm, form => _.has(flat, form));
+        
+        return new Column(
+            flat.id,
+            flat.ns,
+            flat.name,
+            flat.type,
+            forms,
+            flat.minimum,
+            flat.maximum,
+        );
     }
+
+    constructor(
+        public readonly id: string,
+        public readonly ns: string,
+        public readonly name: ColumnName,
+        public readonly type: ColumnType,
+        public readonly forms: ColumnForm[],
+        public readonly minimum: number | null,
+        public readonly maximum: number | null) {}
+
+    //
+    // Getters/Setters
+    //
 
     /**
      * Returns only the `schema_name` portion of the full name property. For example, if the column's name
@@ -51,14 +74,37 @@ export class Column {
         return _.last(this.name.split(':'));
     }
 
+    //
+    // Methods
+    //
+
+    /**
+     * Checks if the column is of a specific type.
+     * 
+     * @param {ColumnType} type - The type to check against.
+     * @returns {boolean} Returns true if the column is of the specified type, false otherwise.
+     */
+    is(type: ColumnType): boolean {
+        return this.type === type;
+    }
+
+    /**
+     * Checks if the column has a specific form.
+     * 
+     * @param {ColumnForm | string} form - The form to check for.
+     * @returns {boolean} Returns true if the column has the specified form, false otherwise.
+     */
+    of(form: ColumnForm | string): boolean {
+        return _.includes(this.forms, form);
+    }
+
     /**
      * Returns the two path parts of the column name. For example, if the column is `system.domain:name`,
      * then the `path()` function will return an array `[undefined, 'name']`. If the column is in namespace
      * itself, such as `package.myobj:customer.field`, then `path()` will return `['customer', 'field']`.
-     * @returns An array with two parts
+     * @returns {string[]} An array with two parts
      */
     path() {
         return this.name.includes('.') ? this.name.split('.') : [undefined, this.name];
     }
-
 }

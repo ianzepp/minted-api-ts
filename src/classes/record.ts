@@ -7,25 +7,13 @@ import { Schema } from '@classes/schema';
 
 // Typedefs
 import { ColumnType } from '@typedefs/column';
+import { ColumnsMeta } from '@typedefs/column';
 import { SchemaName } from '@typedefs/schema';
 
 // Helpers
+import { toNull } from '@classes/helpers';
 import { toJSON } from '@classes/helpers';
 
-export const ColumnsMeta = [
-    'created_at',
-    'created_by',
-    'updated_at',
-    'updated_by',
-    'expired_at',
-    'expired_by',
-    'deleted_at',
-    'deleted_by',
-    'acls_full',
-    'acls_edit',
-    'acls_read',
-    'acls_deny',
-];
 
 //
 // Record proxies. Wizard stuff.
@@ -65,7 +53,7 @@ function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
             return;
         }
 
-        if (source_type === 'data' && schema.columns.has(name)) {
+        if (source_type === 'data' && schema.has(name)) {
             return;
         }
 
@@ -98,6 +86,11 @@ function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
     });
 }
 
+/**
+ * The Record class represents a record in the database.
+ * It contains data, previous data, and metadata about the record.
+ * The class provides methods to manipulate and access the data.
+ */
 export class Record {
     public readonly type: SchemaName;
 
@@ -156,7 +149,7 @@ export class Record {
         };
     }
 
-    is(schema_name: string) {
+    is(schema_name: SchemaName) {
         return this.schema.is(schema_name);
     }
 

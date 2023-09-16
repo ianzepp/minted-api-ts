@@ -299,7 +299,7 @@ export default class extends Observer {
         knex = knex.column(['meta.*']);
 
         // Schema visible columns
-        knex = knex.column(schema.column_keys('data'));
+        knex = knex.column(schema.keys('data'));
 
         // Done
         return knex;
