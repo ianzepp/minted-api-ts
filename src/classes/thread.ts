@@ -17,6 +17,7 @@ import { ThreadOp } from '@typedefs/thread';
 
 // Import pre-loaded routers
 import Observers from '@preloader/observers';
+import { ObserverRing } from '@typedefs/observer';
 
 
 
@@ -45,6 +46,15 @@ export class Thread {
 
     get change_meta() {
         return _.map(this.change, 'meta');
+    }
+
+    async runOp(): Promise<Record[]> {
+        for (let ring = 0 as ObserverRing; ring <= 9; ring++) {
+            await this.run(ring);
+        }
+
+        // Done
+        return this.change;
     }
 
     async run(ring: number): Promise<void> {

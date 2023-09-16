@@ -88,13 +88,8 @@ export class KernelData implements Service {
         // Build the thread
         let thread = new Thread(this.kernel, corpus, filter, op);
 
-        // Cycle through rings 0 - 9
-        for (let ring = 0 as ObserverRing; ring <= 9; ring++) {
-            await thread.run(ring);
-        }
-
-        // Done
-        return thread.change;
+        // Run the op, which returns the set of changes
+        return thread.runOp();
     }
     
     //
