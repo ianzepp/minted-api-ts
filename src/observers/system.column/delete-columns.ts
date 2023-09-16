@@ -34,7 +34,7 @@ export default class extends Observer {
 
     async one(thread: Thread, record: Record) {
         // Create temporary refs
-        let column = new Column(record.data);
+        let column = Column.from(record.data);
         let schema = thread.kernel.meta.schemas.get(column.schema_name);
 
         let [ ns, sn ] = schema.path();
@@ -44,7 +44,7 @@ export default class extends Observer {
         });
 
         // Delete the column data from the parent schema
-        schema.columns.delete(column.column_name);
+        schema.remove(column);
 
         // Delete the column data from the kernel metadata
         thread.kernel.meta.columns.delete(column.name);

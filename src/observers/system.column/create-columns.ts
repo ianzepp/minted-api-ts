@@ -35,7 +35,7 @@ export default class extends Observer {
 
     async one(thread: Thread, record: Record) {
         // Create temporary refs
-        let column = new Column(record.data);
+        let column = Column.from(record.data);
         let schema = thread.kernel.meta.schemas.get(column.schema_name);
 
         let [ ns, sn ] = schema.name.split('.');
@@ -72,7 +72,7 @@ export default class extends Observer {
         });
 
         // Add the column data to the parent schema
-        schema.columns.set(column.column_name, column);
+        schema.insert(column);
 
         // Add the column data to the kernel metadata
         thread.kernel.meta.columns.set(column.name, column);

@@ -1,13 +1,12 @@
 import _ from 'lodash';
 
 // Classes
-import { Thread } from '@classes/thread';
-import { ThreadOp } from '@classes/thread';
-import { Record } from '@classes/record';
-import { Kernel } from '@classes/kernel';
-
-import { Schema } from '@classes/schema';
+import { Corpus } from '@classes/corpus';
 import { Filter } from '@classes/filter';
+import { Kernel } from '@classes/kernel';
+import { Record } from '@classes/record';
+import { Schema } from '@classes/schema';
+import { Thread } from '@classes/thread';
 
 // Typedefs
 import { ChangeData } from '@typedefs/record';
@@ -15,6 +14,7 @@ import { FilterJson } from '@typedefs/filter';
 import { Service } from '@typedefs/kernel';
 import { ObserverRing } from '@typedefs/observer';
 import { SchemaName } from '@typedefs/schema';
+import { ThreadOp } from '@typedefs/thread';
 
 
 // Data API errors
@@ -83,9 +83,10 @@ export class KernelData implements Service {
 
         // Convert the raw change data into records
         let change = change_data.map(change => schema.toRecord(change));
+        let corpus = new Corpus(schema, change);
 
         // Build the thread
-        let thread = new Thread(this.kernel, schema, change, filter, op);
+        let thread = new Thread(this.kernel, corpus, filter, op);
 
         // Cycle through rings 0 - 9
         for (let ring = 0 as ObserverRing; ring <= 9; ring++) {

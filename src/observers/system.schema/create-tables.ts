@@ -50,6 +50,6 @@ export default class extends Observer {
         await auto.createTable(schema_name, table => {});
 
         // Add to kernel metadata
-        thread.kernel.meta.schemas.set(schema_name, new Schema(record.data));
+        thread.kernel.meta.schemas.set(schema_name, Schema.from(record.data));
     }
 }

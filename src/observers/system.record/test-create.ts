@@ -1,14 +1,15 @@
 import _ from 'lodash';
 
 // Classes
+import { Column } from '@classes/column';
 import { Observer } from '@classes/observer';
+import { Record } from '@classes/record';
 import { Thread } from '@classes/thread';
-import { ColumnsMeta, Record } from '@classes/record';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/observer';
+import { ColumnsMeta } from '@typedefs/column';
 import { DataError } from '@classes/kernel-data';
-import { Column } from '@classes/column';
+import { ObserverRing } from '@typedefs/observer';
 
 /**
  * This observer performs all the record prechecks/validations. This is done in one file
@@ -51,9 +52,7 @@ export default class extends Observer {
             // Per record, per Column
             //
 
-            for(let name of thread.schema.column_keys()) {
-                let column = thread.schema.columns.get(name);
-                
+            for(let column of _.values(thread.schema.columns)) {
                 // Columns marked as `required=true` must have a value set
                 this.test_data_required(thread, record, column);
 
@@ -99,7 +98,7 @@ export default class extends Observer {
     }
 
     test_data_required(thread: Thread, record: Record, column: Column) {
-        if (column.required === false) {
+        if (column.of(Column.Form.Required) === false) {
             return;
         }
 
@@ -109,7 +108,7 @@ export default class extends Observer {
             return;
         }
 
-        thread.failures.push(`E_DATA_REQUIRED: A record of type '${ column.schema_name}' requires a value in '${ column.column_name }`);
+        thread.failures.push(`E_DATA_REQUIRED: A record of type '${ column.schema_name}' requires a value in '${ column.column_name }'`);
     }
 
     test_data_minimum(thread: Thread, record: Record, column: Column) {
@@ -127,7 +126,7 @@ export default class extends Observer {
             return;
         }
 
-        thread.failures.push(`On create: a record of type '${ column.schema_name}' with a value in '${ column.column_name }' must have a value greater-or-equal to '${ column.minimum }`);
+        thread.failures.push(`On create: a record of type '${ column.schema_name}' with a value in '${ column.column_name }' must have a value greater-or-equal to '${ column.minimum }'`);
     }
 
     test_data_maximum(thread: Thread, record: Record, column: Column) {
@@ -145,6 +144,6 @@ export default class extends Observer {
             return;
         }
 
-        thread.failures.push(`On create: a record of type '${ column.schema_name}' with a value in '${ column.column_name }' must have a value less-or-equal to '${ column.maximum }`);
+        thread.failures.push(`On create: a record of type '${ column.schema_name}' with a value in '${ column.column_name }' must have a value less-or-equal to '${ column.maximum }'`);
     }
 }
