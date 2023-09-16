@@ -25,7 +25,6 @@ export const KernelSchemaTypes = _.values(SchemaType) as string[];
 // Implementation
 export class KernelMeta implements Service {
     // Source data for known schema and column names
-    public readonly sources: Map<string, RecordFlat[]> = new Map();
     public readonly schemas: MapSchemas;
     public readonly columns: MapColumns;
 
@@ -69,7 +68,6 @@ export class KernelMeta implements Service {
     }
     
     async cleanup(): Promise<void> {
-        this.sources.clear();
         this.schemas.clear();
         this.columns.clear();
     }
@@ -88,24 +86,11 @@ export class KernelMeta implements Service {
     //
 
     async load(schema_path: string) {
-        let sources = await this.kernel.knex
+        return this.kernel.knex
             .selectTo<RecordFlat>(schema_path)
             .whereNull('meta.expired_at')
             .whereNull('meta.deleted_at')
             .select();
-
-        // Save the results
-        this.sources.set(schema_path, sources);
-
-        // Done
-        return sources;
-    }
-    
-
-    find_source(schema_path: string, match: string, k: string = 'name') {
-        return _.find(this.sources.get(schema_path), source => {
-            return source[k] === match;
-        });
     }
 }
 
