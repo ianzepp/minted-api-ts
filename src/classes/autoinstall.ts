@@ -19,39 +19,32 @@ export class AutoInstall {
         // Add `pgcrypto` so we can create UUIDs in the DB
         await this.knex.raw('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
 
-        // Create namespace for `system`
-        await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "system__data";');
-        await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "system__data" TO PUBLIC;');
-
-        await this.knex.raw('CREATE SCHEMA IF NOT EXISTS "system__meta";');
-        await this.knex.raw('GRANT USAGE, CREATE ON SCHEMA "system__meta" TO PUBLIC;');
-
-        // System table is always visible
-        await this.knex.raw(`ALTER DATABASE "${dn}" SET search_path TO system__data, system__meta;`);
-
         // Start the tx
         await this.knex.raw('BEGIN TRANSACTION;');
 
-        // Set user vars
-        await this.knex.raw(`
-            SET LOCAL minted.userinfo_id = '${ this.kernel.user_id }';
-            SET LOCAL minted.userinfo_ns = '${ this.kernel.user_ns }';
-            SET LOCAL minted.userinfo_ts = '${ this.kernel.timeISO() }';
-        `);
+        // // Set user vars
+        // await this.knex.raw(`
+        //     SET LOCAL minted.userinfo_id = '${ this.kernel.user_id }';
+        //     SET LOCAL minted.userinfo_ns = '${ this.kernel.user_ns }';
+        //     SET LOCAL minted.userinfo_ts = '${ this.kernel.timeISO() }';
+        // `);
 
-        // Create the userinfo scopes function
-        await this.knex.raw(`
-            CREATE OR REPLACE FUNCTION get_userinfo_ns_read() 
-            RETURNS text[] AS $$
-            BEGIN
-                RETURN string_to_array(current_setting('minted.userinfo_ns_read'), ',');
-            END;
-            $$ LANGUAGE plpgsql;
-        `);
+        // // Create the userinfo scopes function
+        // await this.knex.raw(`
+        //     CREATE OR REPLACE FUNCTION get_userinfo_ns_read() 
+        //     RETURNS text[] AS $$
+        //     BEGIN
+        //         RETURN string_to_array(current_setting('minted.userinfo_ns_read'), ',');
+        //     END;
+        //     $$ LANGUAGE plpgsql;
+        // `);
 
         // Create the master domain table.
         await this.createTable(SchemaType.Domain, (table) => {
             table.string('description').notNullable();
+
+            // Unique index on (ns)
+            table.unique(['ns']);
         });
 
         // Create the master domain record.
@@ -59,25 +52,25 @@ export class AutoInstall {
             { ns: 'system', description: 'Minted API System' },
         ]);
 
-        //
-        // Define the trigger that adds new schemas when a new client is created.
-        //
-        await this.knex.raw(`
-            CREATE OR REPLACE FUNCTION new_domain_create_schemas_trigger()
-            RETURNS TRIGGER AS $$
-            BEGIN
-                EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__data";';
-                EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__meta";';
+        // //
+        // // Define the trigger that adds new schemas when a new client is created.
+        // //
+        // await this.knex.raw(`
+        //     CREATE OR REPLACE FUNCTION new_domain_create_schemas_trigger()
+        //     RETURNS TRIGGER AS $$
+        //     BEGIN
+        //         EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__data";';
+        //         EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__meta";';
                 
-                RETURN NEW;
-            END;
-            $$ LANGUAGE plpgsql;
+        //         RETURN NEW;
+        //     END;
+        //     $$ LANGUAGE plpgsql;
 
-            CREATE TRIGGER new_domain_create_schemas
-            AFTER INSERT ON "system__data"."domain"
-            FOR EACH ROW
-            EXECUTE PROCEDURE new_domain_create_schemas_trigger();
-        `);
+        //     CREATE TRIGGER new_domain_create_schemas
+        //     AFTER INSERT ON "system__data"."domain"
+        //     FOR EACH ROW
+        //     EXECUTE PROCEDURE new_domain_create_schemas_trigger();
+        // `);
         
         // Create the master test domain record. This tests that the trigger works.
         await this.insertAll(SchemaType.Domain, [
@@ -96,6 +89,9 @@ export class AutoInstall {
 
             table.boolean('external').defaultTo(false);
             table.boolean('metadata').defaultTo(false);
+
+            // Compound index on (ns, name)
+            table.unique(['ns', 'name']);
         });
 
         // Create table `column`
@@ -114,6 +110,9 @@ export class AutoInstall {
             table.integer('minimum');
             table.integer('maximum');
             table.integer('precision');
+
+            // Compound index on (ns, name)
+            table.unique(['ns', 'name']);
         });
 
         // Create table `user`
@@ -184,97 +183,75 @@ export class AutoInstall {
             console.warn('autoinstall.createTable()', schema_path);
         }
 
-        let [ns, sn] = schema_path.split('.');
-
         // Data table
-        await this.knex.schema.withSchema(ns + '__data').createTable(sn, (table) => {
-            table.uuid('id').primary().notNullable().defaultTo(this.knex.fn.uuid());
+        await this.knex.schema.createTable(schema_path, (table) => {
+            table.string('id').notNullable().primary().defaultTo(this.knex.fn.uuid());
+            table.string('ns').notNullable();
 
-            // Only applies to the very first one
-            if (schema_path === SchemaType.Domain) {
-                table.string('ns').notNullable().unique();
-            }
+            // System tables
+            table.timestamp('created_at').index();
+            table.timestamp('updated_at').index();
+            table.timestamp('expired_at').index();
+            table.timestamp('deleted_at').index();
 
-            else {
-                table.string('ns').notNullable().references('ns').inTable('system__data.domain').onDelete('CASCADE');
-            }
+            table.string('created_by').index();
+            table.string('updated_by').index();
+            table.string('expired_by').index();
+            table.string('deleted_by').index();
 
             // Apply extra columns
             columnFn(table);
         });
     
-        // Meta table
-        await this.knex.schema.withSchema(ns + '__meta').createTable(sn, (table) => {
-            table.uuid('id').primary().references('id').inTable(`${ns}__data.${sn}`).onDelete('CASCADE');
-            table.string('ns'); // parent data has an index to the client ns
-    
-            table.timestamp('created_at').index();
-            table.uuid('created_by').index();
+        // //
+        // // Row level security
+        // // 
 
-            table.timestamp('updated_at').index();
-            table.uuid('updated_by').index();
+        // await this.knex.raw(`
+        //     ALTER TABLE "${ns}__meta"."${sn}" ENABLE ROW LEVEL SECURITY;
 
-            table.timestamp('expired_at').index();
-            table.uuid('expired_by').index();
+        //     CREATE POLICY ${ns}_${sn}_rls_policy ON "${ns}__meta"."${sn}"
+        //     USING (
+        //         (
+        //             (acls_deny IS NULL) OR 
+        //             (NOT acls_deny @> ARRAY[current_setting('minted.userinfo_id')]::uuid[])
+        //         ) AND (
+        //             (acls_full @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
+        //             (acls_edit @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
+        //             (acls_read @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
+        //             (acls_full IS NULL AND acls_edit IS NULL AND acls_read IS NULL)
+        //         )
+        //     );
+        // `);
 
-            table.timestamp('deleted_at').index();
-            table.uuid('deleted_by').index();
+        // //
+        // // Auto-insert metadata table
+        // //
 
-            table.specificType('acls_full', 'uuid ARRAY').index();
-            table.specificType('acls_edit', 'uuid ARRAY').index();
-            table.specificType('acls_read', 'uuid ARRAY').index();
-            table.specificType('acls_deny', 'uuid ARRAY').index();
-        });
-
-        //
-        // Row level security
-        // 
-
-        await this.knex.raw(`
-            ALTER TABLE "${ns}__meta"."${sn}" ENABLE ROW LEVEL SECURITY;
-
-            CREATE POLICY ${ns}_${sn}_rls_policy ON "${ns}__meta"."${sn}"
-            USING (
-                (
-                    (acls_deny IS NULL) OR 
-                    (NOT acls_deny @> ARRAY[current_setting('minted.userinfo_id')]::uuid[])
-                ) AND (
-                    (acls_full @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
-                    (acls_edit @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
-                    (acls_read @> ARRAY[current_setting('minted.userinfo_id')]::uuid[]) OR
-                    (acls_full IS NULL AND acls_edit IS NULL AND acls_read IS NULL)
-                )
-            );
-        `);
-
-        //
-        // Auto-insert metadata table
-        //
-
-        await this.knex.raw(`
-            -- Define a trigger to auto-insert a metadata table
-            CREATE OR REPLACE FUNCTION ${ns}_${sn}_insert_meta_function()
-            RETURNS TRIGGER AS $$
-            DECLARE
-                temp_user_id uuid;
-                temp_user_ts timestamp;
-            BEGIN
-                temp_user_id := current_setting('minted.userinfo_id')::uuid;
-                temp_user_ts := current_setting('minted.userinfo_ts')::timestamp;
+        // await this.knex.raw(`
+        //     -- Define a trigger to auto-insert a metadata table
+        //     CREATE OR REPLACE FUNCTION ${ns}_${sn}_insert_meta_function()
+        //     RETURNS TRIGGER AS $$
+        //     DECLARE
+        //         temp_user_id uuid;
+        //         temp_user_ts timestamp;
+        //     BEGIN
+        //         temp_user_id := current_setting('minted.userinfo_id')::uuid;
+        //         temp_user_ts := current_setting('minted.userinfo_ts')::timestamp;
                 
-                INSERT INTO "${ns}__meta"."${sn}" (id, ns, created_at, created_by)
-                VALUES (NEW.id, NEW.ns, temp_user_ts, temp_user_id);
+        //         INSERT INTO "${ns}__meta"."${sn}" (id, ns, created_at, created_by)
+        //         VALUES (NEW.id, NEW.ns, temp_user_ts, temp_user_id);
                 
-                -- Done
-                RETURN NEW;
-            END;
-            $$ LANGUAGE plpgsql;
+        //         -- Done
+        //         RETURN NEW;
+        //     END;
+        //     $$ LANGUAGE plpgsql;
         
-            CREATE TRIGGER ${ns}_${sn}_insert_meta_trigger 
-            AFTER INSERT ON "${ns}__data"."${sn}"
-            FOR EACH ROW
-            EXECUTE PROCEDURE ${ns}_${sn}_insert_meta_function();
-        `);
+        //     CREATE TRIGGER ${ns}_${sn}_insert_meta_trigger 
+        //     AFTER INSERT ON "${ns}__data"."${sn}"
+        //     FOR EACH ROW
+        //     EXECUTE PROCEDURE ${ns}_${sn}_insert_meta_function();
+        // `);
     }
 
     async deleteTable(schema_path: string) {
@@ -282,10 +259,7 @@ export class AutoInstall {
             console.warn('autoinstall.deleteTable()', schema_path);
         }
 
-        let [ns, sn] = schema_path.split('.');
-
-        await this.knex.schema.withSchema(ns + '__meta').dropTable(sn);
-        await this.knex.schema.withSchema(ns + '__data').dropTable(sn);
+        await this.knex.schema.dropTable(schema_path);
     }
 
     //
@@ -297,11 +271,9 @@ export class AutoInstall {
             console.warn('autoinstall.insertAll()', schema_path);
         }
 
-        let [ns, sn] = schema_path.split('.');
-
         for(let record_data of record_rows) {
             console.warn('+', JSON.stringify(record_data));
-            await this.knex(sn).withSchema(`${ns}__data`).insert(record_data);
+            await this.knex(schema_path).insert(record_data);
         }
     }
 }

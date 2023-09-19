@@ -14,10 +14,10 @@ export type SchemaName = string;
 //
 
 export enum SchemaType {
-    Domain = 'system.domain',
-    Schema = 'system.schema',
-    Column = 'system.column',
-    User = 'system.user',
+    Domain = 'domain',
+    Schema = 'schema',
+    Column = 'column',
+    User = 'user',
 };
 
 
