@@ -60,18 +60,18 @@ export class Column {
 
     /**
      * Returns only the `schema_name` portion of the full name property. For example, if the column's name
-     * property is set to `system.domain:name`, then `schema_name` returns `system.domain`.
+     * property is set to `system:domain#name`, then `schema_name` returns `system:domain`.
      */
     get schema_name() {
-        return _.head(this.name.split(':'));
+        return _.head(this.name.split('#'));
     }
 
     /**
      * Returns only the `column_name` portion of the full name property. For example, if the column's name
-     * property is set to `system.domain:name`, then `column_name` returns `name`.
+     * property is set to `system:domain#name`, then `column_name` returns `name`.
      */
     get column_name() {
-        return _.last(this.name.split(':'));
+        return _.last(this.name.split('#'));
     }
 
     //
