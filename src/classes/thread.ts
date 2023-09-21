@@ -39,12 +39,12 @@ export class Thread {
     }
 
     get change_data() {
-        return _.map(this.change, 'data');
+        return _.map(this.change, record => _.assign({}, record.data));
 
     }
 
     get change_meta() {
-        return _.map(this.change, 'meta');
+        return _.map(this.change, record => _.assign({}, record.meta, { id: record.data.id, ns: record.data.ns }));
     }
 
     async run(ring: number): Promise<void> {
