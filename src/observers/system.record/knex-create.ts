@@ -28,35 +28,37 @@ export default class extends Observer {
     }
 
     async startup(thread: Thread): Promise<void> {
+        let created_at = new Date().toISOString();
+        let created_by = thread.kernel.uuid();
+
         // Set ID and namespace. It is possible they are already set, if we are running as root and
         // the root user supplied the IDs. 
         //
         // See the testing / precheck login in `test-create.ts`.
         thread.change.forEach(record => {
-            record.data.id = record.data.id || thread.kernel.uuid();
-            record.data.ns = record.data.ns || thread.kernel.user_ns;
+            if (thread.kernel.isRoot()) {
+                record.data.id = record.data.id ?? thread.kernel.uuid();
+                record.data.ns = record.data.ns ?? thread.kernel.user_ns;
+                record.meta.created_at = record.meta.created_at ?? created_at;
+                record.meta.created_by = record.meta.created_at ?? created_by;
+            }
+
+            else {
+                record.data.id = thread.kernel.uuid();
+                record.data.ns = thread.kernel.user_ns;
+                record.meta.created_at = created_at;
+                record.meta.created_by = created_by;
+            }
         });
     }
 
     async run(thread: Thread): Promise<void> {
-        let creates = await thread.kernel.knex
+        let creates_data = await thread.kernel.knex
             .driverTo(thread.schema.name, 'data')
-            .insert(thread.change_data)
-            .returning('*');
+            .insert(thread.change_data);
 
-        for(let i in thread.change) {
-            let create = creates[i];
-            let change = thread.change[i];
-
-            _.assign(change.data, create);
-        }
+        let creates_meta = await thread.kernel.knex
+            .driverTo(thread.schema.name, 'meta')
+            .insert(thread.change_meta);
     }
-
-    async cleanup(thread: Thread): Promise<void> {
-        thread.change.forEach(record => {
-            record.meta.created_at = thread.kernel.time;
-            record.meta.created_by = thread.kernel.user_id;
-        });
-    }
-
 }
