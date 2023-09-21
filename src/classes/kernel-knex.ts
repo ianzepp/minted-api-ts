@@ -64,12 +64,12 @@ export class KernelKnex implements Service {
     }
 
     async cleanup(): Promise<void> {
-        // Unset the userinfo
-        await this.db.raw(`
-            RESET minted.userinfo_id;
-            RESET minted.userinfo_ns;
-            RESET minted.userinfo_ts;
-        `);
+        // // Unset the userinfo
+        // await this.db.raw(`
+        //     RESET minted.userinfo_id;
+        //     RESET minted.userinfo_ns;
+        //     RESET minted.userinfo_ts;
+        // `);
 
         // Isolated driver. Kill the connection so tests don't hang
         if (this.kernel.isTest()) {
@@ -92,12 +92,12 @@ export class KernelKnex implements Service {
         // Initiate a transaction
         this.tx = await this.db.transaction();
 
-        // Set the current user ID for the transaction
-        await this.tx.raw(`
-            SET LOCAL minted.userinfo_id = '${ this.kernel.user_id }';
-            SET LOCAL minted.userinfo_ns = '${ this.kernel.user_ns }';
-            SET LOCAL minted.userinfo_ts = '${ this.kernel.timeISO() }';
-        `);
+        // // Set the current user ID for the transaction
+        // await this.tx.raw(`
+        //     SET LOCAL minted.userinfo_id = '${ this.kernel.user_id }';
+        //     SET LOCAL minted.userinfo_ns = '${ this.kernel.user_ns }';
+        //     SET LOCAL minted.userinfo_ts = '${ this.kernel.timeISO() }';
+        // `);
     }
 
     async commit() {
