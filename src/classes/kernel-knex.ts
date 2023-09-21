@@ -102,7 +102,7 @@ export class KernelKnex implements Service {
 
     async commit() {
         // Commit the transaction
-        if (this.tx.isCompleted() === false) {
+        if (this.tx && this.tx.isCompleted() === false) {
             await this.tx.commit();
         }
 
@@ -111,7 +111,7 @@ export class KernelKnex implements Service {
     }
 
     async rollback() {
-        if (this.tx.isCompleted() === false) {
+        if (this.tx && this.tx.isCompleted() === false) {
             await this.tx.rollback();
         }
 
@@ -135,8 +135,6 @@ export class KernelKnex implements Service {
     }
 
     selectTo<T = RecordFlat>(schema_path: string) {
-        let [ns, sn] = schema_path.split('.');
-
         // For example, using a `schema_path` of `system.user`, then:
         //
         // 1. split the path into ns=kernel and sn=client
@@ -145,8 +143,8 @@ export class KernelKnex implements Service {
         // 4. restrict to only the running user's visible namespaces
         
         let knex = this
-            .driver<T>({ data: `${ ns }__data.${ sn }` })
-            .join({ meta: `${ ns }__meta.${ sn }` }, 'meta.id', 'data.id');
+            .driver<T>({ data: `${ schema_path }/data` })
+            .join({ meta: `${ schema_path }/meta` }, 'meta.id', 'data.id');
 
         // Root ignores namespace visiblity by default. This may change with RLS.
         if (this.kernel.isRoot() === false) {
@@ -157,9 +155,7 @@ export class KernelKnex implements Service {
     }
 
     driverTo<T = _.Dictionary<any>>(schema_path: string, alias: 'data' | 'meta' = 'data') {
-        let [ns, sn] = schema_path.split('.');
-
-        let knex = this.driver<T>(`${ ns }__${ alias }.${ sn } as ${ alias }`);
+        let knex = this.driver<T>(`${ schema_path }/${ alias } as ${ alias }`);
 
         // Root ignores namespace visiblity by default. This may change with RLS.
         if (this.kernel.isRoot() === false) {
