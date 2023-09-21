@@ -45,13 +45,9 @@ export class KernelMeta implements Service {
      */
 
     async startup(): Promise<void> {
-        this.kernel.emit('kernel-meta', 'startup');
-
         // Instantiate
         for(let source of await this.load(SchemaType.Schema)) {
             let schema = Schema.from(source);
-
-            console.info('++ schema', schema.name);
 
             // Install
             this.schemas.set(source.name, schema);
@@ -61,8 +57,6 @@ export class KernelMeta implements Service {
         for(let source of await this.load(SchemaType.Column)) {
             let column = Column.from(source);
             let schema = this.schemas.get(column.schema_name);
-
-            console.info('++ column', column.name);
 
             // Install
             this.columns.set(column.name, column);
