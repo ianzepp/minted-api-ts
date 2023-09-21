@@ -51,6 +51,8 @@ export class KernelMeta implements Service {
         for(let source of await this.load(SchemaType.Schema)) {
             let schema = Schema.from(source);
 
+            console.info('++ schema', schema.name);
+
             // Install
             this.schemas.set(source.name, schema);
         }
@@ -59,6 +61,8 @@ export class KernelMeta implements Service {
         for(let source of await this.load(SchemaType.Column)) {
             let column = Column.from(source);
             let schema = this.schemas.get(column.schema_name);
+
+            console.info('++ column', column.name);
 
             // Install
             this.columns.set(column.name, column);
@@ -136,13 +140,13 @@ export class MapSchemas extends Map<string, Schema> {
         // Try to find a fully-qualified name
         let schema: Schema | undefined;
 
-        if (schema_name.includes('.')) {
+        if (schema_name.includes(':')) {
             schema = super.get(schema_name);
         }
 
-        // Try to find the schema with a `kernel` prefix for known schemas
-        else if (KernelSchemaTypes.includes(`system.${schema_name}`)) {
-            schema = super.get(`system.${schema_name}`);
+        // Try to find the schema with a `system` prefix for known schemas
+        else if (KernelSchemaTypes.includes(`system:${schema_name}`)) {
+            schema = super.get(`system:${schema_name}`);
         }
 
         // Try to find the schema in the user's namespace

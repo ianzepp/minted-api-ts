@@ -37,9 +37,7 @@ export default class extends Observer {
         let column = Column.from(record.data);
         let schema = thread.kernel.meta.schemas.get(column.schema_name);
 
-        let [ ns, sn ] = schema.path();
-
-        await thread.kernel.knex.schema.table(`${ns}__data.${sn}`, t => {            
+        await thread.kernel.knex.schema.table(`${schema.name}/data`, t => {            
             return t.dropColumn(column.column_name);
         });
 

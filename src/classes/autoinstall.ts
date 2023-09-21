@@ -135,33 +135,33 @@ export class AutoInstall {
         // Add data for `column`
         await this.insertAll(SchemaType.Column, [
             // Columns for 'system'
-            { ns: 'system', name: SchemaType.Domain + ':description' },
+            { ns: 'system', name: SchemaType.Domain + '#description' },
 
             // Columns for 'schema'
-            { ns: 'system', name: SchemaType.Schema + ':name', required: true, immutable: true, indexed: true  },
-            { ns: 'system', name: SchemaType.Schema + ':type' },
-            { ns: 'system', name: SchemaType.Schema + ':description' },
-            { ns: 'system', name: SchemaType.Schema + ':external', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Schema + ':metadata', type: 'boolean' },
+            { ns: 'system', name: SchemaType.Schema + '#name', required: true, immutable: true, indexed: true  },
+            { ns: 'system', name: SchemaType.Schema + '#type' },
+            { ns: 'system', name: SchemaType.Schema + '#description' },
+            { ns: 'system', name: SchemaType.Schema + '#external', type: 'boolean' },
+            { ns: 'system', name: SchemaType.Schema + '#metadata', type: 'boolean' },
 
             // Columns for 'column'
-            { ns: 'system', name: SchemaType.Column + ':name', required: true, immutable: true, indexed: true },
-            { ns: 'system', name: SchemaType.Column + ':type', required: true },
-            { ns: 'system', name: SchemaType.Column + ':description' },
+            { ns: 'system', name: SchemaType.Column + '#name', required: true, immutable: true, indexed: true },
+            { ns: 'system', name: SchemaType.Column + '#type', required: true },
+            { ns: 'system', name: SchemaType.Column + '#description' },
 
-            { ns: 'system', name: SchemaType.Column + ':audited', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + ':immutable', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + ':indexed', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + ':internal', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + ':required', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + ':unique', type: 'boolean' },
+            { ns: 'system', name: SchemaType.Column + '#audited', type: 'boolean' },
+            { ns: 'system', name: SchemaType.Column + '#immutable', type: 'boolean' },
+            { ns: 'system', name: SchemaType.Column + '#indexed', type: 'boolean' },
+            { ns: 'system', name: SchemaType.Column + '#internal', type: 'boolean' },
+            { ns: 'system', name: SchemaType.Column + '#required', type: 'boolean' },
+            { ns: 'system', name: SchemaType.Column + '#unique', type: 'boolean' },
 
-            { ns: 'system', name: SchemaType.Column + ':minimum', type: 'integer' },
-            { ns: 'system', name: SchemaType.Column + ':maximum', type: 'integer' },
-            { ns: 'system', name: SchemaType.Column + ':precision', type: 'integer' },
+            { ns: 'system', name: SchemaType.Column + '#minimum', type: 'integer' },
+            { ns: 'system', name: SchemaType.Column + '#maximum', type: 'integer' },
+            { ns: 'system', name: SchemaType.Column + '#precision', type: 'integer' },
 
             // Columns for 'user'
-            { ns: 'system', name: SchemaType.User + ':name', type: 'text', required: true },
+            { ns: 'system', name: SchemaType.User + '#name', type: 'text', required: true },
         ]);
 
         // Add data for `client`
@@ -184,11 +184,19 @@ export class AutoInstall {
         }
 
         // Data table
-        await this.knex.schema.createTable(schema_path, (table) => {
+        await this.knex.schema.createTable(schema_path + '/data', (table) => {
             table.string('id').notNullable().primary().defaultTo(this.knex.fn.uuid());
             table.string('ns').notNullable();
 
-            // System tables
+            // Apply extra columns
+            columnFn(table);
+        });
+
+        await this.knex.schema.createTable(schema_path + '/meta', (table) => {
+            table.string('id').notNullable().primary();
+            table.string('ns').notNullable();
+
+            // Metadata
             table.timestamp('created_at').index();
             table.timestamp('updated_at').index();
             table.timestamp('expired_at').index();
@@ -199,8 +207,11 @@ export class AutoInstall {
             table.string('expired_by').index();
             table.string('deleted_by').index();
 
-            // Apply extra columns
-            columnFn(table);
+            // ACLs
+            table.specificType('acls_full', 'text ARRAY');
+            table.specificType('acls_edit', 'text ARRAY');
+            table.specificType('acls_read', 'text ARRAY');
+            table.specificType('acls_deny', 'text ARRAY');
         });
     
         // //
@@ -271,9 +282,18 @@ export class AutoInstall {
             console.warn('autoinstall.insertAll()', schema_path);
         }
 
+        // Process
         for(let record_data of record_rows) {
             console.warn('+', JSON.stringify(record_data));
-            await this.knex(schema_path).insert(record_data);
+            
+            // Assign ID
+            let [data] = await this.knex(schema_path + '/data').insert(record_data).returning('*');
+            let [meta] = await this.knex(schema_path + '/meta').insert({ 
+                id: data.id,
+                ns: data.ns,
+                created_at: new Date().toISOString(),
+                created_by: Kernel.ID,
+            }).returning('*');
         }
     }
 }

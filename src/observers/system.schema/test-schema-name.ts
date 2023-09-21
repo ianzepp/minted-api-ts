@@ -36,10 +36,10 @@ export default class extends Observer {
 
     async run(thread: Thread): Promise<void> {
         for(let record of thread.change) {
-            thread.expect(record.data).property('name').includes('.');
+            thread.expect(record.data).property('name').includes(':');
 
             let schema_name = record.data.name;
-            let [ns, sn] = schema_name.split('.');
+            let [ns, sn] = schema_name.split(':');
 
             thread.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).match(/^[a-z_0-9]+$/i);
             thread.expect(ns, `schema_name '${schema_name}' (left side '${ns}')`).not.match(/^[_0-9]/i);
