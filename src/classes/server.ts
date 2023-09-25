@@ -11,8 +11,8 @@ const jsonBody = Util.promisify(require('body/json'));
 const formBody = Util.promisify(require('body/form'));
 
 // Classes
-import { HttpReq } from '@typedefs/http-req';
-import { HttpRes } from '@typedefs/http-res';
+import { RouterReq } from '@typedefs/router-req';
+import { RouterRes } from '@typedefs/router-res';
 import { Kernel } from '@classes/kernel';
 import { Tester } from '@classes/tester';
 
@@ -42,7 +42,7 @@ export class Server {
         let request_url = new UrlParse(req.url, true);
 
         // Build the structures of httpReq and httpRes to be passed into kernel-http
-        let httpReq: HttpReq = {
+        let httpReq: RouterReq = {
             verb: req.method,
             path: request_url.pathname,
             params: undefined, // will be set once the matching router is found
@@ -50,7 +50,7 @@ export class Server {
             body: null,
         };
 
-        let httpRes: HttpRes = {
+        let httpRes: RouterRes = {
             status: 0,
             length: 0,
             schema: undefined,
