@@ -12,6 +12,7 @@ jobs:
 
     env:
       NODE_ENV: development
+      KNEX_CLIENT: postgres
       KNEX_HOST: localhost
       KNEX_PORT: 5432
       KNEX_USER: postgres
