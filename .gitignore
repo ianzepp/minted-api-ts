@@ -6,3 +6,5 @@ tmp
 
 # Sqlite3 databases
 *.db
+*.sqlite
+*.sqlite3
