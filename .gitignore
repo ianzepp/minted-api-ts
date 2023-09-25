@@ -3,3 +3,8 @@ dst
 tmp
 .env
 .env.local
+
+# Sqlite3 databases
+*.db
+*.sqlite
+*.sqlite3

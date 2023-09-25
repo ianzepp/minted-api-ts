@@ -51,15 +51,11 @@ let source_data = [
     { ns: 'test', name: 'test-user-2' },
 ];
 
-let records = [];
-
-function insertSamples() {
-    return kernel.knex.driverTo(schema_type).insert(source_data).returning('*');
-}
+let records: Record[] = [];
 
 function updateSamples() {
     return records.map(record => {
-        return { id: record.id, name: record.name + '-updated' };
+        return { id: record.data.id, name: record.data.name + '-updated' };
     });
 }
 
@@ -99,7 +95,7 @@ beforeEach(async () => {
     await kernel.startup();
 
     // Insert dummy user records
-    records.push(... await insertSamples());
+    records.push(... await kernel.data.createAll(schema_type, source_data));
 });
 
 afterEach(async () => {
@@ -119,12 +115,12 @@ test('selectAny() using filter ID', async () => {
     let source = records[0];
     let select = await kernel.data.selectAny(schema_type, {
         where: {
-            id: source.id
+            id: source.data.id
         }
     });
 
     chai.expect(select).an('array').length(1);
-    chai.expect(select[0].data).property('id', source.id);
+    chai.expect(select[0].data).property('id', source.data.id);
 });
 
 test('selectAny() using limit of 1', async () => {
@@ -173,7 +169,7 @@ test('selectOne() with empty source gives empty result', async () => {
 test('selectOne() with valid source', async () => {
     let select = await kernel.data.selectOne(schema_type, records[0]);
     chai.expect(select).instanceOf(Record);
-    chai.expect(select.data).property('id', records[0].id);
+    chai.expect(select.data).property('id', records[0].data.id);
 });
 
 test('selectOne() with invalid source ID', async () => {
@@ -189,12 +185,12 @@ test('selectIds() with empty IDs gives empty results', async () => {
 });
 
 test('selectIds() with valid IDs', async () => {
-    let select = await kernel.data.selectIds(schema_type, [records[0].id, records[1].id]);
+    let select = await kernel.data.selectIds(schema_type, [records[0].data.id, records[1].data.id]);
     chai.expect(select).an('array').length(2);
 });
 
 test('selectIds() with duplicate IDs', async () => {
-    let select = await kernel.data.selectIds(schema_type, [records[0].id, records[0].id]);
+    let select = await kernel.data.selectIds(schema_type, [records[0].data.id, records[0].data.id]);
     chai.expect(select).an('array').length(1);
 });
 
@@ -213,9 +209,9 @@ test('select404() with null ID should fail !!', async () => {
 });
 
 test('select404() with valid ID', async () => {
-    let select = await kernel.data.select404(schema_type, records[0].id);
+    let select = await kernel.data.select404(schema_type, records[0].data.id);
     chai.expect(select).instanceOf(Record);
-    chai.expect(select.data).property('id', records[0].id);
+    chai.expect(select.data).property('id', records[0].data.id);
 });
 
 test('select404() with invalid ID should fail !!', async () => {
@@ -364,14 +360,14 @@ test('expireOne() with source data', async () => {
 });
 
 test('expireAny() with source IDs', async () => {
-    let filter = { where: { id: _.map(records, 'id') }};
+    let filter = { where: { id: _.map(records, 'data.id') }};
 
     testExpireAll(await kernel.data.expireAny(schema_type, filter), records.length);
     testExpireAll(await kernel.data.selectAll(schema_type, records), 0);
 });
 
 test('expireIds() with source IDs', async () => {
-    let record_ids = _.map(records, 'id');
+    let record_ids = _.map(records, 'data.id');
 
     testExpireAll(await kernel.data.expireIds(schema_type, record_ids), records.length);
     testExpireAll(await kernel.data.selectAll(schema_type, records), 0);
@@ -399,14 +395,14 @@ test('deleteOne() with source data', async () => {
 });
 
 test('deleteAny() with source IDs', async () => {
-    let filter = { where: { id: _.map(records, 'id') }};
+    let filter = { where: { id: _.map(records, 'data.id') }};
 
     testDeleteAll(await kernel.data.deleteAny(schema_type, filter), records.length);
     testDeleteAll(await kernel.data.selectAll(schema_type, records), 0);
 });
 
 test('deleteIds() with source IDs', async () => {
-    let record_ids = _.map(records, 'id');
+    let record_ids = _.map(records, 'data.id');
 
     testDeleteAll(await kernel.data.deleteIds(schema_type, record_ids), records.length);
     testDeleteAll(await kernel.data.selectAll(schema_type, records), 0);

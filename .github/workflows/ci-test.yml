@@ -12,19 +12,20 @@ jobs:
 
     env:
       NODE_ENV: development
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: github-ci
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres                
+      KNEX_CLIENT: postgres
+      KNEX_HOST: localhost
+      KNEX_PORT: 5432
+      KNEX_USER: postgres
+      KNEX_PASSWORD: postgres                
+      KNEX_DATABASE: github-ci
 
     services:
       postgres:
         image: postgres:12
         env:
-          POSTGRES_DB: ${{ env.POSTGRES_DB }}
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.KNEX_DATABASE }}
+          POSTGRES_USER: ${{ env.KNEX_USER }}
+          POSTGRES_PASSWORD: ${{ env.KNEX_PASSWORD }}
         ports:
           - 5432:5432
 

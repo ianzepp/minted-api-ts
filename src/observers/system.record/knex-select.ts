@@ -207,7 +207,7 @@ export default class extends Observer {
         }
 
         if (op == Filter.Where.Find) {
-            return knex.whereILike(column_name, op_data);
+            return knex.whereLike(column_name, op_data);
         }
 
         throw 'Unknown filter "where" operator: ' + op;

@@ -163,12 +163,12 @@ export class Schema {
     }
 
     /**
-     * Splits the schema name into its constituent parts and returns them as an array. For example, if the schema's full name is `system.domain`, 
+     * Splits the schema name into its constituent parts and returns them as an array. For example, if the schema's full name is `system:domain`, 
      * calling the `path()` function will return an array `['system', 'domain']`.
      * @returns {string[]} An array containing the parts of the schema name.
      */
     path() {
-        return this.name.split('.');
+        return this.name.split(':');
     }
 
     /**

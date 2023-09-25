@@ -45,8 +45,6 @@ export class KernelMeta implements Service {
      */
 
     async startup(): Promise<void> {
-        this.kernel.emit('kernel-meta', 'startup');
-
         // Instantiate
         for(let source of await this.load(SchemaType.Schema)) {
             let schema = Schema.from(source);
@@ -136,13 +134,13 @@ export class MapSchemas extends Map<string, Schema> {
         // Try to find a fully-qualified name
         let schema: Schema | undefined;
 
-        if (schema_name.includes('.')) {
+        if (schema_name.includes(':')) {
             schema = super.get(schema_name);
         }
 
-        // Try to find the schema with a `kernel` prefix for known schemas
-        else if (KernelSchemaTypes.includes(`system.${schema_name}`)) {
-            schema = super.get(`system.${schema_name}`);
+        // Try to find the schema with a `system` prefix for known schemas
+        else if (KernelSchemaTypes.includes(`system:${schema_name}`)) {
+            schema = super.get(`system:${schema_name}`);
         }
 
         // Try to find the schema in the user's namespace

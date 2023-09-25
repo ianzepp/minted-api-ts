@@ -60,18 +60,18 @@ export class Column {
 
     /**
      * Returns only the `schema_name` portion of the full name property. For example, if the column's name
-     * property is set to `system.domain:name`, then `schema_name` returns `system.domain`.
+     * property is set to `system:domain#name`, then `schema_name` returns `system:domain`.
      */
     get schema_name() {
-        return _.head(this.name.split(':'));
+        return _.head(this.name.split('#'));
     }
 
     /**
      * Returns only the `column_name` portion of the full name property. For example, if the column's name
-     * property is set to `system.domain:name`, then `column_name` returns `name`.
+     * property is set to `system:domain#name`, then `column_name` returns `name`.
      */
     get column_name() {
-        return _.last(this.name.split(':'));
+        return _.last(this.name.split('#'));
     }
 
     //
@@ -96,15 +96,5 @@ export class Column {
      */
     of(form: ColumnForm | string): boolean {
         return _.includes(this.forms, form);
-    }
-
-    /**
-     * Returns the two path parts of the column name. For example, if the column is `system.domain:name`,
-     * then the `path()` function will return an array `[undefined, 'name']`. If the column is in namespace
-     * itself, such as `package.myobj:customer.field`, then `path()` will return `['customer', 'field']`.
-     * @returns {string[]} An array with two parts
-     */
-    path() {
-        return this.name.includes('.') ? this.name.split('.') : [undefined, this.name];
     }
 }
