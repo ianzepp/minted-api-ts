@@ -115,6 +115,14 @@ export class AutoInstall {
             table.unique(['ns', 'name']);
         });
 
+        // Create table `test`
+        await this.createTable(SchemaType.Test, table => {
+            table.string('name').notNullable();
+            table.boolean('boolean');
+            table.integer('integer');
+            table.decimal('decimal');
+        });
+
         // Create table `user`
         await this.createTable(SchemaType.User, table => {
             table.string('name').notNullable();
@@ -129,6 +137,7 @@ export class AutoInstall {
             { ns: 'system', name: SchemaType.Domain, type: 'database' },
             { ns: 'system', name: SchemaType.Schema, type: 'database', metadata: true },
             { ns: 'system', name: SchemaType.Column, type: 'database', metadata: true },
+            { ns: 'system', name: SchemaType.Test, type: 'database' },
             { ns: 'system', name: SchemaType.User, type: 'database' },
         ]);
 
@@ -159,6 +168,12 @@ export class AutoInstall {
             { ns: 'system', name: SchemaType.Column + '#minimum', type: 'integer' },
             { ns: 'system', name: SchemaType.Column + '#maximum', type: 'integer' },
             { ns: 'system', name: SchemaType.Column + '#precision', type: 'integer' },
+
+            // Columns for 'test'
+            { ns: 'system', name: SchemaType.Test + '#name', type: 'text', required: true },
+            { ns: 'system', name: SchemaType.Test + '#boolean', type: 'boolean' },
+            { ns: 'system', name: SchemaType.Test + '#integer', type: 'integer' },
+            { ns: 'system', name: SchemaType.Test + '#decimal', type: 'decimal' },
 
             // Columns for 'user'
             { ns: 'system', name: SchemaType.User + '#name', type: 'text', required: true },
