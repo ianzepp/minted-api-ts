@@ -7,8 +7,6 @@ export type SchemaName = string;
 
 /** ... */
 // export type SchemaType = SchemaInfo | SchemaName;
-
-
 //
 // Enums
 //
@@ -17,6 +15,7 @@ export enum SchemaType {
     Domain = 'system:domain',
     Schema = 'system:schema',
     Column = 'system:column',
+    Test = 'system:test',
     User = 'system:user',
 };
 
