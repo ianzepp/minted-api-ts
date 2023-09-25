@@ -12,7 +12,7 @@ import { DataError } from '@classes/kernel-data';
 import { NeuronRing } from '@typedefs/neuron';
 
 /**
- * This observer performs all the record prechecks/validations. This is done in one file
+ * This neuron performs all the record prechecks/validations. This is done in one file
  * so that we don't have many small files doing duplicate loops over the same data.
  * 
  * @event KernelVerb.Create

@@ -5,7 +5,7 @@ import { RecordJson } from "./record";
 // Enums
 //
 
-/** The priority levels an observer can have. */
+/** The priority levels an neuron can have. */
 export enum NeuronRank {
     KernelMax = 0,
     Max = 1,
@@ -13,7 +13,7 @@ export enum NeuronRank {
     Min = 9,
 }
 
-/** The levels of operations for an observer. */
+/** The levels of operations for an neuron. */
 export enum NeuronRing {
     Init = 0, // Kernel init
     Prep = 1, // Logic prep

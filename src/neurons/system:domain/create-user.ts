@@ -11,7 +11,7 @@ import { NeuronRing } from '@typedefs/neuron';
 import { SchemaType } from '@typedefs/schema';
 
 /**
- * This observer listens to inserts on the `system.domain` table (which represents an organization or namespace),
+ * This neuron listens to inserts on the `system.domain` table (which represents an organization or namespace),
  * and generates an associated `User` record with admin permissions.
  */
 export default class extends Neuron {

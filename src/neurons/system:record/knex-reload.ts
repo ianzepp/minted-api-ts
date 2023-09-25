@@ -9,7 +9,7 @@ import { NeuronRing } from '@typedefs/neuron';
 import { RecordFlat } from '@typedefs/record';
 
 /**
- * This observer runs onUpdate() to reload prior data from the DB, so the `Record` has a full view of
+ * This neuron runs onUpdate() to reload prior data from the DB, so the `Record` has a full view of
  * all previous state.
  */
 export default class extends Neuron {
