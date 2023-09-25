@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { Corpus } from '@classes/corpus';
 import { Filter } from '@classes/filter';
 import { Kernel } from '@classes/kernel';
-import { Observer } from '@classes/observer';
+import { Neuron } from '@classes/neuron';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 
@@ -16,7 +16,7 @@ import { Schema } from '@classes/schema';
 import { SignalOp } from '@typedefs/signal';
 
 // Import pre-loaded routers
-import Observers from '@preloader/observers';
+import Neurons from '../loaders/neurons';
 
 export class Signal {
     readonly expect = chai.expect;
@@ -46,31 +46,31 @@ export class Signal {
     }
 
     async run(ring: number): Promise<void> {
-        let observers = Observers[ring] || [];
+        let neurons = Neurons[ring] || [];
 
         // Filter in a single loop
-        observers = observers.filter(observer => {
+        neurons = neurons.filter(neuron => {
             //
             // Negetive checks
             //
 
             // Wrong client namespace?
-            if (observer.onDomain() != '*' && observer.onDomain() !== this.kernel.user_ns) {
+            if (neuron.onDomain() != '*' && neuron.onDomain() !== this.kernel.user_ns) {
                 return false;
             }
 
             // Wrong schema name?
-            if (observer.onSchema() != '*' && observer.onSchema() !== this.schema.name) {
+            if (neuron.onSchema() != '*' && neuron.onSchema() !== this.schema.name) {
                 return false;
             }
 
             // Don't run for root?
-            if (observer.onRoot() === false && this.kernel.isRoot()) {
+            if (neuron.onRoot() === false && this.kernel.isRoot()) {
                 return false;
             }
 
             // Don't run for test cases?
-            if (observer.onTest() === false && this.kernel.isTest()) {
+            if (neuron.onTest() === false && this.kernel.isTest()) {
                 return false;
             }
 
@@ -78,27 +78,27 @@ export class Signal {
             // Positive checks
             //
 
-            if (observer.onSelect() && this.op == SignalOp.Select) {
+            if (neuron.onSelect() && this.op == SignalOp.Select) {
                 return true;
             }
 
-            if (observer.onCreate() && this.op == SignalOp.Create) {
+            if (neuron.onCreate() && this.op == SignalOp.Create) {
                 return true;
             }
 
-            if (observer.onUpdate() && this.op == SignalOp.Update) {
+            if (neuron.onUpdate() && this.op == SignalOp.Update) {
                 return true;
             }
 
-            if (observer.onUpsert() && this.op == SignalOp.Upsert) {
+            if (neuron.onUpsert() && this.op == SignalOp.Upsert) {
                 return true;
             }
 
-            if (observer.onExpire() && this.op == SignalOp.Expire) {
+            if (neuron.onExpire() && this.op == SignalOp.Expire) {
                 return true;
             }
 
-            if (observer.onDelete() && this.op == SignalOp.Delete) {
+            if (neuron.onDelete() && this.op == SignalOp.Delete) {
                 return true;
             }
 
@@ -106,38 +106,38 @@ export class Signal {
             return false;
         });
 
-        for(let observer of observers) {
-            // console.info(util.format('Signal: schema=%j op=%j ring=%j rank=%j observer=%j', 
+        for(let neuron of neurons) {
+            // console.info(util.format('Signal: schema=%j op=%j ring=%j rank=%j neuron=%j', 
             //     this.schema.name, 
             //     this.op, 
-            //     observer.onRing(),
-            //     observer.onRank(),
-            //     observer.toFileName()
+            //     neuron.onRing(),
+            //     neuron.onRank(),
+            //     neuron.toFileName()
             // ));
 
             // Switch to root?
             try {
                 // Switch into root?
-                if (observer.asRoot()) {
+                if (neuron.asRoot()) {
                     this.kernel.sudoRoot();
                 }
 
                 // There should be no error when tested
                 let sanity = () => {
-                    chai.assert(this.failures.length === 0, observer.toFileName() + ': ' + this.failures.join(' / '));
+                    chai.assert(this.failures.length === 0, neuron.toFileName() + ': ' + this.failures.join(' / '));
                 }
 
                 // Run the full cycle
-                await observer.startup(this).then(sanity);
-                await observer.run(this).then(sanity);
-                await observer.cleanup(this).then(sanity);
+                await neuron.startup(this).then(sanity);
+                await neuron.run(this).then(sanity);
+                await neuron.cleanup(this).then(sanity);
 
                 // If we get here we are good.
             }
 
             finally {
                 // Switch out of root?
-                if (observer.asRoot()) {
+                if (neuron.asRoot()) {
                     this.kernel.sudoExit();
                 }
             }

@@ -2,19 +2,19 @@ import _ from 'lodash';
 
 // Classes
 import { DataError } from '@classes/kernel-data';
-import { Observer } from '@classes/observer';
+import { Neuron } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/observer';
+import { NeuronRing } from '@typedefs/neuron';
 import { SchemaType } from '@typedefs/schema';
 
 /**
- * This observer listens to inserts on the `system.domain` table (which represents an organization or namespace),
+ * This neuron listens to inserts on the `system.domain` table (which represents an organization or namespace),
  * and generates an associated `User` record with admin permissions.
  */
-export default class extends Observer {
+export default class extends Neuron {
     toName(): string {
         return __filename;
     }
@@ -23,8 +23,8 @@ export default class extends Observer {
         return SchemaType.Domain;
     }
 
-    onRing(): ObserverRing {
-        return ObserverRing.Flow;
+    onRing(): NeuronRing {
+        return NeuronRing.Flow;
     }
 
     onCreate(): boolean {

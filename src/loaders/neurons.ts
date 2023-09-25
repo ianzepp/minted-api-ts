@@ -3,14 +3,14 @@ import fs from 'fs-extra';
 import path from 'path';
 import klaw from 'klaw-sync';
 
-import { Observer } from '@classes/observer';
+import { Neuron } from '@classes/neuron';
 
-const preload_files = klaw(path.join(__dirname, '../observers'), {
+const preload_files = klaw(path.join(__dirname, '../neurons'), {
     nodir: true,
     traverseAll: true
 });
 
-// Instantiate all of the default observers, sort by ring priority and then group by schema
+// Instantiate all of the default neurons, sort by ring priority and then group by schema
 let preloads = _.chain(preload_files)
     // Convert the klaw format into a simple path
     .map(preload_info => preload_info.path)
@@ -22,19 +22,19 @@ let preloads = _.chain(preload_files)
     .reject(preload_path => preload_path.endsWith('.spec.ts'))
     .reject(preload_path => preload_path.endsWith('.spec.js'))
 
-    // Load the observer code
+    // Load the neuron code
     .map(preload_path => require(preload_path).default)
 
-    // Instantiate each observer
-    .map(preload_type => new preload_type() as Observer)
+    // Instantiate each neuron
+    .map(preload_type => new preload_type() as Neuron)
 
     // Sort in ascending order by ring priority. Easier to do once here, then every time when executing
-    .sortBy(observer => observer.onRank())
+    .sortBy(neuron => neuron.onRank())
 
-    // Group the observers by their runtime ring
-    .groupBy(observer => observer.onRing())
+    // Group the neurons by their runtime ring
+    .groupBy(neuron => neuron.onRing())
 
-    // Done, return the _.Dictionary<Observer[]>
+    // Done, return the _.Dictionary<Neuron[]>
     .value();
 
 export default preloads;

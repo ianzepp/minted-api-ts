@@ -1,17 +1,17 @@
 import _ from 'lodash';
 
 // Classes
-import { Observer } from '@classes/observer';
+import { Neuron } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/observer';
+import { NeuronRing } from '@typedefs/neuron';
 import { SchemaType } from '@typedefs/schema';
 import { Column } from '@classes/column';
 
 
-export default class extends Observer {
+export default class extends Neuron {
     toName(): string {
         return __filename;
     }
@@ -20,8 +20,8 @@ export default class extends Observer {
         return SchemaType.Column;
     }
 
-    onRing(): ObserverRing {
-        return ObserverRing.Post;
+    onRing(): NeuronRing {
+        return NeuronRing.Post;
     }
 
     onDelete(): boolean {

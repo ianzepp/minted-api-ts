@@ -2,22 +2,22 @@ import _ from 'lodash';
 
 // Classes
 import { Column } from '@classes/column';
-import { Observer } from '@classes/observer';
+import { Neuron } from '@classes/neuron';
 import { Record } from '@classes/record';
 import { Signal } from '@classes/signal';
 
 // Typedefs
 import { ColumnsMeta } from '@typedefs/column';
 import { DataError } from '@classes/kernel-data';
-import { ObserverRing } from '@typedefs/observer';
+import { NeuronRing } from '@typedefs/neuron';
 
 /**
- * This observer performs all the record prechecks/validations. This is done in one file
+ * This neuron performs all the record prechecks/validations. This is done in one file
  * so that we don't have many small files doing duplicate loops over the same data.
  * 
  * @event KernelVerb.Create
  */
-export default class extends Observer {
+export default class extends Neuron {
     toName(): string {
         return __filename;
     }
@@ -26,8 +26,8 @@ export default class extends Observer {
         return '*';
     }
 
-    onRing(): ObserverRing {
-        return ObserverRing.Test;
+    onRing(): NeuronRing {
+        return NeuronRing.Test;
     }
 
     onCreate(): boolean {
