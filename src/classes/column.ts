@@ -32,7 +32,7 @@ export class Column {
      * @returns {Column} Returns a new `Column` instance.
      */
     static from(flat: _.Dictionary<any>): Column {
-        let forms: ColumnForm[] = _.filter(ColumnForm, form => _.has(flat, form));
+        let forms: ColumnForm[] = _.filter(ColumnForm, form => _.has(flat, form) && !!_.get(flat, form));
         
         return new Column(
             flat.id,
