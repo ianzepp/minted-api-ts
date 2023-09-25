@@ -23,9 +23,9 @@ jobs:
       postgres:
         image: postgres:12
         env:
-          KNEX_DB: ${{ env.KNEX_DATABASE }}
-          KNEX_USER: ${{ env.KNEX_USER }}
-          KNEX_PASSWORD: ${{ env.KNEX_PASSWORD }}
+          POSTGRES_DB: ${{ env.KNEX_DATABASE }}
+          POSTGRES_USER: ${{ env.KNEX_USER }}
+          POSTGRES_PASSWORD: ${{ env.KNEX_PASSWORD }}
         ports:
           - 5432:5432
 
