@@ -1,12 +1,12 @@
 import _ from 'lodash';
 
 // Classes
-import { Observer } from '@classes/observer';
+import { Observer } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/observer';
+import { ObserverRing } from '@typedefs/neuron';
 import { DataError } from '@classes/kernel-data';
 
 

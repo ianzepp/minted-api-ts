@@ -3,9 +3,9 @@ import fs from 'fs-extra';
 import path from 'path';
 import klaw from 'klaw-sync';
 
-import { Observer } from '@classes/observer';
+import { Observer } from '@classes/neuron';
 
-const preload_files = klaw(path.join(__dirname, '../observers'), {
+const preload_files = klaw(path.join(__dirname, '../neurons'), {
     nodir: true,
     traverseAll: true
 });

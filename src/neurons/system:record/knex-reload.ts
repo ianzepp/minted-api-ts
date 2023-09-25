@@ -1,11 +1,11 @@
 import _ from 'lodash';
 
 // Classes
-import { Observer } from '@classes/observer';
+import { Observer } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/observer';
+import { ObserverRing } from '@typedefs/neuron';
 import { RecordFlat } from '@typedefs/record';
 
 /**

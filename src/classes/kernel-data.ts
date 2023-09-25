@@ -12,7 +12,7 @@ import { Signal } from '@classes/signal';
 import { ChangeData } from '@typedefs/record';
 import { FilterJson } from '@typedefs/filter';
 import { Service } from '@typedefs/kernel';
-import { ObserverRing } from '@typedefs/observer';
+import { ObserverRing } from '@typedefs/neuron';
 import { SchemaName } from '@typedefs/schema';
 import { SignalOp } from '@typedefs/signal';
 

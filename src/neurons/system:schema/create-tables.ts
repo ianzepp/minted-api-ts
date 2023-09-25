@@ -1,14 +1,18 @@
 import _ from 'lodash';
+import chai from 'chai';
+import { Knex } from 'knex';
 
 // Classes
 import { AutoInstall } from '@classes/autoinstall';
-import { Observer } from '@classes/observer';
+import { Observer } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
+import { Schema } from '@classes/schema';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/observer';
+import { ObserverRing } from '@typedefs/neuron';
 import { SchemaType } from '@typedefs/schema';
+
 
 export default class extends Observer {
     toName(): string {
@@ -23,7 +27,7 @@ export default class extends Observer {
         return ObserverRing.Post;
     }
 
-    onDelete(): boolean {
+    onCreate(): boolean {
         return true;
     }
 
@@ -32,19 +36,20 @@ export default class extends Observer {
     }
 
     async one(signal: Signal, record: Record) {
+        // Setup
         let schema_name = record.data.name;
         let schema_type = record.data.type;
         let auto = new AutoInstall(signal.kernel);
 
-        // Only delete schemas that are marked as `database` types
+        // Only create schemas that are marked as `database` types
         if (schema_type !== 'database') {
             return;
         }
 
-        // Drop the table
-        await auto.deleteTable(schema_name);
+        // Create the empty table with no default columns
+        await auto.createTable(schema_name, table => {});
 
-        // Remove from kernel metadata
-        signal.kernel.meta.schemas.delete(schema_name);
+        // Add to kernel metadata
+        signal.kernel.meta.schemas.set(schema_name, Schema.from(record.data));
     }
 }

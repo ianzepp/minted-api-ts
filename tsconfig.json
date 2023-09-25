@@ -18,7 +18,7 @@
         "paths": {
             "@classes/*": ["./src/classes/*"],
             "@helpers/*": ["./src/helpers/*"],
-            "@observers/*": ["./src/observers/*"],
+            "@neurons/*": ["./src/neurons/*"],
             "@preloader/*": ["./src/preloader/*"],
             "@routers/*": ["./src/routers/*"],
             "@typedefs/*": ["./src/typedefs/*"]

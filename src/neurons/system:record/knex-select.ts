@@ -2,12 +2,12 @@ import _, { cond } from 'lodash';
 import { Knex } from 'knex';
 
 // Classes
-import { Observer } from '@classes/observer';
+import { Observer } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 import { Filter } from '@classes/filter';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/observer';
+import { ObserverRing } from '@typedefs/neuron';
 import { Schema } from '@classes/schema';
 import { Kernel } from '@classes/kernel';
 

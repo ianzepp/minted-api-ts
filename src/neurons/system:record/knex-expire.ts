@@ -1,11 +1,11 @@
 import _ from 'lodash';
 
 // Classes
-import { Observer } from '@classes/observer';
+import { Observer } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/observer';
+import { ObserverRing } from '@typedefs/neuron';
 
 
 export default class extends Observer {
@@ -21,7 +21,7 @@ export default class extends Observer {
         return ObserverRing.Knex;
     }
 
-    onDelete(): boolean {
+    onExpire(): boolean {
         return true;
     }
 
@@ -30,15 +30,15 @@ export default class extends Observer {
             .driverTo(signal.schema.name, 'meta')
             .whereIn('id', _.map(signal.change_data, 'id'))
             .update({
-                deleted_at: signal.kernel.time,
-                deleted_by: signal.kernel.user_id
+                expired_at: signal.kernel.time,
+                expired_by: signal.kernel.user_id
             });
     }
 
     async cleanup(signal: Signal) {
         signal.change.forEach(record => {
-            record.meta.deleted_at = signal.kernel.time;
-            record.meta.deleted_by = signal.kernel.user_id;
+            record.meta.expired_at = signal.kernel.time;
+            record.meta.expired_by = signal.kernel.user_id;
         })
     }
 }

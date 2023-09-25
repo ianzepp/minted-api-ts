@@ -2,14 +2,14 @@ import _ from 'lodash';
 
 // Classes
 import { Column } from '@classes/column';
-import { Observer } from '@classes/observer';
+import { Observer } from '@classes/neuron';
 import { Record } from '@classes/record';
 import { Signal } from '@classes/signal';
 
 // Typedefs
 import { ColumnsMeta } from '@typedefs/column';
 import { DataError } from '@classes/kernel-data';
-import { ObserverRing } from '@typedefs/observer';
+import { ObserverRing } from '@typedefs/neuron';
 
 /**
  * This observer performs all the record prechecks/validations. This is done in one file

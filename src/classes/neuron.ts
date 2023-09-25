@@ -4,8 +4,8 @@ import path from 'path';
 import { Signal } from '@classes/signal';
 
 // Typedefs
-import { ObserverRank } from '@typedefs/observer';
-import { ObserverRing } from '@typedefs/observer';
+import { ObserverRank } from '@typedefs/neuron';
+import { ObserverRing } from '@typedefs/neuron';
 
 export class Observer {
     // Re-export aliases

@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { Corpus } from '@classes/corpus';
 import { Filter } from '@classes/filter';
 import { Kernel } from '@classes/kernel';
-import { Observer } from '@classes/observer';
+import { Observer } from '@classes/neuron';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 
@@ -16,7 +16,7 @@ import { Schema } from '@classes/schema';
 import { SignalOp } from '@typedefs/signal';
 
 // Import pre-loaded routers
-import Observers from '@preloader/observers';
+import Observers from '@preloader/neurons';
 
 export class Signal {
     readonly expect = chai.expect;
