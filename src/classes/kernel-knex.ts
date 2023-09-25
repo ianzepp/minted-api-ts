@@ -6,14 +6,14 @@ import { RecordFlat } from '@typedefs/record';
 
 // Create the driver reference
 export const KnexConfig = {
-    debug: Bun.env.POSTGRES_DEBUG === 'true',
-    client: 'postgresql',
+    client: Bun.env.KNEX_CLIENT,
     connection: {
-        host:     Bun.env.POSTGRES_HOST,
-        port:     Bun.env.POSTGRES_PORT,
-        database: Bun.env.POSTGRES_DB,
-        user:     Bun.env.POSTGRES_USER,
-        password: Bun.env.POSTGRES_PASSWORD,
+        host:     Bun.env.KNEX_HOST,
+        port:     Bun.env.KNEX_PORT,
+        user:     Bun.env.KNEX_USER,
+        password: Bun.env.KNEX_PASSWORD,
+        database: Bun.env.KNEX_DATABASE,
+        filename: Bun.env.KNEX_FILENAME,
         acquireConnectionTimeout: 10000,
     },
     pool: {
@@ -21,14 +21,6 @@ export const KnexConfig = {
         max: 10
     }
 };
-
-// Test contexts have lower connection pool sizes
-export const KnexConfigTest = _.defaults({ 
-    pool: {
-        min: 0,
-        max: 2
-    }
-}, KnexConfig);
 
 // Create the app-wide connection
 export const KnexDriver = knex(KnexConfig);
