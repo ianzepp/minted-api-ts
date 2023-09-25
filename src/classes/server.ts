@@ -21,7 +21,7 @@ export class HttpError extends Error {};
 export class HttpRouteNotFoundError extends HttpError {};
 
 // Import pre-loaded routers
-import Routers from '@preloader/routers';
+import Routers from '../loaders/routers';
 
 function newResponse(data?: any) {
     let res = new Response(data);

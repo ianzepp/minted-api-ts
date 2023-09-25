@@ -16,7 +16,7 @@ import { Schema } from '@classes/schema';
 import { SignalOp } from '@typedefs/signal';
 
 // Import pre-loaded routers
-import Neurons from '@preloader/neurons';
+import Neurons from '../loaders/neurons';
 
 export class Signal {
     readonly expect = chai.expect;
