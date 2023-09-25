@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -27,38 +27,38 @@ export default class extends Observer {
         return true;
     }
 
-    async startup(thread: Thread): Promise<void> {
+    async startup(signal: Signal): Promise<void> {
         let created_at = new Date().toISOString();
-        let created_by = thread.kernel.uuid();
+        let created_by = signal.kernel.uuid();
 
         // Set ID and namespace. It is possible they are already set, if we are running as root and
         // the root user supplied the IDs. 
         //
         // See the testing / precheck login in `test-create.ts`.
-        thread.change.forEach(record => {
-            if (thread.kernel.isRoot()) {
-                record.data.id = record.data.id ?? thread.kernel.uuid();
-                record.data.ns = record.data.ns ?? thread.kernel.user_ns;
+        signal.change.forEach(record => {
+            if (signal.kernel.isRoot()) {
+                record.data.id = record.data.id ?? signal.kernel.uuid();
+                record.data.ns = record.data.ns ?? signal.kernel.user_ns;
                 record.meta.created_at = record.meta.created_at ?? created_at;
                 record.meta.created_by = record.meta.created_at ?? created_by;
             }
 
             else {
-                record.data.id = thread.kernel.uuid();
-                record.data.ns = thread.kernel.user_ns;
+                record.data.id = signal.kernel.uuid();
+                record.data.ns = signal.kernel.user_ns;
                 record.meta.created_at = created_at;
                 record.meta.created_by = created_by;
             }
         });
     }
 
-    async run(thread: Thread): Promise<void> {
-        let creates_data = await thread.kernel.knex
-            .driverTo(thread.schema.name, 'data')
-            .insert(thread.change_data);
+    async run(signal: Signal): Promise<void> {
+        let creates_data = await signal.kernel.knex
+            .driverTo(signal.schema.name, 'data')
+            .insert(signal.change_data);
 
-        let creates_meta = await thread.kernel.knex
-            .driverTo(thread.schema.name, 'meta')
-            .insert(thread.change_meta);
+        let creates_meta = await signal.kernel.knex
+            .driverTo(signal.schema.name, 'meta')
+            .insert(signal.change_meta);
     }
 }

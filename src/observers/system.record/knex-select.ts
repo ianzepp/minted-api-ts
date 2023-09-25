@@ -3,7 +3,7 @@ import { Knex } from 'knex';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Filter } from '@classes/filter';
 
 // Typedefs
@@ -29,38 +29,38 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
-        let schema = thread.schema;
-        let knex = thread.kernel.knex.selectTo(schema.name);
+    async run(signal: Signal): Promise<void> {
+        let schema = signal.schema;
+        let knex = signal.kernel.knex.selectTo(schema.name);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');
         knex = knex.whereNull('meta.deleted_at');
         
         // Build `filter.where` conditions
-        knex = this.whereOne(knex, thread.filter.where);
+        knex = this.whereOne(knex, signal.filter.where);
 
         // Add the ACL conditions
-        // knex = this.whereAcl(knex, thread.kernel);
+        // knex = this.whereAcl(knex, signal.kernel);
 
         // Build `filter.order` conditions
-        knex = this.order(knex, thread.filter.order);
+        knex = this.order(knex, signal.filter.order);
 
         // Build `filter.limit`
-        knex = this.limit(knex, thread.filter.limit);
+        knex = this.limit(knex, signal.filter.limit);
 
         // Build the list of columns. Based on internal visibility
-        knex = this.columns(knex, thread.schema);
+        knex = this.columns(knex, signal.schema);
 
         // Wait for the result
         let result = await knex;
 
         // Convert the raw results into records
-        let select = _.map(result, record_flat => thread.schema.toRecord(record_flat));
+        let select = _.map(result, record_flat => signal.schema.toRecord(record_flat));
 
         // Reset change list and add to results
-        thread.change.length = 0;
-        thread.change.push(... select);
+        signal.change.length = 0;
+        signal.change.push(... select);
     }
 
     private whereAll(knex: Knex.QueryBuilder, conditions: _.Dictionary<any>[] = [], group: '$and' | '$or' = '$and') {

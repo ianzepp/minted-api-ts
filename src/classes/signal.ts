@@ -13,14 +13,12 @@ import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 
 // Typedefs
-import { ThreadOp } from '@typedefs/thread';
+import { SignalOp } from '@typedefs/signal';
 
 // Import pre-loaded routers
 import Observers from '@preloader/observers';
 
-
-
-export class Thread {
+export class Signal {
     readonly expect = chai.expect;
     readonly failures: string[] = [];
 
@@ -28,7 +26,7 @@ export class Thread {
         readonly kernel: Kernel,
         readonly corpus: Corpus,
         readonly filter: Filter,
-        readonly op: ThreadOp) {}
+        readonly op: SignalOp) {}
 
     get schema() {
         return this.corpus.schema;
@@ -80,27 +78,27 @@ export class Thread {
             // Positive checks
             //
 
-            if (observer.onSelect() && this.op == ThreadOp.Select) {
+            if (observer.onSelect() && this.op == SignalOp.Select) {
                 return true;
             }
 
-            if (observer.onCreate() && this.op == ThreadOp.Create) {
+            if (observer.onCreate() && this.op == SignalOp.Create) {
                 return true;
             }
 
-            if (observer.onUpdate() && this.op == ThreadOp.Update) {
+            if (observer.onUpdate() && this.op == SignalOp.Update) {
                 return true;
             }
 
-            if (observer.onUpsert() && this.op == ThreadOp.Upsert) {
+            if (observer.onUpsert() && this.op == SignalOp.Upsert) {
                 return true;
             }
 
-            if (observer.onExpire() && this.op == ThreadOp.Expire) {
+            if (observer.onExpire() && this.op == SignalOp.Expire) {
                 return true;
             }
 
-            if (observer.onDelete() && this.op == ThreadOp.Delete) {
+            if (observer.onDelete() && this.op == SignalOp.Delete) {
                 return true;
             }
 
@@ -109,7 +107,7 @@ export class Thread {
         });
 
         for(let observer of observers) {
-            // console.info(util.format('Thread: schema=%j op=%j ring=%j rank=%j observer=%j', 
+            // console.info(util.format('Signal: schema=%j op=%j ring=%j rank=%j observer=%j', 
             //     this.schema.name, 
             //     this.op, 
             //     observer.onRing(),

@@ -33,7 +33,7 @@ export enum ObserverRing {
 //
 
 /** ... */
-export interface ThreadFailure {
+export interface SignalFailure {
     code: number;
     message: string;
     record?: RecordJson;

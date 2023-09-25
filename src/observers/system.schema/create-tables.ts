@@ -5,7 +5,7 @@ import { Knex } from 'knex';
 // Classes
 import { AutoInstall } from '@classes/autoinstall';
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 
@@ -31,15 +31,15 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
-        await Promise.all(thread.change.map(record => this.one(thread, record)));
+    async run(signal: Signal): Promise<void> {
+        await Promise.all(signal.change.map(record => this.one(signal, record)));
     }
 
-    async one(thread: Thread, record: Record) {
+    async one(signal: Signal, record: Record) {
         // Setup
         let schema_name = record.data.name;
         let schema_type = record.data.type;
-        let auto = new AutoInstall(thread.kernel);
+        let auto = new AutoInstall(signal.kernel);
 
         // Only create schemas that are marked as `database` types
         if (schema_type !== 'database') {
@@ -50,6 +50,6 @@ export default class extends Observer {
         await auto.createTable(schema_name, table => {});
 
         // Add to kernel metadata
-        thread.kernel.meta.schemas.set(schema_name, Schema.from(record.data));
+        signal.kernel.meta.schemas.set(schema_name, Schema.from(record.data));
     }
 }

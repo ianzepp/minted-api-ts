@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -28,16 +28,16 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
-        await Promise.all(thread.change.map(record => this.one(thread, record)));
+    async run(signal: Signal): Promise<void> {
+        await Promise.all(signal.change.map(record => this.one(signal, record)));
     }
 
-    async one(thread: Thread, record: Record) {
+    async one(signal: Signal, record: Record) {
         // Create temporary refs
         let column = Column.from(record.data);
-        let schema = thread.kernel.meta.schemas.get(column.schema_name);
+        let schema = signal.kernel.meta.schemas.get(column.schema_name);
 
-        await thread.kernel.knex.schema.table(`${schema.name}/data`, t => {            
+        await signal.kernel.knex.schema.table(`${schema.name}/data`, t => {            
             return t.dropColumn(column.column_name);
         });
 
@@ -45,6 +45,6 @@ export default class extends Observer {
         schema.remove(column);
 
         // Delete the column data from the kernel metadata
-        thread.kernel.meta.columns.delete(column.name);
+        signal.kernel.meta.columns.delete(column.name);
     }
 }

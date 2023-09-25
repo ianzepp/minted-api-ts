@@ -3,7 +3,7 @@ import _ from 'lodash';
 // Classes
 import { DataError } from '@classes/kernel-data';
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -35,12 +35,12 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
-        let users = thread.change.map(record => {
+    async run(signal: Signal): Promise<void> {
+        let users = signal.change.map(record => {
             return { ns: record.data.ns, name: 'admin' };
         });
 
         // Insert the users
-        await thread.kernel.data.createAll(SchemaType.User, users);
+        await signal.kernel.data.createAll(SchemaType.User, users);
     }
 }

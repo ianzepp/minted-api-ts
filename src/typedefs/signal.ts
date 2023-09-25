@@ -3,10 +3,10 @@
 //
 
 /**
- * Enum for thread operations.
+ * Enum for signal operations.
  * @enum {string}
  */
-export enum ThreadOp {
+export enum SignalOp {
     Create = 'create',
     Delete = 'delete',
     Expire = 'expire',

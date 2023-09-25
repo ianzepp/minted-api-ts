@@ -1,7 +1,7 @@
 import path from 'path';
 
 // Classes
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 
 // Typedefs
 import { ObserverRank } from '@typedefs/observer';
@@ -14,9 +14,9 @@ export class Observer {
 
     constructor() {}
 
-    async startup(thread: Thread): Promise<any> {}
-    async run(thread: Thread): Promise<any> {}
-    async cleanup(thread: Thread): Promise<any> {}
+    async startup(signal: Signal): Promise<any> {}
+    async run(signal: Signal): Promise<any> {}
+    async cleanup(signal: Signal): Promise<any> {}
 
     toJSON(): Object {
         return {

@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -27,8 +27,8 @@ export default class extends Observer {
         return true;
     }
 
-    async startup(thread: Thread) {
-        let exceptions = thread.change.filter(record => typeof record.data.id !== 'string');
+    async startup(signal: Signal) {
+        let exceptions = signal.change.filter(record => typeof record.data.id !== 'string');
 
         if (exceptions.length) {
             throw new DataError('One or more records are missing IDs');
@@ -36,21 +36,21 @@ export default class extends Observer {
     }
 
 
-    async run(thread: Thread) {
-        return Promise.all(thread.change.map(record => this.one(thread, record)));
+    async run(signal: Signal) {
+        return Promise.all(signal.change.map(record => this.one(signal, record)));
     }
 
-    async one(thread: Thread, record: Record) {
-        return thread.kernel.knex
-            .driverTo(thread.schema.name, 'data')
+    async one(signal: Signal, record: Record) {
+        return signal.kernel.knex
+            .driverTo(signal.schema.name, 'data')
             .whereIn('data.id', [record.data.id])
             .update(record.diff);
     }
 
-    async cleanup(thread: Thread) {
-        thread.change.forEach(record => {
-            record.meta.updated_at = thread.kernel.time;
-            record.meta.updated_by = thread.kernel.user_id;
+    async cleanup(signal: Signal) {
+        signal.change.forEach(record => {
+            record.meta.updated_at = signal.kernel.time;
+            record.meta.updated_by = signal.kernel.user_id;
         });
     }
 }
