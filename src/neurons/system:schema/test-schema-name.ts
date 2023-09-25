@@ -1,15 +1,15 @@
 import _ from 'lodash';
 
 // Classes
-import { Observer } from '@classes/neuron';
+import { Neuron } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/neuron';
+import { NeuronRing } from '@typedefs/neuron';
 import { SchemaType } from '@typedefs/schema';
 
 
-export default class extends Observer {
+export default class extends Neuron {
     toName(): string {
         return __filename;
     }
@@ -18,8 +18,8 @@ export default class extends Observer {
         return SchemaType.Schema;
     }
 
-    onRing(): ObserverRing {
-        return ObserverRing.Test;
+    onRing(): NeuronRing {
+        return NeuronRing.Test;
     }
 
     onCreate(): boolean {

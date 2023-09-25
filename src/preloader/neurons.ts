@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import klaw from 'klaw-sync';
 
-import { Observer } from '@classes/neuron';
+import { Neuron } from '@classes/neuron';
 
 const preload_files = klaw(path.join(__dirname, '../neurons'), {
     nodir: true,
@@ -26,7 +26,7 @@ let preloads = _.chain(preload_files)
     .map(preload_path => require(preload_path).default)
 
     // Instantiate each observer
-    .map(preload_type => new preload_type() as Observer)
+    .map(preload_type => new preload_type() as Neuron)
 
     // Sort in ascending order by ring priority. Easier to do once here, then every time when executing
     .sortBy(observer => observer.onRank())
@@ -34,7 +34,7 @@ let preloads = _.chain(preload_files)
     // Group the observers by their runtime ring
     .groupBy(observer => observer.onRing())
 
-    // Done, return the _.Dictionary<Observer[]>
+    // Done, return the _.Dictionary<Neuron[]>
     .value();
 
 export default preloads;

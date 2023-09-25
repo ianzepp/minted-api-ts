@@ -4,13 +4,13 @@ import path from 'path';
 import { Signal } from '@classes/signal';
 
 // Typedefs
-import { ObserverRank } from '@typedefs/neuron';
-import { ObserverRing } from '@typedefs/neuron';
+import { NeuronRank } from '@typedefs/neuron';
+import { NeuronRing } from '@typedefs/neuron';
 
-export class Observer {
+export class Neuron {
     // Re-export aliases
-    public static Rank = ObserverRank;
-    public static Ring = ObserverRing;
+    public static Rank = NeuronRank;
+    public static Ring = NeuronRing;
 
     constructor() {}
 
@@ -65,18 +65,18 @@ export class Observer {
 
     /**
      * Method to get the observer ring
-     * @returns {ObserverRing} - The observer ring
+     * @returns {NeuronRing} - The observer ring
      */
-    onRing(): ObserverRing {
-        return ObserverRing.Work;
+    onRing(): NeuronRing {
+        return NeuronRing.Work;
     }
 
     /**
      * Method to get the observer rank
-     * @returns {ObserverRank} - The observer rank: 0 (low) to 9 (high). Defaults to 5 (average)
+     * @returns {NeuronRank} - The observer rank: 0 (low) to 9 (high). Defaults to 5 (average)
      */
-    onRank(): ObserverRank {
-        return ObserverRank.Avg;
+    onRank(): NeuronRank {
+        return NeuronRank.Avg;
     }
 
     /**

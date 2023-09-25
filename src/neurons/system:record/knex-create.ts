@@ -1,16 +1,16 @@
 import _ from 'lodash';
 
 // Classes
-import { Observer } from '@classes/neuron';
+import { Neuron } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
-import { ObserverRing } from '@typedefs/neuron';
+import { NeuronRing } from '@typedefs/neuron';
 import { DataError } from '@classes/kernel-data';
 
 
-export default class extends Observer {
+export default class extends Neuron {
     toName(): string {
         return __filename;
     }
@@ -19,8 +19,8 @@ export default class extends Observer {
         return '*';
     }
 
-    onRing(): ObserverRing {
-        return ObserverRing.Knex;
+    onRing(): NeuronRing {
+        return NeuronRing.Knex;
     }
 
     onCreate(): boolean {

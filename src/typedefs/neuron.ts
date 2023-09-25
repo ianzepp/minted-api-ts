@@ -6,7 +6,7 @@ import { RecordJson } from "./record";
 //
 
 /** The priority levels an observer can have. */
-export enum ObserverRank {
+export enum NeuronRank {
     KernelMax = 0,
     Max = 1,
     Avg = 5,
@@ -14,7 +14,7 @@ export enum ObserverRank {
 }
 
 /** The levels of operations for an observer. */
-export enum ObserverRing {
+export enum NeuronRing {
     Init = 0, // Kernel init
     Prep = 1, // Logic prep
     Load = 2, // Load in any data dependencies
