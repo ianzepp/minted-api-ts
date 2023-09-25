@@ -43,7 +43,7 @@ async function verifyOne(source_name: string, result: any) {
     chai.expect(record).nested.property('meta.created_by', record.meta.created_by);
 }
 
-test.only('create one record', async () => {
+test('create one record', async () => {
     let router = new RouterTest();
 
     // Build the structures
