@@ -3,7 +3,7 @@ import _ from 'lodash';
 // Classes
 import { Column } from '@classes/column';
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { ObserverRing } from '@typedefs/observer';
 import { Record } from '@classes/record';
 
@@ -29,11 +29,11 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
+    async run(thread: Signal): Promise<void> {
         await Promise.all(thread.change.map(record => this.one(thread, record)));
     }
 
-    async one(thread: Thread, record: Record) {
+    async one(thread: Signal, record: Record) {
         // Create temporary refs
         let column = Column.from(record.data);
         let schema = thread.kernel.meta.schemas.get(column.schema_name);

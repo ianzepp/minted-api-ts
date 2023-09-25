@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { Column } from '@classes/column';
 import { Observer } from '@classes/observer';
 import { Record } from '@classes/record';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 
 // Typedefs
 import { ColumnsMeta } from '@typedefs/column';
@@ -34,7 +34,7 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
+    async run(thread: Signal): Promise<void> {
         for(let record of thread.change) {
             //
             // Per record
@@ -69,7 +69,7 @@ export default class extends Observer {
     // Test functions
     //
 
-    test_data_id(thread: Thread, record: Record) {
+    test_data_id(thread: Signal, record: Record) {
         if (record.data.id === null) {
             return;
         }
@@ -81,7 +81,7 @@ export default class extends Observer {
         thread.failures.push(`E_ID_EXISTS: A record should not have an ID when being created: found '${ record.data.id }'.`);
     }
 
-    test_data_ns(thread: Thread, record: Record) {
+    test_data_ns(thread: Signal, record: Record) {
         if (record.data.ns === null) {
             return;
         }
@@ -97,7 +97,7 @@ export default class extends Observer {
         thread.failures.push(`E_NS_EXISTS: On create: a record should not have an namespace. Found '${ record.data.ns }'.`);
     }
 
-    test_data_required(thread: Thread, record: Record, column: Column) {
+    test_data_required(thread: Signal, record: Record, column: Column) {
         if (column.of(Column.Form.Required) === false) {
             return;
         }
@@ -111,7 +111,7 @@ export default class extends Observer {
         thread.failures.push(`E_DATA_REQUIRED: A record of type '${ column.schema_name}' requires a value in '${ column.column_name }'`);
     }
 
-    test_data_minimum(thread: Thread, record: Record, column: Column) {
+    test_data_minimum(thread: Signal, record: Record, column: Column) {
         if (column.minimum === null) {
             return;
         }
@@ -129,7 +129,7 @@ export default class extends Observer {
         thread.failures.push(`On create: a record of type '${ column.schema_name}' with a value in '${ column.column_name }' must have a value greater-or-equal to '${ column.minimum }'`);
     }
 
-    test_data_maximum(thread: Thread, record: Record, column: Column) {
+    test_data_maximum(thread: Signal, record: Record, column: Column) {
         if (column.maximum === null) {
             return;
         }

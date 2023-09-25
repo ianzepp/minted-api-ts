@@ -5,7 +5,7 @@ import { Knex } from 'knex';
 // Classes
 import { AutoInstall } from '@classes/autoinstall';
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 import { Schema } from '@classes/schema';
 
@@ -31,11 +31,11 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
+    async run(thread: Signal): Promise<void> {
         await Promise.all(thread.change.map(record => this.one(thread, record)));
     }
 
-    async one(thread: Thread, record: Record) {
+    async one(thread: Signal, record: Record) {
         // Setup
         let schema_name = record.data.name;
         let schema_type = record.data.type;

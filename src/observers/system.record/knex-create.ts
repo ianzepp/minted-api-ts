@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -27,7 +27,7 @@ export default class extends Observer {
         return true;
     }
 
-    async startup(thread: Thread): Promise<void> {
+    async startup(thread: Signal): Promise<void> {
         let created_at = new Date().toISOString();
         let created_by = thread.kernel.uuid();
 
@@ -52,7 +52,7 @@ export default class extends Observer {
         });
     }
 
-    async run(thread: Thread): Promise<void> {
+    async run(thread: Signal): Promise<void> {
         let creates_data = await thread.kernel.knex
             .driverTo(thread.schema.name, 'data')
             .insert(thread.change_data);

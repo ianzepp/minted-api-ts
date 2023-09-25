@@ -3,7 +3,7 @@ import { Knex } from 'knex';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Filter } from '@classes/filter';
 
 // Typedefs
@@ -29,7 +29,7 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
+    async run(thread: Signal): Promise<void> {
         let schema = thread.schema;
         let knex = thread.kernel.knex.selectTo(schema.name);
 

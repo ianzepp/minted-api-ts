@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -27,7 +27,7 @@ export default class extends Observer {
         return true;
     }
 
-    async startup(thread: Thread) {
+    async startup(thread: Signal) {
         let exceptions = thread.change.filter(record => typeof record.data.id !== 'string');
 
         if (exceptions.length) {
@@ -36,18 +36,18 @@ export default class extends Observer {
     }
 
 
-    async run(thread: Thread) {
+    async run(thread: Signal) {
         return Promise.all(thread.change.map(record => this.one(thread, record)));
     }
 
-    async one(thread: Thread, record: Record) {
+    async one(thread: Signal, record: Record) {
         return thread.kernel.knex
             .driverTo(thread.schema.name, 'data')
             .whereIn('data.id', [record.data.id])
             .update(record.diff);
     }
 
-    async cleanup(thread: Thread) {
+    async cleanup(thread: Signal) {
         thread.change.forEach(record => {
             record.meta.updated_at = thread.kernel.time;
             record.meta.updated_by = thread.kernel.user_id;

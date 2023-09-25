@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 
 // Typedefs
 import { ObserverRing } from '@typedefs/observer';
@@ -29,7 +29,7 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
+    async run(thread: Signal): Promise<void> {
         // Easiest to use the existing data service to reselect record data
         let result = await thread.kernel.data.selectAll(thread.schema, thread.change);
         let result_map = _.keyBy(result, 'data.id');

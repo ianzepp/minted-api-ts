@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Observer } from '@classes/observer';
-import { Thread } from '@classes/thread';
+import { Signal } from '@classes/signal';
 
 // Typedefs
 import { ObserverRing } from '@typedefs/observer';
@@ -34,7 +34,7 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Thread): Promise<void> {
+    async run(thread: Signal): Promise<void> {
         for(let record of thread.change) {
             thread.expect(record.data).property('name').includes(':');
 
