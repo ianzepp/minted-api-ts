@@ -35,12 +35,12 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Signal): Promise<void> {
-        let users = thread.change.map(record => {
+    async run(signal: Signal): Promise<void> {
+        let users = signal.change.map(record => {
             return { ns: record.data.ns, name: 'admin' };
         });
 
         // Insert the users
-        await thread.kernel.data.createAll(SchemaType.User, users);
+        await signal.kernel.data.createAll(SchemaType.User, users);
     }
 }

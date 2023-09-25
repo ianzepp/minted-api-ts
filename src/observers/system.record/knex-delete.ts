@@ -25,20 +25,20 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Signal): Promise<void> {
-        return thread.kernel.knex
-            .driverTo(thread.schema.name, 'meta')
-            .whereIn('id', _.map(thread.change_data, 'id'))
+    async run(signal: Signal): Promise<void> {
+        return signal.kernel.knex
+            .driverTo(signal.schema.name, 'meta')
+            .whereIn('id', _.map(signal.change_data, 'id'))
             .update({
-                deleted_at: thread.kernel.time,
-                deleted_by: thread.kernel.user_id
+                deleted_at: signal.kernel.time,
+                deleted_by: signal.kernel.user_id
             });
     }
 
-    async cleanup(thread: Signal) {
-        thread.change.forEach(record => {
-            record.meta.deleted_at = thread.kernel.time;
-            record.meta.deleted_by = thread.kernel.user_id;
+    async cleanup(signal: Signal) {
+        signal.change.forEach(record => {
+            record.meta.deleted_at = signal.kernel.time;
+            record.meta.deleted_by = signal.kernel.user_id;
         })
     }
 }

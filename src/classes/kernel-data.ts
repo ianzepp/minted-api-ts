@@ -85,16 +85,16 @@ export class KernelData implements Service {
         let change = change_data.map(change => schema.toRecord(change));
         let corpus = new Corpus(schema, change);
 
-        // Build the thread
-        let thread = new Signal(this.kernel, corpus, filter, op);
+        // Build the signal
+        let signal = new Signal(this.kernel, corpus, filter, op);
 
         // Cycle through rings 0 - 9
         for (let ring = 0 as ObserverRing; ring <= 9; ring++) {
-            await thread.run(ring);
+            await signal.run(ring);
         }
 
         // Done
-        return thread.change;
+        return signal.change;
     }
     
     //

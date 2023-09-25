@@ -14,9 +14,9 @@ export class Observer {
 
     constructor() {}
 
-    async startup(thread: Signal): Promise<any> {}
-    async run(thread: Signal): Promise<any> {}
-    async cleanup(thread: Signal): Promise<any> {}
+    async startup(signal: Signal): Promise<any> {}
+    async run(signal: Signal): Promise<any> {}
+    async cleanup(signal: Signal): Promise<any> {}
 
     toJSON(): Object {
         return {

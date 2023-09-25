@@ -29,13 +29,13 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Signal): Promise<void> {
+    async run(signal: Signal): Promise<void> {
         // Easiest to use the existing data service to reselect record data
-        let result = await thread.kernel.data.selectAll(thread.schema, thread.change);
+        let result = await signal.kernel.data.selectAll(signal.schema, signal.change);
         let result_map = _.keyBy(result, 'data.id');
 
         // Assign the raw knex data for previous values to the records
-        for(let record of thread.change) {
+        for(let record of signal.change) {
             let record_prev = result_map[record.data.id];
 
             if (record_prev === undefined) {

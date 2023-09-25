@@ -3,7 +3,7 @@
 //
 
 /**
- * Enum for thread operations.
+ * Enum for signal operations.
  * @enum {string}
  */
 export enum SignalOp {

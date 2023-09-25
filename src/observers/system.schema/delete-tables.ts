@@ -27,14 +27,14 @@ export default class extends Observer {
         return true;
     }
 
-    async run(thread: Signal): Promise<void> {
-        await Promise.all(thread.change.map(record => this.one(thread, record)));
+    async run(signal: Signal): Promise<void> {
+        await Promise.all(signal.change.map(record => this.one(signal, record)));
     }
 
-    async one(thread: Signal, record: Record) {
+    async one(signal: Signal, record: Record) {
         let schema_name = record.data.name;
         let schema_type = record.data.type;
-        let auto = new AutoInstall(thread.kernel);
+        let auto = new AutoInstall(signal.kernel);
 
         // Only delete schemas that are marked as `database` types
         if (schema_type !== 'database') {
@@ -45,6 +45,6 @@ export default class extends Observer {
         await auto.deleteTable(schema_name);
 
         // Remove from kernel metadata
-        thread.kernel.meta.schemas.delete(schema_name);
+        signal.kernel.meta.schemas.delete(schema_name);
     }
 }
