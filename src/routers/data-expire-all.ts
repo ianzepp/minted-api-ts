@@ -7,7 +7,7 @@ import { Router } from '@classes/router';
 // Implementation
 export default class extends Router {
     async run() {
-        return this.kernel.data.deleteAll(this.req.params.schema, this.req.body);
+        return this.kernel.data.expireAll(this.params.schema, this.req.body);
     }
 
     onHttpVerb() {

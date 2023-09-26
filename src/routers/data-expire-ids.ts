@@ -6,7 +6,7 @@ import { Router } from '@classes/router';
 // Implementation
 export default class extends Router {
     async run() {
-        return this.kernel.data.deleteIds(this.req.params.schema, [this.req.params.record]);
+        return this.kernel.data.expireIds(this.req.params.schema, [this.req.params.record]);
     }
 
     onHttpVerb() {

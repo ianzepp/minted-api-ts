@@ -12,7 +12,7 @@ import { RouterRes } from '@typedefs/router-res';
 import { toJSON } from '@classes/helpers';
 
 // Router for testing
-import RouterTest from '@routers/data-delete-all';
+import RouterTest from '@routers/data-expire-all';
 
 let kernel = new Tester();
 
@@ -29,13 +29,15 @@ async function verifyOne(result: any) {
 
     chai.expect(record).a('object');
     chai.expect(record).nested.property('data.id').string;
-    chai.expect(record).nested.property('meta.deleted_at').string;
-    chai.expect(record).nested.property('meta.deleted_by').string;
+    chai.expect(record).nested.property('meta.expired_at').string;
+    chai.expect(record).nested.property('meta.expired_by').string;
+    chai.expect(record).nested.property('meta.deleted_at').null;
+    chai.expect(record).nested.property('meta.deleted_by').null;
 
     // Confirm the record cannot be selected anymore
     let select = await kernel.data.selectIds(SchemaType.Test, [record.data.id]);
 
-    chai.expect(record).a('array').length(0);
+    chai.expect(select).a('array').length(0);
 }
 
 test('delete multiple records', async () => {
