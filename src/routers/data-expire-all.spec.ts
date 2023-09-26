@@ -24,6 +24,27 @@ afterEach(async () => {
     await kernel.cleanup();
 });
 
+function createRouterReq(body: any): RouterReq {
+    return {
+        verb: 'DELETE',
+        path: '/api/data/' + SchemaType.Test,
+        params: { schema: SchemaType.Test },
+        search: {},
+        body: body
+    };
+}
+
+function createRouterRes(): RouterRes {
+    return {
+        status: 0,
+        length: 0,
+        schema: undefined,
+        record: undefined,
+        filter: undefined,
+        result: undefined,
+    };
+}
+
 async function verifyOne(result: any) {
     let record = toJSON(result);
 
@@ -40,7 +61,7 @@ async function verifyOne(result: any) {
     chai.expect(select).a('array').length(0);
 }
 
-test('delete multiple records', async () => {
+test('expire multiple records', async () => {
     let router = new RouterTest();
     let schema_name = SchemaType.Test;
 
@@ -54,22 +75,8 @@ test('delete multiple records', async () => {
     chai.expect(create).a('array').length(3);
 
     // Build the structures
-    let router_req: RouterReq = {
-        verb: 'DELETE',
-        path: '/api/data/' + schema_name,
-        params: { schema: schema_name },
-        search: {},
-        body: create
-    };
-
-    let router_res: RouterRes = {
-        status: 0,
-        length: 0,
-        schema: undefined,
-        record: undefined,
-        filter: undefined,
-        result: undefined,
-    }
+    let router_req = createRouterReq(create);
+    let router_res = createRouterRes();
 
     // Run the router
     let result = await router.runsafe(kernel, router_req, router_res);
@@ -82,3 +89,21 @@ test('delete multiple records', async () => {
     await verifyOne(result[2]);
 });
 
+test('expire with object instead of array', async () => {
+    let router = new RouterTest();
+
+    // Build the structures
+    let router_req = createRouterReq(
+        { name: 'foo', integer: 1, decimal: 2.0, boolean: false }
+    );
+
+    let router_res = createRouterRes();
+
+    // Run the router
+    try {
+        let result = await router.runsafe(kernel, router_req, router_res);
+    } catch (error) {
+        chai.expect(error).to.be.instanceOf(Error);
+        chai.expect(error.message).to.include('to be an array');
+    }
+});

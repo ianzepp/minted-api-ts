@@ -12,7 +12,7 @@ import { RouterRes } from '@typedefs/router-res';
 import { toJSON } from '@classes/helpers';
 
 // Router for testing
-import RouterTest from '@routers/data-create-all';
+import RouterTest from '@routers/data-update-all';
 
 let kernel = new Tester();
 
@@ -32,6 +32,8 @@ async function verifyOne(source_name: string, result: any) {
     chai.expect(record).nested.property('data.name', source_name);
     chai.expect(record).nested.property('meta.created_at').string;
     chai.expect(record).nested.property('meta.created_by').string;
+    chai.expect(record).nested.property('meta.updated_at').string;
+    chai.expect(record).nested.property('meta.updated_by').string;
 
     // Confirm the record exists in the system
     let select = await kernel.data.select404(SchemaType.Test, record.data.id);
@@ -41,11 +43,13 @@ async function verifyOne(source_name: string, result: any) {
     chai.expect(record).nested.property('data.name', record.data.name);
     chai.expect(record).nested.property('meta.created_at', record.meta.created_at);
     chai.expect(record).nested.property('meta.created_by', record.meta.created_by);
+    chai.expect(record).nested.property('meta.updated_at', record.meta.updated_at);
+    chai.expect(record).nested.property('meta.updated_by', record.meta.updated_by);
 }
 
 function createRouterReq(body: any): RouterReq {
     return {
-        verb: 'POST',
+        verb: 'PATCH',
         path: '/api/data/' + SchemaType.Test,
         params: { schema: SchemaType.Test },
         search: {},
@@ -64,12 +68,20 @@ function createRouterRes(): RouterRes {
     };
 }
 
-test('create one record', async () => {
+test('update one record', async () => {
     let router = new RouterTest();
+
+    // Create the records
+    let create = await kernel.data.createAll(SchemaType.Test, [
+        { name: 'foo' },
+    ]);
+
+    // Verify
+    await verifyOne('foo', create[0]);
 
     // Build the structures
     let router_req = createRouterReq([
-        { name: 'foo', integer: null, decimal: 2.0, boolean: false },
+        { id: create[0].data.id, name: 'foo-updated' }
     ]);
 
     let router_res = createRouterRes();
@@ -83,14 +95,26 @@ test('create one record', async () => {
     await verifyOne(router_req.body[0].name, result[0]);
 });
 
-test('create multiple records', async () => {
+test('update multiple records', async () => {
     let router = new RouterTest();
 
-    // Build the structures
-    let router_req = createRouterReq([
+    // Create the records
+    let create = await kernel.data.createAll(SchemaType.Test, [
         { name: 'foo-0' },
         { name: 'foo-1' },
         { name: 'foo-2' },
+    ]);
+
+    // Verify
+    await verifyOne('foo-0', create[0]);
+    await verifyOne('foo-1', create[1]);
+    await verifyOne('foo-2', create[2]);
+
+    // Build the structures
+    let router_req = createRouterReq([
+        { id: create[0].data.id, name: 'foo-0-updated' },
+        { id: create[0].data.id, name: 'foo-1-updated' },
+        { id: create[0].data.id, name: 'foo-2-updated' },
     ]);
 
     let router_res = createRouterRes();
@@ -106,12 +130,12 @@ test('create multiple records', async () => {
     await verifyOne(router_req.body[2].name, result[2]);
 });
 
-test('create record with missing data', async () => {
+test('update record with missing data', async () => {
     let router = new RouterTest();
 
     // Build the structures
     let router_req = createRouterReq([
-        { name: null, integer: null, decimal: 2.0, boolean: false },
+        { id: '1', name: null, integer: null, decimal: 2.0, boolean: false },
     ]);
 
     let router_res = createRouterRes();
@@ -125,12 +149,12 @@ test('create record with missing data', async () => {
     }
 });
 
-test('create record with bad integer', async () => {
+test('update record with bad integer', async () => {
     let router = new RouterTest();
 
     // Build the structures
     let router_req = createRouterReq([
-        { name: 'foo', integer: 'bad', decimal: 2.0, boolean: false },
+        { id: '1', name: 'foo', integer: 'bad', decimal: 2.0, boolean: false },
     ]);
 
     let router_res = createRouterRes();
@@ -144,12 +168,12 @@ test('create record with bad integer', async () => {
     }
 });
 
-test('create record with missing name', async () => {
+test('update record with missing name', async () => {
     let router = new RouterTest();
 
     // Build the structures
     let router_req = createRouterReq([
-        { name: undefined, integer: 1, decimal: 2.0, boolean: false },
+        { id: '1', name: undefined, integer: 1, decimal: 2.0, boolean: false },
     ]);
 
     let router_res = createRouterRes();
@@ -163,12 +187,12 @@ test('create record with missing name', async () => {
     }
 });
 
-test('create record with object instead of array', async () => {
+test('update record with object instead of array', async () => {
     let router = new RouterTest();
 
     // Build the structures
     let router_req = createRouterReq(
-        { name: 'foo', integer: 1, decimal: 2.0, boolean: false }
+        { id: '1', name: 'foo', integer: 1, decimal: 2.0, boolean: false }
     );
 
     let router_res = createRouterRes();
@@ -181,4 +205,3 @@ test('create record with object instead of array', async () => {
         chai.expect(error.message).to.include('to be an array');
     }
 });
-
