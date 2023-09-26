@@ -1,4 +1,4 @@
-export interface HttpReq {
+export interface RouterReq {
     verb: string;
     path: string;
     params: _.Dictionary<string>;

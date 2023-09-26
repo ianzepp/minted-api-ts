@@ -6,8 +6,8 @@ import { pathToRegexp, match } from 'path-to-regexp';
 import { Kernel } from '@classes/kernel';
 
 // Typedefs
-import { HttpReq } from '@typedefs/http-req';
-import { HttpRes } from '@typedefs/http-res';
+import { RouterReq } from '@typedefs/router-req';
+import { RouterRes } from '@typedefs/router-res';
 import { HttpVerb } from '@typedefs/http-verb';
 
 // Helper to assert a value is not undefined
@@ -20,19 +20,19 @@ export class Router {
     public static Verb = HttpVerb;
 
     private __kernel: Kernel | undefined;
-    private __req: HttpReq | undefined;
-    private __res: HttpRes | undefined;
+    private __req: RouterReq | undefined;
+    private __res: RouterRes | undefined;
 
     get kernel(): Kernel {
         return assert<Kernel>(this.__kernel);
     }
 
-    get req(): HttpReq {
-        return assert<HttpReq>(this.__req);
+    get req(): RouterReq {
+        return assert<RouterReq>(this.__req);
     }
 
-    get res(): HttpRes {
-        return assert<HttpRes>(this.__res);
+    get res(): RouterRes {
+        return assert<RouterRes>(this.__res);
     }
 
     get params(): _.Dictionary<string> {
@@ -43,7 +43,7 @@ export class Router {
         return this.req.search;
     }
 
-    async runsafe(kernel: Kernel, req: HttpReq, res: HttpRes): Promise<any> {
+    async runsafe(kernel: Kernel, req: RouterReq, res: RouterRes): Promise<any> {
         // Default body values
         if (req.verb == Router.Verb.Get) {
             req.body = req.body || {};

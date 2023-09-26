@@ -1,4 +1,4 @@
-export interface HttpRes {
+export interface RouterRes {
     status: number;
     length: number;
     schema: string | undefined;

@@ -98,6 +98,7 @@ export default class extends Neuron {
     }
 
     test_data_required(signal: Signal, record: Record, column: Column) {
+        
         if (column.of(Column.Form.Required) === false) {
             return;
         }
@@ -108,7 +109,7 @@ export default class extends Neuron {
             return;
         }
 
-        signal.failures.push(`E_DATA_REQUIRED: A record of type '${ column.schema_name}' requires a value in '${ column.column_name }'`);
+        signal.failures.push(`E_DATA_REQUIRED: A record of type '${ column.schema_name }' requires a value in '${ column.column_name }'`);
     }
 
     test_data_minimum(signal: Signal, record: Record, column: Column) {
