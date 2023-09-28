@@ -50,30 +50,6 @@ export class AutoInstall {
         // Create the master domain record.
         await this.insertAll(ObjectType.Domain, [
             { ns: 'system', name: 'Minted API System' },
-        ]);
-
-        // //
-        // // Define the trigger that adds new objects when a new client is created.
-        // //
-        // await this.knex.raw(`
-        //     CREATE OR REPLACE FUNCTION new_domain_create_objects_trigger()
-        //     RETURNS TRIGGER AS $$
-        //     BEGIN
-        //         EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__data";';
-        //         EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__meta";';
-                
-        //         RETURN NEW;
-        //     END;
-        //     $$ LANGUAGE plpgsql;
-
-        //     CREATE TRIGGER new_domain_create_objects
-        //     AFTER INSERT ON "system__data"."domain"
-        //     FOR EACH ROW
-        //     EXECUTE PROCEDURE new_domain_create_objects_trigger();
-        // `);
-        
-        // Create the master test domain record. This tests that the trigger works.
-        await this.insertAll(ObjectType.Domain, [
             { ns: 'test', name: 'Minted API Test Suite' },
         ]);
 
@@ -128,6 +104,12 @@ export class AutoInstall {
             table.string('name').notNullable();
         });
 
+        // Create table `config`
+        await this.createTable(ObjectType.Config, table => {
+            table.string('name').notNullable();
+            table.string('data').notNullable();
+        });
+
         //
         // Data inserts
         //
@@ -139,6 +121,7 @@ export class AutoInstall {
             { ns: 'system', name: ObjectType.Column, type: 'database', metadata: true },
             { ns: 'system', name: ObjectType.Test, type: 'database' },
             { ns: 'system', name: ObjectType.User, type: 'database' },
+            { ns: 'system', name: ObjectType.Config, type: 'database' },
         ]);
 
         // Add data for `column`
@@ -177,6 +160,10 @@ export class AutoInstall {
 
             // Columns for 'user'
             { ns: 'system', name: ObjectType.User + '#name', type: 'text', required: true },
+
+            // Columns for 'config'
+            { ns: 'system', name: ObjectType.Config + '#name', type: 'text', required: true },
+            { ns: 'system', name: ObjectType.Config + '#data', type: 'text', required: true },
         ]);
 
         // Add data for `client`
