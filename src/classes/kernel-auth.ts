@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 // Classes
 import { Kernel } from '@classes/kernel';
+import { Record } from '@classes/record';
 
 // Typedefs
 import { Service } from '@typedefs/kernel';
@@ -24,7 +25,23 @@ export class KernelAuth implements Service {
     private static JWT_SECRET = Bun.env.JWT_SECRET || 'development-password';
     private static JWT_OPTION = { expiresIn: '1h' };
 
+    // What is the user's config data?
+    public readonly config = new Map<string, string>();
+
     constructor(private readonly kernel: Kernel) {}
+
+    async startup(): Promise<void> {
+        await this.authenticate();
+        await this.configure(await this.kernel.data.selectAny(ObjectType.Config));
+    }
+
+    async cleanup(): Promise<void> {
+        await this.configure([]);
+    }
+
+    //
+    // Property shortcuts
+    //
 
     get id() {
         return this.kernel.user_id;
@@ -38,8 +55,9 @@ export class KernelAuth implements Service {
         return _.uniq(_.compact(['system', this.ns]));
     }
 
-    async startup(): Promise<void> {}
-    async cleanup(): Promise<void> {}
+    //
+    // Authentication process
+    //
 
     async authenticate() {
         // Verify user record exists and has access to the kernel
@@ -64,5 +82,18 @@ export class KernelAuth implements Service {
 
     async signup() {
         // nothing done right now
+    }
+
+
+    //
+    // User configurations
+    //
+
+    async configure(configs: Record[]) {
+        // Clear any old data
+        this.config.clear();
+
+        // Import the new data
+        configs.forEach(config => this.config.set(config.data.name, config.data.data));
     }
 }
