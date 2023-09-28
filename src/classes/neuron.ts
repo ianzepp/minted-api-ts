@@ -21,7 +21,7 @@ export class Neuron {
     toJSON(): Object {
         return {
             'name': this.toName(),
-            'on_schema': this.onSchema(),
+            'on_object': this.onObject(),
             'on_ring': this.onRing(),
             'on_rank': this.onRank(),
             'on_root': this.onRoot(),
@@ -56,10 +56,10 @@ export class Neuron {
     }
 
     /**
-     * Method to get the `Schema` that this neuron targets, or `*` if it applies to all schemas
-     * @returns {string} - The targeted `Schema` name
+     * Method to get the `Object` that this neuron targets, or `*` if it applies to all objects
+     * @returns {string} - The targeted `Object` name
      */
-    onSchema(): string {
+    onObject(): string {
         return '*';
     }
 

@@ -7,7 +7,7 @@ import { Record } from '@classes/record';
 
 // Typedefs
 import { NeuronRing } from '@typedefs/neuron';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 import { Column } from '@classes/column';
 
 
@@ -16,8 +16,8 @@ export default class extends Neuron {
         return __filename;
     }
     
-    onSchema(): string {
-        return SchemaType.Column;
+    onObject(): string {
+        return ObjectType.Column;
     }
 
     onRing(): NeuronRing {
@@ -35,14 +35,14 @@ export default class extends Neuron {
     async one(signal: Signal, record: Record) {
         // Create temporary refs
         let column = Column.from(record.data);
-        let schema = signal.kernel.meta.schemas.get(column.schema_name);
+        let object = signal.kernel.meta.objects.get(column.object_name);
 
-        await signal.kernel.knex.schema.table(`${schema.name}/data`, t => {            
+        await signal.kernel.knex.schema.table(`${object.name}/data`, t => {            
             return t.dropColumn(column.column_name);
         });
 
-        // Delete the column data from the parent schema
-        schema.remove(column);
+        // Delete the column data from the parent object
+        object.remove(column);
 
         // Delete the column data from the kernel metadata
         signal.kernel.meta.columns.delete(column.name);

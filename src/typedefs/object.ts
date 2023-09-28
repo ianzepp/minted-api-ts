@@ -3,17 +3,17 @@
 //
 
 /** ... */
-export type SchemaName = string;
+export type ObjectName = string;
 
 /** ... */
-// export type SchemaType = SchemaInfo | SchemaName;
+// export type ObjectType = ObjectInfo | ObjectName;
 //
 // Enums
 //
 
-export enum SchemaType {
+export enum ObjectType {
     Domain = 'system:domain',
-    Schema = 'system:schema',
+    Object = 'system:object',
     Column = 'system:column',
     Test = 'system:test',
     User = 'system:user',
@@ -24,10 +24,10 @@ export enum SchemaType {
 // Interfaces
 //
 
-/** Represents the architecture needed to obtain a schema's info. */
-export interface SchemaInfo {
-    /** Returns the name of the schema */
-    readonly name: SchemaName;
+/** Represents the architecture needed to obtain a object's info. */
+export interface ObjectInfo {
+    /** Returns the name of the object */
+    readonly name: ObjectName;
 
     /** Generate a new filter */
     // toFilter(source?: FilterJson): FilterInfo;

@@ -8,15 +8,15 @@ import { Record } from '@classes/record';
 
 // Typedefs
 import { NeuronRing } from '@typedefs/neuron';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 
 export default class extends Neuron {
     toName(): string {
         return __filename;
     }
     
-    onSchema(): string {
-        return SchemaType.Schema;
+    onObject(): string {
+        return ObjectType.Object;
     }
 
     onRing(): NeuronRing {
@@ -32,19 +32,19 @@ export default class extends Neuron {
     }
 
     async one(signal: Signal, record: Record) {
-        let schema_name = record.data.name;
-        let schema_type = record.data.type;
+        let object_name = record.data.name;
+        let object_type = record.data.type;
         let auto = new AutoInstall(signal.kernel);
 
-        // Only delete schemas that are marked as `database` types
-        if (schema_type !== 'database') {
+        // Only delete objects that are marked as `database` types
+        if (object_type !== 'database') {
             return;
         }
 
         // Drop the table
-        await auto.deleteTable(schema_name);
+        await auto.deleteTable(object_name);
 
         // Remove from kernel metadata
-        signal.kernel.meta.schemas.delete(schema_name);
+        signal.kernel.meta.objects.delete(object_name);
     }
 }

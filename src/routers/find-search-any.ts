@@ -6,7 +6,7 @@ import { Router } from '@classes/router';
 // Implementation
 export default class extends Router {
     async run() {
-        return this.kernel.data.selectAny(this.req.params.schema, this.req.body || {});
+        return this.kernel.data.selectAny(this.req.params.object, this.req.body || {});
     }
 
     onHttpVerb() {
@@ -14,6 +14,6 @@ export default class extends Router {
     }
 
     onHttpPath() {
-        return '/api/find/:schema';
+        return '/api/find/:object';
     }
 }

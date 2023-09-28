@@ -3,23 +3,23 @@ import _ from 'lodash';
 // Classes
 import { Column } from '@classes/column';
 import { Record } from '@classes/record';
-import { Schema } from '@classes/schema';
+import { Object } from '@classes/object';
 
 // Typedefs
 import { Access } from '@typedefs/corpus';
 import { ColumnName } from '@typedefs/column';
 import { ColumnForm } from '@typedefs/column';
 import { ColumnType } from '@typedefs/column';
-import { SchemaName } from '@typedefs/schema';
+import { ObjectName } from '@typedefs/object';
 
 
 /**
  * The Corpus class implements the Access interface.
- * It represents a collection of records that share a common schema.
+ * It represents a collection of records that share a common object.
  */
 export class Corpus implements Access {
     constructor(
-        public readonly schema: Schema,
+        public readonly object: Object,
         public readonly records: Record[]) {}
 
     //
@@ -27,48 +27,48 @@ export class Corpus implements Access {
     //
 
     /**
-     * Retrieves the root schema name.
+     * Retrieves the root object name.
      * 
-     * @returns {SchemaName} Returns the schema name.
+     * @returns {ObjectName} Returns the object name.
      */
-    get root(): SchemaName {
-        return this.schema.name;
+    get root(): ObjectName {
+        return this.object.name;
     }
 
     /**
-     * Retrieves the columns of the schema.
+     * Retrieves the columns of the object.
      * 
-     * @returns {_.Dictionary<Column>} Returns the schema columns.
+     * @returns {_.Dictionary<Column>} Returns the object columns.
      */
     get columns(): _.Dictionary<Column> {
-        return this.schema.columns;
+        return this.object.columns;
     }
 
     /**
-     * Retrieves the names of the schema.
+     * Retrieves the names of the object.
      * 
-     * @returns {ColumnName[]} Returns an array of schema names.
+     * @returns {ColumnName[]} Returns an array of object names.
      */
     get names(): ColumnName[] {
-        return this.schema.names;
+        return this.object.names;
     }
 
     /**
-     * Retrieves the types of the schema.
+     * Retrieves the types of the object.
      * 
-     * @returns {ColumnType[]} Returns an array of schema types.
+     * @returns {ColumnType[]} Returns an array of object types.
      */
     get types(): ColumnType[] {
-        return this.schema.types;
+        return this.object.types;
     }
 
     /**
-     * Retrieves the forms of the schema.
+     * Retrieves the forms of the object.
      * 
-     * @returns {ColumnForm[][]} Returns an array of schema forms.
+     * @returns {ColumnForm[][]} Returns an array of object forms.
      */
     get forms(): ColumnForm[][] {
-        return this.schema.forms;
+        return this.object.forms;
     }
 
     //

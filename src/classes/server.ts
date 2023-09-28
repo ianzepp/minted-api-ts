@@ -53,7 +53,7 @@ export class Server {
         let httpRes: RouterRes = {
             status: 0,
             length: 0,
-            schema: undefined,
+            object: undefined,
             record: undefined,
             filter: request_url.query,
             result: undefined,

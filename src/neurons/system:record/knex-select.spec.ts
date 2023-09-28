@@ -9,7 +9,7 @@ import { RecordColumnImmutableError } from '@classes/kernel-data';
 import { Tester } from '@classes/tester';
 
 // Typedefs
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 
 
 let kernel = new Tester();
@@ -23,7 +23,7 @@ afterEach(async () => {
 });
 
 function selectAny({ where, order, limit }) {
-    return kernel.data.selectAny(SchemaType.Column, {
+    return kernel.data.selectAny(ObjectType.Column, {
         where: where,
         order: order,
         limit: limit,
@@ -48,17 +48,17 @@ test('"where" empty search', async () => {
 });
 
 test('"where" with 1 column', async () => {
-    let result = await selectWhere({ name: SchemaType.Column + '#required' });
+    let result = await selectWhere({ name: ObjectType.Column + '#required' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 3 columns', async () => {
-    let result = await selectWhere({ name: SchemaType.Column + '#required', type: 'boolean' });
+    let result = await selectWhere({ name: ObjectType.Column + '#required', type: 'boolean' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 3 columns where 1 is incorrect', async () => {
-    let result = await selectWhere({ name: SchemaType.Column + '#required', type: 'text' });
+    let result = await selectWhere({ name: ObjectType.Column + '#required', type: 'text' });
     chai.expect(result).an('array').empty;
 });
 
@@ -78,7 +78,7 @@ test('"where" with 1 column using $eq and null', async () => {
 });
 
 test('"where" with 1 column using $eq', async () => {
-    let result = await selectWhere({ name: { $eq: SchemaType.Column + '#required' }});
+    let result = await selectWhere({ name: { $eq: ObjectType.Column + '#required' }});
     chai.expect(result).an('array').not.empty;
 });
 
@@ -88,48 +88,48 @@ test('"where" with 1 column using $ne and null', async () => {
 });
 
 test('"where" with 1 column using $ne', async () => {
-    let result = await selectWhere({ name: { $ne: SchemaType.Column + '#required' }});
+    let result = await selectWhere({ name: { $ne: ObjectType.Column + '#required' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $gt', async () => {
-    let result = await selectWhere({ name: { $gt: SchemaType.Column }});
+    let result = await selectWhere({ name: { $gt: ObjectType.Column }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $gte', async () => {
-    let result = await selectWhere({ name: { $gte: SchemaType.Column }});
+    let result = await selectWhere({ name: { $gte: ObjectType.Column }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $lt', async () => {
-    let result = await selectWhere({ name: { $lt: SchemaType.Schema }});
+    let result = await selectWhere({ name: { $lt: ObjectType.Object }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $lte', async () => {
-    let result = await selectWhere({ name: { $lte: SchemaType.Schema }});
+    let result = await selectWhere({ name: { $lte: ObjectType.Object }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $in', async () => {
-    let result = await selectWhere({ name: { $in: [SchemaType.Column + '#required'] }});
+    let result = await selectWhere({ name: { $in: [ObjectType.Column + '#required'] }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $nin', async () => {
-    let result = await selectWhere({ name: { $nin: [SchemaType.Column + '#required'] }});
+    let result = await selectWhere({ name: { $nin: [ObjectType.Column + '#required'] }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $find', async () => {
-    let result = await selectWhere({ name: { $find: '%schema%' }});
+    let result = await selectWhere({ name: { $find: '%object%' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with $and', async () => {
     let result = await selectWhere({ $and: [
-        { name: SchemaType.Column + '#required' },
+        { name: ObjectType.Column + '#required' },
         { type: 'text' }
     ]});
 
@@ -138,8 +138,8 @@ test('"where" with $and', async () => {
 
 test('"where" with $or', async () => {
     let result = await selectWhere({ $or: [
-        { name: SchemaType.Column + '#required' },
-        { name: SchemaType.Schema + '#indexed' }
+        { name: ObjectType.Column + '#required' },
+        { name: ObjectType.Object + '#indexed' }
     ]});
 
     chai.expect(result).an('array').not.empty;

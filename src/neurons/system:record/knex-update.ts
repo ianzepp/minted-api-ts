@@ -15,7 +15,7 @@ export default class extends Neuron {
         return __filename;
     }
     
-    onSchema(): string {
+    onObject(): string {
         return '*';
     }
 
@@ -42,7 +42,7 @@ export default class extends Neuron {
 
     async one(signal: Signal, record: Record) {
         return signal.kernel.knex
-            .driverTo(signal.schema.name, 'data')
+            .driverTo(signal.object.name, 'data')
             .whereIn('data.id', [record.data.id])
             .update(record.diff);
     }

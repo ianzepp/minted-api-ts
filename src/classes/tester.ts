@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Kernel } from "@classes/kernel";
-import { SchemaType } from "@typedefs/schema";
+import { ObjectType } from "@typedefs/object";
 
 export class Tester extends Kernel {
     public static ID = '99999999-9999-4999-9999-999999999999'; // v4 UUID
@@ -35,14 +35,14 @@ export class Tester extends Kernel {
     //
 
     async createTestTable()  {
-        let record = await this.data.createOne(SchemaType.Schema, { 
-            name: this.toTestSchemaName()
+        let record = await this.data.createOne(ObjectType.Object, { 
+            name: this.toTestObjectName()
         });
 
-        return this.meta.schemas.get(record.data.name);
+        return this.meta.objects.get(record.data.name);
     }
 
-    toTestSchemaName() {
+    toTestObjectName() {
         return 'test.' + this.toTestName();
     }
 

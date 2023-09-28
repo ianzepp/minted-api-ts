@@ -8,7 +8,7 @@ import { Record } from '@classes/record';
 
 // Typedefs
 import { NeuronRing } from '@typedefs/neuron';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 
 /**
  * This neuron listens to inserts on the `system.domain` table (which represents an organization or namespace),
@@ -19,8 +19,8 @@ export default class extends Neuron {
         return __filename;
     }
     
-    onSchema(): string {
-        return SchemaType.Domain;
+    onObject(): string {
+        return ObjectType.Domain;
     }
 
     onRing(): NeuronRing {
@@ -41,6 +41,6 @@ export default class extends Neuron {
         });
 
         // Insert the users
-        await signal.kernel.data.createAll(SchemaType.User, users);
+        await signal.kernel.data.createAll(ObjectType.User, users);
     }
 }

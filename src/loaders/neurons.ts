@@ -10,7 +10,7 @@ const preload_files = klaw(path.join(__dirname, '../neurons'), {
     traverseAll: true
 });
 
-// Instantiate all of the default neurons, sort by ring priority and then group by schema
+// Instantiate all of the default neurons, sort by ring priority and then group by object
 let preloads = _.chain(preload_files)
     // Convert the klaw format into a simple path
     .map(preload_info => preload_info.path)

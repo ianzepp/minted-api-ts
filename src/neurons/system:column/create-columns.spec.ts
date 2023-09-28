@@ -9,7 +9,7 @@ import { Kernel } from '@classes/kernel';
 import { Tester } from '@classes/tester';
 
 // Typedefs
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 
 let kernel = new Tester();
 
@@ -23,19 +23,19 @@ afterEach(async () => {
 
 // FIXME:
 test.skip('should create a knex column', async () => {
-    await kernel.data.createOne(SchemaType.Column, { 
-        name: SchemaType.User + ':something', 
+    await kernel.data.createOne(ObjectType.Column, { 
+        name: ObjectType.User + ':something', 
         type: 'text' 
     });
 
     // Make sure we can insert records
-    await kernel.data.createOne(SchemaType.User, {
+    await kernel.data.createOne(ObjectType.User, {
         name: 'username',
         something: 'this is some type of value'
     });
 
     // Check using direct knex
-    let select = await kernel.knex.driverTo(SchemaType.User).select().first();
+    let select = await kernel.knex.driverTo(ObjectType.User).select().first();
 
     chai.expect(select).a('object');
     chai.expect(select).property('id').string;

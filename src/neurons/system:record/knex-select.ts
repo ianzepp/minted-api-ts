@@ -8,7 +8,7 @@ import { Filter } from '@classes/filter';
 
 // Typedefs
 import { NeuronRing } from '@typedefs/neuron';
-import { Schema } from '@classes/schema';
+import { Object } from '@classes/object';
 import { Kernel } from '@classes/kernel';
 
 
@@ -17,7 +17,7 @@ export default class extends Neuron {
         return __filename;
     }
     
-    onSchema(): string {
+    onObject(): string {
         return '*';
     }
 
@@ -30,8 +30,8 @@ export default class extends Neuron {
     }
 
     async run(signal: Signal): Promise<void> {
-        let schema = signal.schema;
-        let knex = signal.kernel.knex.selectTo(schema.name);
+        let object = signal.object;
+        let knex = signal.kernel.knex.selectTo(object.name);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');
@@ -50,13 +50,13 @@ export default class extends Neuron {
         knex = this.limit(knex, signal.filter.limit);
 
         // Build the list of columns. Based on internal visibility
-        knex = this.columns(knex, signal.schema);
+        knex = this.columns(knex, signal.object);
 
         // Wait for the result
         let result = await knex;
 
         // Convert the raw results into records
-        let select = _.map(result, record_flat => signal.schema.toRecord(record_flat));
+        let select = _.map(result, record_flat => signal.object.toRecord(record_flat));
 
         // Reset change list and add to results
         signal.change.length = 0;
@@ -152,7 +152,8 @@ export default class extends Neuron {
             throw 'Unknown filter "where" data type: ' + typeof data;
         }
 
-        let [[op, op_data]] = Object.entries(data);
+        // 
+        let [[op, op_data]] = _.toPairs(data);
 
         if (typeof op !== 'string') {
             throw 'Invalid filter "where" operation type: ' + typeof op;
@@ -223,7 +224,7 @@ export default class extends Neuron {
         //     return;
         // }
 
-        // // The record ACLs live in the `<schema_name>__meta` table as:
+        // // The record ACLs live in the `<object_name>__meta` table as:
         // // - acls_full UUID[]
         // // - acls_edit UUID[]
         // // - acls_read UUID[]
@@ -291,15 +292,15 @@ export default class extends Neuron {
         return knex.limit(limit);
     }
 
-    private columns(knex: Knex.QueryBuilder, schema: Schema) {
+    private columns(knex: Knex.QueryBuilder, object: Object) {
         // Required columns
         knex = knex.column(['data.id', 'data.ns']);
 
         // Meta columns
         knex = knex.column(['meta.*']);
 
-        // Schema visible columns
-        knex = knex.column(schema.keys('data'));
+        // Object visible columns
+        knex = knex.column(object.keys('data'));
 
         // Done
         return knex;

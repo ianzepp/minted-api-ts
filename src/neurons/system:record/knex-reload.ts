@@ -17,7 +17,7 @@ export default class extends Neuron {
         return __filename;
     }
     
-    onSchema(): string {
+    onObject(): string {
         return '*';
     }
 
@@ -31,7 +31,7 @@ export default class extends Neuron {
 
     async run(signal: Signal): Promise<void> {
         // Easiest to use the existing data service to reselect record data
-        let result = await signal.kernel.data.selectAll(signal.schema, signal.change);
+        let result = await signal.kernel.data.selectAll(signal.object, signal.change);
         let result_map = _.keyBy(result, 'data.id');
 
         // Assign the raw knex data for previous values to the records
