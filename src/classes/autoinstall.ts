@@ -41,14 +41,14 @@ export class AutoInstall {
 
         // Create the master domain table.
         await this.createTable(ObjectType.Domain, (table) => {
-            table.string('description').notNullable();
+            table.string('name').notNullable();
 
             // Unique index on (ns)
             table.unique(['ns']);
         });
 
         // Create the master domain record.
-        await this.insertAll(ObjectType.Domain, [
+        await this.insertAll(SchemaType.Domain, [
             { ns: 'system', description: 'Minted API System' },
         ]);
 
@@ -74,7 +74,7 @@ export class AutoInstall {
         
         // Create the master test domain record. This tests that the trigger works.
         await this.insertAll(ObjectType.Domain, [
-            { ns: 'test', description: 'Minted API Test Suite' },
+            { ns: 'test', name: 'Minted API Test Suite' },
         ]);
 
         //
@@ -144,7 +144,7 @@ export class AutoInstall {
         // Add data for `column`
         await this.insertAll(ObjectType.Column, [
             // Columns for 'system'
-            { ns: 'system', name: ObjectType.Domain + '#description' },
+            { ns: 'system', name: ObjectType.Domain + '#name', required: true },
 
             // Columns for 'object'
             { ns: 'system', name: ObjectType.Object + '#name', required: true, immutable: true, indexed: true  },

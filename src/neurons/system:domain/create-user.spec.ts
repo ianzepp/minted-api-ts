@@ -28,7 +28,7 @@ test('auto-creates a new `system.user` admin user', async () => {
     let test_ns = kernel.toTestName();
 
     // Create the new domain & namespace
-    await kernel.data.createOne(ObjectType.Domain, { ns: test_ns, description: test_ns });
+    await kernel.data.createOne(ObjectType.Domain, { ns: test_ns, name: test_ns });
 
     // Assert the domain exists in the right namespace
     await kernel.data
