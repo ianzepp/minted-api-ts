@@ -7,11 +7,11 @@ import { AutoInstall } from '@classes/autoinstall';
 import { Neuron } from '@classes/neuron';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
-import { Schema } from '@classes/schema';
+import { Object } from '@classes/object';
 
 // Typedefs
 import { NeuronRing } from '@typedefs/neuron';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 
 
 export default class extends Neuron {
@@ -19,8 +19,8 @@ export default class extends Neuron {
         return __filename;
     }
     
-    onSchema(): string {
-        return SchemaType.Schema;
+    onObject(): string {
+        return ObjectType.Object;
     }
 
     onRing(): NeuronRing {
@@ -37,19 +37,19 @@ export default class extends Neuron {
 
     async one(signal: Signal, record: Record) {
         // Setup
-        let schema_name = record.data.name;
-        let schema_type = record.data.type;
+        let object_name = record.data.name;
+        let object_type = record.data.type;
         let auto = new AutoInstall(signal.kernel);
 
-        // Only create schemas that are marked as `database` types
-        if (schema_type !== 'database') {
+        // Only create objects that are marked as `database` types
+        if (object_type !== 'database') {
             return;
         }
 
         // Create the empty table with no default columns
-        await auto.createTable(schema_name, table => {});
+        await auto.createTable(object_name, table => {});
 
         // Add to kernel metadata
-        signal.kernel.meta.schemas.set(schema_name, Schema.from(record.data));
+        signal.kernel.meta.objects.set(object_name, Object.from(record.data));
     }
 }

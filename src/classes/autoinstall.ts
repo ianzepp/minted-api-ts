@@ -3,7 +3,7 @@ import { Knex } from 'knex';
 
 import { Kernel } from '@classes/kernel';
 import { Tester } from '@classes/tester';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 
 export class AutoInstall {
     constructor(public readonly kernel: Kernel = new Tester()) {}
@@ -40,7 +40,7 @@ export class AutoInstall {
         // `);
 
         // Create the master domain table.
-        await this.createTable(SchemaType.Domain, (table) => {
+        await this.createTable(ObjectType.Domain, (table) => {
             table.string('name').notNullable();
 
             // Unique index on (ns)
@@ -48,15 +48,15 @@ export class AutoInstall {
         });
 
         // Create the master domain record.
-        await this.insertAll(SchemaType.Domain, [
+        await this.insertAll(ObjectType.Domain, [
             { ns: 'system', name: 'Minted API System' },
         ]);
 
         // //
-        // // Define the trigger that adds new schemas when a new client is created.
+        // // Define the trigger that adds new objects when a new client is created.
         // //
         // await this.knex.raw(`
-        //     CREATE OR REPLACE FUNCTION new_domain_create_schemas_trigger()
+        //     CREATE OR REPLACE FUNCTION new_domain_create_objects_trigger()
         //     RETURNS TRIGGER AS $$
         //     BEGIN
         //         EXECUTE 'CREATE SCHEMA IF NOT EXISTS "' || NEW.ns || '__data";';
@@ -66,14 +66,14 @@ export class AutoInstall {
         //     END;
         //     $$ LANGUAGE plpgsql;
 
-        //     CREATE TRIGGER new_domain_create_schemas
+        //     CREATE TRIGGER new_domain_create_objects
         //     AFTER INSERT ON "system__data"."domain"
         //     FOR EACH ROW
-        //     EXECUTE PROCEDURE new_domain_create_schemas_trigger();
+        //     EXECUTE PROCEDURE new_domain_create_objects_trigger();
         // `);
         
         // Create the master test domain record. This tests that the trigger works.
-        await this.insertAll(SchemaType.Domain, [
+        await this.insertAll(ObjectType.Domain, [
             { ns: 'test', name: 'Minted API Test Suite' },
         ]);
 
@@ -81,8 +81,8 @@ export class AutoInstall {
         // Meta definitions
         //
 
-        // Create table `schema`
-        await this.createTable(SchemaType.Schema, (table) => {
+        // Create table `object`
+        await this.createTable(ObjectType.Object, (table) => {
             table.string('name').notNullable();
             table.string('type').notNullable().defaultTo('database');
             table.string('description');
@@ -95,7 +95,7 @@ export class AutoInstall {
         });
 
         // Create table `column`
-        await this.createTable(SchemaType.Column, table => {
+        await this.createTable(ObjectType.Column, table => {
             table.string('name').notNullable();
             table.string('type').notNullable().defaultTo('text');
             table.string('description');
@@ -116,7 +116,7 @@ export class AutoInstall {
         });
 
         // Create table `test`
-        await this.createTable(SchemaType.Test, table => {
+        await this.createTable(ObjectType.Test, table => {
             table.string('name').notNullable();
             table.boolean('boolean');
             table.integer('integer');
@@ -124,7 +124,7 @@ export class AutoInstall {
         });
 
         // Create table `user`
-        await this.createTable(SchemaType.User, table => {
+        await this.createTable(ObjectType.User, table => {
             table.string('name').notNullable();
         });
 
@@ -132,55 +132,55 @@ export class AutoInstall {
         // Data inserts
         //
 
-        // Add data for `schema`
-        await this.insertAll(SchemaType.Schema, [
-            { ns: 'system', name: SchemaType.Domain, type: 'database' },
-            { ns: 'system', name: SchemaType.Schema, type: 'database', metadata: true },
-            { ns: 'system', name: SchemaType.Column, type: 'database', metadata: true },
-            { ns: 'system', name: SchemaType.Test, type: 'database' },
-            { ns: 'system', name: SchemaType.User, type: 'database' },
+        // Add data for `object`
+        await this.insertAll(ObjectType.Object, [
+            { ns: 'system', name: ObjectType.Domain, type: 'database' },
+            { ns: 'system', name: ObjectType.Object, type: 'database', metadata: true },
+            { ns: 'system', name: ObjectType.Column, type: 'database', metadata: true },
+            { ns: 'system', name: ObjectType.Test, type: 'database' },
+            { ns: 'system', name: ObjectType.User, type: 'database' },
         ]);
 
         // Add data for `column`
-        await this.insertAll(SchemaType.Column, [
+        await this.insertAll(ObjectType.Column, [
             // Columns for 'system'
-            { ns: 'system', name: SchemaType.Domain + '#name', required: true },
+            { ns: 'system', name: ObjectType.Domain + '#name', required: true },
 
-            // Columns for 'schema'
-            { ns: 'system', name: SchemaType.Schema + '#name', required: true, immutable: true, indexed: true  },
-            { ns: 'system', name: SchemaType.Schema + '#type' },
-            { ns: 'system', name: SchemaType.Schema + '#description' },
-            { ns: 'system', name: SchemaType.Schema + '#external', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Schema + '#metadata', type: 'boolean' },
+            // Columns for 'object'
+            { ns: 'system', name: ObjectType.Object + '#name', required: true, immutable: true, indexed: true  },
+            { ns: 'system', name: ObjectType.Object + '#type' },
+            { ns: 'system', name: ObjectType.Object + '#description' },
+            { ns: 'system', name: ObjectType.Object + '#external', type: 'boolean' },
+            { ns: 'system', name: ObjectType.Object + '#metadata', type: 'boolean' },
 
             // Columns for 'column'
-            { ns: 'system', name: SchemaType.Column + '#name', required: true, immutable: true, indexed: true },
-            { ns: 'system', name: SchemaType.Column + '#type', required: true },
-            { ns: 'system', name: SchemaType.Column + '#description' },
+            { ns: 'system', name: ObjectType.Column + '#name', required: true, immutable: true, indexed: true },
+            { ns: 'system', name: ObjectType.Column + '#type', required: true },
+            { ns: 'system', name: ObjectType.Column + '#description' },
 
-            { ns: 'system', name: SchemaType.Column + '#audited', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + '#immutable', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + '#indexed', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + '#internal', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + '#required', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Column + '#unique', type: 'boolean' },
+            { ns: 'system', name: ObjectType.Column + '#audited', type: 'boolean' },
+            { ns: 'system', name: ObjectType.Column + '#immutable', type: 'boolean' },
+            { ns: 'system', name: ObjectType.Column + '#indexed', type: 'boolean' },
+            { ns: 'system', name: ObjectType.Column + '#internal', type: 'boolean' },
+            { ns: 'system', name: ObjectType.Column + '#required', type: 'boolean' },
+            { ns: 'system', name: ObjectType.Column + '#unique', type: 'boolean' },
 
-            { ns: 'system', name: SchemaType.Column + '#minimum', type: 'integer' },
-            { ns: 'system', name: SchemaType.Column + '#maximum', type: 'integer' },
-            { ns: 'system', name: SchemaType.Column + '#precision', type: 'integer' },
+            { ns: 'system', name: ObjectType.Column + '#minimum', type: 'integer' },
+            { ns: 'system', name: ObjectType.Column + '#maximum', type: 'integer' },
+            { ns: 'system', name: ObjectType.Column + '#precision', type: 'integer' },
 
             // Columns for 'test'
-            { ns: 'system', name: SchemaType.Test + '#name', type: 'text', required: true },
-            { ns: 'system', name: SchemaType.Test + '#boolean', type: 'boolean' },
-            { ns: 'system', name: SchemaType.Test + '#integer', type: 'integer' },
-            { ns: 'system', name: SchemaType.Test + '#decimal', type: 'decimal' },
+            { ns: 'system', name: ObjectType.Test + '#name', type: 'text', required: true },
+            { ns: 'system', name: ObjectType.Test + '#boolean', type: 'boolean' },
+            { ns: 'system', name: ObjectType.Test + '#integer', type: 'integer' },
+            { ns: 'system', name: ObjectType.Test + '#decimal', type: 'decimal' },
 
             // Columns for 'user'
-            { ns: 'system', name: SchemaType.User + '#name', type: 'text', required: true },
+            { ns: 'system', name: ObjectType.User + '#name', type: 'text', required: true },
         ]);
 
         // Add data for `client`
-        await this.insertAll(SchemaType.User, [
+        await this.insertAll(ObjectType.User, [
             { ns: Kernel.NS, id: Kernel.ID, name: 'root' },
             { ns: Tester.NS, id: Tester.ID, name: 'test' },
         ]);
@@ -193,13 +193,13 @@ export class AutoInstall {
     // Helpers
     //
 
-    async createTable(schema_path: string, columnFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
+    async createTable(object_path: string, columnFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
         if (this.kernel.isTest() === false) {
-            console.warn('autoinstall.createTable()', schema_path);
+            console.warn('autoinstall.createTable()', object_path);
         }
 
         // Data table
-        await this.knex.schema.createTable(schema_path + '/data', (table) => {
+        await this.knex.schema.createTable(object_path + '/data', (table) => {
             table.string('id').notNullable().primary().defaultTo(this.knex.fn.uuid());
             table.string('ns').notNullable();
 
@@ -207,7 +207,7 @@ export class AutoInstall {
             columnFn(table);
         });
 
-        await this.knex.schema.createTable(schema_path + '/meta', (table) => {
+        await this.knex.schema.createTable(object_path + '/meta', (table) => {
             table.string('id').notNullable().primary();
             table.string('ns').notNullable();
 
@@ -280,21 +280,21 @@ export class AutoInstall {
         // `);
     }
 
-    async deleteTable(schema_path: string) {
+    async deleteTable(object_path: string) {
         if (this.kernel.isTest() === false) {
-            console.warn('autoinstall.deleteTable()', schema_path);
+            console.warn('autoinstall.deleteTable()', object_path);
         }
 
-        await this.knex.schema.dropTable(schema_path);
+        await this.knex.schema.dropTable(object_path);
     }
 
     //
     // Helpers
     //
 
-    async insertAll(schema_path: string, record_rows: _.Dictionary<any>[]) {
+    async insertAll(object_path: string, record_rows: _.Dictionary<any>[]) {
         if (this.kernel.isTest() === false) {
-            console.warn('autoinstall.insertAll()', schema_path);
+            console.warn('autoinstall.insertAll()', object_path);
         }
 
         // Process
@@ -302,8 +302,8 @@ export class AutoInstall {
             console.warn('+', JSON.stringify(record_data));
             
             // Assign ID
-            let [data] = await this.knex(schema_path + '/data').insert(record_data).returning('*');
-            let [meta] = await this.knex(schema_path + '/meta').insert({ 
+            let [data] = await this.knex(object_path + '/data').insert(record_data).returning('*');
+            let [meta] = await this.knex(object_path + '/meta').insert({ 
                 id: data.id,
                 ns: data.ns,
                 created_at: new Date().toISOString(),

@@ -126,8 +126,8 @@ export class KernelKnex implements Service {
         return this.tx ?? this.db;
     }
 
-    selectTo<T = RecordFlat>(schema_path: string) {
-        // For example, using a `schema_path` of `system.user`, then:
+    selectTo<T = RecordFlat>(object_path: string) {
+        // For example, using a `object_path` of `system.user`, then:
         //
         // 1. split the path into ns=kernel and sn=client
         // 2. start from a top-level table of `system.user`
@@ -135,8 +135,8 @@ export class KernelKnex implements Service {
         // 4. restrict to only the running user's visible namespaces
         
         let knex = this
-            .driver<T>({ data: `${ schema_path }/data` })
-            .join({ meta: `${ schema_path }/meta` }, 'meta.id', 'data.id');
+            .driver<T>({ data: `${ object_path }/data` })
+            .join({ meta: `${ object_path }/meta` }, 'meta.id', 'data.id');
 
         // Root ignores namespace visiblity by default. This may change with RLS.
         if (this.kernel.isRoot() === false) {
@@ -146,8 +146,8 @@ export class KernelKnex implements Service {
         return knex;
     }
 
-    driverTo<T = _.Dictionary<any>>(schema_path: string, alias: 'data' | 'meta' = 'data') {
-        let knex = this.driver<T>(`${ schema_path }/${ alias } as ${ alias }`);
+    driverTo<T = _.Dictionary<any>>(object_path: string, alias: 'data' | 'meta' = 'data') {
+        let knex = this.driver<T>(`${ object_path }/${ alias } as ${ alias }`);
 
         // Root ignores namespace visiblity by default. This may change with RLS.
         if (this.kernel.isRoot() === false) {

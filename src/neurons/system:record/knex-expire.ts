@@ -13,7 +13,7 @@ export default class extends Neuron {
         return __filename;
     }
     
-    onSchema(): string {
+    onObject(): string {
         return '*';
     }
 
@@ -27,7 +27,7 @@ export default class extends Neuron {
 
     async run(signal: Signal): Promise<void> {
         return signal.kernel.knex
-            .driverTo(signal.schema.name, 'meta')
+            .driverTo(signal.object.name, 'meta')
             .whereIn('id', _.map(signal.change_data, 'id'))
             .update({
                 expired_at: signal.kernel.time,

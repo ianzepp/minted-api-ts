@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Typedefs
-import { SchemaName } from './schema';
+import { ObjectName } from './object';
 
 
 //
@@ -75,8 +75,8 @@ export interface RecordAcls {
 
 /** Represents the record's JSON representation in object format. */
 export interface RecordJson {
-    /** Returns the string name of the parent schema type. */
-    type: SchemaName;
+    /** Returns the string name of the parent object type. */
+    type: ObjectName;
 
     /** Accessor to the key/value mapping of record properties with their values. */
     data: RecordData;

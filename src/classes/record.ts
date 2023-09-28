@@ -3,12 +3,12 @@ import { assert, expect } from 'chai';
 
 // Classes
 import { Column } from '@classes/column';
-import { Schema } from '@classes/schema';
+import { Object } from '@classes/object';
 
 // Typedefs
 import { ColumnType } from '@typedefs/column';
 import { ColumnsMeta } from '@typedefs/column';
-import { SchemaName } from '@typedefs/schema';
+import { ObjectName } from '@typedefs/object';
 
 // Helpers
 import { toNull } from '@classes/helpers';
@@ -19,7 +19,7 @@ import { toJSON } from '@classes/helpers';
 // Record proxies. Wizard stuff.
 //
 
-function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
+function createProxy(object: Object, source_type: 'data' | 'meta' | 'acls') {
     // Define default target values
     let source: _.Dictionary<any> = {};
 
@@ -53,7 +53,7 @@ function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
             return;
         }
 
-        if (source_type === 'data' && schema.has(name)) {
+        if (source_type === 'data' && object.has(name)) {
             return;
         }
 
@@ -61,7 +61,7 @@ function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
             return;
         }
 
-        assert.fail(`schema '${schema.name}' column '${name}' is invalid for 'record.${source_type}'`);
+        assert.fail(`object '${object.name}' column '${name}' is invalid for 'record.${source_type}'`);
     }
 
     // Build and return the new Proxy
@@ -92,7 +92,7 @@ function createProxy(schema: Schema, source_type: 'data' | 'meta' | 'acls') {
  * The class provides methods to manipulate and access the data.
  */
 export class Record {
-    public readonly type: SchemaName;
+    public readonly type: ObjectName;
 
     // Containers
     public readonly data: _.Dictionary<any>;
@@ -100,10 +100,10 @@ export class Record {
     public readonly meta: _.Dictionary<any>;
 
     // Related objects
-    constructor(public readonly schema: Schema) {
-        this.data = createProxy(schema, 'data');
-        this.prev = createProxy(schema, 'data');
-        this.meta = createProxy(schema, 'meta');
+    constructor(public readonly object: Object) {
+        this.data = createProxy(object, 'data');
+        this.prev = createProxy(object, 'data');
+        this.meta = createProxy(object, 'meta');
     }
 
     get diff() {
@@ -139,7 +139,7 @@ export class Record {
     }
 
     toString(): string {
-        return `${this.schema.name}#${this.data.id}`;
+        return `${this.object.name}#${this.data.id}`;
     }
 
     toJSON() {
@@ -149,8 +149,8 @@ export class Record {
         };
     }
 
-    is(schema_name: SchemaName) {
-        return this.schema.is(schema_name);
+    is(object_name: ObjectName) {
+        return this.object.is(object_name);
     }
 
     has(column: Column): boolean {

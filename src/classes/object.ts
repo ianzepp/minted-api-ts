@@ -11,42 +11,42 @@ import { ColumnsMeta } from '@typedefs/column';
 import { ColumnName } from '@typedefs/column';
 import { ColumnForm } from '@typedefs/column';
 import { ColumnType } from '@typedefs/column';
-import { SchemaName } from '@typedefs/schema';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectName } from '@typedefs/object';
+import { ObjectType } from '@typedefs/object';
 
 
 /**
- * The `Schema` class represents a schema in the database.
+ * The `Object` class represents a object in the database.
  * It provides methods to:
- * - Generate a new `Schema` instance from provided flat data.
- * - Access properties of the schema such as `id`, `ns` (namespace), `name`, `type`, and `metadata`.
- * - Get the names, types, and forms of the columns in the schema.
- * - Check if the schema name matches a provided name.
- * - Check if the schema has a column with a specified name.
- * - Retrieve a column from the schema by its name.
- * - Generate an array of keys from the schema's column names, with an optional prefix.
- * - Insert a column into the schema.
- * - Remove a column from the schema.
- * - Get the two path parts of the schema name.
- * - Convert the schema to a record.
+ * - Generate a new `Object` instance from provided flat data.
+ * - Access properties of the object such as `id`, `ns` (namespace), `name`, `type`, and `metadata`.
+ * - Get the names, types, and forms of the columns in the object.
+ * - Check if the object name matches a provided name.
+ * - Check if the object has a column with a specified name.
+ * - Retrieve a column from the object by its name.
+ * - Generate an array of keys from the object's column names, with an optional prefix.
+ * - Insert a column into the object.
+ * - Remove a column from the object.
+ * - Get the two path parts of the object name.
+ * - Convert the object to a record.
  */
-export class Schema {
+export class Object {
     //
     // Static
     //
 
     // Re-export aliases
-    public static Type = SchemaType;
+    public static Type = ObjectType;
 
 
     /**
-     * Generates a new `Schema` instance from provided flat data.
+     * Generates a new `Object` instance from provided flat data.
      * 
-     * @param {_.Dictionary<any>} flat - The flat data to generate the schema from.
-     * @returns {Schema} Returns a new `Schema` instance.
+     * @param {_.Dictionary<any>} flat - The flat data to generate the object from.
+     * @returns {Object} Returns a new `Object` instance.
      */
-    static from(flat: _.Dictionary<any>): Schema {
-        return new Schema(
+    static from(flat: _.Dictionary<any>): Object {
+        return new Object(
             flat.id,
             flat.ns,
             flat.name,
@@ -61,7 +61,7 @@ export class Schema {
     constructor(
         public readonly id: string,
         public readonly ns: string,
-        public readonly name: SchemaName,
+        public readonly name: ObjectName,
         public readonly type: string,
         public readonly metadata: boolean) {}
 
@@ -70,7 +70,7 @@ export class Schema {
     //
 
     /**
-     * Retrieves the names of all columns in the schema.
+     * Retrieves the names of all columns in the object.
      * 
      * @returns {ColumnName[]} Returns an array of column names.
      */
@@ -79,7 +79,7 @@ export class Schema {
     }
 
     /**
-     * Retrieves the types of all columns in the schema.
+     * Retrieves the types of all columns in the object.
      * 
      * @returns {ColumnType[]} Returns an array of column types.
      */
@@ -88,7 +88,7 @@ export class Schema {
     }
 
     /**
-     * Retrieves the forms of all columns in the schema.
+     * Retrieves the forms of all columns in the object.
      * 
      * @returns {ColumnForm[][]} Returns a 2D array of column forms.
      */
@@ -101,17 +101,17 @@ export class Schema {
     //
 
     /**
-     * Checks if the schema name matches the provided name.
+     * Checks if the object name matches the provided name.
      * 
-     * @param {SchemaName} name - The name to check against the schema name.
-     * @returns {boolean} Returns true if the provided name matches the schema name, false otherwise.
+     * @param {ObjectName} name - The name to check against the object name.
+     * @returns {boolean} Returns true if the provided name matches the object name, false otherwise.
      */
-    is(name: SchemaName) {
+    is(name: ObjectName) {
         return this.name === name;
     }
 
     /**
-     * Checks if the schema has a column with the specified name.
+     * Checks if the object has a column with the specified name.
      * 
      * @param {ColumnName} name - The name of the column to check for.
      * @returns {boolean} Returns true if a column with the specified name exists, false otherwise.
@@ -121,7 +121,7 @@ export class Schema {
     }
 
     /**
-     * Retrieves a column from the schema by its name.
+     * Retrieves a column from the object by its name.
      * 
      * @param {ColumnName} name - The name of the column to retrieve.
      * @returns {Column | undefined} Returns the column if found, undefined otherwise.
@@ -131,7 +131,7 @@ export class Schema {
     }
 
     /**
-     * Generates an array of keys from the schema's column names. If a prefix is provided, it is prepended to each key.
+     * Generates an array of keys from the object's column names. If a prefix is provided, it is prepended to each key.
      * 
      * @param {string} prefix - The prefix to prepend to each key.
      * @returns {string[]} Returns an array of keys.
@@ -141,10 +141,10 @@ export class Schema {
     }
 
     /**
-     * Inserts a column into the schema.
+     * Inserts a column into the object.
      * 
      * @param {Column} column - The column to be inserted.
-     * @returns {this} Returns the current schema instance.
+     * @returns {this} Returns the current object instance.
      */
     insert(column: Column): this {
         this.columns[column.column_name] = column;
@@ -152,10 +152,10 @@ export class Schema {
     }
 
     /**
-     * Removes a column from the schema.
+     * Removes a column from the object.
      * 
      * @param {Column | ColumnName} column - The column to be removed.
-     * @returns {this} Returns the current schema instance.
+     * @returns {this} Returns the current object instance.
      */
     remove(column: Column | ColumnName): this {
         _.unset(this.columns, column instanceof Column ? column.column_name : column);
@@ -163,16 +163,16 @@ export class Schema {
     }
 
     /**
-     * Splits the schema name into its constituent parts and returns them as an array. For example, if the schema's full name is `system:domain`, 
+     * Splits the object name into its constituent parts and returns them as an array. For example, if the object's full name is `system:domain`, 
      * calling the `path()` function will return an array `['system', 'domain']`.
-     * @returns {string[]} An array containing the parts of the schema name.
+     * @returns {string[]} An array containing the parts of the object name.
      */
     path() {
         return this.name.split(':');
     }
 
     /**
-     * Converts the schema to a record.
+     * Converts the object to a record.
      * 
      * @param {any} source - The source from which to create the record.
      * @returns {Record} Returns a new Record instance.
@@ -191,17 +191,17 @@ export class Schema {
             _.assign(record.meta, source.meta);
         }
 
-        else if (Schema.isRecordJson(source)) {
+        else if (Object.isRecordJson(source)) {
             _.assign(record.data, source.data);
             _.assign(record.meta, source.meta);
         }
 
-        else if (Schema.isRecordFlat(source)) {
+        else if (Object.isRecordFlat(source)) {
             _.assign(record.data, _.omit(source, ColumnsMeta));
             _.assign(record.meta, _.pick(source, ColumnsMeta));
         }
 
-        else if (Schema.isRecordDict(source)) {
+        else if (Object.isRecordDict(source)) {
             _.assign(record.data, _.omit(source, ColumnsMeta));
         }
 

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Typedefs
-import { SchemaName } from './schema';
+import { ObjectName } from './object';
 
 
 //
@@ -70,7 +70,7 @@ export interface FilterJson {
 
 /** Represents the filter's JSON representation in object format. */
 // export interface FilterJson {
-//     using: SchemaName;
+//     using: ObjectName;
 //     where: _.Dictionary<FilterWhere>;
 //     order: _.Dictionary<FilterOrder>;
 //     flags: _.Dictionary<FilterFlags>;

@@ -9,7 +9,7 @@ import { Record } from '@classes/record';
 
 // Typedefs
 import { ColumnType } from '@typedefs/column';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 
 
 export default class extends Neuron {
@@ -17,8 +17,8 @@ export default class extends Neuron {
         return __filename;
     }
     
-    onSchema(): string {
-        return SchemaType.Column;
+    onObject(): string {
+        return ObjectType.Column;
     }
 
     onRing(): NeuronRing {
@@ -36,9 +36,9 @@ export default class extends Neuron {
     async one(signal: Signal, record: Record) {
         // Create temporary refs
         let column = Column.from(record.data);
-        let schema = signal.kernel.meta.schemas.get(column.schema_name);
+        let object = signal.kernel.meta.objects.get(column.object_name);
 
-        await signal.kernel.knex.schema.table(`${schema.name}/data`, t => {            
+        await signal.kernel.knex.schema.table(`${object.name}/data`, t => {            
             let column_type = column.type;
             let column_name = column.column_name;
 
@@ -69,8 +69,8 @@ export default class extends Neuron {
             // Invalid column type
         });
 
-        // Add the column data to the parent schema
-        schema.insert(column);
+        // Add the column data to the parent object
+        object.insert(column);
 
         // Add the column data to the kernel metadata
         signal.kernel.meta.columns.set(column.name, column);

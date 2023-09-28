@@ -6,7 +6,7 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Tester } from '@classes/tester';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 import { RouterReq } from '@typedefs/router-req';
 import { RouterRes } from '@typedefs/router-res';
 import { toJSON } from '@classes/helpers';
@@ -34,7 +34,7 @@ async function verifyOne(source_name: string, result: any) {
     chai.expect(record).nested.property('meta.created_by').string;
 
     // Confirm the record exists in the system
-    let select = await kernel.data.select404(SchemaType.Test, record.data.id);
+    let select = await kernel.data.select404(ObjectType.Test, record.data.id);
 
     chai.expect(record).a('object');
     chai.expect(record).nested.property('data.id', record.data.id).string;
@@ -46,8 +46,8 @@ async function verifyOne(source_name: string, result: any) {
 function createRouterReq(body: any): RouterReq {
     return {
         verb: 'POST',
-        path: '/api/data/' + SchemaType.Test,
-        params: { schema: SchemaType.Test },
+        path: '/api/data/' + ObjectType.Test,
+        params: { object: ObjectType.Test },
         search: {},
         body: body
     };
@@ -57,7 +57,7 @@ function createRouterRes(): RouterRes {
     return {
         status: 0,
         length: 0,
-        schema: undefined,
+        object: undefined,
         record: undefined,
         filter: undefined,
         result: undefined,

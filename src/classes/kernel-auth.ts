@@ -7,7 +7,7 @@ import { Kernel } from '@classes/kernel';
 
 // Typedefs
 import { Service } from '@typedefs/kernel';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 
 // User API errors
 export class AuthError extends Error {};
@@ -43,7 +43,7 @@ export class KernelAuth implements Service {
 
     async authenticate() {
         // Verify user record exists and has access to the kernel
-        let user = this.kernel.knex.driverTo(SchemaType.User)
+        let user = this.kernel.knex.driverTo(ObjectType.User)
             .where('id', this.kernel.user_id)
             .column(['id', 'ns'])
             .first();

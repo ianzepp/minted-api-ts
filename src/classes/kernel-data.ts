@@ -5,7 +5,7 @@ import { Corpus } from '@classes/corpus';
 import { Filter } from '@classes/filter';
 import { Kernel } from '@classes/kernel';
 import { Record } from '@classes/record';
-import { Schema } from '@classes/schema';
+import { Object } from '@classes/object';
 import { Signal } from '@classes/signal';
 
 // Typedefs
@@ -13,7 +13,7 @@ import { ChangeData } from '@typedefs/record';
 import { FilterJson } from '@typedefs/filter';
 import { Service } from '@typedefs/kernel';
 import { NeuronRing } from '@typedefs/neuron';
-import { SchemaName } from '@typedefs/schema';
+import { ObjectName } from '@typedefs/object';
 import { SignalOp } from '@typedefs/signal';
 
 
@@ -64,16 +64,16 @@ export class KernelData implements Service {
     // Core runtime
     //
 
-    async run(schema_name: Schema | SchemaName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: SignalOp): Promise<Record[]> {
+    async run(object_name: Object | ObjectName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: SignalOp): Promise<Record[]> {
         if (Bun.env.POSTGRES_DEBUG === 'true') {
-            console.debug(`KernelData.run(): op="${op}" schema_name="${schema_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
+            console.debug(`KernelData.run(): op="${op}" object_name="${object_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
         }
 
         this.kernel.expect(change_data, 'change_data').an('array');
         this.kernel.expect(filter_data, 'filter_data').an('object');
         this.kernel.expect(op, 'op').a('string');
 
-        let schema = this.kernel.meta.schemas.get(schema_name);
+        let object = this.kernel.meta.objects.get(object_name);
         let filter = new Filter(filter_data);
 
         // Is this something other than a select op, and the change data is empty?
@@ -82,8 +82,8 @@ export class KernelData implements Service {
         }
 
         // Convert the raw change data into records
-        let change = change_data.map(change => schema.toRecord(change));
-        let corpus = new Corpus(schema, change);
+        let change = change_data.map(change => object.toRecord(change));
+        let corpus = new Corpus(object, change);
 
         // Build the signal
         let signal = new Signal(this.kernel, corpus, filter, op);
@@ -101,125 +101,125 @@ export class KernelData implements Service {
     // Collection record methods
     //
 
-    async selectAll(schema_name: Schema | SchemaName, source_data: ChangeData[]): Promise<Record[]> {
-        let schema = this.kernel.meta.schemas.get(schema_name);
-        let source = source_data.map(change => schema.toRecord(change).data.id);
+    async selectAll(object_name: Object | ObjectName, source_data: ChangeData[]): Promise<Record[]> {
+        let object = this.kernel.meta.objects.get(object_name);
+        let source = source_data.map(change => object.toRecord(change).data.id);
 
-        return this.selectIds(schema, _.uniq(_.compact(source)));
+        return this.selectIds(object, _.uniq(_.compact(source)));
     }
 
-    async createAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SignalOp.Create);
+    async createAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(object_name, change_data, {}, SignalOp.Create);
     }
 
-    async updateAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SignalOp.Update);
+    async updateAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(object_name, change_data, {}, SignalOp.Update);
     }
 
-    async upsertAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SignalOp.Upsert);
+    async upsertAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(object_name, change_data, {}, SignalOp.Upsert);
     }
 
-    async expireAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SignalOp.Expire);
+    async expireAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(object_name, change_data, {}, SignalOp.Expire);
     }
 
-    async deleteAll(schema_name: Schema | SchemaName, change_data: ChangeData[]): Promise<Record[]> {
-        return this.run(schema_name, change_data, {}, SignalOp.Delete);
+    async deleteAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+        return this.run(object_name, change_data, {}, SignalOp.Delete);
     }
 
     //
     // Single record methods
     //
 
-    async selectOne(schema_name: Schema | SchemaName, source_data: ChangeData): Promise<Record | undefined> {
-        return this.selectAll(schema_name, [source_data]).then(headOne<Record>);
+    async selectOne(object_name: Object | ObjectName, source_data: ChangeData): Promise<Record | undefined> {
+        return this.selectAll(object_name, [source_data]).then(headOne<Record>);
     }
 
-    async createOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.createAll(schema_name, [change_data]).then(headOne<Record>);
+    async createOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+        return this.createAll(object_name, [change_data]).then(headOne<Record>);
     }
 
-    async updateOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.updateAll(schema_name, [change_data]).then(headOne<Record>);
+    async updateOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+        return this.updateAll(object_name, [change_data]).then(headOne<Record>);
     }
 
-    async upsertOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.upsertAll(schema_name, [change_data]).then(headOne<Record>);
+    async upsertOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+        return this.upsertAll(object_name, [change_data]).then(headOne<Record>);
     }
 
-    async expireOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.expireAll(schema_name, [change_data]).then(headOne<Record>);
+    async expireOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+        return this.expireAll(object_name, [change_data]).then(headOne<Record>);
     }
 
-    async deleteOne(schema_name: Schema | SchemaName, change_data: ChangeData): Promise<Record> {
-        return this.deleteAll(schema_name, [change_data]).then(headOne<Record>);
+    async deleteOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+        return this.deleteAll(object_name, [change_data]).then(headOne<Record>);
     }
 
     //
     // Search ops. Basically a `select` but with a filter to support a slightly different API
     // 
 
-    async searchAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
-        return this.selectAny(schema_name, filter_data);
+    async searchAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
+        return this.selectAny(object_name, filter_data);
     }
 
-    async searchOne(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record | undefined> {
-        return this.selectAny(schema_name, filter_data).then(headOne);
+    async searchOne(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<Record | undefined> {
+        return this.selectAny(object_name, filter_data).then(headOne);
     }
 
-    async search404(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record> {
-        return this.selectAny(schema_name, filter_data).then(head404);
+    async search404(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<Record> {
+        return this.selectAny(object_name, filter_data).then(head404);
     }
 
-    async searchNot(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<void> {
-        return this.selectAny(schema_name, filter_data).then(headNot);
+    async searchNot(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<void> {
+        return this.selectAny(object_name, filter_data).then(headNot);
     }
 
     //
     // Filter + Change ops
     //
 
-    async selectAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
-        return this.run(schema_name, [], filter_data, SignalOp.Select);
+    async selectAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
+        return this.run(object_name, [], filter_data, SignalOp.Select);
     }
 
-    async updateAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {
-        return this.selectAny(schema_name, filter_data).then(result => {
+    async updateAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {
+        return this.selectAny(object_name, filter_data).then(result => {
             result.forEach(record => _.assign(record.data, change_data));
-            return this.updateAll(schema_name, result);
+            return this.updateAll(object_name, result);
         });
     }
 
-    async expireAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson>): Promise<Record[]> {
-        return this.selectAny(schema_name, filter_data).then(result => this.expireAll(schema_name, result));
+    async expireAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson>): Promise<Record[]> {
+        return this.selectAny(object_name, filter_data).then(result => this.expireAll(object_name, result));
     }
 
-    async deleteAny(schema_name: Schema | SchemaName, filter_data: Partial<FilterJson>): Promise<Record[]> {
-        return this.selectAny(schema_name, filter_data).then(result => this.deleteAll(schema_name, result));
+    async deleteAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson>): Promise<Record[]> {
+        return this.selectAny(object_name, filter_data).then(result => this.deleteAll(object_name, result));
     }
 
     //
     // By ID or IDs
     //
 
-    async select404(schema_name: Schema | SchemaName, record_one: string): Promise<Record> {
-        return this.selectAny(schema_name, { where: { id: record_one }}).then(head404<Record>);
+    async select404(object_name: Object | ObjectName, record_one: string): Promise<Record> {
+        return this.selectAny(object_name, { where: { id: record_one }}).then(head404<Record>);
     }
 
-    async selectIds(schema_name: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
-        return this.selectAny(schema_name, { where: { id: record_ids }});
+    async selectIds(object_name: Object | ObjectName, record_ids: string[]): Promise<Record[]> {
+        return this.selectAny(object_name, { where: { id: record_ids }});
     }
 
-    async updateIds(schema_name: Schema | SchemaName, record_ids: string[], change_data: ChangeData): Promise<Record[]> {
-        return this.updateAny(schema_name, { where: { id: record_ids }}, change_data);
+    async updateIds(object_name: Object | ObjectName, record_ids: string[], change_data: ChangeData): Promise<Record[]> {
+        return this.updateAny(object_name, { where: { id: record_ids }}, change_data);
     }
 
-    async expireIds(schema_name: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
-        return this.expireAny(schema_name, { where: { id: record_ids }});
+    async expireIds(object_name: Object | ObjectName, record_ids: string[]): Promise<Record[]> {
+        return this.expireAny(object_name, { where: { id: record_ids }});
     }
 
-    async deleteIds(schema_name: Schema | SchemaName, record_ids: string[]): Promise<Record[]> {
-        return this.deleteAny(schema_name, { where: { id: record_ids }});
+    async deleteIds(object_name: Object | ObjectName, record_ids: string[]): Promise<Record[]> {
+        return this.deleteAny(object_name, { where: { id: record_ids }});
     }
 }

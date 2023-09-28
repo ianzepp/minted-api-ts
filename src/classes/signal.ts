@@ -10,7 +10,7 @@ import { Filter } from '@classes/filter';
 import { Kernel } from '@classes/kernel';
 import { Neuron } from '@classes/neuron';
 import { Record } from '@classes/record';
-import { Schema } from '@classes/schema';
+import { Object } from '@classes/object';
 
 // Typedefs
 import { SignalOp } from '@typedefs/signal';
@@ -28,8 +28,8 @@ export class Signal {
         readonly filter: Filter,
         readonly op: SignalOp) {}
 
-    get schema() {
-        return this.corpus.schema;
+    get object() {
+        return this.corpus.object;
     }
 
     get change() {
@@ -59,8 +59,8 @@ export class Signal {
                 return false;
             }
 
-            // Wrong schema name?
-            if (neuron.onSchema() != '*' && neuron.onSchema() !== this.schema.name) {
+            // Wrong object name?
+            if (neuron.onObject() != '*' && neuron.onObject() !== this.object.name) {
                 return false;
             }
 
@@ -107,8 +107,8 @@ export class Signal {
         });
 
         for(let neuron of neurons) {
-            // console.info(util.format('Signal: schema=%j op=%j ring=%j rank=%j neuron=%j', 
-            //     this.schema.name, 
+            // console.info(util.format('Signal: object=%j op=%j ring=%j rank=%j neuron=%j', 
+            //     this.object.name, 
             //     this.op, 
             //     neuron.onRing(),
             //     neuron.onRank(),

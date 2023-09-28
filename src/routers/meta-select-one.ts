@@ -2,12 +2,12 @@ import _ from 'lodash';
 
 // API
 import { Router } from '@classes/router';
-import { SchemaType } from '@typedefs/schema';
+import { ObjectType } from '@typedefs/object';
 
 // Implementation
 export default class extends Router {
     async run() {
-        return this.kernel.data.search404(this.params.schema, { where: { name: this.params.record_name }});
+        return this.kernel.data.search404(this.params.object, { where: { name: this.params.record_name }});
     }
 
     onHttpVerb() {
@@ -15,6 +15,6 @@ export default class extends Router {
     }
 
     onHttpPath() {
-        return '/api/meta/:schema/:record';
+        return '/api/meta/:object/:record';
     }
 }

@@ -11,7 +11,7 @@ import { ColumnType } from '@typedefs/column';
  * It provides functionalities to:
  * - Generate a new `Column` instance from provided flat data.
  * - Access properties of the column such as `id`, `ns` (namespace), `name`, `type`, `forms`, `minimum` and `maximum`.
- * - Get the `schema_name` and `column_name` from the full name of the column.
+ * - Get the `object_name` and `column_name` from the full name of the column.
  * - Check if the column is of a specific type or has a specific form.
  * - Get the two path parts of the column name.
  */
@@ -59,10 +59,10 @@ export class Column {
     //
 
     /**
-     * Returns only the `schema_name` portion of the full name property. For example, if the column's name
-     * property is set to `system:domain#name`, then `schema_name` returns `system:domain`.
+     * Returns only the `object_name` portion of the full name property. For example, if the column's name
+     * property is set to `system:domain#name`, then `object_name` returns `system:domain`.
      */
-    get schema_name() {
+    get object_name() {
         return _.head(this.name.split('#'));
     }
 
