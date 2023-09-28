@@ -49,7 +49,7 @@ export class AutoInstall {
 
         // Create the master domain record.
         await this.insertAll(ObjectType.Domain, [
-            { ns: 'system', description: 'Minted API System' },
+            { ns: 'system', name: 'Minted API System' },
         ]);
 
         // //
