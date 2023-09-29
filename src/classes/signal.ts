@@ -5,7 +5,6 @@ import chai from 'chai';
 import { expect } from 'chai';
 
 // Classes
-import { Corpus } from '@classes/corpus';
 import { Filter } from '@classes/filter';
 import { Kernel } from '@classes/kernel';
 import { Neuron } from '@classes/neuron';
@@ -18,23 +17,17 @@ import { SignalOp } from '@typedefs/signal';
 // Import pre-loaded routers
 import Neurons from '../loaders/neurons';
 
+
 export class Signal {
     readonly expect = chai.expect;
     readonly failures: string[] = [];
 
     constructor(
         readonly kernel: Kernel,
-        readonly corpus: Corpus,
+        readonly object: Object,
+        readonly change: Record[],
         readonly filter: Filter,
         readonly op: SignalOp) {}
-
-    get object() {
-        return this.corpus.object;
-    }
-
-    get change() {
-        return this.corpus.records;
-    }
 
     get change_data() {
         return _.map(this.change, record => _.assign({}, record.data));

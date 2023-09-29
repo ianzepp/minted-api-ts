@@ -5,8 +5,7 @@
 /** ... */
 export type ObjectName = string;
 
-/** ... */
-// export type ObjectType = ObjectInfo | ObjectName;
+
 //
 // Enums
 //
@@ -27,8 +26,11 @@ export enum ObjectType {
 
 /** Represents the architecture needed to obtain a object's info. */
 export interface ObjectInfo {
-    /** Returns the name of the object */
+    /** Returns the name of the object. */
     readonly name: ObjectName;
+
+    /** Returns the type of the object. */
+    readonly type: ObjectType;
 
     /** Generate a new filter */
     // toFilter(source?: FilterJson): FilterInfo;

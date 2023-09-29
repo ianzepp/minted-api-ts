@@ -9,7 +9,7 @@ import { Tester } from '@classes/tester';
 import { ObjectType } from '@typedefs/object';
 import { RouterReq } from '@typedefs/router-req';
 import { RouterRes } from '@typedefs/router-res';
-import { toJSON } from '@classes/helpers';
+import { toJSON } from '@classes/helper';
 
 // Router for testing
 import RouterTest from '@routers/data-expire-all';

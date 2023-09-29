@@ -6,7 +6,7 @@ import { Object } from '@classes/object';
 import { Column } from '@classes/column';
 import { Record } from '@classes/record';
 import { Kernel } from '@classes/kernel';
-import { toJSON } from '@classes/helpers';
+import { toJSON } from '@classes/helper';
 
 // Typedefs
 import { Service } from '@typedefs/kernel';
@@ -82,7 +82,7 @@ export class KernelMeta implements Service {
     }
 
     //
-    // Metadata source helpers
+    // Metadata source helper
     //
 
     async load(object_path: string) {

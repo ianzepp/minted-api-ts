@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 // Classes
-import { Corpus } from '@classes/corpus';
 import { Filter } from '@classes/filter';
 import { Kernel } from '@classes/kernel';
 import { Record } from '@classes/record';
@@ -24,9 +23,9 @@ export class RecordNotFoundError extends DataError {};
 export class RecordColumnImmutableError extends DataError {};
 export class RecordColumnRequiredError extends DataError {};
 
-import { toJSON } from './helpers';
+import { toJSON } from './helper';
 
-// Local helpers
+// Local helper
 function headOne<T>(result: T[]): T | undefined {
     return _.head(result);
 }
@@ -83,10 +82,9 @@ export class KernelData implements Service {
 
         // Convert the raw change data into records
         let change = change_data.map(change => object.toRecord(change));
-        let corpus = new Corpus(object, change);
 
         // Build the signal
-        let signal = new Signal(this.kernel, corpus, filter, op);
+        let signal = new Signal(this.kernel, object, change, filter, op);
 
         // Cycle through rings 0 - 9
         for (let ring = 0 as NeuronRing; ring <= 9; ring++) {
