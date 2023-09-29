@@ -6,7 +6,7 @@ import { FilterGroup } from '@typedefs/filter';
 import { FilterOrder } from '@typedefs/filter';
 import { FilterWhere } from '@typedefs/filter';
 import { FilterJson } from '@typedefs/filter';
-import { toJSON } from '@classes/helpers';
+import { toJSON } from '@classes/helper';
 
 export class Filter implements FilterJson {
     // Static values

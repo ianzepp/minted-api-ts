@@ -11,8 +11,8 @@ import { ColumnsMeta } from '@typedefs/column';
 import { ObjectName } from '@typedefs/object';
 
 // Helpers
-import { toNull } from '@classes/helpers';
-import { toJSON } from '@classes/helpers';
+import { toNull } from '@classes/helper';
+import { toJSON } from '@classes/helper';
 
 
 //

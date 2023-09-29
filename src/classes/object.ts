@@ -4,7 +4,7 @@ import chai from 'chai';
 // Classes
 import { Column } from '@classes/column';
 import { Record } from '@classes/record';
-import { toJSON } from '@classes/helpers';
+import { toJSON } from '@classes/helper';
 
 // Typedefs
 import { ColumnsMeta } from '@typedefs/column';
@@ -62,7 +62,7 @@ export class Object {
         public readonly id: string,
         public readonly ns: string,
         public readonly name: ObjectName,
-        public readonly type: string,
+        public readonly type: ObjectType,
         public readonly metadata: boolean) {}
 
     //
