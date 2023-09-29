@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 // Classes
-import { Corpus } from '@classes/corpus';
 import { Filter } from '@classes/filter';
 import { Kernel } from '@classes/kernel';
 import { Record } from '@classes/record';

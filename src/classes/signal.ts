@@ -5,7 +5,6 @@ import chai from 'chai';
 import { expect } from 'chai';
 
 // Classes
-// import { Corpus } from '@classes/corpus';
 import { Filter } from '@classes/filter';
 import { Kernel } from '@classes/kernel';
 import { Neuron } from '@classes/neuron';
