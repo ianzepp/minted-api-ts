@@ -41,23 +41,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     
-    - name: Install Bun
+    - name: Run the build script
       run: |
-        npm install -g bun
+        npm run build
 
-    - name: Install dependencies using Bun
+    - name: Run the test script
       run: |
-        bun install
-
-    - name: Compile codebase with TSC
-      run: |
-        bun tsc
-
-    - name: Install database schemas
-      run: |
-        bun autoinstall
-
-    - name: Run test suite
-      run: |
-        bun test
+        npm run test
 
