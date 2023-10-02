@@ -5,14 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "autoinstall": "bash ./scripts/autoinstall.sh",
-    "ci:local": "bash ./scripts/ci:local.sh",
+    "build": "bash ./scripts/build.sh",
     "clean": "bash ./scripts/clean.sh",
-    "clean:test": "bash ./scripts/clean:test.sh",
     "start": "bash ./scripts/start.sh",
     "test": "bash ./scripts/test.sh",
-    "tsc": "bash ./scripts/tsc.sh",
-    "typedoc": "bash ./scripts/typedoc.sh"
+    "docs": "bash ./scripts/docs.sh"
   },
   "keywords": [],
   "author": "",
