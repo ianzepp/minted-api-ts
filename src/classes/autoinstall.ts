@@ -287,8 +287,13 @@ export class AutoInstall {
         // Process
         for(let record_data of record_rows) {
             console.warn('+', JSON.stringify(record_data));
-            
-            // Assign ID
+
+            // Assign
+            if (record_data.id ?? null === null) {
+                record_data.id = this.kernel.uuid();
+            }
+
+            // Run
             let [data] = await this.knex(object_path + '/data').insert(record_data).returning('*');
             let [meta] = await this.knex(object_path + '/meta').insert({ 
                 id: data.id,
