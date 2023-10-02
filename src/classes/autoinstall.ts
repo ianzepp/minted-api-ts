@@ -187,7 +187,7 @@ export class AutoInstall {
 
         // Data table
         await this.knex.schema.createTable(object_path + '/data', (table) => {
-            table.string('id').notNullable().primary().defaultTo(this.knex.fn.uuid());
+            table.string('id').notNullable().primary();
             table.string('ns').notNullable();
 
             // Apply extra columns
