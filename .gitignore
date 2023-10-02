@@ -1,8 +1,10 @@
 node_modules
 dst
 tmp
+
+# Environment config
 .env
-.env.local
+.env.*
 
 # Sqlite3 databases
 *.db
