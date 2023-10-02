@@ -1,6 +1,6 @@
 #!/bin/bash
 
-bun clean
-bun build
-bun autoinstall
-bun test $1
+npm run clean
+npm run build
+npm run autoinstall
+npm run test $1

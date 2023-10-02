@@ -19,7 +19,8 @@ export const KnexConfig = {
     pool: {
         min: 0,
         max: 10
-    }
+    },
+    useNullAsDefault: true,
 };
 
 // SSL required?
