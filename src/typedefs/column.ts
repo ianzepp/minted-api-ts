@@ -19,10 +19,16 @@ export const ColumnsMeta = [
     'expired_by',
     'deleted_at',
     'deleted_by',
-    'acls_full',
-    'acls_edit',
-    'acls_read',
-    'acls_deny',
+];
+
+/**
+ * Represents the column names in the acls.
+ */
+export const ColumnsAcls = [
+    'access_full',
+    'access_edit',
+    'access_read',
+    'access_deny',
 ];
 
 //

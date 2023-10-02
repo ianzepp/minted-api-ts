@@ -19,7 +19,8 @@ export const KnexConfig = {
     pool: {
         min: 0,
         max: 10
-    }
+    },
+    useNullAsDefault: true,
 };
 
 // SSL required?
@@ -144,23 +145,31 @@ export class KernelKnex implements Service {
         // 4. restrict to only the running user's visible namespaces
         
         let knex = this
-            .driver<T>({ data: `${ object_path }/data` })
-            .join({ meta: `${ object_path }/meta` }, 'meta.id', 'data.id');
+            .driver<T>({ data: `${ object_path }` })
+            .leftJoin({ meta: `${ object_path }::meta` }, 'meta.id', 'data.id')
+            .leftJoin({ acls: `${ object_path }::acls` }, 'acls.id', 'data.id');
 
-        // Root ignores namespace visiblity by default. This may change with RLS.
         if (this.kernel.isRoot() === false) {
-            knex = knex.whereIn('data.ns', this.kernel.auth.namespaces);
+            knex = knex.whereIn(`data.ns`, this.kernel.auth.namespaces);
         }
 
         return knex;
     }
 
-    driverTo<T = _.Dictionary<any>>(object_path: string, alias: 'data' | 'meta' = 'data') {
-        let knex = this.driver<T>(`${ object_path }/${ alias } as ${ alias }`);
+    driverTo<T = _.Dictionary<any>>(object_path: string, type: 'data' | 'meta' | 'acls '= 'data') {
+        let knex: Knex.QueryBuilder;
+
+        if (type === 'data') {
+            knex = this.driver<T>(`${ object_path } as ${ type }`);
+        }
+
+        else {
+            knex = this.driver<T>(`${ object_path }::${ type } as ${ type }`);
+        }
 
         // Root ignores namespace visiblity by default. This may change with RLS.
         if (this.kernel.isRoot() === false) {
-            knex = knex.whereIn(`${ alias }.ns`, this.kernel.auth.namespaces);
+            knex = knex.whereIn(`${ type }.ns`, this.kernel.auth.namespaces);
         }
 
         return knex;

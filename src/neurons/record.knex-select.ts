@@ -225,35 +225,35 @@ export default class extends Neuron {
         // }
 
         // // The record ACLs live in the `<object_name>__meta` table as:
-        // // - acls_full UUID[]
-        // // - acls_edit UUID[]
-        // // - acls_read UUID[]
-        // // - acls_deny UUID[]
+        // // - access_full UUID[]
+        // // - access_edit UUID[]
+        // // - access_read UUID[]
+        // // - access_deny UUID[]
         // //
         // // Each user has a user ID (found in `system.user_id`)
         // //
         // // The following rules define whether a user can access a record or not (in this order):
-        // // 1. If the user's ID is in `acls_deny`, then no.
-        // // 2. If the user's ID is in `acls_full`, or `acls_edit`, or `acls_read`, then yes.
-        // // 3. If all of `acls_full`, `acls_edit`, and `acls_read` are `null`, then yes.
+        // // 1. If the user's ID is in `access_deny`, then no.
+        // // 2. If the user's ID is in `access_full`, or `access_edit`, or `access_read`, then yes.
+        // // 3. If all of `access_full`, `access_edit`, and `access_read` are `null`, then yes.
 
         // let user_id = kernel.user_id;
 
         // // Handle the deny case
         // knex = knex.where(function() {
-        //     this.whereRaw('NOT meta.acls_deny @> ARRAY[?]::uuid[]', [user_id]);
-        //     this.orWhereNull('meta.acls_deny');
+        //     this.whereRaw('NOT meta.access_deny @> ARRAY[?]::uuid[]', [user_id]);
+        //     this.orWhereNull('meta.access_deny');
         // });
 
         // // Handle the view case
         // knex = knex.where(function() {
-        //     this.whereRaw('meta.acls_full @> ARRAY[?]::uuid[]', [user_id]);
-        //     this.orWhereRaw('meta.acls_edit @> ARRAY[?]::uuid[]', [user_id]);
-        //     this.orWhereRaw('meta.acls_read @> ARRAY[?]::uuid[]', [user_id]);
+        //     this.whereRaw('meta.access_full @> ARRAY[?]::uuid[]', [user_id]);
+        //     this.orWhereRaw('meta.access_edit @> ARRAY[?]::uuid[]', [user_id]);
+        //     this.orWhereRaw('meta.access_read @> ARRAY[?]::uuid[]', [user_id]);
         //     this.orWhere(function() {
-        //         this.whereNull('meta.acls_full');
-        //         this.whereNull('meta.acls_edit');
-        //         this.whereNull('meta.acls_read');
+        //         this.whereNull('meta.access_full');
+        //         this.whereNull('meta.access_edit');
+        //         this.whereNull('meta.access_read');
         //     });
         // });
 

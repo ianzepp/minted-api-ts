@@ -132,23 +132,8 @@ export class MapObjects extends Map<string, Object> {
         object_name = object_name.toLowerCase().trim();
 
         // Try to find a fully-qualified name
-        let object: Object | undefined;
+        let object = super.get(object_name);
 
-        if (object_name.includes(':')) {
-            object = super.get(object_name);
-        }
-
-        // Try to find the object with a `system` prefix for known objects
-        else if (KernelObjectTypes.includes(`system:${object_name}`)) {
-            object = super.get(`system:${object_name}`);
-        }
-
-        // Try to find the object in the user's namespace
-        else {
-            object = super.get(`${this.kernel.user_ns}.${object_name}`);
-        }
-        
-        // Moment of truth..
         if (object === undefined) {
             throw new ObjectNotFoundError(object_name as string);
         }

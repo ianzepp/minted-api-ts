@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Start tests
-bun test
+bun test $1

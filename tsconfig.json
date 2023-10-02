@@ -17,9 +17,7 @@
         "skipLibCheck": true,
         "paths": {
             "@classes/*": ["./src/classes/*"],
-            "@helpers/*": ["./src/helpers/*"],
             "@loaders/*": ["./src/loaders/*"],
-            "@neurons/*": ["./src/neurons/*"],
             "@routers/*": ["./src/routers/*"],
             "@typedefs/*": ["./src/typedefs/*"]
         }

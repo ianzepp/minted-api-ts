@@ -63,7 +63,7 @@ export class Column {
      * property is set to `system:domain#name`, then `object_name` returns `system:domain`.
      */
     get object_name() {
-        return _.head(this.name.split('#'));
+        return _.head(this.name.split('.'));
     }
 
     /**
@@ -71,7 +71,7 @@ export class Column {
      * property is set to `system:domain#name`, then `column_name` returns `name`.
      */
     get column_name() {
-        return _.last(this.name.split('#'));
+        return _.last(this.name.split('.'));
     }
 
     //
