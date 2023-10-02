@@ -15,13 +15,21 @@ export const KnexConfig = {
         database: Bun.env.KNEX_DATABASE,
         filename: Bun.env.KNEX_FILENAME,
         acquireConnectionTimeout: 10000,
-        ssl: { rejectUnauthorized: false }
     },
     pool: {
         min: 0,
         max: 10
     }
 };
+
+// SSL required?
+if (Bun.env.KNEX_ENCRYPT === 'true' && Bun.env.KNEX_CLIENT === 'postgres') {
+    _.set(KnexConfig, 'connection.ssl', { rejectUnauthorized: false });
+}
+
+if (Bun.env.KNEX_ENCRYPT === 'true' && Bun.env.KNEX_CLIENT === 'mssql') {
+    _.set(KnexConfig, 'options.encrypt', true);
+}
 
 // Create the app-wide connection
 export const KnexDriver = knex(KnexConfig);

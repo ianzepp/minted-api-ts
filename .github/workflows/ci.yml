@@ -18,6 +18,7 @@ jobs:
       KNEX_USER: postgres
       KNEX_PASSWORD: postgres                
       KNEX_DATABASE: github-ci
+      KNEX_ENCRYPT: false
 
     services:
       postgres:
