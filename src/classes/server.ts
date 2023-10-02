@@ -22,6 +22,7 @@ export class HttpRouteNotFoundError extends HttpError {};
 
 // Import pre-loaded routers
 import Routers from '../loaders/routers';
+import { toJSON } from './helper';
 
 function newResponse(data?: any) {
     let res = new Response(data);
@@ -94,7 +95,26 @@ export class Server {
                 if (result === undefined) {
                     result = null;
                 }
-        
+
+                // Convert to JSON
+                result = toJSON(result);
+
+                let is_meta = httpReq.search.meta === 'true';
+                let is_acls = httpReq.search.acls === 'true';
+
+                // Transform the result
+                if (is_meta && is_acls) {
+                    result = _.map(result, r => _.merge({}, r.data, r.meta, r.acls));
+                }
+
+                else if (is_meta) {
+                    result = _.map(result, r => _.merge({}, r.data, r.meta));
+                }
+
+                else {
+                    result = _.map(result, r => _.merge({}, r.data));
+                }
+
                 // Save the results
                 httpRes.status = 200;
                 httpRes.length = _.isArray(result) ? _.size(result) : 1;
