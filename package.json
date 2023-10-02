@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "autoinstall": "bash ./scripts/autoinstall.sh",
     "build": "bash ./scripts/build.sh",
     "clean": "bash ./scripts/clean.sh",
     "start": "bash ./scripts/start.sh",

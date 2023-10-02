@@ -1,10 +1,12 @@
 name: NodeJS-CI-Test
 
+# This workflow action runs when a pull request is created or updated against the `develop` branch
+# 
+#
+
 on:
-  push:
-    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
@@ -45,6 +47,10 @@ jobs:
     - name: Run the build script
       run: |
         npm run build
+
+    - name: Run autoinstall against the DB
+      run: |
+        npm run autoinstall
 
     - name: Run the test script
       run: |

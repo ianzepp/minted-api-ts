@@ -10,12 +10,6 @@ echo "Using KNEX_PORT: $KNEX_PORT"
 echo "Using KNEX_USER: $KNEX_USER"
 echo "Using KNEX_DATABASE: $KNEX_DATABASE"
 
-# Remove any node modules
-if ! rm -rf ./node_modules; then
-    echo "Failed to delete 'node_modules'"
-    exit 1
-fi
-
 # Postgres config
 if [ "$KNEX_CLIENT" = "postgres" ]; then
     if [ -n "$KNEX_DATABASE" ] && ! dropdb "$KNEX_DATABASE"; then
