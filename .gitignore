@@ -8,3 +8,7 @@ tmp
 *.db
 *.sqlite
 *.sqlite3
+
+# Bun ignores
+bun.lockb
+
