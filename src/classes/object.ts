@@ -163,15 +163,6 @@ export class Object {
     }
 
     /**
-     * Splits the object name into its constituent parts and returns them as an array. For example, if the object's full name is `system:domain`, 
-     * calling the `path()` function will return an array `['system', 'domain']`.
-     * @returns {string[]} An array containing the parts of the object name.
-     */
-    path() {
-        return this.name.split(':');
-    }
-
-    /**
      * Converts the object to a record.
      * 
      * @param {any} source - The source from which to create the record.

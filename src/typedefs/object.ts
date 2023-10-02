@@ -11,12 +11,12 @@ export type ObjectName = string;
 //
 
 export enum ObjectType {
-    Config = 'system:config',
-    Domain = 'system:domain',
-    Object = 'system:object',
-    Column = 'system:column',
-    Test = 'system:test',
-    User = 'system:user',
+    Config = 'config',
+    Domain = 'domain',
+    Object = 'object',
+    Column = 'column',
+    Test = 'test',
+    User = 'user',
 };
 
 
