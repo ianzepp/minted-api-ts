@@ -6,7 +6,7 @@ import { Column } from '@classes/column';
 import { Object } from '@classes/object';
 
 // Typedefs
-import { ColumnType } from '@typedefs/column';
+import { ColumnType, ColumnsAcls } from '@typedefs/column';
 import { ColumnsMeta } from '@typedefs/column';
 import { ObjectName } from '@typedefs/object';
 
@@ -24,7 +24,7 @@ function createProxy(object: Object, source_type: 'data' | 'meta' | 'acls') {
     let source: _.Dictionary<any> = {};
 
     if (source_type === 'data') {
-        // no defaults
+        source.id = null;
     }
 
     if (source_type === 'meta') {
@@ -36,12 +36,13 @@ function createProxy(object: Object, source_type: 'data' | 'meta' | 'acls') {
         source.expired_by = null;
         source.deleted_at = null;
         source.deleted_by = null;
+    }
 
-        // ACLs are in metadata for now
-        source.acls_full = null;
-        source.acls_edit = null;
-        source.acls_read = null;
-        source.acls_deny = null;
+    if (source_type === 'acls') {
+        source.access_full = null;
+        source.access_edit = null;
+        source.access_read = null;
+        source.access_deny = null;
     }
 
     let assertFn = (name: string) => {
@@ -58,6 +59,10 @@ function createProxy(object: Object, source_type: 'data' | 'meta' | 'acls') {
         }
 
         if (source_type === 'meta' && ColumnsMeta.includes(name)) {
+            return;
+        }
+
+        if (source_type === 'acls' && ColumnsAcls.includes(name)) {
             return;
         }
 
@@ -98,12 +103,14 @@ export class Record {
     public readonly data: _.Dictionary<any>;
     public readonly prev: _.Dictionary<any>;
     public readonly meta: _.Dictionary<any>;
+    public readonly acls: _.Dictionary<any>;
 
     // Related objects
     constructor(public readonly object: Object) {
         this.data = createProxy(object, 'data');
         this.prev = createProxy(object, 'data');
         this.meta = createProxy(object, 'meta');
+        this.acls = createProxy(object, 'acls');
     }
 
     get diff() {
@@ -146,6 +153,7 @@ export class Record {
         return {
             data: this.data,
             meta: this.meta,
+            acls: this.acls,
         };
     }
 

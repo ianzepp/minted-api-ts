@@ -61,16 +61,16 @@ export interface RecordMeta {
 /** Represents the access rights of various users of the record. */
 export interface RecordAcls {
     /** The User IDs with full access. */
-    acls_full: UUID[];
+    access_full: UUID[];
 
     /** The User IDs with edit access. */
-    acls_edit: UUID[];
+    access_edit: UUID[];
 
     /** The User IDs with read access. */
-    acls_read: UUID[];
+    access_read: UUID[];
 
     /** The User IDs denied access. */
-    acls_deny: UUID[];
+    access_deny: UUID[];
 }
 
 /** Represents the record's JSON representation in object format. */

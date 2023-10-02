@@ -146,7 +146,8 @@ export class KernelKnex implements Service {
         
         let knex = this
             .driver<T>({ data: `${ object_path }` })
-            .leftJoin({ meta: `${ object_path }::meta` }, 'meta.id', 'data.id');
+            .leftJoin({ meta: `${ object_path }::meta` }, 'meta.id', 'data.id')
+            .leftJoin({ acls: `${ object_path }::acls` }, 'acls.id', 'data.id');
 
         if (this.kernel.isRoot() === false) {
             knex = knex.whereIn(`data.ns`, this.kernel.auth.namespaces);

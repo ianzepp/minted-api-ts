@@ -43,7 +43,7 @@ export class Tester extends Kernel {
     }
 
     toTestObjectName() {
-        return 'test.' + this.toTestName();
+        return this.toTestName();
     }
 
     toTestName() {

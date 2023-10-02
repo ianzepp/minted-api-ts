@@ -189,20 +189,25 @@ export class AutoInstall {
 
             table.timestamp('deleted_at').index();
             table.string('deleted_by').index();
+        });
 
-            table.specificType('acls_full', 'text ARRAY');
-            table.specificType('acls_edit', 'text ARRAY');
-            table.specificType('acls_read', 'text ARRAY');
-            table.specificType('acls_deny', 'text ARRAY');
+        await this.knex.schema.createTable(object_path + '::acls', (table) => {
+            table.string('id').notNullable().primary();
+            table.string('ns').notNullable();
+
+            table.specificType('access_full', 'text ARRAY');
+            table.specificType('access_edit', 'text ARRAY');
+            table.specificType('access_read', 'text ARRAY');
+            table.specificType('access_deny', 'text ARRAY');
         });
 
         // await this.knex.schema.createTable(object_path + '::acls', (table) => {
         //     table.string('id').notNullable().primary();
 
-        //     table.specificType('acls_full', 'text ARRAY');
-        //     table.specificType('acls_edit', 'text ARRAY');
-        //     table.specificType('acls_read', 'text ARRAY');
-        //     table.specificType('acls_deny', 'text ARRAY');
+        //     table.specificType('access_full', 'text ARRAY');
+        //     table.specificType('access_edit', 'text ARRAY');
+        //     table.specificType('access_read', 'text ARRAY');
+        //     table.specificType('access_deny', 'text ARRAY');
         // });
     }
 
@@ -211,7 +216,7 @@ export class AutoInstall {
             console.warn('autoinstall.deleteTable()', object_path);
         }
 
-        // await this.knex.schema.dropTable(object_path + '::acls');
+        await this.knex.schema.dropTable(object_path + '::acls');
         await this.knex.schema.dropTable(object_path + '::meta');
         await this.knex.schema.dropTable(object_path + '::data');
     }

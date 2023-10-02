@@ -7,7 +7,7 @@ import { Record } from '@classes/record';
 import { toJSON } from '@classes/helper';
 
 // Typedefs
-import { ColumnsMeta } from '@typedefs/column';
+import { ColumnsAcls, ColumnsMeta } from '@typedefs/column';
 import { ColumnName } from '@typedefs/column';
 import { ColumnForm } from '@typedefs/column';
 import { ColumnType } from '@typedefs/column';
@@ -180,20 +180,23 @@ export class Object {
             _.assign(record.data, source.data);
             _.assign(record.prev, source.prev);
             _.assign(record.meta, source.meta);
+            _.assign(record.acls, source.acls);
         }
 
         else if (Object.isRecordJson(source)) {
             _.assign(record.data, source.data);
             _.assign(record.meta, source.meta);
+            _.assign(record.acls, source.acls);
         }
 
         else if (Object.isRecordFlat(source)) {
-            _.assign(record.data, _.omit(source, ColumnsMeta));
+            _.assign(record.data, _.omit(source, ColumnsMeta, ColumnsAcls));
             _.assign(record.meta, _.pick(source, ColumnsMeta));
+            _.assign(record.acls, _.pick(source, ColumnsAcls));
         }
 
         else if (Object.isRecordDict(source)) {
-            _.assign(record.data, _.omit(source, ColumnsMeta));
+            _.assign(record.data, _.omit(source, ColumnsMeta, ColumnsAcls));
         }
 
         else {
@@ -238,9 +241,9 @@ export class Object {
             && _.has(source, 'created_at')
             && _.has(source, 'updated_at')
             && _.has(source, 'expired_at')
-            && _.has(source, 'acls_full')
-            && _.has(source, 'acls_edit')
-            && _.has(source, 'acls_read')
-            && _.has(source, 'acls_deny');
+            && _.has(source, 'access_full')
+            && _.has(source, 'access_edit')
+            && _.has(source, 'access_read')
+            && _.has(source, 'access_deny');
     }
 }
