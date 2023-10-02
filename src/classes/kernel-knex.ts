@@ -15,6 +15,7 @@ export const KnexConfig = {
         database: Bun.env.KNEX_DATABASE,
         filename: Bun.env.KNEX_FILENAME,
         acquireConnectionTimeout: 10000,
+        ssl: { rejectUnauthorized: false }
     },
     pool: {
         min: 0,
