@@ -16,8 +16,8 @@ export class AutoInstall {
         // Current database name
         let dn = this.knex.client.config.connection.database;
 
-        // Add `pgcrypto` so we can create UUIDs in the DB
-        await this.knex.raw('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
+        // // Add `pgcrypto` so we can create UUIDs in the DB
+        // await this.knex.raw('CREATE EXTENSION IF NOT EXISTS pgcrypto;');
 
         // Start the tx
         await this.knex.raw('BEGIN TRANSACTION;');
