@@ -1,34 +1,13 @@
 import _ from 'lodash';
-import knex from 'knex';
 import { Knex } from 'knex';
 
-import { RecordFlat } from '@typedefs/record';
+// Knex imports 
+import { KnexDriver } from '../knex';
+import { KnexDriverFn } from '../knex';
 
-// Create the driver reference
-export const KnexConfig = {
-    client: Bun.env.KNEX_CLIENT,
-    connection: {
-        host:     Bun.env.KNEX_HOST,
-        port:     Bun.env.KNEX_PORT,
-        user:     Bun.env.KNEX_USER,
-        password: Bun.env.KNEX_PASSWORD,
-        database: Bun.env.KNEX_DATABASE,
-        filename: Bun.env.KNEX_FILENAME,
-        acquireConnectionTimeout: 10000,
-    },
-    pool: {
-        min: 0,
-        max: 10
-    }
-};
-
-// Create the app-wide connection
-export const KnexDriver = knex(KnexConfig);
-
-// Classes
+// Imports
 import { Kernel } from '@classes/kernel';
-
-// Typedefs
+import { RecordFlat } from '@typedefs/record';
 import { Service } from '@typedefs/kernel';
 
 // Errors
@@ -51,7 +30,7 @@ export class KernelKnex implements Service {
     async startup(): Promise<void> {
         // Isolated driver for test suites
         if (this.kernel.isTest()) {
-            this.db = knex(KnexConfig);
+            this.db = KnexDriverFn();
         }
     }
 
