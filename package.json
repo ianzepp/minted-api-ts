@@ -10,8 +10,7 @@
     "clean": "bash ./scripts/clean.sh",
     "start": "bash ./scripts/start.sh",
     "test": "bash ./scripts/test.sh",
-    "test:clean": "bash ./scripts/test:clean.sh",
-    "docs": "bash ./scripts/docs.sh"
+    "test:clean": "bash ./scripts/test:clean.sh"
   },
   "keywords": [],
   "author": "",
