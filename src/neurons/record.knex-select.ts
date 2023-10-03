@@ -31,7 +31,7 @@ export default class extends Neuron {
 
     async run(signal: Signal): Promise<void> {
         let object = signal.object;
-        let knex = signal.kernel.knex.selectTo(object.name);
+        let knex = signal.kernel.data.selectTo(object.name);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');

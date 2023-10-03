@@ -9,7 +9,7 @@ export class AutoInstall {
     constructor(public readonly kernel: Kernel = new Tester()) {}
 
     get knex() {
-        return this.kernel.knex.driver;
+        return this.kernel.data.driver;
     }
     
     async up() {

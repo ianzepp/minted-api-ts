@@ -37,7 +37,7 @@ export default class extends Neuron {
         let column = Column.from(record.data);
         let object = signal.kernel.meta.objects.get(column.object_name);
 
-        await signal.kernel.knex.schema.table(`${object.name}/data`, t => {            
+        await signal.kernel.data.schema.table(`${object.name}/data`, t => {            
             return t.dropColumn(column.column_name);
         });
 

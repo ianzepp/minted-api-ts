@@ -92,11 +92,11 @@ export class Server {
         let kernel = new Kernel(Kernel.ID, Kernel.NS);
 
         try {
-            // Startup a transaction
-            await kernel.knex.transaction();
-
             // Startup the kernel
             await kernel.startup();
+
+            // Startup a transaction
+            await kernel.data.transaction();
 
             // Start a transaction
 
@@ -130,13 +130,15 @@ export class Server {
             httpRes.length = _.isArray(result) ? _.size(result) : 1;
             httpRes.result = result;
 
-            // Commit
-            await kernel.knex.commit();
+            // Commit the transaction
+            await kernel.data.commit();
         }
 
         catch (error) {
-            // Commit and cleanup
-            await kernel.knex.rollback();
+            // Revert the transaction
+            await kernel.data.revert();
+
+            // Cleanup any misc data
             await kernel.cleanup();
 
             // Process the result

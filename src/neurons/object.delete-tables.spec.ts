@@ -44,7 +44,7 @@ test.skip('should delete a knex table', async () => {
     chai.expect(create.data).property('ns');
 
     // Check using direct knex
-    let select = await kernel.knex.driverTo(object_name, 'data').select()
+    let select = await kernel.data.driverTo(object_name, 'data').select()
         .then(() => { throw new Error('Test failed') })
         .catch(error => chai.expect(error.message).includes('does not exist'));
 });
