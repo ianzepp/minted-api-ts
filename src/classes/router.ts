@@ -71,7 +71,7 @@ export class Router {
         this.__res = res;
 
         // Set the params
-        this.__req.params = _.get(match(this.onHttpPath())(req.path), 'params');
+        this.__req.params = _.get(match(this.onRouterPath())(req.path), 'params');
 
         // Done
         return this.run();
@@ -89,7 +89,7 @@ export class Router {
         throw 'Unimplemented!';
     }
 
-    onHttpPath(): string {
+    onRouterPath(): string {
         throw 'Unimplemented!';
     }
 
@@ -97,11 +97,11 @@ export class Router {
         return verb == this.onRouterVerb();
     }
 
-    isHttpPath(path: string): boolean {
-        return pathToRegexp(this.onHttpPath()).exec(path ?? '/') !== null;
+    isRouterPath(path: string): boolean {
+        return pathToRegexp(this.onRouterPath()).exec(path ?? '/') !== null;
     }
 
     is(verb: string, path: string): boolean {
-        return this.isRouterVerb(verb) && this.isHttpPath(path);
+        return this.isRouterVerb(verb) && this.isRouterPath(path);
     }
 }

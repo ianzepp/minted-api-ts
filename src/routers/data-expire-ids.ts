@@ -13,7 +13,7 @@ export default class extends Router {
         return Router.Verb.Delete;
     }
 
-    onHttpPath() {
+    onRouterPath() {
         return '/api/data/:object/:record';
     }
 }

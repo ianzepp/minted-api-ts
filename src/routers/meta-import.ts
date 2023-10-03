@@ -13,7 +13,7 @@ export default class extends Router {
         return Router.Verb.Put;
     }
 
-    onHttpPath() {
+    onRouterPath() {
         return '/api/meta/import';
     }
 }

@@ -13,7 +13,7 @@ export default class extends Router {
         return Router.Verb.Post;
     }
 
-    onHttpPath() {
+    onRouterPath() {
         return '/auth/signup';
     }
 }

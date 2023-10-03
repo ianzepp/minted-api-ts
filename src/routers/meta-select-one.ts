@@ -14,7 +14,7 @@ export default class extends Router {
         return Router.Verb.Get;
     }
 
-    onHttpPath() {
+    onRouterPath() {
         return '/api/meta/:object/:record';
     }
 }
