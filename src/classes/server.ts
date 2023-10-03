@@ -1,20 +1,11 @@
 import _ from 'lodash';
 import Util from 'util';
-import Http from 'http';
 import UrlParse from 'url-parse';
-
-import { pathToRegexp, match } from 'path-to-regexp';
-
-// HTTP reqeuest body parsers
-const textBody = Util.promisify(require('body'));
-const jsonBody = Util.promisify(require('body/json'));
-const formBody = Util.promisify(require('body/form'));
 
 // Classes
 import { RouterReq } from '@typedefs/router-req';
 import { RouterRes } from '@typedefs/router-res';
 import { Kernel } from '@classes/kernel';
-import { Tester } from '@classes/tester';
 
 // Error
 export class HttpError extends Error {};
@@ -23,7 +14,6 @@ export class HttpRouteNotFoundError extends HttpError {};
 // Import pre-loaded routers
 import Routers from '../loaders/routers';
 import { toJSON } from './helper';
-import knex from 'knex';
 
 function newResponse(data?: any) {
     let res = new Response(data);
