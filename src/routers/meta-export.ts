@@ -9,11 +9,11 @@ export default class extends Router {
         
     }
 
-    onHttpVerb() {
+    onRouterVerb() {
         return Router.Verb.Get;
     }
 
-    onHttpPath() {
+    onRouterPath() {
         return '/api/meta/export';
     }
 }

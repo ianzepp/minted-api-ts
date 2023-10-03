@@ -10,11 +10,11 @@ export default class extends Router {
         return this.kernel.data.search404(this.params.object, { where: { name: this.params.record_name }});
     }
 
-    onHttpVerb() {
+    onRouterVerb() {
         return Router.Verb.Get;
     }
 
-    onHttpPath() {
+    onRouterPath() {
         return '/api/meta/:object/:record';
     }
 }

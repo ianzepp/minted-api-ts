@@ -9,11 +9,11 @@ export default class extends Router {
         return this.kernel.data.updateAll(this.req.params.object, this.req.body);
     }
 
-    onHttpVerb() {
+    onRouterVerb() {
         return Router.Verb.Patch;
     }
 
-    onHttpPath() {
+    onRouterPath() {
         return '/api/data/:object';
     }
 }

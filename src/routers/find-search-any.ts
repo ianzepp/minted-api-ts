@@ -9,11 +9,11 @@ export default class extends Router {
         return this.kernel.data.selectAny(this.req.params.object, this.req.body || {});
     }
 
-    onHttpVerb() {
+    onRouterVerb() {
         return Router.Verb.Post;
     }
 
-    onHttpPath() {
+    onRouterPath() {
         return '/api/find/:object';
     }
 }

@@ -6,17 +6,14 @@ import { Router } from '@classes/router';
 // Implementation
 export default class extends Router {
     async run() {
-        return { 
-            pong: new Date().toISOString(),
-            user: this.kernel.user_id
-        };
+        return this.kernel.bulk.process(this.req.body);
     }
 
     onRouterVerb() {
-        return Router.Verb.Get;
+        return Router.Verb.Post;
     }
 
     onRouterPath() {
-        return '/api/ping';
+        return '/api/bulk';
     }
 }
