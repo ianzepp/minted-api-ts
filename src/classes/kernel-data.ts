@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 
 // Knex stuff
-import knex from 'knex';
+import { KnexDriver, KnexDriverFn } from '@classes/knex';
 import { Knex } from 'knex';
 
 // Classes
@@ -27,36 +27,8 @@ export class RecordNotFoundError extends DataError {};
 export class RecordColumnImmutableError extends DataError {};
 export class RecordColumnRequiredError extends DataError {};
 
-// Create the driver reference
-export const KnexConfig = {
-    client: Bun.env.KNEX_CLIENT,
-    connection: {
-        host:     Bun.env.KNEX_HOST,
-        port:     Bun.env.KNEX_PORT,
-        user:     Bun.env.KNEX_USER,
-        password: Bun.env.KNEX_PASSWORD,
-        database: Bun.env.KNEX_DATABASE,
-        filename: Bun.env.KNEX_FILENAME,
-        acquireConnectionTimeout: 10000,
-    },
-    pool: {
-        min: 0,
-        max: 10
-    },
-    useNullAsDefault: true,
-};
-
-// SSL required?
-if (Bun.env.KNEX_ENCRYPT === 'true' && Bun.env.KNEX_CLIENT === 'postgres') {
-    _.set(KnexConfig, 'connection.ssl', { rejectUnauthorized: false });
-}
-
-if (Bun.env.KNEX_ENCRYPT === 'true' && Bun.env.KNEX_CLIENT === 'mssql') {
-    _.set(KnexConfig, 'options.encrypt', true);
-}
-
-// Create the app-wide connection
-export const KnexDriver = knex(KnexConfig);
+// Import knex config and driver
+import KnexConfig from '@root/knexconfig';
 
 // Local helper
 function headOne<T>(result: T[]): T | undefined {
@@ -94,7 +66,7 @@ export class KernelData implements Service {
 
     async startup(): Promise<void> {
         if (this.kernel.isTest()) {
-            this.db = knex(KnexConfig);
+            this.db = KnexDriverFn();
         }
     }
 
@@ -109,6 +81,10 @@ export class KernelData implements Service {
     //
 
     async transaction() {
+        if (this.tx !== undefined) {
+            throw new Error('Transaction already started!');
+        }
+
         this.tx = await this.db.transaction();
     }
 
