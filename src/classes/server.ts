@@ -23,6 +23,7 @@ export class HttpRouteNotFoundError extends HttpError {};
 // Import pre-loaded routers
 import Routers from '../loaders/routers';
 import { toJSON } from './helper';
+import knex from 'knex';
 
 function newResponse(data?: any) {
     let res = new Response(data);
@@ -88,58 +89,74 @@ export class Server {
         }
 
         // Run the router
-        await new Tester().run(async kernel => {
-            try {
-                let result = await router.runsafe(kernel, httpReq, httpRes);
+        let kernel = new Kernel(Kernel.ID, Kernel.NS);
 
-                if (result === undefined) {
-                    result = null;
-                }
+        try {
+            // Startup a transaction
+            await kernel.knex.transaction();
 
-                // Convert to JSON
-                result = toJSON(result);
+            // Startup the kernel
+            await kernel.startup();
 
-                let is_meta = httpReq.search.meta === 'true';
-                let is_acls = httpReq.search.acls === 'true';
+            // Start a transaction
 
-                // Transform the result
-                if (is_meta && is_acls) {
-                    result = _.map(result, r => _.merge({}, r.data, r.meta, r.acls));
-                }
+            let result = await router.runsafe(kernel, httpReq, httpRes);
 
-                else if (is_meta) {
-                    result = _.map(result, r => _.merge({}, r.data, r.meta));
-                }
-
-                else {
-                    result = _.map(result, r => _.merge({}, r.data));
-                }
-
-                // Save the results
-                httpRes.status = 200;
-                httpRes.length = _.isArray(result) ? _.size(result) : 1;
-                httpRes.result = result;
+            if (result === undefined) {
+                result = null;
             }
 
-            catch (error) {
-                if (typeof error === 'string') {
-                    httpRes.status = 500;
-                    httpRes.result = error;
-                }
-                else if (error instanceof Error) {
-                    httpRes.status = 500;
-                    httpRes.result = 'error: ' + error.message;
-                }
+            // Convert to JSON
+            result = toJSON(result);
 
-                else {
-                    httpRes.status = 500;
-                    httpRes.result = error;
-                }
+            let is_meta = httpReq.search.meta === 'true';
+            let is_acls = httpReq.search.acls === 'true';
 
-                // Always set the length to 0
-                httpRes.length = 0;
+            // Transform the result
+            if (is_meta && is_acls) {
+                result = _.map(result, r => _.merge({}, r.data, r.meta, r.acls));
             }
-        });
+
+            else if (is_meta) {
+                result = _.map(result, r => _.merge({}, r.data, r.meta));
+            }
+
+            else {
+                result = _.map(result, r => _.merge({}, r.data));
+            }
+
+            // Save the results
+            httpRes.status = 200;
+            httpRes.length = _.isArray(result) ? _.size(result) : 1;
+            httpRes.result = result;
+
+            // Commit
+            await kernel.knex.commit();
+        }
+
+        catch (error) {
+            // Commit and cleanup
+            await kernel.knex.rollback();
+            await kernel.cleanup();
+
+            // Process the result
+            if (typeof error === 'string') {
+                httpRes.status = 500;
+                httpRes.result = error;
+            }
+            else if (error instanceof Error) {
+                httpRes.status = 500;
+                httpRes.result = 'error: ' + error.message;
+            }
+
+            else {
+                httpRes.status = 500;
+                httpRes.result = error;
+            }
+
+            // Always set the length to 0
+            httpRes.length = 0;
+        }
 
         // Return the response
         return newResponse(JSON.stringify(httpRes));
