@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - minted-api-ts-test
 on:
   push:
     branches:
-      - develop
+      - main
   workflow_dispatch:
 
 jobs:
