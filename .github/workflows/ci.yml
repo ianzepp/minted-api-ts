@@ -1,0 +1,62 @@
+name: NodeJS-CI-Test
+
+# This workflow action runs when a pull request is created or updated against the `develop` branch
+# 
+#
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      NODE_ENV: development
+      KNEX_CLIENT: postgres
+      KNEX_HOST: localhost
+      KNEX_PORT: 5432
+      KNEX_USER: postgres
+      KNEX_PASSWORD: postgres                
+      KNEX_DATABASE: github-ci
+      KNEX_ENCRYPT: false
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_DB: ${{ env.KNEX_DATABASE }}
+          POSTGRES_USER: ${{ env.KNEX_USER }}
+          POSTGRES_PASSWORD: ${{ env.KNEX_PASSWORD }}
+        ports:
+          - 5432:5432
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    
+    - name: Install dependencies
+      run: |
+        npm install
+  
+    - name: Run the build script
+      run: |
+        npm run build
+    
+    - name: Run autoinstall against the DB
+      run: |
+        npm run autoinstall
+
+    - name: Run the test script
+      run: |
+        npm run test
+

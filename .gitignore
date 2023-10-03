@@ -1,4 +1,16 @@
 node_modules
 dst
 tmp
+
+# Environment config
 .env
+.env.*
+
+# Sqlite3 databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Bun ignores
+bun.lockb
+

@@ -1,19 +1,19 @@
 import _ from 'lodash';
 
 // API
-import { HttpRouter } from '../classes/http-router';
+import { Router } from '@classes/router';
 
 // Implementation
-export default class extends HttpRouter {
+export default class extends Router {
     async run() {
-        return this.system.data.updateOne(this.req.params.schema, this.req.body);
+        return this.kernel.data.updateOne(this.req.params.object, this.req.body);
     }
 
     onHttpVerb() {
-        return HttpRouter.Verb.Patch;
+        return Router.Verb.Patch;
     }
 
     onHttpPath() {
-        return '/api/data/:schema/:record';
+        return '/api/data/:object/:record';
     }
 }

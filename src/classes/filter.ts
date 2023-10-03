@@ -1,24 +1,14 @@
 import _ from 'lodash';
 import chai from 'chai';
 
-// Classes
-import { Schema } from '../classes/schema';
-import { System } from '../classes/system';
-import { Record } from '../classes/record';
+// Typedefs
+import { FilterGroup } from '@typedefs/filter';
+import { FilterOrder } from '@typedefs/filter';
+import { FilterWhere } from '@typedefs/filter';
+import { FilterJson } from '@typedefs/filter';
+import { toJSON } from '@classes/helper';
 
-// Layouts
-import { FilterGroup } from '../layouts/filter';
-import { FilterOrder } from '../layouts/filter';
-import { FilterWhere } from '../layouts/filter';
-import { FilterInfo } from '../layouts/filter';
-import { FilterJson } from '../layouts/filter';
-import { SchemaName } from '../layouts/schema';
-
-// Helpers
-import toJSON from '../helpers/toJSON';
-
-
-export class Filter implements FilterInfo {
+export class Filter implements FilterJson {
     // Static values
     public static LimitDefault = 100;
     public static LimitMaximum = 10000;
@@ -35,20 +25,12 @@ export class Filter implements FilterInfo {
     public readonly flags: _.Dictionary<any> = {};
     public limit: number = Filter.LimitDefault;
 
-    constructor(public readonly using: SchemaName, source?: Partial<FilterJson>) {
-        _.assign(this.where, source?.where);
-        _.assign(this.order, source?.order);
-        _.assign(this.flags, source?.flags);
-        _.assign(this.limit, source?.limit);
-    }
+    constructor(source: Partial<FilterJson> = {}) {
+        _.assign(this.where, source.where);
+        _.assign(this.order, source.order);
+        _.assign(this.flags, source.flags);
 
-    toJSON(): FilterJson {
-        return toJSON({
-            using: this.using,
-            where: this.where,
-            order: this.order,
-            flags: this.flags,
-            limit: this.limit,
-        });
+        // Set the limit
+        this.limit = source.limit ?? Filter.LimitDefault;
     }
 }

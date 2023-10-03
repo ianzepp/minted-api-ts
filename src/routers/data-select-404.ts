@@ -1,20 +1,31 @@
 import _ from 'lodash';
 
 // API
-import { HttpRouter } from '../classes/http-router';
-import head404 from '../helpers/head404';
+import { Router } from '@classes/router';
+import { UUID_REGEX } from '@classes/kernel';
+import { ObjectType } from '@typedefs/object';
 
 // Implementation
-export default class extends HttpRouter {
+export default class extends Router {
     async run() {
-        return this.system.data.select404(this.req.params.schema, this.req.params.record);
+        if (this.params.record.match(UUID_REGEX)) {
+            return this.kernel.data.select404(this.params.object, this.params.record);
+        }
+
+        else if (this.params.record.includes('%')) {
+            return this.kernel.data.search404(this.params.object, { where: { name: { $find: this.params.record }}});
+        }
+
+        else {
+            return this.kernel.data.search404(this.params.object, { where: { name: this.params.record }});
+        }
     }
 
     onHttpVerb() {
-        return HttpRouter.Verb.Get;
+        return Router.Verb.Get;
     }
 
     onHttpPath() {
-        return '/api/data/:schema/:record';
+        return '/api/data/:object/:record';
     }
 }

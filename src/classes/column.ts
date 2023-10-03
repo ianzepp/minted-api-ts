@@ -1,95 +1,100 @@
 import _ from 'lodash';
-import chai from 'chai';
 
-// Classes
-import { Schema } from '../classes/schema';
-
-// Layouts
-import { ColumnType } from '../layouts/column';
-
-// Helpers
-import assertReturn from '../helpers/assertReturn';
-import toJSON from '../helpers/toJSON';
+// Typedefs
+import { ColumnName } from '@typedefs/column';
+import { ColumnForm } from '@typedefs/column';
+import { ColumnType } from '@typedefs/column';
 
 
+/**
+ * The `Column` class represents a column in a database table.
+ * It provides functionalities to:
+ * - Generate a new `Column` instance from provided flat data.
+ * - Access properties of the column such as `id`, `ns` (namespace), `name`, `type`, `forms`, `minimum` and `maximum`.
+ * - Get the `object_name` and `column_name` from the full name of the column.
+ * - Check if the column is of a specific type or has a specific form.
+ * - Get the two path parts of the column name.
+ */
 export class Column {
-    public readonly system_name: string;
+    //
+    // Static
+    //
 
-    constructor(private readonly source: _.Dictionary<any>, public readonly schema: Schema) {
-        chai.expect(source).property('id').a('string');
-        chai.expect(source).property('ns').a('string');
+    // Re-export aliases
+    public static Form = ColumnForm;
+    public static Type = ColumnType;
 
-        chai.expect(source).property('schema_name').a('string');
-        chai.expect(source).property('column_name').a('string');
-        chai.expect(source).property('column_type').a('string');
+
+    /**
+     * Generates a new `Column` instance from provided flat data.
+     * 
+     * @param {_.Dictionary<any>} flat - The flat data to generate the column from.
+     * @returns {Column} Returns a new `Column` instance.
+     */
+    static from(flat: _.Dictionary<any>): Column {
+        let forms: ColumnForm[] = _.filter(ColumnForm, form => !!_.get(flat, form, false));
         
-        chai.expect(source).property('audited').a('boolean');
-        chai.expect(source).property('immutable').a('boolean');
-        chai.expect(source).property('indexed').a('boolean');
-        chai.expect(source).property('internal').a('boolean');
-        chai.expect(source).property('required').a('boolean');
-        chai.expect(source).property('unique').a('boolean');
-        
-        chai.expect(source).property('minimum');
-        chai.expect(source).property('maximum');
-
-        // Set system name
-        this.system_name = `${ source.ns }__${ source.schema_name }`;
+        return new Column(
+            flat.id,
+            flat.ns,
+            flat.name,
+            flat.type,
+            forms,
+            flat.minimum,
+            flat.maximum,
+        );
     }
 
-    get id(): string {
-        return this.source.id;
+    constructor(
+        public readonly id: string,
+        public readonly ns: string,
+        public readonly name: ColumnName,
+        public readonly type: ColumnType,
+        public readonly forms: ColumnForm[],
+        public readonly minimum: number | null,
+        public readonly maximum: number | null) {}
+
+    //
+    // Getters/Setters
+    //
+
+    /**
+     * Returns only the `object_name` portion of the full name property. For example, if the column's name
+     * property is set to `system:domain#name`, then `object_name` returns `system:domain`.
+     */
+    get object_name() {
+        return _.head(this.name.split('.'));
     }
 
-    get ns(): string {
-        return this.source.ns;
+    /**
+     * Returns only the `column_name` portion of the full name property. For example, if the column's name
+     * property is set to `system:domain#name`, then `column_name` returns `name`.
+     */
+    get column_name() {
+        return _.last(this.name.split('.'));
     }
 
-    get schema_name(): string {
-        return this.source.schema_name;
+    //
+    // Methods
+    //
+
+    /**
+     * Checks if the column is of a specific type.
+     * 
+     * @param {ColumnType} type - The type to check against.
+     * @returns {boolean} Returns true if the column is of the specified type, false otherwise.
+     */
+    is(type: ColumnType): boolean {
+        return this.type === type;
     }
 
-    get column_name(): string {
-        return this.source.column_name;
-    }
-
-    get column_type(): string {
-        return this.source.column_type;
-    }
-
-    get audited(): boolean {
-        return this.source.audited;
-    }
-
-    get immutable(): boolean {
-        return this.source.immutable;
-    }
-
-    get indexed(): boolean {
-        return this.source.indexed;
-    }
-
-    get internal(): boolean {
-        return this.source.internal;
-    }
-
-    get required(): boolean {
-        return this.source.required;
-    }
-
-    get unique(): boolean {
-        return this.source.unique;
-    }
-
-    get minimum(): number | null {
-        return this.source.minimum;
-    }
-
-    get maximum(): number | null {
-        return this.source.maximum;
-    }
-
-    toJSON() {
-        return toJSON(this.source);
+    /**
+     * Checks if the column has a specific form.
+     * 
+     * @param {ColumnForm | string} form - The form to check for.
+     * @returns {boolean} Returns true if the column has the specified form, false otherwise.
+     */
+    of(form: ColumnForm | string): boolean {
+        return _.includes(this.forms, form);
     }
 }
