@@ -2,17 +2,17 @@ import _, { cond } from 'lodash';
 import { Knex } from 'knex';
 
 // Classes
-import { Neuron } from '@classes/neuron';
+import { Action } from '@root/src/classes/action';
 import { Signal } from '@classes/signal';
 import { Filter } from '@classes/filter';
 
 // Typedefs
-import { NeuronRing } from '@typedefs/neuron';
+import { ActionRing } from '@typedefs/neuron';
 import { Object } from '@classes/object';
 import { Kernel } from '@classes/kernel';
 
 
-export default class extends Neuron {
+export default class extends Action {
     toName(): string {
         return __filename;
     }
@@ -21,8 +21,8 @@ export default class extends Neuron {
         return '*';
     }
 
-    onRing(): NeuronRing {
-        return NeuronRing.Knex;
+    onRing(): ActionRing {
+        return ActionRing.Knex;
     }
 
     onSelect(): boolean {

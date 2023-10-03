@@ -7,7 +7,7 @@ import { expect } from 'chai';
 // Classes
 import { Filter } from '@classes/filter';
 import { Kernel } from '@classes/kernel';
-import { Neuron } from '@classes/neuron';
+import { Action } from '@root/src/classes/action';
 import { Record } from '@classes/record';
 import { Object } from '@classes/object';
 
@@ -15,7 +15,7 @@ import { Object } from '@classes/object';
 import { SignalOp } from '@typedefs/signal';
 
 // Import pre-loaded routers
-import Neurons from '../loaders/neurons';
+import Actions from '../loaders/actions';
 
 
 export class Signal {
@@ -39,7 +39,7 @@ export class Signal {
     }
 
     async run(ring: number): Promise<void> {
-        let neurons = Neurons[ring] || [];
+        let neurons = Actions[ring] || [];
 
         // Filter in a single loop
         neurons = neurons.filter(neuron => {

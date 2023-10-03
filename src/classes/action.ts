@@ -4,13 +4,13 @@ import path from 'path';
 import { Signal } from '@classes/signal';
 
 // Typedefs
-import { NeuronRank } from '@typedefs/neuron';
-import { NeuronRing } from '@typedefs/neuron';
+import { ActionRank } from '@typedefs/neuron';
+import { ActionRing } from '@typedefs/neuron';
 
-export class Neuron {
+export class Action {
     // Re-export aliases
-    public static Rank = NeuronRank;
-    public static Ring = NeuronRing;
+    public static Rank = ActionRank;
+    public static Ring = ActionRing;
 
     constructor() {}
 
@@ -65,18 +65,18 @@ export class Neuron {
 
     /**
      * Method to get the neuron ring
-     * @returns {NeuronRing} - The neuron ring
+     * @returns {ActionRing} - The neuron ring
      */
-    onRing(): NeuronRing {
-        return NeuronRing.Work;
+    onRing(): ActionRing {
+        return ActionRing.Work;
     }
 
     /**
      * Method to get the neuron rank
-     * @returns {NeuronRank} - The neuron rank: 0 (low) to 9 (high). Defaults to 5 (average)
+     * @returns {ActionRank} - The neuron rank: 0 (low) to 9 (high). Defaults to 5 (average)
      */
-    onRank(): NeuronRank {
-        return NeuronRank.Avg;
+    onRank(): ActionRank {
+        return ActionRank.Avg;
     }
 
     /**

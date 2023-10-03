@@ -1,18 +1,18 @@
 import _ from 'lodash';
 
 // Classes
-import { Neuron } from '@classes/neuron';
+import { Action } from '@root/src/classes/action';
 import { Signal } from '@classes/signal';
 
 // Typedefs
-import { NeuronRing } from '@typedefs/neuron';
+import { ActionRing } from '@typedefs/neuron';
 import { RecordFlat } from '@typedefs/record';
 
 /**
  * This neuron runs onUpdate() to reload prior data from the DB, so the `Record` has a full view of
  * all previous state.
  */
-export default class extends Neuron {
+export default class extends Action {
     toName(): string {
         return __filename;
     }
@@ -21,8 +21,8 @@ export default class extends Neuron {
         return '*';
     }
 
-    onRing(): NeuronRing {
-        return NeuronRing.Init;
+    onRing(): ActionRing {
+        return ActionRing.Init;
     }
 
     onUpdate(): boolean {
