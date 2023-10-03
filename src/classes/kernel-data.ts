@@ -1,4 +1,9 @@
 import _ from 'lodash';
+import { v4 as uuid } from 'uuid';
+
+// Knex stuff
+import { KnexDriver, KnexDriverFn } from '@classes/knex';
+import { Knex } from 'knex';
 
 // Classes
 import { Filter } from '@classes/filter';
@@ -15,7 +20,6 @@ import { NeuronRing } from '@typedefs/neuron';
 import { ObjectName } from '@typedefs/object';
 import { SignalOp } from '@typedefs/signal';
 
-
 // Data API errors
 export class DataError extends Error {};
 export class RecordFoundError extends DataError {};
@@ -23,7 +27,8 @@ export class RecordNotFoundError extends DataError {};
 export class RecordColumnImmutableError extends DataError {};
 export class RecordColumnRequiredError extends DataError {};
 
-import { toJSON } from './helper';
+// Import knex config and driver
+import KnexConfig from '@root/knexconfig';
 
 // Local helper
 function headOne<T>(result: T[]): T | undefined {
@@ -53,12 +58,102 @@ function headNot<T>(result: T[]): void {
 
 // Implementation
 export class KernelData implements Service {
+    public db: Knex = KnexDriver;
+    public tx: Knex.Transaction | undefined;
+    public readonly uuid = uuid;
+
     constructor(private readonly kernel: Kernel) {}
 
-    async startup(): Promise<void> {}
+    async startup(): Promise<void> {
+        if (this.kernel.isTest()) {
+            this.db = KnexDriverFn();
+        }
+    }
 
-    async cleanup(): Promise<void> {}
+    async cleanup(): Promise<void> {
+        if (this.kernel.isTest()) {
+            await this.db.destroy();
+        }
+    }
 
+    //
+    // Transaction support
+    //
+
+    async transaction() {
+        if (this.tx !== undefined) {
+            throw new Error('Transaction already started!');
+        }
+
+        this.tx = await this.db.transaction();
+    }
+
+    async commit() {
+        if (this.tx && this.tx.isCompleted() === false) {
+            await this.tx.commit();
+        }
+
+        this.tx = undefined;
+    }
+
+    async revert() {
+        if (this.tx && this.tx.isCompleted() === false) {
+            await this.tx.rollback();
+        }
+
+        this.tx = undefined;
+    }
+
+    //
+    // Direct access
+    //
+    
+    get driver(): Knex {
+        return this.tx ?? this.db;
+    }
+
+    get schema(): Knex.SchemaBuilder {
+        return this.driver.schema;
+    }
+
+    get fn() {
+        return this.driver.fn;
+    }
+
+    //
+    // Direct DB/TX methods
+    //
+
+    driverTo(object_name: string, type: 'data' | 'meta' | 'acls '= 'data') {
+        let knex: Knex.QueryBuilder;
+
+        if (type === 'data') {
+            knex = this.driver(`${ object_name } as ${ type }`);
+        }
+
+        else {
+            knex = this.driver(`${ object_name }::${ type } as ${ type }`);
+        }
+
+        // if (this.kernel.isRoot() === false) {
+        //     knex = knex.whereIn(`${ type }.ns`, this.kernel.auth.namespaces);
+        // }
+
+        return knex;
+    }
+    
+    selectTo(object_name: string) {
+        let knex = this
+            .driver({ data: `${ object_name }` })
+            .leftJoin({ meta: `${ object_name }::meta` }, 'meta.id', 'data.id')
+            .leftJoin({ acls: `${ object_name }::acls` }, 'acls.id', 'data.id');
+
+        // if (this.kernel.isRoot() === false) {
+        //     knex = knex.whereIn(`data.ns`, this.kernel.auth.namespaces);
+        // }
+
+        return knex;
+    }
     //
     // Core runtime
     //

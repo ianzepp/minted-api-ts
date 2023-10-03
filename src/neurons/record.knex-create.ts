@@ -53,11 +53,11 @@ export default class extends Neuron {
     }
 
     async run(signal: Signal): Promise<void> {
-        let creates_data = await signal.kernel.knex
+        let creates_data = await signal.kernel.data
             .driverTo(signal.object.name, 'data')
             .insert(signal.change_data);
 
-        let creates_meta = await signal.kernel.knex
+        let creates_meta = await signal.kernel.data
             .driverTo(signal.object.name, 'meta')
             .insert(signal.change_meta);
     }

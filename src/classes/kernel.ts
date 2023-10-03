@@ -10,7 +10,6 @@ import { v4 as uuid } from 'uuid';
 import { KernelAuth } from '@classes/kernel-auth';
 import { KernelData } from '@classes/kernel-data';
 import { KernelMeta } from '@classes/kernel-meta';
-import { KernelKnex } from '@classes/kernel-knex';
 
 // Typedefs
 import { Service } from "@typedefs/kernel";
@@ -31,7 +30,6 @@ export class Kernel implements Service {
     public readonly auth = new KernelAuth(this);
     public readonly data = new KernelData(this);
     public readonly meta = new KernelMeta(this);
-    public readonly knex = new KernelKnex(this);
 
     // Kernel constants
     public readonly time = new Date();
@@ -55,23 +53,15 @@ export class Kernel implements Service {
     //
 
     async startup(): Promise<void> {
-        // Start knex first so we have a transaction context
-        await this.knex.startup();
-
-        // Remaining services
         await this.data.startup();
         await this.meta.startup();
         await this.auth.startup();
     }
 
     async cleanup(): Promise<void> {
-        // Shutdown services
-        await this.data.cleanup();
-        await this.meta.cleanup();
         await this.auth.cleanup();
-
-        // Shutdown knex last so the transaction commits/rollbacks
-        await this.knex.cleanup();
+        await this.meta.cleanup();
+        await this.data.cleanup();
     }
 
     async refresh(): Promise<void> {
@@ -86,21 +76,6 @@ export class Kernel implements Service {
     //
     // Methods
     //
-
-    async run(executeFn: (kernel: Kernel) => Promise<any>) {
-        try {
-            // Startup
-            await this.certify();
-            await this.startup();
-            
-            // Run the logic
-            await executeFn(this);
-        }
-        
-        finally {
-            await this.cleanup();
-        }
-    }
 
     emit(cn, fn, ... messages) {
         debug(cn + ':' + fn)(util.format(... messages));

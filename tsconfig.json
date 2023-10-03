@@ -16,6 +16,7 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "paths": {
+            "@root/*": ["./*"],
             "@classes/*": ["./src/classes/*"],
             "@loaders/*": ["./src/loaders/*"],
             "@routers/*": ["./src/routers/*"],
@@ -23,7 +24,8 @@
         }
     },
     "include": [
-        "src/**/*.ts"
+        "./src/**/*.ts",
+        "./*.ts"
     ],
     "exclude": [
         "node_modules"

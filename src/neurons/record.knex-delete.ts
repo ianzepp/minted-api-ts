@@ -26,7 +26,7 @@ export default class extends Neuron {
     }
 
     async run(signal: Signal): Promise<void> {
-        return signal.kernel.knex
+        return signal.kernel.data
             .driverTo(signal.object.name, 'meta')
             .whereIn('id', _.map(signal.change_data, 'id'))
             .update({

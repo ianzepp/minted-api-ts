@@ -61,7 +61,7 @@ export class KernelAuth implements Service {
 
     async authenticate() {
         // Verify user record exists and has access to the kernel
-        let user = this.kernel.knex.driverTo(ObjectType.User)
+        let user = this.kernel.data.driverTo(ObjectType.User)
             .where('id', this.kernel.user_id)
             .column(['id', 'ns'])
             .first();

@@ -18,11 +18,11 @@ export class Tester extends Kernel {
 
     async startup() {
         await super.startup();
-        await this.knex.transaction();
+        await this.data.transaction();
     }
 
     async cleanup() {
-        await this.knex.rollback();
+        await this.data.revert();
         await super.cleanup();
     }
 

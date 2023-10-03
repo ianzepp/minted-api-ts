@@ -35,7 +35,7 @@ test.skip('should create a knex column', async () => {
     });
 
     // Check using direct knex
-    let select = await kernel.knex.driverTo(ObjectType.User).select().first();
+    let select = await kernel.data.driverTo(ObjectType.User).select().first();
 
     chai.expect(select).a('object');
     chai.expect(select).property('id').string;
