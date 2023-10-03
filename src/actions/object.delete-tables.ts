@@ -2,15 +2,15 @@ import _ from 'lodash';
 
 // Classes
 import { AutoInstall } from '@classes/autoinstall';
-import { Neuron } from '@classes/neuron';
+import { Action } from '@root/src/classes/action';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
-import { NeuronRing } from '@typedefs/neuron';
+import { ActionRing } from '@typedefs/neuron';
 import { ObjectType } from '@typedefs/object';
 
-export default class extends Neuron {
+export default class extends Action {
     toName(): string {
         return __filename;
     }
@@ -19,8 +19,8 @@ export default class extends Neuron {
         return ObjectType.Object;
     }
 
-    onRing(): NeuronRing {
-        return NeuronRing.Post;
+    onRing(): ActionRing {
+        return ActionRing.Post;
     }
 
     onDelete(): boolean {

@@ -16,7 +16,7 @@ import { Signal } from '@classes/signal';
 import { ChangeData } from '@typedefs/record';
 import { FilterJson } from '@typedefs/filter';
 import { Service } from '@typedefs/kernel';
-import { NeuronRing } from '@typedefs/neuron';
+import { ActionRing } from '@typedefs/neuron';
 import { ObjectName } from '@typedefs/object';
 import { SignalOp } from '@typedefs/signal';
 
@@ -182,7 +182,7 @@ export class KernelData implements Service {
         let signal = new Signal(this.kernel, object, change, filter, op);
 
         // Cycle through rings 0 - 9
-        for (let ring = 0 as NeuronRing; ring <= 9; ring++) {
+        for (let ring = 0 as ActionRing; ring <= 9; ring++) {
             await signal.run(ring);
         }
 
