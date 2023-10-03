@@ -10,7 +10,7 @@ export default class extends Router {
         return this.kernel.data.expireAll(this.params.object, this.req.body);
     }
 
-    onHttpVerb() {
+    onRouterVerb() {
         return Router.Verb.Delete;
     }
 

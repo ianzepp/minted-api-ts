@@ -9,7 +9,7 @@ export default class extends Router {
         return this.kernel.data.upsertAll(this.req.params.object, this.req.body);
     }
 
-    onHttpVerb() {
+    onRouterVerb() {
         return Router.Verb.Put;
     }
 

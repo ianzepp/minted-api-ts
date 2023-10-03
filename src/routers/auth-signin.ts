@@ -9,7 +9,7 @@ export default class extends Router {
         return this.kernel.auth.signin();
     }
 
-    onHttpVerb() {
+    onRouterVerb() {
         return Router.Verb.Post;
     }
 

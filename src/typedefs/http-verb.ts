@@ -1,4 +1,4 @@
-export enum HttpVerb {
+export enum RouterVerb {
     Delete = 'DELETE',
     Get = 'GET',
     Patch = 'PATCH',

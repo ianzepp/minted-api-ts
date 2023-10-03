@@ -8,7 +8,7 @@ import { Kernel } from '@classes/kernel';
 // Typedefs
 import { RouterReq } from '@typedefs/router-req';
 import { RouterRes } from '@typedefs/router-res';
-import { HttpVerb } from '@typedefs/http-verb';
+import { RouterVerb } from '@typedefs/http-verb';
 
 // Helper to assert a value is not undefined
 function assert<T>(v: T | undefined): T {
@@ -17,7 +17,7 @@ function assert<T>(v: T | undefined): T {
 
 export class Router {
     // Re-export aliases
-    public static Verb = HttpVerb;
+    public static Verb = RouterVerb;
 
     private __kernel: Kernel | undefined;
     private __req: RouterReq | undefined;
@@ -85,7 +85,7 @@ export class Router {
         return '<unknown>';
     }
 
-    onHttpVerb(): string {
+    onRouterVerb(): string {
         throw 'Unimplemented!';
     }
 
@@ -93,8 +93,8 @@ export class Router {
         throw 'Unimplemented!';
     }
 
-    isHttpVerb(verb: string): boolean {
-        return verb == this.onHttpVerb();
+    isRouterVerb(verb: string): boolean {
+        return verb == this.onRouterVerb();
     }
 
     isHttpPath(path: string): boolean {
@@ -102,6 +102,6 @@ export class Router {
     }
 
     is(verb: string, path: string): boolean {
-        return this.isHttpVerb(verb) && this.isHttpPath(path);
+        return this.isRouterVerb(verb) && this.isHttpPath(path);
     }
 }

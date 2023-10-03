@@ -9,7 +9,7 @@ export default class extends Router {
         
     }
 
-    onHttpVerb() {
+    onRouterVerb() {
         return Router.Verb.Put;
     }
 
