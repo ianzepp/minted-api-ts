@@ -77,21 +77,6 @@ export class Kernel implements Service {
     // Methods
     //
 
-    async run(executeFn: (kernel: Kernel) => Promise<any>) {
-        try {
-            // Startup
-            await this.certify();
-            await this.startup();
-            
-            // Run the logic
-            await executeFn(this);
-        }
-        
-        finally {
-            await this.cleanup();
-        }
-    }
-
     emit(cn, fn, ... messages) {
         debug(cn + ':' + fn)(util.format(... messages));
     }
