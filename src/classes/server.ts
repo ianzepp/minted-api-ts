@@ -109,21 +109,21 @@ export class Server {
             // Convert to JSON
             result = toJSON(result);
 
-            let is_meta = httpReq.search.meta === 'true';
-            let is_acls = httpReq.search.acls === 'true';
+            // let is_meta = httpReq.search.meta === 'true';
+            // let is_acls = httpReq.search.acls === 'true';
 
-            // Transform the result
-            if (is_meta && is_acls) {
-                result = _.map(result, r => _.merge({}, r.data, r.meta, r.acls));
-            }
+            // // Transform the result
+            // if (is_meta && is_acls) {
+            //     result = _.map(result, r => _.merge({}, r.data, r.meta, r.acls));
+            // }
 
-            else if (is_meta) {
-                result = _.map(result, r => _.merge({}, r.data, r.meta));
-            }
+            // else if (is_meta) {
+            //     result = _.map(result, r => _.merge({}, r.data, r.meta));
+            // }
 
-            else {
-                result = _.map(result, r => _.merge({}, r.data));
-            }
+            // else {
+            //     result = _.map(result, r => _.merge({}, r.data));
+            // }
 
             // Save the results
             httpRes.status = 200;
