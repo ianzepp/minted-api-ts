@@ -104,4 +104,49 @@ export class Router {
     is(verb: string, path: string): boolean {
         return this.isRouterVerb(verb) && this.isRouterPath(path);
     }
+
+    toOpenAPI(): _.Dictionary<any> {
+        let path = this.onRouterPath();
+        let verb = this.onRouterVerb();
+        let openapi = {};
+
+        // Replace common paths
+        path = path.replace(/:object/, '{object}');
+        path = path.replace(/:record/, '{record}');
+
+        // Set path data
+        openapi[path] = {};
+
+        // Set verb data
+        openapi[path][verb] = { parameters: []};
+
+        // Process parameters
+        if (path.includes('{object}')) {
+            openapi[path][verb].parameters.push({
+                'name': 'object',
+                'in': 'path',
+                'required': true,
+                'description': 'The object name',
+                'schema': {
+                    'type': 'string',
+                    'enum': this.kernel.meta.object_names
+                }
+            });
+        }
+
+        if (path.includes('{record}')) {
+            openapi[path][verb].parameters.push({
+                'name': 'record',
+                'in': 'path',
+                'required': true,
+                'description': 'The record UUID',
+                'schema': {
+                    'type': 'string',
+                }
+            });
+        }
+
+        // Done
+        return openapi;
+    }
 }
