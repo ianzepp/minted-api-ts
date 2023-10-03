@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 
 // Classes
 import { KernelAuth } from '@classes/kernel-auth';
+import { KernelBulk } from '@classes/kernel-bulk';
 import { KernelData } from '@classes/kernel-data';
 import { KernelMeta } from '@classes/kernel-meta';
 
@@ -28,6 +29,7 @@ export class Kernel implements Service {
 
     // Services
     public readonly auth = new KernelAuth(this);
+    public readonly bulk = new KernelBulk(this);
     public readonly data = new KernelData(this);
     public readonly meta = new KernelMeta(this);
 
@@ -56,12 +58,14 @@ export class Kernel implements Service {
         await this.data.startup();
         await this.meta.startup();
         await this.auth.startup();
+        await this.bulk.startup();
     }
 
     async cleanup(): Promise<void> {
         await this.auth.cleanup();
         await this.meta.cleanup();
         await this.data.cleanup();
+        await this.bulk.cleanup();
     }
 
     async refresh(): Promise<void> {
