@@ -6,7 +6,7 @@ import { Tester } from '@classes/tester';
 import { ObjectType } from '@typedefs/object';
 
 export class AutoInstall {
-    constructor(public readonly kernel: Kernel = new Tester()) {}
+    constructor(public readonly kernel: Kernel = new Kernel(Kernel.ID, Kernel.NS)) {}
 
     get knex() {
         return this.kernel.data.driver;
