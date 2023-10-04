@@ -159,10 +159,6 @@ export class AutoInstall {
     //
 
     async createTable(object_path: string, columnFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
-        if (this.kernel.isTest() === false) {
-            console.warn('autoinstall.createTable()', object_path);
-        }
-
         // Data table
         await this.knex.schema.createTable(object_path, (table) => {
             table.string('id').notNullable().primary();
@@ -210,10 +206,6 @@ export class AutoInstall {
     }
 
     async deleteTable(object_path: string) {
-        if (this.kernel.isTest() === false) {
-            console.warn('autoinstall.deleteTable()', object_path);
-        }
-
         await this.knex.schema.dropTable(object_path + '::acls');
         await this.knex.schema.dropTable(object_path + '::meta');
         await this.knex.schema.dropTable(object_path + '::data');
@@ -224,10 +216,6 @@ export class AutoInstall {
     //
 
     async insertAll(object_path: string, record_rows: _.Dictionary<any>[]) {
-        if (this.kernel.isTest() === false) {
-            console.warn('autoinstall.insertAll()', object_path);
-        }
-
         // Process
         for(let record_data of record_rows) {
             console.warn('+', JSON.stringify(record_data));

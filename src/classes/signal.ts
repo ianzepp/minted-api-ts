@@ -63,7 +63,7 @@ export class Signal {
             // }
 
             // Don't run for test cases?
-            if (neuron.onTest() === false && this.kernel.isTest()) {
+            if (neuron.onTest() === false && this.kernel.isNodeTest()) {
                 return false;
             }
 

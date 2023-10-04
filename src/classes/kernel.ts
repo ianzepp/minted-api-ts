@@ -10,6 +10,7 @@ import { v4 as uuid } from 'uuid';
 import { KernelBulk } from '@classes/kernel-bulk';
 import { KernelData } from '@classes/kernel-data';
 import { KernelMeta } from '@classes/kernel-meta';
+import { KernelUser } from '@classes/kernel-user';
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
@@ -26,6 +27,7 @@ export class Kernel {
     public readonly bulk = new KernelBulk(this);
     public readonly data = new KernelData(this);
     public readonly meta = new KernelMeta(this);
+    public readonly user = new KernelUser(this);
 
     // Kernel constants
     public readonly time = new Date();
@@ -41,12 +43,14 @@ export class Kernel {
         await this.data.startup();
         await this.meta.startup();
         await this.bulk.startup();
+        await this.user.startup();
     }
 
     async cleanup(): Promise<void> {
         await this.meta.cleanup();
         await this.data.cleanup();
         await this.bulk.cleanup();
+        await this.user.cleanup();
     }
 
     async refresh(): Promise<void> {
@@ -67,11 +71,11 @@ export class Kernel {
             || this.sudo_chain[this.sudo_chain.length - 1] === Kernel.ID;
     }
 
-    isTest(): boolean {
+    isNodeTest(): boolean {
         return Bun.env.NODE_ENV === 'test';
     } 
 
-    isProd(): boolean {
+    isNodeProduction(): boolean {
         return Bun.env.NODE_ENV === 'production';
     }
 

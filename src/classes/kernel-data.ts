@@ -64,14 +64,14 @@ export class KernelData {
     constructor(private readonly kernel: Kernel) {}
 
     async startup(): Promise<void> {
-        if (this.kernel.isTest()) {
+        if (this.kernel.isNodeTest()) {
             this.db = KnexDriverFn();
             await this.transaction();
         }
     }
 
     async cleanup(): Promise<void> {
-        if (this.kernel.isTest()) {
+        if (this.kernel.isNodeTest()) {
             await this.revert();
             await this.db.destroy();
         }
