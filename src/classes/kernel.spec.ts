@@ -6,10 +6,9 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { Tester } from '@classes/tester';
 import { ObjectType } from '@typedefs/object';
 
-let kernel = new Tester();
+let kernel = new Kernel();
 
 beforeEach(async () => {
     await kernel.startup();

@@ -6,11 +6,10 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { Tester } from '@classes/tester';
 import { Record } from '@classes/record';
 import { ObjectType } from '@typedefs/object';
 
-let kernel = new Tester();
+let kernel = new Kernel();
 
 beforeEach(async () => {
     await kernel.startup();
@@ -21,7 +20,7 @@ afterEach(async () => {
 });
 
 test.skip('should delete a knex table', async () => {
-    let object_name = kernel.toTestObjectName();
+    let object_name = kernel.toTestName();
     let object_data = await kernel.data.createOne(ObjectType.Object, {
         name: object_name
     });

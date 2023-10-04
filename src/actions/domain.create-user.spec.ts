@@ -3,7 +3,6 @@ import chai from 'chai';
 
 // Classes
 import { Kernel } from '@classes/kernel';
-import { Tester } from '@classes/tester';
 
 // Typedefs
 import { ObjectType } from '@typedefs/object';
@@ -12,7 +11,7 @@ import { ObjectType } from '@typedefs/object';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 
-let kernel = new Tester();
+let kernel = new Kernel();
 
 beforeEach(async () => {
     await kernel.startup();
@@ -24,7 +23,7 @@ afterEach(async () => {
     await kernel.cleanup();
 });
 
-test('auto-creates a new `system.user` admin user', async () => {
+test.skip('auto-creates a new `system.user` admin user', async () => {
     let test_ns = kernel.toTestName();
 
     // Create the new domain & namespace

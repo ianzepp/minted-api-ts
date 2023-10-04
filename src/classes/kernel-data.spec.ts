@@ -2,18 +2,16 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Bun:test
-import { beforeEach, afterEach, describe, test } from "bun:test";
+import { beforeEach, afterEach, test } from "bun:test";
 
 // Classes
-import { Tester } from '@classes/tester';
 import { Record } from '@classes/record';
-import { Object } from '@classes/object';
 import { DataError } from '@classes/kernel-data';
 import { RecordNotFoundError } from '@classes/kernel-data';
 
 // Typedefs
 import { ObjectType } from '@typedefs/object';
-
+import { Kernel } from './kernel';
 
 function expectRecordSet(result_set: any[], length?: number) {
     chai.expect(result_set).an('array');
@@ -43,12 +41,12 @@ function expectRecord(result: any) {
 }
 
 // Test suite
-let kernel = new Tester();
+let kernel = new Kernel();
 let object_type = ObjectType.User;
 let source_data = [
-    { ns: 'test', name: 'test-user-0' },
-    { ns: 'test', name: 'test-user-1' },
-    { ns: 'test', name: 'test-user-2' },
+    { name: 'test-user-0' },
+    { name: 'test-user-1' },
+    { name: 'test-user-2' },
 ];
 
 let records: Record[] = [];

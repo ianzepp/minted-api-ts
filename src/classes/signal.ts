@@ -57,10 +57,10 @@ export class Signal {
                 return false;
             }
 
-            // Don't run for root?
-            if (neuron.onRoot() === false && this.kernel.isRoot()) {
-                return false;
-            }
+            // // Don't run for root?
+            // if (neuron.onRoot() === false && this.kernel.isRoot()) {
+            //     return false;
+            // }
 
             // Don't run for test cases?
             if (neuron.onTest() === false && this.kernel.isTest()) {

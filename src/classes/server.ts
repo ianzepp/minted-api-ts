@@ -78,7 +78,7 @@ export class Server {
         }
 
         // Run the router
-        let kernel = new Kernel(Kernel.ID, Kernel.NS);
+        let kernel = new Kernel();
 
         try {
             // Startup the kernel

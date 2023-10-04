@@ -36,19 +36,10 @@ export default class extends Action {
         //
         // See the testing / precheck login in `test-create.ts`.
         signal.change.forEach(record => {
-            if (signal.kernel.isRoot()) {
-                record.data.id = record.data.id ?? signal.kernel.uuid();
-                record.data.ns = record.data.ns ?? signal.kernel.user_ns;
-                record.meta.created_at = record.meta.created_at ?? created_at;
-                record.meta.created_by = record.meta.created_at ?? created_by;
-            }
-
-            else {
-                record.data.id = signal.kernel.uuid();
-                record.data.ns = signal.kernel.user_ns;
-                record.meta.created_at = created_at;
-                record.meta.created_by = created_by;
-            }
+            record.data.id = signal.kernel.uuid();
+            record.data.ns = signal.kernel.user_ns;
+            record.meta.created_at = created_at;
+            record.meta.created_by = created_by;
         });
     }
 

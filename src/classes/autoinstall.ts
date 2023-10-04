@@ -2,11 +2,10 @@ import _ from 'lodash';
 import { Knex } from 'knex';
 
 import { Kernel } from '@classes/kernel';
-import { Tester } from '@classes/tester';
 import { ObjectType } from '@typedefs/object';
 
 export class AutoInstall {
-    constructor(public readonly kernel: Kernel = new Tester()) {}
+    constructor(public readonly kernel: Kernel = new Kernel()) {}
 
     get knex() {
         return this.kernel.data.driver;
@@ -149,7 +148,6 @@ export class AutoInstall {
         // Add data for `client`
         await this.insertAll(ObjectType.User, [
             { ns: Kernel.NS, id: Kernel.ID, name: 'root' },
-            { ns: Tester.NS, id: Tester.ID, name: 'test' },
         ]);
 
         // Commit the transaction
