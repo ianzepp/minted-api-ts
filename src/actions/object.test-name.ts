@@ -5,7 +5,7 @@ import { Action } from '@root/src/classes/action';
 import { Signal } from '@classes/signal';
 
 // Typedefs
-import { ActionRing } from '@typedefs/neuron';
+import { ActionRing } from '@root/src/typedefs/action';
 import { ObjectType } from '@typedefs/object';
 
 

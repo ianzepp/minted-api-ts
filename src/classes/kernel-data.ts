@@ -15,7 +15,7 @@ import { Signal } from '@classes/signal';
 // Typedefs
 import { ChangeData } from '@typedefs/record';
 import { FilterJson } from '@typedefs/filter';
-import { ActionRing } from '@typedefs/neuron';
+import { ActionRing } from '@root/src/typedefs/action';
 import { ObjectName } from '@typedefs/object';
 import { SignalOp } from '@typedefs/signal';
 

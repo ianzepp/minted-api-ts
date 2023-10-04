@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { Column } from '@classes/column';
 import { Action } from '@root/src/classes/action';
 import { Signal } from '@classes/signal';
-import { ActionRing } from '@typedefs/neuron';
+import { ActionRing } from '@root/src/typedefs/action';
 import { Record } from '@classes/record';
 
 // Typedefs

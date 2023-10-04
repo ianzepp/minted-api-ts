@@ -10,7 +10,7 @@ import { Record } from '@classes/record';
 import { Object } from '@classes/object';
 
 // Typedefs
-import { ActionRing } from '@typedefs/neuron';
+import { ActionRing } from '@root/src/typedefs/action';
 import { ObjectType } from '@typedefs/object';
 
 

@@ -9,10 +9,10 @@ import { Signal } from '@classes/signal';
 // Typedefs
 import { ColumnsMeta } from '@typedefs/column';
 import { DataError } from '@classes/kernel-data';
-import { ActionRing } from '@typedefs/neuron';
+import { ActionRing } from '@root/src/typedefs/action';
 
 /**
- * This neuron performs all the record prechecks/validations. This is done in one file
+ * This action performs all the record prechecks/validations. This is done in one file
  * so that we don't have many small files doing duplicate loops over the same data.
  * 
  * @event KernelVerb.Create
