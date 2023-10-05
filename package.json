@@ -9,6 +9,7 @@
     "build": "bash ./scripts/build.sh",
     "clean": "bash ./scripts/clean.sh",
     "start": "bash ./scripts/start.sh",
+    "start:dst": "bun ./dst/src/start.js",
     "test": "bash ./scripts/test.sh",
     "test:clean": "bash ./scripts/test-clean.sh"
   },
