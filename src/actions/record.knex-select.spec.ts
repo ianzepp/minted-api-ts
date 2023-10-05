@@ -6,13 +6,13 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { RecordColumnImmutableError } from '@classes/kernel-data';
-import { Tester } from '@classes/tester';
 
 // Typedefs
 import { ObjectType } from '@typedefs/object';
+import { Kernel } from '../classes/kernel';
 
 
-let kernel = new Tester();
+let kernel = new Kernel();
 
 beforeEach(async () => {
     await kernel.startup();

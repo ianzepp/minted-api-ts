@@ -6,14 +6,14 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
 import { Column } from '@classes/column';
-import { Tester } from '@classes/tester';
 import { Record } from '@classes/record';
 import { Object } from '@classes/object';
 
 // Typedefs
 import { ObjectType } from '@typedefs/object';
+import { Kernel } from './kernel';
 
-let kernel = new Tester();
+let kernel = new Kernel();
 
 beforeEach(async () => {
     await kernel.startup();
@@ -24,7 +24,7 @@ afterEach(async () => {
 });
 
 test.skip('object => database table lifecycle', async () => {
-    let object_name = kernel.toTestObjectName();
+    let object_name = kernel.toTestName();
     let record_data = { name: object_name, type: 'database' };
     let record: Record;
 
@@ -101,7 +101,7 @@ test.skip('object => database table lifecycle', async () => {
 
 test.skip('column => database table lifecycle', async () => {
     // Setup the object
-    let object_name = kernel.toTestObjectName();
+    let object_name = kernel.toTestName();
     let parent_data = { name: object_name, type: 'database' };
 
     // Insert the new object record

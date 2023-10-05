@@ -7,11 +7,11 @@ import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
-import { ActionRing } from '@typedefs/neuron';
+import { ActionRing } from '@root/src/typedefs/action';
 import { ObjectType } from '@typedefs/object';
 
 /**
- * This neuron listens to inserts on the `system.domain` table (which represents an organization or namespace),
+ * This action listens to inserts on the `system.domain` table (which represents an organization or namespace),
  * and generates an associated `User` record with admin permissions.
  */
 export default class extends Action {

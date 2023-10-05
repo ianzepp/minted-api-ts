@@ -9,10 +9,10 @@ import { Signal } from '@classes/signal';
 // Typedefs
 import { ColumnsMeta } from '@typedefs/column';
 import { DataError } from '@classes/kernel-data';
-import { ActionRing } from '@typedefs/neuron';
+import { ActionRing } from '@root/src/typedefs/action';
 
 /**
- * This neuron performs all the record prechecks/validations. This is done in one file
+ * This action performs all the record prechecks/validations. This is done in one file
  * so that we don't have many small files doing duplicate loops over the same data.
  * 
  * @event KernelVerb.Create
@@ -41,11 +41,9 @@ export default class extends Action {
             //
 
             // Record should not have an ID already assigned
-            // Exceptions: isRoot()
             this.test_data_id(signal, record);
 
             // Record should either not have a namespace, or the namespace should match the user.
-            // Exceptions: isRoot()
             this.test_data_ns(signal, record);
 
             //
@@ -74,10 +72,6 @@ export default class extends Action {
             return;
         }
 
-        if (signal.kernel.isRoot()) {
-            return;
-        }
-
         signal.failures.push(`E_ID_EXISTS: A record should not have an ID when being created: found '${ record.data.id }'.`);
     }
 
@@ -87,10 +81,6 @@ export default class extends Action {
         }
 
         if (record.data.ns === signal.kernel.user_ns) {
-            return;
-        }
-
-        if (signal.kernel.isRoot()) {
             return;
         }
 

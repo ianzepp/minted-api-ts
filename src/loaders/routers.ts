@@ -26,7 +26,7 @@ let preloads = _.chain(preload_files)
     // Load the file
     .map(preload_path => require(preload_path).default)
 
-    // Instantiate each neuron
+    // Instantiate each action
     .map(preload_type => new preload_type() as Router)
 
     // Done
