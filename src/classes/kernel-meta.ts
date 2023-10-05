@@ -33,6 +33,14 @@ export class KernelMeta {
         this.columns = new MapColumns(kernel);
     }
 
+    get object_names() {
+        return Array.from(this.objects.keys());
+    }
+
+    get column_names() {
+        return Array.from(this.columns.keys());
+    }
+
     /**
      * The `startup` method loads all the core metadata from the DB into a local
      * service cache. At present, it does the following:
@@ -104,6 +112,11 @@ export class KernelMeta {
             return source[k] === match;
         });
     }
+
+    //
+    // Helpers
+    //
+
 }
 
 //

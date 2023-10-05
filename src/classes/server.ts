@@ -108,6 +108,8 @@ export class Server {
         }
 
         catch (error) {
+            console.error(error.stack);
+
             // Revert the transaction
             await kernel.data.revert();
 

@@ -11,8 +11,8 @@ import { RouterRes } from '@typedefs/router-res';
 import { RouterVerb } from '@typedefs/http-verb';
 
 // Helper to assert a value is not undefined
-function assert<T>(v: T | undefined): T {
-    chai.assert(v); return v;
+function assert<T>(v: T | undefined, message?: string): T {
+    chai.assert(v, message); return v;
 }
 
 export class Router {
@@ -24,15 +24,15 @@ export class Router {
     private __res: RouterRes | undefined;
 
     get kernel(): Kernel {
-        return assert<Kernel>(this.__kernel);
+        return assert<Kernel>(this.__kernel, '"Router.__kernel" is undefined');
     }
 
     get req(): RouterReq {
-        return assert<RouterReq>(this.__req);
+        return assert<RouterReq>(this.__req, '"Router.__req" is undefined');
     }
 
     get res(): RouterRes {
-        return assert<RouterRes>(this.__res);
+        return assert<RouterRes>(this.__res, '"Router.__res" is undefined');
     }
 
     get params(): _.Dictionary<string> {
