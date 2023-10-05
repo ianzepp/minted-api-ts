@@ -23,6 +23,58 @@ afterEach(async () => {
     await kernel.cleanup();
 });
 
+//
+// meta.objects
+//
+
+test('meta.objects should not be empty after startup()', async () => {
+    chai.expect(kernel.meta.objects).not.empty;
+});
+
+test('meta.objects should be populated with Object instances', async () => {
+    for(let [object_name, object] of kernel.meta.objects) {
+        chai.expect(object_name).a('string');
+        chai.expect(object).instanceOf(Object);
+
+        // Check object properties
+        chai.expect(object).property('name', object_name).string;
+        chai.expect(object).property('metadata');
+
+        // Check object references
+        chai.expect(object).property('columns');
+    }
+});
+
+test('meta.object_names should return the same keys as meta.objects', async () => {
+    chai.expect(kernel.meta.object_names).members(Array.from(kernel.meta.objects.keys()));
+});
+
+//
+// meta.columns
+//
+
+test('meta.columns should not be empty after startup()', async () => {
+    chai.expect(kernel.meta.columns).not.empty;
+});
+
+test('meta.columns should be populated with Column instances', async () => {
+    for(let [column_name, column] of kernel.meta.columns) {
+        chai.expect(column_name).a('string');
+        chai.expect(column).instanceOf(Column);
+
+        // Check column properties
+        chai.expect(column).property('name', column_name).string;
+    }
+});
+
+test('meta.column_names should return the same keys as meta.columns', async () => {
+    chai.expect(kernel.meta.column_names).members(Array.from(kernel.meta.columns.keys()));
+});
+
+//
+// lifecycle testing
+//
+
 test.skip('object => database table lifecycle', async () => {
     let object_name = kernel.toTestName();
     let record_data = { name: object_name, type: 'database' };

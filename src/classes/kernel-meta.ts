@@ -33,11 +33,11 @@ export class KernelMeta {
         this.columns = new MapColumns(kernel);
     }
 
-    object_names() {
+    get object_names() {
         return Array.from(this.objects.keys());
     }
 
-    column_names() {
+    get column_names() {
         return Array.from(this.columns.keys());
     }
 
