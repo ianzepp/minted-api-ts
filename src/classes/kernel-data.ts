@@ -15,8 +15,7 @@ import { Signal } from '@classes/signal';
 // Typedefs
 import { ChangeData } from '@typedefs/record';
 import { FilterJson } from '@typedefs/filter';
-import { Service } from '@typedefs/kernel';
-import { ActionRing } from '@typedefs/neuron';
+import { ActionRing } from '@root/src/typedefs/action';
 import { ObjectName } from '@typedefs/object';
 import { SignalOp } from '@typedefs/signal';
 
@@ -57,7 +56,7 @@ function headNot<T>(result: T[]): void {
 
 
 // Implementation
-export class KernelData implements Service {
+export class KernelData {
     public db: Knex = KnexDriver;
     public tx: Knex.Transaction | undefined;
     public readonly uuid = uuid;
@@ -65,13 +64,15 @@ export class KernelData implements Service {
     constructor(private readonly kernel: Kernel) {}
 
     async startup(): Promise<void> {
-        if (this.kernel.isTest()) {
+        if (this.kernel.isNodeTest()) {
             this.db = KnexDriverFn();
+            await this.transaction();
         }
     }
 
     async cleanup(): Promise<void> {
-        if (this.kernel.isTest()) {
+        if (this.kernel.isNodeTest()) {
+            await this.revert();
             await this.db.destroy();
         }
     }
@@ -135,10 +136,10 @@ export class KernelData implements Service {
             knex = this.driver(`${ object_name }::${ type } as ${ type }`);
         }
 
-        // if (this.kernel.isRoot() === false) {
-        //     knex = knex.whereIn(`${ type }.ns`, this.kernel.auth.namespaces);
-        // }
+        // Apply namespace visibility
+        knex = knex.whereIn(`${ type }.ns`, this.kernel.namespaces);
 
+        // Done
         return knex;
     }
     
@@ -148,12 +149,13 @@ export class KernelData implements Service {
             .leftJoin({ meta: `${ object_name }::meta` }, 'meta.id', 'data.id')
             .leftJoin({ acls: `${ object_name }::acls` }, 'acls.id', 'data.id');
 
-        // if (this.kernel.isRoot() === false) {
-        //     knex = knex.whereIn(`data.ns`, this.kernel.auth.namespaces);
-        // }
+        // Apply namespace visibility
+        knex = knex.whereIn(`data.ns`, this.kernel.namespaces);
 
+        // Done
         return knex;
     }
+    
     //
     // Core runtime
     //

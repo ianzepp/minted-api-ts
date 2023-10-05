@@ -5,12 +5,11 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { Kernel } from '@classes/kernel';
-import { Tester } from '@classes/tester';
 import { ObjectType } from '@typedefs/object';
+import { Kernel } from '../classes/kernel';
 
 
-let kernel = new Tester();
+let kernel = new Kernel();
 
 beforeEach(async () => {
     await kernel.startup();
@@ -21,7 +20,7 @@ afterEach(async () => {
 });
 
 test.skip('should create a knex table', async () => {
-    let object_name = kernel.toTestObjectName();    
+    let object_name = kernel.toTestName();    
     let object_data = await kernel.data.createOne(ObjectType.Object, {
         name: object_name
     });

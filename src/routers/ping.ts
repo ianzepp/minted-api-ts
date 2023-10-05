@@ -6,10 +6,7 @@ import { Router } from '@classes/router';
 // Implementation
 export default class extends Router {
     async run() {
-        return { 
-            pong: new Date().toISOString(),
-            user: this.kernel.user_id
-        };
+        return {  pong: new Date().toISOString() }
     }
 
     onRouterVerb() {

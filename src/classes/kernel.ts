@@ -7,18 +7,14 @@ import debug from 'debug';
 import { v4 as uuid } from 'uuid';
 
 // Classes
-import { KernelAuth } from '@classes/kernel-auth';
 import { KernelBulk } from '@classes/kernel-bulk';
 import { KernelData } from '@classes/kernel-data';
 import { KernelMeta } from '@classes/kernel-meta';
-
-// Typedefs
-import { Service } from "@typedefs/kernel";
-
+import { KernelUser } from '@classes/kernel-user';
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
-export class Kernel implements Service {
+export class Kernel {
     // Import aliases
     public readonly uuid = uuid;
     public readonly expect = chai.expect;
@@ -28,27 +24,16 @@ export class Kernel implements Service {
     public static NS = 'system';
 
     // Services
-    public readonly auth = new KernelAuth(this);
     public readonly bulk = new KernelBulk(this);
     public readonly data = new KernelData(this);
     public readonly meta = new KernelMeta(this);
+    public readonly user = new KernelUser(this);
 
     // Kernel constants
     public readonly time = new Date();
 
     // Sudo root
     private sudo_chain: string[] = [];
-
-    // Setup the user-specific kernel, or default to a root user.
-    constructor(readonly user_id: string, readonly user_ns: string) {
-        // Nil UUID doesn't technically meet UUID version format requirements
-        if (user_id !== Kernel.ID) {
-            chai.expect(user_id).a('string').match(UUID_REGEX);
-        }
-
-        // NS should always exist
-        chai.expect(user_ns).a('string').not.empty;
-    }
 
     //
     // Service Methods
@@ -57,24 +42,20 @@ export class Kernel implements Service {
     async startup(): Promise<void> {
         await this.data.startup();
         await this.meta.startup();
-        await this.auth.startup();
         await this.bulk.startup();
+        await this.user.startup();
     }
 
     async cleanup(): Promise<void> {
-        await this.auth.cleanup();
         await this.meta.cleanup();
         await this.data.cleanup();
         await this.bulk.cleanup();
+        await this.user.cleanup();
     }
 
     async refresh(): Promise<void> {
         await this.cleanup();
         await this.startup();
-    }
-
-    async certify(): Promise<void> {
-        await this.auth.authenticate();
     }
 
     //
@@ -86,14 +67,15 @@ export class Kernel implements Service {
     }
 
     isRoot(): boolean {
-        return Kernel.ID === this.user_id || Kernel.ID === _.last(this.sudo_chain);
+        return this.sudo_chain.length === 0 
+            || this.sudo_chain[this.sudo_chain.length - 1] === Kernel.ID;
     }
 
-    isTest(): boolean {
-        return false;
+    isNodeTest(): boolean {
+        return Bun.env.NODE_ENV === 'test';
     } 
 
-    isProd(): boolean {
+    isNodeProduction(): boolean {
         return Bun.env.NODE_ENV === 'production';
     }
 
@@ -102,15 +84,42 @@ export class Kernel implements Service {
     }
 
     //
-    // Root sudo contest
+    // Switch into or out of another user
     //
 
     sudoRoot() {
         this.sudo_chain.push(Kernel.ID);
     }
 
+    sudoUser(user_id: string) {
+        this.sudo_chain.push(user_id);
+    }
+
     sudoExit() {
         this.sudo_chain.pop();
     }
-}
 
+    //
+    // User ID, NS, and namespaces
+    //
+
+    get user_id() {
+        return Kernel.ID;
+    }
+
+    get user_ns() {
+        return Kernel.NS;
+    }
+
+    get namespaces() {
+        return _.uniq(_.compact(['system', this.user_ns]));
+    }
+
+    //
+    // Test helpers
+    //
+
+    toTestName() {
+        return 'test_' + Math.floor(Math.random() * 1000000);
+    }
+}

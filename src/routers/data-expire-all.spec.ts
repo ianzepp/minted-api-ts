@@ -5,7 +5,6 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { Tester } from '@classes/tester';
 import { ObjectType } from '@typedefs/object';
 import { RouterReq } from '@typedefs/router-req';
 import { RouterRes } from '@typedefs/router-res';
@@ -13,8 +12,9 @@ import { toJSON } from '@classes/helper';
 
 // Router for testing
 import RouterTest from '@routers/data-expire-all';
+import { Kernel } from '../classes/kernel';
 
-let kernel = new Tester();
+let kernel = new Kernel();
 
 beforeEach(async () => {
     await kernel.startup();

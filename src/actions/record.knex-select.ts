@@ -7,7 +7,7 @@ import { Signal } from '@classes/signal';
 import { Filter } from '@classes/filter';
 
 // Typedefs
-import { ActionRing } from '@typedefs/neuron';
+import { ActionRing } from '@root/src/typedefs/action';
 import { Object } from '@classes/object';
 import { Kernel } from '@classes/kernel';
 

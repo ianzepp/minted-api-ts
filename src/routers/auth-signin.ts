@@ -6,7 +6,7 @@ import { Router } from '@classes/router';
 // Implementation
 export default class extends Router {
     async run() {
-        return this.kernel.auth.signin();
+        // TODO
     }
 
     onRouterVerb() {

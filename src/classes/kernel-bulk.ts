@@ -4,7 +4,6 @@ import chai from 'chai';
 import { ChangeData } from "@typedefs/record";
 import { FilterJson } from "@typedefs/filter";
 import { Kernel } from "@classes/kernel";
-import { Service } from "@typedefs/kernel";
 import { toJSON } from "./helper";
 
 // Bulk request payload
@@ -52,7 +51,7 @@ export enum BulkMethod {
 }
 
 // Implementation
-export class KernelBulk implements Service {
+export class KernelBulk {
     // Constructor
     constructor(private readonly kernel: Kernel) {}
 

@@ -5,7 +5,7 @@ import { RecordJson } from "./record";
 // Enums
 //
 
-/** The priority levels an neuron can have. */
+/** The priority levels an action can have. */
 export enum ActionRank {
     KernelMax = 0,
     Max = 1,
@@ -13,7 +13,7 @@ export enum ActionRank {
     Min = 9,
 }
 
-/** The levels of operations for an neuron. */
+/** The levels of operations for an action. */
 export enum ActionRing {
     Init = 0, // Kernel init
     Prep = 1, // Logic prep

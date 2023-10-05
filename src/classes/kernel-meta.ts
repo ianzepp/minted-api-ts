@@ -9,7 +9,6 @@ import { Kernel } from '@classes/kernel';
 import { toJSON } from '@classes/helper';
 
 // Typedefs
-import { Service } from '@typedefs/kernel';
 import { RecordFlat } from '@typedefs/record';
 import { ObjectType } from '@typedefs/object';
 
@@ -23,7 +22,7 @@ export class ColumnNotFoundError extends MetaError {};
 export const KernelObjectTypes = _.values(ObjectType) as string[];
 
 // Implementation
-export class KernelMeta implements Service {
+export class KernelMeta {
     // Source data for known object and column names
     public readonly sources: Map<string, RecordFlat[]> = new Map();
     public readonly objects: MapObjects;

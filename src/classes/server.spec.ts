@@ -5,7 +5,7 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 import { Server } from '@classes/server';
 
-test('server starts up', async () => {
-    let server = new Server();
+test('server starts', async () => {
+    new Server();
 });
 
