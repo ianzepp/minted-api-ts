@@ -11,8 +11,8 @@ import { RouterRes } from '@typedefs/router-res';
 import { RouterVerb } from '@typedefs/http-verb';
 
 // Helper to assert a value is not undefined
-function assert<T>(v: T | undefined): T {
-    chai.assert(v); return v;
+function assert<T>(v: T | undefined, message?: string): T {
+    chai.assert(v, message); return v;
 }
 
 export class Router {
@@ -24,15 +24,15 @@ export class Router {
     private __res: RouterRes | undefined;
 
     get kernel(): Kernel {
-        return assert<Kernel>(this.__kernel);
+        return assert<Kernel>(this.__kernel, '"Router.__kernel" is undefined');
     }
 
     get req(): RouterReq {
-        return assert<RouterReq>(this.__req);
+        return assert<RouterReq>(this.__req, '"Router.__req" is undefined');
     }
 
     get res(): RouterRes {
-        return assert<RouterRes>(this.__res);
+        return assert<RouterRes>(this.__res, '"Router.__res" is undefined');
     }
 
     get params(): _.Dictionary<string> {
@@ -103,50 +103,5 @@ export class Router {
 
     is(verb: string, path: string): boolean {
         return this.isRouterVerb(verb) && this.isRouterPath(path);
-    }
-
-    toOpenAPI(): _.Dictionary<any> {
-        let path = this.onRouterPath();
-        let verb = this.onRouterVerb();
-        let openapi = {};
-
-        // Replace common paths
-        path = path.replace(/:object/, '{object}');
-        path = path.replace(/:record/, '{record}');
-
-        // Set path data
-        openapi[path] = {};
-
-        // Set verb data
-        openapi[path][verb] = { parameters: []};
-
-        // Process parameters
-        if (path.includes('{object}')) {
-            openapi[path][verb].parameters.push({
-                'name': 'object',
-                'in': 'path',
-                'required': true,
-                'description': 'The object name',
-                'schema': {
-                    'type': 'string',
-                    'enum': this.kernel.meta.object_names
-                }
-            });
-        }
-
-        if (path.includes('{record}')) {
-            openapi[path][verb].parameters.push({
-                'name': 'record',
-                'in': 'path',
-                'required': true,
-                'description': 'The record UUID',
-                'schema': {
-                    'type': 'string',
-                }
-            });
-        }
-
-        // Done
-        return openapi;
     }
 }
