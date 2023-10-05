@@ -2,8 +2,7 @@ import _ from 'lodash';
 
 // API
 import { Router } from '@classes/router';
-import { ObjectType } from '../typedefs/object';
-import { ColumnType } from '../typedefs/column';
+import { Object } from '@classes/object';
 
 // Routers
 import Routers from '../loaders/routers';
@@ -27,15 +26,20 @@ export default class extends Router {
             },
         };
 
-        // Process paths
-        for(let router of Routers) {
-            _.assign(openapi.paths, router.toOpenAPI());
+        // Process components
+        for(let [object_name, object] of this.kernel.meta.objects) {
+            openapi.components.schemas[object_name] = this.toComponent(object_name, object);
         }
 
-        // Process components
-        for(let object_data of this.kernel.meta.sources.get(ObjectType.Object)) {
-            let object_name = object_data.name;
-            openapi.components.schemas[object_name] = this.toComponent(object_name);
+        // Sort the routers so the generated OpenAPI are more presentable
+        let routers = _.chain(Routers)
+            .sortBy(router => router.onRouterVerb())
+            .sortBy(router => router.onRouterPath())
+            .value();
+
+        // Process routers into paths
+        for(let router of routers) {
+            _.assign(openapi.paths, this.toPathSpec(router));
         }
 
         // Done
@@ -54,8 +58,7 @@ export default class extends Router {
     // Helpers
     //
 
-    private toComponent(object_name: string) {
-        let object = this.kernel.meta.objects.get(object_name);
+    toComponent(object_name: string, object: Object) {
         let result = { 
             type: 'object', 
             properties: {
@@ -83,5 +86,51 @@ export default class extends Router {
 
         // Done
         return result;
+    }
+
+    toPathSpec(router: Router) {
+        let path = router.onRouterPath();
+        let verb = router.onRouterVerb();
+        let spec = {};
+
+        // Replace common paths
+        path = path.replace(/:object/, '{object}');
+        path = path.replace(/:record/, '{record}');
+
+        // Set path data
+        spec[path] = {};
+
+        // Set verb data
+        spec[path][verb] = { parameters: []};
+
+        // Process parameters
+        if (path.includes('{object}')) {
+            console.warn('push object', path, verb, );
+
+            spec[path][verb].parameters.push({
+                'name': 'object',
+                'in': 'path',
+                'required': true,
+                'description': 'The object name',
+                'schema': {
+                    'type': 'string',
+                    'enum': this.kernel.meta.object_names,
+                }
+            });
+        }
+
+        if (path.includes('{record}')) {
+            spec[path][verb].parameters.push({
+                'name': 'record',
+                'in': 'path',
+                'required': true,
+                'description': 'The record UUID',
+                'schema': {
+                    'type': 'string',
+                }
+            });
+        }
+
+        return spec;
     }
 }
