@@ -14,7 +14,8 @@ import Routers from '@loaders/routers';
 export class HttpError extends Error {};
 export class HttpRouteNotFoundError extends HttpError {};
 
-function newResponse(data?: any) {
+function newResponse(data?: string) {
+    // Define the response object
     let res = new Response(data);
 
     // Always send CORS headers
@@ -22,6 +23,11 @@ function newResponse(data?: any) {
     res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
     res.headers.set('Access-Control-Allow-Headers', 'Content-Type');
     res.headers.set('Access-Control-Allow-Credentials', 'true');
+
+    // Response data (when present) is always stringified "application/json"
+    if (typeof data === 'string') {
+        res.headers.set('Content-Type', 'application/json');
+    }
 
     // Done
     return res;
@@ -95,7 +101,7 @@ export class Server {
                 result = null;
             }
 
-            // Convert to JSON
+            // Convert to plain objects
             result = toJSON(result);
 
             // Save the results
@@ -105,6 +111,9 @@ export class Server {
 
             // Commit the transaction
             await kernel.data.commit();
+
+            // Done
+            return newResponse(JSON.stringify(result));
         }
 
         catch (error) {
