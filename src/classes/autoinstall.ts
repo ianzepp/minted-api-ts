@@ -103,6 +103,11 @@ export class AutoInstall {
                 && _.get(json, 'data.name', '').startsWith(object_name + '.');
         }) as RecordJson[];
 
+        let record_json = _.filter(MetadataImports, json => {
+            return _.get(json, 'type') === object_name;
+        }) as RecordJson[];
+
+        // Sanity
         if (object_json === undefined) {
             console.error(`!! object '${ object_name }' not found in MetadataImports`);
             return;
@@ -114,6 +119,9 @@ export class AutoInstall {
         // Insert the object
         await this.kernel.data.createOne(ObjectType.Object, object_json);
         await this.kernel.data.createAll(ObjectType.Column, column_json);
+
+        // Insert the object records
+        await this.kernel.data.createAll(object_name, record_json);
     }
     
     async up() {
@@ -141,11 +149,6 @@ export class AutoInstall {
             // Install testing support
             await this.importObject('test');
 
-            console.warn('isRoot()', this.kernel.isRoot());
-
-            // Install the root user
-            await this.kernel.data.createOne('user', { ns: 'system', id: Kernel.ID, name: 'root' });
-
             // Commit the transaction
             await this.knex.raw('COMMIT;');
         }
@@ -155,7 +158,7 @@ export class AutoInstall {
             await this.knex.raw('ROLLBACK;');
 
             // Trace the error
-            console.trace(error.stack);
+            console.trace(error.stack || error);
 
             // Return as an error
             process.exit(1);

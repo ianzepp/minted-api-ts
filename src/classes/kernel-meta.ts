@@ -13,11 +13,6 @@ import { RecordFlat } from '@typedefs/record';
 import { ObjectType } from '@typedefs/object';
 
 
-// Meta API errors
-export class MetaError extends Error {};
-export class ObjectNotFoundError extends MetaError {};
-export class ColumnNotFoundError extends MetaError {};
-
 // Extract the predefined list of object names
 export const KernelObjectTypes = _.values(ObjectType) as string[];
 
@@ -136,8 +131,7 @@ export class MapObjects extends Map<string, Object> {
 
         // It must be at least a string
         if (typeof object_name !== 'string') {
-            throw new ObjectNotFoundError(object_name as string);
-
+            throw new Error(`Object '${ object_name }' is not a valid string type`);
         }
 
         // Convert the string to lower-case and clean it up
@@ -147,7 +141,8 @@ export class MapObjects extends Map<string, Object> {
         let object = super.get(object_name);
 
         if (object === undefined) {
-            throw new ObjectNotFoundError(object_name as string);
+            console.trace('objects', this);
+            throw new Error(`Object '${ object_name }' was not found or is not visible`);
         }
 
         return object;        
