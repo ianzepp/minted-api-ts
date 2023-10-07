@@ -1,0 +1,8 @@
+{
+    "type": "object",
+    "data": {
+        "ns": "system",
+        "name": "user",
+        "description": "Represents a user configuration or access authorization"
+    }
+}

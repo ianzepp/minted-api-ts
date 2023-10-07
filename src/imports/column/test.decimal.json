@@ -1,0 +1,8 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "test.decimal",
+        "type": "decimal"
+    }
+}

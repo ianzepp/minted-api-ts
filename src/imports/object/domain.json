@@ -1,0 +1,8 @@
+{
+    "type": "object",
+    "data": {
+        "ns": "system",
+        "name": "domain",
+        "description": "Represents a domain, company, or organization. The `name` property defines the namespace (`ns`) of the entire domain and all objects, columns, users, etc.. contained in the domain."
+    }
+}
