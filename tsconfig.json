@@ -7,7 +7,7 @@
         "module": "esnext",
         "target": "esnext",
         "moduleResolution": "bundler",
-        "noEmit": false,
+        "noEmit": true,
         "allowImportingTsExtensions": false,
         "moduleDetection": "force",
         "allowJs": true,

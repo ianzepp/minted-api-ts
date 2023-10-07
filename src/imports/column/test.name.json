@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "test.name",
+        "type": "text",
+        "required": true
+    }
+}

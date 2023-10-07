@@ -1,0 +1,8 @@
+{
+    "type": "object",
+    "data": {
+        "ns": "system",
+        "name": "config",
+        "description": "Represents stored configuration data (key/value pairs), similar to an environment value setting"
+    }
+}

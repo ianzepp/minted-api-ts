@@ -14,6 +14,15 @@ import { ColumnType } from '@typedefs/column';
 import { ObjectName } from '@typedefs/object';
 import { ObjectType } from '@typedefs/object';
 
+export interface ObjectData {
+    name: string;
+    description: string | null;
+}
+
+export interface ColumnData {
+    name: string;
+    description: string | null;
+}
 
 /**
  * The `Object` class represents a object in the database.
@@ -38,6 +47,9 @@ export class Object {
     // Re-export aliases
     public static Type = ObjectType;
 
+    // Properties
+    public readonly data: _.Dictionary<any> = {};
+    public readonly columns: _.Dictionary<Column> = {};
 
     /**
      * Generates a new `Object` instance from provided flat data.
@@ -46,28 +58,28 @@ export class Object {
      * @returns {Object} Returns a new `Object` instance.
      */
     static from(flat: _.Dictionary<any>): Object {
-        return new Object(
-            flat.id,
-            flat.ns,
-            flat.name,
-            flat.type,
-            flat.metadata,
-        );
+        return new Object(flat);
     }
 
     // Properties
-    public columns: _.Dictionary<Column> = {};
+    constructor(flat: _.Dictionary<any>) {
+        chai.expect(flat).property('name').string;
+        chai.expect(flat).property('name').matches(/^[a-zA-Z][a-zA-Z0-9_]*$/i);
 
-    constructor(
-        public readonly id: string,
-        public readonly ns: string,
-        public readonly name: ObjectName,
-        public readonly type: ObjectType,
-        public readonly metadata: boolean) {}
+        // Extract only the valid properties
+        flat = _.pick(flat, ['id', 'ns', 'name', 'description']);
+
+        // Save to the internal data
+        _.assign(this.data, flat);
+    }
 
     //
     // Getters/Setters
     //
+
+    get object_name() {
+        return this.data.name;
+    }
 
     /**
      * Retrieves the names of all columns in the object.
@@ -107,7 +119,7 @@ export class Object {
      * @returns {boolean} Returns true if the provided name matches the object name, false otherwise.
      */
     is(name: ObjectName) {
-        return this.name === name;
+        return this.data.name === name;
     }
 
     /**
@@ -177,6 +189,7 @@ export class Object {
         }
 
         else if (source instanceof Record) {
+            chai.expect(record.type, 'record.type').equals(source.type);
             _.assign(record.data, source.data);
             _.assign(record.prev, source.prev);
             _.assign(record.meta, source.meta);
@@ -184,6 +197,7 @@ export class Object {
         }
 
         else if (Object.isRecordJson(source)) {
+            chai.expect(record.type, 'record.type').equals(source.type);
             _.assign(record.data, source.data);
             _.assign(record.meta, source.meta);
             _.assign(record.acls, source.acls);
@@ -224,8 +238,10 @@ export class Object {
      */
     private static isRecordJson(source: unknown) {
         return typeof source === 'object'
+            && _.has(source, 'type')
+            && typeof _.get(source, 'type') === 'string'
             && _.has(source, 'data')
-            && _.has(source, 'meta');
+            && typeof _.get(source, 'data') === 'object';
     }
 
     /**
@@ -237,7 +253,9 @@ export class Object {
     private static isRecordFlat(source: unknown) {
         return typeof source === 'object'
             && _.has(source, 'id')
+            && typeof _.get(source, 'id') === 'string'
             && _.has(source, 'ns')
+            && typeof _.get(source, 'ns') === 'string'
             && _.has(source, 'created_at')
             && _.has(source, 'updated_at')
             && _.has(source, 'expired_at')

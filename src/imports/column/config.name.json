@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "config.name",
+        "type": "text",
+        "required": true
+    }
+}

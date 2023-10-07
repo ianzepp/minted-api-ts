@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import chai from 'chai';
 import { assert, expect } from 'chai';
 
 // Classes
@@ -6,14 +7,9 @@ import { Column } from '@classes/column';
 import { Object } from '@classes/object';
 
 // Typedefs
-import { ColumnType, ColumnsAcls } from '@typedefs/column';
+import { ColumnsAcls } from '@typedefs/column';
 import { ColumnsMeta } from '@typedefs/column';
 import { ObjectName } from '@typedefs/object';
-
-// Helpers
-import { toNull } from '@classes/helper';
-import { toJSON } from '@classes/helper';
-
 
 //
 // Record proxies. Wizard stuff.
@@ -45,28 +41,32 @@ function createProxy(object: Object, source_type: 'data' | 'meta' | 'acls') {
         source.access_deny = null;
     }
 
-    let assertFn = (name: string) => {
-        if (source_type === 'data' && name === 'id') {
+    let assertFn = (column_name: string, op: 'get' | 'set') => {
+        if (source_type === 'data' && column_name === 'id') {
             return;
         }
 
-        if (source_type === 'data' && name === 'ns') {
+        if (source_type === 'data' && column_name === 'ns') {
             return;
         }
 
-        if (source_type === 'data' && object.has(name)) {
+        if (source_type === 'data' && column_name === 'name') {
             return;
         }
 
-        if (source_type === 'meta' && ColumnsMeta.includes(name)) {
+        if (source_type === 'data' && object.has(column_name)) {
             return;
         }
 
-        if (source_type === 'acls' && ColumnsAcls.includes(name)) {
+        if (source_type === 'meta' && ColumnsMeta.includes(column_name)) {
             return;
         }
 
-        assert.fail(`object '${object.name}' column '${name}' is invalid for 'record.${source_type}'`);
+        if (source_type === 'acls' && ColumnsAcls.includes(column_name)) {
+            return;
+        }
+
+        throw new Error(`Object '${object.object_name}' accessor '${ op }' on column '${column_name}' is invalid for 'record.${source_type}'`);
     }
 
     // Build and return the new Proxy
@@ -75,17 +75,34 @@ function createProxy(object: Object, source_type: 'data' | 'meta' | 'acls') {
             return Reflect.ownKeys(target);
         },
 
-        get(target: _.Dictionary<any>, name: string) {
-            if (name === 'toJSON') return target;
-            if (name === 'constructor') return undefined;
-            if (name === 'length') return undefined;
-            assertFn(name);
-            return target[name] ?? null;
+        get(target: _.Dictionary<any>, column_name: string) {
+            if (column_name === 'toJSON') return target;
+            if (column_name === 'constructor') return undefined;
+            if (column_name === 'length') return undefined;
+
+            // Special cases
+            if ((<unknown>column_name) === Symbol.toString) {
+                return JSON.stringify(target);
+            }
+
+            if ((<unknown>column_name) === Symbol.toStringTag) {
+                return JSON.stringify(target);
+            }
+
+            if ((<unknown>column_name) instanceof Symbol) {
+                return undefined;
+            }
+    
+            // Assert this column exists on the target
+            assertFn(column_name, 'get');
+
+            // Fetch and return
+            return target[column_name] ?? null;
         },
 
-        set(target: _.Dictionary<any>, name: string, data: any) {
-            assertFn(name);
-            target[name] = data;
+        set(target: _.Dictionary<any>, column_name: string, data: any) {
+            assertFn(column_name, 'set');
+            target[column_name] = data;
             return true;
         }
     });
@@ -97,9 +114,6 @@ function createProxy(object: Object, source_type: 'data' | 'meta' | 'acls') {
  * The class provides methods to manipulate and access the data.
  */
 export class Record {
-    public readonly type: ObjectName;
-
-    // Containers
     public readonly data: _.Dictionary<any>;
     public readonly prev: _.Dictionary<any>;
     public readonly meta: _.Dictionary<any>;
@@ -111,6 +125,18 @@ export class Record {
         this.prev = createProxy(object, 'data');
         this.meta = createProxy(object, 'meta');
         this.acls = createProxy(object, 'acls');
+    }
+
+    get object_name() {
+        return this.object.object_name;
+    }
+
+    get reference() {
+        return this.object_name + '(name=' + this.data.name + ', id=' + this.data.id + ')';
+    }
+
+    get type() {
+        return this.object_name;
     }
 
     get diff() {
@@ -133,24 +159,13 @@ export class Record {
         }, { id: this.data.id } as _.Dictionary<any>);
     }
 
-    get created() {
-        return this.data.created_at !== null;
-    }
-
-    get updated() {
-        return this.data.updated_at !== null;
-    }
-
-    get expired() {
-        return this.data.expired_at !== null;
-    }
-
     toString(): string {
-        return `${this.object.name}#${this.data.id}`;
+        return `${this.object_name}#${this.data.id}`;
     }
 
     toJSON() {
         return {
+            type: this.object_name,
             data: this.data,
             meta: this.meta,
             acls: this.acls,
@@ -176,5 +191,9 @@ export class Record {
 
     set(column: Column, data: any) {
         return this.data[column.column_name] = data;
+    }
+
+    expect(column_name: string, accessor: 'data' | 'meta' | 'acls' = 'data') {
+        return chai.expect(this[accessor], this.reference + `: property '${ column_name }'`).property(column_name);
     }
 }

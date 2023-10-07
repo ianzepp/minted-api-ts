@@ -32,61 +32,59 @@ export default class extends Action {
     }
 
     async run(signal: Signal): Promise<void> {
-        await Promise.all(signal.change.map(record => this.one(signal, record)));
-    }
+        for(let record of signal.change) {
+            // Sanity
+            record.expect('name').a('string');
+            record.expect('name').contains('.');
+            record.expect('type').oneOf(ColumnTypeKeys);        
 
-    async one(signal: Signal, record: Record) {
-        // Sanity
-        record.expect('name').a('string');
-        record.expect('name').contains('.');
-        record.expect('type').oneOf(ColumnTypeKeys);        
+            // Create temporary refs
+            let [object_name, column_name] = record.data.name.split('.');
 
-        // Create temporary refs
-        let [object_name, column_name] = record.data.name.split('.');
+            await signal.kernel.data.updateTable(object_name, t => {
+                let column_type = record.data.type;
+                let column;
 
-        await signal.kernel.data.updateTable(object_name, t => {
-            let column_type = record.data.type;
-            let column;
+                if (column_type === ColumnType.Text) {
+                    column = t.text(column_name);
+                }
+                
+                else if (column_type === ColumnType.Boolean) {
+                    column = t.boolean(column_name);
+                }
+                
+                else if (column_type === ColumnType.Decimal) {
+                    column = t.decimal(column_name);
+                }
+                
+                else if (column_type === ColumnType.Integer) {
+                    column = t.integer(column_name);
+                }
 
-            if (column_type === ColumnType.Text) {
-                column = t.text(column_name);
-            }
-            
-            else if (column_type === ColumnType.Boolean) {
-                column = t.boolean(column_name);
-            }
-            
-            else if (column_type === ColumnType.Decimal) {
-                column = t.decimal(column_name);
-            }
-            
-            else if (column_type === ColumnType.Integer) {
-                column = t.integer(column_name);
-            }
+                else if (column_type === ColumnType.Json) {
+                    column = t.jsonb(column_name);
+                }
 
-            else if (column_type === ColumnType.Json) {
-                column = t.jsonb(column_name);
-            }
+                else if (column_type === ColumnType.Enum) {
+                    column = t.specificType(column_name, 'string ARRAY');
+                }
 
-            else if (column_type === ColumnType.Enum) {
-                column = t.specificType(column_name, 'string ARRAY');
-            }
+                else {
+                    throw new Error('Unknown column type: ' + column_type);
+                }
 
-            else {
-                throw new Error('Unknown column type: ' + column_type);
-            }
+                // Invalid column type
+            });
 
-            // Invalid column type
-        });
+            // Setup
+            let object = signal.kernel.meta.objects.get(object_name);
+            let column = Column.from(record.data);
 
-        // Setup
-        let object = signal.kernel.meta.objects.get(object_name);
-        let column = Column.from(record.data);
+            // Save the column to the parent object
+            object.insert(column);
 
-        // Save the column to the parent object
-        object.insert(column);
-
-        // Add the column data to the kernel metadata
-        signal.kernel.meta.columns.set(column.name, column);
+            // Add the column data to the kernel metadata
+            signal.kernel.meta.columns.set(column.name, column);
+        }
     }
 }

@@ -38,6 +38,30 @@ export class Signal {
         return _.map(this.change, record => _.assign({}, record.meta, { id: record.data.id, ns: record.data.ns }));
     }
 
+    isSelect() {
+        return this.op === SignalOp.Select;
+    }
+
+    isCreate() {
+        return this.op === SignalOp.Create;
+    }
+
+    isUpdate() {
+        return this.op === SignalOp.Update;
+    }
+
+    isUpsert() {
+        return this.op === SignalOp.Upsert;
+    }
+
+    isExpire() {
+        return this.op === SignalOp.Expire;
+    }
+
+    isDelete() {
+        return this.op === SignalOp.Delete;
+    }
+
     async run(ring: number): Promise<void> {
         let actions = Actions[ring] || [];
 
@@ -53,7 +77,7 @@ export class Signal {
             }
 
             // Wrong object name?
-            if (action.onObject() != '*' && action.onObject() !== this.object.name) {
+            if (action.onObject() != '*' && action.onObject() !== this.object.object_name) {
                 return false;
             }
 

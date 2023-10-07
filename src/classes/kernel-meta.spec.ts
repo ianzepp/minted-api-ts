@@ -37,8 +37,8 @@ test('meta.objects should be populated with Object instances', async () => {
         chai.expect(object).instanceOf(Object);
 
         // Check object properties
-        chai.expect(object).property('name', object_name).string;
-        chai.expect(object).property('metadata');
+        chai.expect(object).nested.property('data.name', object_name).string;
+        chai.expect(object).nested.property('data.description');
 
         // Check object references
         chai.expect(object).property('columns');

@@ -29,34 +29,32 @@ export default class extends Action {
     }
 
     async run(signal: Signal): Promise<void> {
-        await Promise.all(signal.change.map(record => this.one(signal, record)));
-    }
+        for(let record of signal.change) {
+            // Sanity
+            record.expect('name').a('string');
+            record.expect('name').contains('.');
 
-    async one(signal: Signal, record: Record) {
-        // Sanity
-        record.expect('name').a('string');
-        record.expect('name').contains('.');
+            // Create temporary refs
+            let [object_name, column_name] = record.data.name.split('.');
 
-        // Create temporary refs
-        let [object_name, column_name] = record.data.name.split('.');
+            // Verify object exists
+            let object = signal.kernel.meta.objects.get(object_name);
+            let column = object.columns[column_name];
 
-        // Verify object exists
-        let object = signal.kernel.meta.objects.get(object_name);
-        let column = object.columns[column_name];
+            if (column === undefined) {
+                throw new Error(`Object '${ object_name }' column '${ column_name }' does not exist or is not visible.`)
+            }
 
-        if (column === undefined) {
-            throw new Error(`Object '${ object_name }' column '${ column_name }' does not exist or is not visible.`)
+            // Run
+            await signal.kernel.data.updateTable(object_name, t => {
+                t.dropColumn(column_name);
+            });
+
+            // Delete the column data from the parent object
+            object.remove(column_name);
+
+            // Delete the column data from the kernel metadata
+            signal.kernel.meta.columns.delete(record.data.name);
         }
-
-        // Run
-        await signal.kernel.data.updateTable(object_name, t => {
-            t.dropColumn(column_name);
-        });
-
-        // Delete the column data from the parent object
-        object.remove(column_name);
-
-        // Delete the column data from the kernel metadata
-        signal.kernel.meta.columns.delete(record.data.name);
     }
 }

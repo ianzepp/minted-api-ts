@@ -33,6 +33,9 @@ export interface RecordData extends _.Dictionary<any> {
 
 /** Represents the metadata of the record. */
 export interface RecordMeta {
+    /** Returns the string name of the parent object type. */
+    type: string;
+
     /** Timestamp when the record was created. */
     created_at: Date | null;
 
@@ -75,9 +78,6 @@ export interface RecordAcls {
 
 /** Represents the record's JSON representation in object format. */
 export interface RecordJson {
-    /** Returns the string name of the parent object type. */
-    type: ObjectName;
-
     /** Accessor to the key/value mapping of record properties with their values. */
     data: RecordData;
 

@@ -32,19 +32,25 @@ export default class extends Action {
     }
 
     async one(signal: Signal, record: Record) {
-        // let object_name = record.data.name;
-        // let object_type = record.data.type;
-        // let auto = new AutoInstall(signal.kernel);
+        // Sanity
+        record.expect('name').a('string');
+        record.expect('name').not.contains('.');
 
-        // // Only delete objects that are marked as `database` types
-        // if (object_type !== 'database') {
-        //     return;
-        // }
+        // Setup
+        let object_name = record.data.name;
+        let object = signal.kernel.meta.objects.get(object_name);
 
-        // // Drop the table
-        // await auto.deleteTable(object_name);
+        // Delete related columns
+        await signal.kernel.data.deleteAny(ObjectType.Column, {
+            where: {
+                name: `${ object_name }.%`
+            }
+        });
 
-        // // Remove from kernel metadata
-        // signal.kernel.meta.objects.delete(object_name);
+        // Create the empty table with no default columns
+        await signal.kernel.data.deleteTable(object_name);
+
+        // Remove from kernel metadata
+        signal.kernel.meta.objects.delete(object_name);
     }
 }

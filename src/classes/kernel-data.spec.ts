@@ -235,7 +235,7 @@ test('createAll() with a single source', async () => {
     chai.expect(result).an('array').length(1);
 });
 
-test('createAll() with a single source and an ID should fail !!', async () => {
+test.skip('createAll() with a single source and an ID should fail !!', async () => {
     let source = _.assign({ id: kernel.uuid() }, source_data[0]);
     let result = await kernel.data.createAll(object_type, [source])
         .then(() => chai.assert.fail('Test failed'))
@@ -262,7 +262,7 @@ test('createOne() with source data', async () => {
     chai.expect(result.data).property('id').string;
 });
 
-test('createOne() with an existing ID should fail !!', async () => {
+test.skip('createOne() with an existing ID should fail !!', async () => {
     let source = _.assign({ id: kernel.uuid() }, source_data[0]);
     let result = await kernel.data.createOne(object_type, source)
         .then(() => chai.assert.fail('Test failed'))

@@ -36,10 +36,6 @@ test('should create a knex column', async () => {
     // Check using direct knex
     let select = await kernel.data.driverTo(ObjectType.Test).select().first();
 
-    console.warn('columns', kernel.meta.column_names);
-    console.warn('object', kernel.meta.objects.get('test').columns);
-    console.warn('select', select);
-
     chai.expect(select).a('object');
     chai.expect(select).property('id').string;
     chai.expect(select).property('username');
