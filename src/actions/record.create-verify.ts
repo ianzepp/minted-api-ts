@@ -72,6 +72,10 @@ export default class extends Action {
             return;
         }
 
+        if (signal.kernel.isRoot() === true) {
+            return;
+        }
+
         signal.failures.push(`E_ID_EXISTS: A record should not have an ID when being created: found '${ record.data.id }'.`);
     }
 
@@ -81,6 +85,10 @@ export default class extends Action {
         }
 
         if (record.data.ns === signal.kernel.user_ns) {
+            return;
+        }
+
+        if (signal.kernel.isRoot() === true) {
             return;
         }
 

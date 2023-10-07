@@ -8,6 +8,7 @@ import { Record } from '@classes/record';
 // Typedefs
 import { ActionRing } from '@root/src/typedefs/action';
 import { DataError } from '@classes/kernel-data';
+import { sign } from 'jsonwebtoken';
 
 
 export default class extends Action {
@@ -35,11 +36,36 @@ export default class extends Action {
         // the root user supplied the IDs. 
         //
         // See the testing / precheck login in `test-create.ts`.
+        let is_root = signal.kernel.isRoot();
+
         signal.change.forEach(record => {
-            record.data.id = signal.kernel.uuid();
-            record.data.ns = signal.kernel.user_ns;
-            record.meta.created_at = created_at;
-            record.meta.created_by = created_by;
+            if (is_root) {
+                record.data.id = record.data.id ?? signal.kernel.uuid();
+                record.data.ns = record.data.ns ?? signal.kernel.user_ns;
+
+                // Created info may already exist
+                record.meta.created_at = record.meta.created_at ?? created_at;
+                record.meta.created_by = record.meta.created_by ?? created_by;
+
+                // The other meta tpyes may or may not be passed in by root
+            }
+
+            else {
+                record.data.id = signal.kernel.uuid();
+                record.data.ns = signal.kernel.user_ns;
+
+                // Standard timestamps
+                record.meta.created_at = created_at;
+                record.meta.created_by = created_by;
+
+                // meta properties that can't be set by the user
+                record.meta.updated_at = null;
+                record.meta.updated_by = null;
+                record.meta.expired_at = null;
+                record.meta.expired_by = null;
+                record.meta.deleted_at = null;
+                record.meta.deleted_by = null;
+            }
         });
     }
 
