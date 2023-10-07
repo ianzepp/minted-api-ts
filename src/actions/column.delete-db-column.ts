@@ -33,18 +33,30 @@ export default class extends Action {
     }
 
     async one(signal: Signal, record: Record) {
-        // Create temporary refs
-        let column = Column.from(record.data);
-        let object = signal.kernel.meta.objects.get(column.object_name);
+        // Sanity
+        record.expect('name').a('string');
+        record.expect('name').contains('.');
 
-        await signal.kernel.data.schema.table(`${object.name}/data`, t => {            
-            return t.dropColumn(column.column_name);
+        // Create temporary refs
+        let [object_name, column_name] = record.data.name.split('.');
+
+        // Verify object exists
+        let object = signal.kernel.meta.objects.get(object_name);
+        let column = object.columns[column_name];
+
+        if (column === undefined) {
+            throw new Error(`Object '${ object_name }' column '${ column_name }' does not exist or is not visible.`)
+        }
+
+        // Run
+        await signal.kernel.data.updateTable(object_name, t => {
+            t.dropColumn(column_name);
         });
 
         // Delete the column data from the parent object
-        object.remove(column);
+        object.remove(column_name);
 
         // Delete the column data from the kernel metadata
-        signal.kernel.meta.columns.delete(column.name);
+        signal.kernel.meta.columns.delete(record.data.name);
     }
 }
