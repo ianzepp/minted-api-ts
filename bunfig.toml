@@ -1,7 +1,7 @@
 [test]
 
 # Always show test coverage
-coverage = true
+# coverage = true
 
 # Preload global test handlers
 preload = ['./src/setup-tests.ts']

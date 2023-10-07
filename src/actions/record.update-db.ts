@@ -42,7 +42,7 @@ export default class extends Action {
 
     async one(signal: Signal, record: Record) {
         return signal.kernel.data
-            .driverTo(signal.object.name, 'data')
+            .driverTo(signal.object.object_name, 'data')
             .whereIn('data.id', [record.data.id])
             .update(record.diff);
     }

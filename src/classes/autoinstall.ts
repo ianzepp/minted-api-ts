@@ -4,41 +4,31 @@ import { Knex } from 'knex';
 import { Kernel } from '@classes/kernel';
 import { ObjectType } from '@typedefs/object';
 
+// Import table functions
+import { createTable, deleteTable, insertAll } from './knex';
+
+// Import preloads
+import MetadataImports from '@loaders/imports';
+import { RecordJson } from '../typedefs/record';
+
 export class AutoInstall {
     constructor(public readonly kernel: Kernel = new Kernel()) {}
 
     get knex() {
         return this.kernel.data.driver;
     }
-    
-    async up() {
-        // Current database name
-        let dn = this.knex.client.config.connection.database;
 
-        // Start the tx
-        await this.knex.raw('BEGIN TRANSACTION;');
+    async deleteAll() {
+        const tables = await this.knex.raw("SELECT tablename FROM pg_tables WHERE schemaname='public';");
 
-        // Create the master domain table.
-        await this.createTable(ObjectType.Domain, (table) => {
-            table.string('name').notNullable();
+        for (let table of tables.rows) {
+            await deleteTable(this.knex, table.tablename);
+        }
+    }
 
-            // Unique index on (ns)
-            table.unique(['ns']);
-        });
-
-        // Create the master domain record.
-        await this.insertAll(ObjectType.Domain, [
-            { ns: 'system', name: 'Minted API System' },
-            { ns: 'test', name: 'Minted API Test Suite' },
-        ]);
-
-        //
-        // Meta definitions
-        //
-
+    async createSystem() {
         // Create table `object`
-        await this.createTable(ObjectType.Object, (table) => {
-            table.string('name').notNullable();
+        await createTable(this.knex, ObjectType.Object, (table) => {
             table.string('type').notNullable().defaultTo('database');
             table.string('description');
 
@@ -50,8 +40,7 @@ export class AutoInstall {
         });
 
         // Create table `column`
-        await this.createTable(ObjectType.Column, table => {
-            table.string('name').notNullable();
+        await createTable(this.knex, ObjectType.Column, table => {
             table.string('type').notNullable().defaultTo('text');
             table.string('description');
 
@@ -70,169 +59,106 @@ export class AutoInstall {
             table.unique(['ns', 'name']);
         });
 
-        // Create table `test`
-        await this.createTable(ObjectType.Test, table => {
-            table.string('name').notNullable();
-            table.boolean('boolean');
-            table.integer('integer');
-            table.decimal('decimal');
-        });
+        // Add system data for `object`
+        await insertAll(this.knex, ObjectType.Object, [
+            { ns: 'system', name: ObjectType.Object, metadata: true },
+            { ns: 'system', name: ObjectType.Column, metadata: true },
+        ]);    
 
-        // Create table `user`
-        await this.createTable(ObjectType.User, table => {
-            table.string('name').notNullable();
-        });
+        await insertAll(this.knex, ObjectType.Column, [
+           // Columns for 'object'
+           { ns: 'system', name: ObjectType.Object + '.name', required: true, immutable: true, indexed: true  },
+           { ns: 'system', name: ObjectType.Object + '.description' },
+           { ns: 'system', name: ObjectType.Object + '.external', type: 'boolean' },
+           { ns: 'system', name: ObjectType.Object + '.metadata', type: 'boolean' },
 
-        // Create table `config`
-        await this.createTable(ObjectType.Config, table => {
-            table.string('name').notNullable();
-            table.string('data').notNullable();
-        });
+           // Columns for 'column'
+           { ns: 'system', name: ObjectType.Column + '.name', required: true, immutable: true, indexed: true },
+           { ns: 'system', name: ObjectType.Column + '.type', required: true },
+           { ns: 'system', name: ObjectType.Column + '.description' },
 
-        //
-        // Data inserts
-        //
+           { ns: 'system', name: ObjectType.Column + '.audited', type: 'boolean' },
+           { ns: 'system', name: ObjectType.Column + '.immutable', type: 'boolean' },
+           { ns: 'system', name: ObjectType.Column + '.indexed', type: 'boolean' },
+           { ns: 'system', name: ObjectType.Column + '.internal', type: 'boolean' },
+           { ns: 'system', name: ObjectType.Column + '.required', type: 'boolean' },
+           { ns: 'system', name: ObjectType.Column + '.unique', type: 'boolean' },
 
-        // Add data for `object`
-        await this.insertAll(ObjectType.Object, [
-            { ns: 'system', name: ObjectType.Domain, type: 'database' },
-            { ns: 'system', name: ObjectType.Object, type: 'database', metadata: true },
-            { ns: 'system', name: ObjectType.Column, type: 'database', metadata: true },
-            { ns: 'system', name: ObjectType.Test, type: 'database' },
-            { ns: 'system', name: ObjectType.User, type: 'database' },
-            { ns: 'system', name: ObjectType.Config, type: 'database' },
-        ]);
-
-        // Add data for `column`
-        await this.insertAll(ObjectType.Column, [
-            // Columns for 'system'
-            { ns: 'system', name: ObjectType.Domain + '.name', required: true },
-
-            // Columns for 'object'
-            { ns: 'system', name: ObjectType.Object + '.name', required: true, immutable: true, indexed: true  },
-            { ns: 'system', name: ObjectType.Object + '.type' },
-            { ns: 'system', name: ObjectType.Object + '.description' },
-            { ns: 'system', name: ObjectType.Object + '.external', type: 'boolean' },
-            { ns: 'system', name: ObjectType.Object + '.metadata', type: 'boolean' },
-
-            // Columns for 'column'
-            { ns: 'system', name: ObjectType.Column + '.name', required: true, immutable: true, indexed: true },
-            { ns: 'system', name: ObjectType.Column + '.type', required: true },
-            { ns: 'system', name: ObjectType.Column + '.description' },
-
-            { ns: 'system', name: ObjectType.Column + '.audited', type: 'boolean' },
-            { ns: 'system', name: ObjectType.Column + '.immutable', type: 'boolean' },
-            { ns: 'system', name: ObjectType.Column + '.indexed', type: 'boolean' },
-            { ns: 'system', name: ObjectType.Column + '.internal', type: 'boolean' },
-            { ns: 'system', name: ObjectType.Column + '.required', type: 'boolean' },
-            { ns: 'system', name: ObjectType.Column + '.unique', type: 'boolean' },
-
-            { ns: 'system', name: ObjectType.Column + '.minimum', type: 'integer' },
-            { ns: 'system', name: ObjectType.Column + '.maximum', type: 'integer' },
-            { ns: 'system', name: ObjectType.Column + '.precision', type: 'integer' },
-
-            // Columns for 'test'
-            { ns: 'system', name: ObjectType.Test + '.name', type: 'text', required: true },
-            { ns: 'system', name: ObjectType.Test + '.boolean', type: 'boolean' },
-            { ns: 'system', name: ObjectType.Test + '.integer', type: 'integer' },
-            { ns: 'system', name: ObjectType.Test + '.decimal', type: 'decimal' },
-
-            // Columns for 'user'
-            { ns: 'system', name: ObjectType.User + '.name', type: 'text', required: true },
-
-            // Columns for 'config'
-            { ns: 'system', name: ObjectType.Config + '.name', type: 'text', required: true },
-            { ns: 'system', name: ObjectType.Config + '.data', type: 'text', required: true },
-        ]);
-
-        // Add data for `client`
-        await this.insertAll(ObjectType.User, [
-            { ns: Kernel.NS, id: Kernel.ID, name: 'root' },
-        ]);
-
-        // Commit the transaction
-        await this.knex.raw('COMMIT;');
+           { ns: 'system', name: ObjectType.Column + '.minimum', type: 'integer' },
+           { ns: 'system', name: ObjectType.Column + '.maximum', type: 'integer' },
+           { ns: 'system', name: ObjectType.Column + '.precision', type: 'integer' },
+       ]);
     }
 
-    //
-    // Helpers
-    //
+    async importObject(object_name: string) {
+        console.info(`importObject(${ object_name })..`);
 
-    async createTable(object_path: string, columnFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
-        // Data table
-        await this.knex.schema.createTable(object_path, (table) => {
-            table.string('id').notNullable().primary();
-            table.string('ns').notNullable();
+        let object_json = _.find(MetadataImports, json => {
+            return _.get(json, 'type') === 'object'
+                && _.get(json, 'data.name') === object_name;
+        }) as RecordJson;
 
-            // Apply extra columns
-            columnFn(table);
-        });
+        let column_json = _.filter(MetadataImports, json => {
+            return _.get(json, 'type') === 'column'
+                && _.get(json, 'data.name', '').startsWith(object_name + '.');
+        }) as RecordJson[];
 
-        await this.knex.schema.createTable(object_path + '::meta', (table) => {
-            table.string('id').notNullable().primary();
-            table.string('ns').notNullable();
+        if (object_json === undefined) {
+            console.error(`!! object '${ object_name }' not found in MetadataImports`);
+            return;
+        }
 
-            table.timestamp('created_at').index();
-            table.string('created_by').index();
+        // Show columns
+        console.warn('- with columns:', column_json.map(c => c.data.name));
 
-            table.timestamp('updated_at').index();
-            table.string('updated_by').index();
-
-            table.timestamp('expired_at').index();
-            table.string('expired_by').index();
-
-            table.timestamp('deleted_at').index();
-            table.string('deleted_by').index();
-        });
-
-        await this.knex.schema.createTable(object_path + '::acls', (table) => {
-            table.string('id').notNullable().primary();
-            table.string('ns').notNullable();
-
-            table.specificType('access_full', 'text ARRAY');
-            table.specificType('access_edit', 'text ARRAY');
-            table.specificType('access_read', 'text ARRAY');
-            table.specificType('access_deny', 'text ARRAY');
-        });
-
-        // await this.knex.schema.createTable(object_path + '::acls', (table) => {
-        //     table.string('id').notNullable().primary();
-
-        //     table.specificType('access_full', 'text ARRAY');
-        //     table.specificType('access_edit', 'text ARRAY');
-        //     table.specificType('access_read', 'text ARRAY');
-        //     table.specificType('access_deny', 'text ARRAY');
-        // });
+        // Insert the object
+        await this.kernel.data.createOne(ObjectType.Object, object_json);
+        await this.kernel.data.createAll(ObjectType.Column, column_json);
     }
+    
+    async up() {
+        try {
+            // Current database name
+            let dn = this.knex.client.config.connection.database;
 
-    async deleteTable(object_path: string) {
-        await this.knex.schema.dropTable(object_path + '::acls');
-        await this.knex.schema.dropTable(object_path + '::meta');
-        await this.knex.schema.dropTable(object_path + '::data');
-    }
+            // Start the tx
+            await this.knex.raw('BEGIN TRANSACTION;');
 
-    //
-    // Helpers
-    //
+            // Reset any existing DB contents
+            await this.deleteAll();
+        
+            // Install the core system data?
+            await this.createSystem();
 
-    async insertAll(object_path: string, record_rows: _.Dictionary<any>[]) {
-        // Process
-        for(let record_data of record_rows) {
-            console.warn('+', JSON.stringify(record_data));
+            // Startup the kernel so we have basic data structures
+            await this.kernel.startup();
 
-            // Assign UUID
-            record_data.id = this.kernel.uuid();
+            // Install module: domain & user
+            await this.importObject('domain');
+            await this.importObject('user');
+            await this.importObject('config');
 
-            // Insert record
-            await this.knex(object_path).insert(record_data);
+            // Install testing support
+            await this.importObject('test');
 
-            // Insert record::meta
-            await this.knex(object_path + '::meta').insert({
-                id: record_data.id,
-                ns: record_data.ns,
-                created_at: new Date().toISOString(),
-                created_by: Kernel.ID,
-            });
+            console.warn('isRoot()', this.kernel.isRoot());
+
+            // Install the root user
+            await this.kernel.data.createOne('user', { ns: 'system', id: Kernel.ID, name: 'root' });
+
+            // Commit the transaction
+            await this.knex.raw('COMMIT;');
+        }
+
+        catch (error) {
+            // Rollback the transaction
+            await this.knex.raw('ROLLBACK;');
+
+            // Trace the error
+            console.trace(error.stack);
+
+            // Return as an error
+            process.exit(1);
         }
     }
 }

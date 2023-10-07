@@ -28,6 +28,7 @@ export class RecordColumnRequiredError extends DataError {};
 
 // Import knex config and driver
 import KnexConfig from '@root/knexconfig';
+import { toJSON } from './helper';
 
 // Local helper
 function headOne<T>(result: T[]): T | undefined {
@@ -137,7 +138,9 @@ export class KernelData {
         }
 
         // Apply namespace visibility
-        knex = knex.whereIn(`${ type }.ns`, this.kernel.namespaces);
+        if (this.kernel.isRoot() === false) {
+            knex = knex.whereIn(`${ type }.ns`, this.kernel.namespaces);
+        }
 
         // Done
         return knex;
@@ -150,10 +153,72 @@ export class KernelData {
             .leftJoin({ acls: `${ object_name }::acls` }, 'acls.id', 'data.id');
 
         // Apply namespace visibility
-        knex = knex.whereIn(`data.ns`, this.kernel.namespaces);
+        if (this.kernel.isRoot() === false) {
+            knex = knex.whereIn(`data.ns`, this.kernel.namespaces);
+        }
 
         // Done
         return knex;
+    }
+
+    //
+    // DB schema modifications
+    //
+
+    async createTable(object_name: string, createFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
+        console.warn('+ createTable', object_name);
+
+        // Data table
+        await this.schema.createTable(object_name, (table) => {
+            table.string('id').notNullable().primary();
+            table.string('ns').notNullable();
+    
+            // Apply extra columns
+            createFn(table);
+        });
+    
+        await this.schema.createTable(object_name + '::meta', (table) => {
+            table.string('id').notNullable().primary();
+            table.string('ns').notNullable();
+    
+            table.timestamp('created_at').index();
+            table.string('created_by').index();
+    
+            table.timestamp('updated_at').index();
+            table.string('updated_by').index();
+    
+            table.timestamp('expired_at').index();
+            table.string('expired_by').index();
+    
+            table.timestamp('deleted_at').index();
+            table.string('deleted_by').index();
+        });
+    
+        await this.schema.createTable(object_name + '::acls', (table) => {
+            table.string('id').notNullable().primary();
+            table.string('ns').notNullable();
+    
+            table.specificType('access_full', 'text ARRAY');
+            table.specificType('access_edit', 'text ARRAY');
+            table.specificType('access_read', 'text ARRAY');
+            table.specificType('access_deny', 'text ARRAY');
+        });
+    }
+    
+    async updateTable(object_name: string, updateFn: (table: Knex.AlterTableBuilder) => void): Promise<void> {
+        console.warn('+ updateTable', object_name);
+
+        await this.schema.alterTable(object_name, (table) => {
+            updateFn(table);
+        });
+    }
+    
+    async deleteTable(object_name: string): Promise<void> {
+        console.warn('+ deleteTable', object_name);
+
+        await this.schema.dropTableIfExists(object_name + '::acls');
+        await this.schema.dropTableIfExists(object_name + '::meta');
+        await this.schema.dropTableIfExists(object_name);
     }
     
     //

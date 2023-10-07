@@ -95,6 +95,18 @@ export class Column {
      * @returns {boolean} Returns true if the column has the specified form, false otherwise.
      */
     of(form: ColumnForm | string): boolean {
+        if (form === Column.Form.Required && this.column_name === 'name') {
+            return true;
+        }
+
+        if (form === Column.Form.Immutable && this.column_name === 'id') {
+            return true;
+        }
+
+        if (form === Column.Form.Immutable && this.column_name === 'ns') {
+            return true;
+        }
+
         return _.includes(this.forms, form);
     }
 }

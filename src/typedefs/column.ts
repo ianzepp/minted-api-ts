@@ -1,6 +1,10 @@
+import _ from 'lodash';
+
 //
 // Types
 //
+
+import { toLower } from "lodash";
 
 /**
  * Represents the name of a column.
@@ -58,3 +62,5 @@ export enum ColumnType {
     Json = 'json', // The column is of JSON type
     Text = 'text', // The column is of text type
 }
+
+export const ColumnTypeKeys = _.keys(ColumnType).map(_.toLower);

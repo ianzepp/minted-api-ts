@@ -19,7 +19,7 @@ afterEach(async () => {
     await kernel.cleanup();
 });
 
-test.skip('should create a knex table', async () => {
+test('should create a knex table', async () => {
     let object_name = kernel.toTestName();    
     let object_data = await kernel.data.createOne(ObjectType.Object, {
         name: object_name

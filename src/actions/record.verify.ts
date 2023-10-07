@@ -35,6 +35,7 @@ export default class extends Action {
     }
 
     async run(signal: Signal): Promise<void> {
+
         for(let record of signal.change) {
             //
             // Per record
@@ -72,6 +73,10 @@ export default class extends Action {
             return;
         }
 
+        if (signal.kernel.isRoot() === true) {
+            return;
+        }
+
         signal.failures.push(`E_ID_EXISTS: A record should not have an ID when being created: found '${ record.data.id }'.`);
     }
 
@@ -84,16 +89,19 @@ export default class extends Action {
             return;
         }
 
+        if (signal.kernel.isRoot() === true) {
+            return;
+        }
+
         signal.failures.push(`E_NS_EXISTS: On create: a record should not have an namespace. Found '${ record.data.ns }'.`);
     }
 
     test_data_required(signal: Signal, record: Record, column: Column) {
-        
         if (column.of(Column.Form.Required) === false) {
             return;
         }
 
-        let data = record.get(column);
+        let data = record.get(column) ?? null;
 
         if (data !== null) {
             return;

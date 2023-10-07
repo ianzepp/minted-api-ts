@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "test.integer",
+        "type": "integer",
+        "description": "Stores an integer value for test cases"
+    }
+}

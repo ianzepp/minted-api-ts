@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 // Classes
+import { AutoInstall } from '@classes/autoinstall';
 import { Action } from '@root/src/classes/action';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
@@ -8,8 +9,6 @@ import { Record } from '@classes/record';
 // Typedefs
 import { ActionRing } from '@root/src/typedefs/action';
 import { ObjectType } from '@typedefs/object';
-import { Column } from '@classes/column';
-
 
 export default class extends Action {
     toName(): string {
@@ -17,7 +16,7 @@ export default class extends Action {
     }
     
     onObject(): string {
-        return ObjectType.Column;
+        return ObjectType.Object;
     }
 
     onRing(): ActionRing {
@@ -33,18 +32,25 @@ export default class extends Action {
     }
 
     async one(signal: Signal, record: Record) {
-        // Create temporary refs
-        let column = Column.from(record.data);
-        let object = signal.kernel.meta.objects.get(column.object_name);
+        // Sanity
+        record.expect('name').a('string');
+        record.expect('name').not.contains('.');
 
-        await signal.kernel.data.schema.table(`${object.name}/data`, t => {            
-            return t.dropColumn(column.column_name);
+        // Setup
+        let object_name = record.data.name;
+        let object = signal.kernel.meta.objects.get(object_name);
+
+        // Delete related columns
+        await signal.kernel.data.deleteAny(ObjectType.Column, {
+            where: {
+                name: `${ object_name }.%`
+            }
         });
 
-        // Delete the column data from the parent object
-        object.remove(column);
+        // Create the empty table with no default columns
+        await signal.kernel.data.deleteTable(object_name);
 
-        // Delete the column data from the kernel metadata
-        signal.kernel.meta.columns.delete(column.name);
+        // Remove from kernel metadata
+        signal.kernel.meta.objects.delete(object_name);
     }
 }

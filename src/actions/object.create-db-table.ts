@@ -3,7 +3,6 @@ import chai from 'chai';
 import { Knex } from 'knex';
 
 // Classes
-import { AutoInstall } from '@classes/autoinstall';
 import { Action } from '@root/src/classes/action';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
@@ -12,7 +11,6 @@ import { Object } from '@classes/object';
 // Typedefs
 import { ActionRing } from '@root/src/typedefs/action';
 import { ObjectType } from '@typedefs/object';
-
 
 export default class extends Action {
     toName(): string {
@@ -36,20 +34,18 @@ export default class extends Action {
     }
 
     async one(signal: Signal, record: Record) {
+        // Sanity
+        record.expect('name').a('string');
+        record.expect('name').not.contains('.');
+
         // Setup
         let object_name = record.data.name;
-        let object_type = record.data.type;
-        let auto = new AutoInstall(signal.kernel);
-
-        // Only create objects that are marked as `database` types
-        if (object_type !== 'database') {
-            return;
-        }
+        let object = Object.from(record.data);
 
         // Create the empty table with no default columns
-        await auto.createTable(object_name, table => {});
+        await signal.kernel.data.createTable(object_name, t => {});
 
         // Add to kernel metadata
-        signal.kernel.meta.objects.set(object_name, Object.from(record.data));
+        signal.kernel.meta.objects.set(object_name, object);
     }
 }

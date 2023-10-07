@@ -1,0 +1,8 @@
+{
+    "type": "object",
+    "data": {
+        "ns": "system",
+        "name": "test",
+        "description": null
+    }
+}

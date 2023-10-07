@@ -21,23 +21,23 @@ afterEach(async () => {
 });
 
 // FIXME:
-test.skip('should create a knex column', async () => {
-    await kernel.data.createOne(ObjectType.Column, { 
-        name: ObjectType.User + ':something', 
+test('should create a knex column', async () => {
+    let record = await kernel.data.createOne(ObjectType.Column, { 
+        name: 'test.username', 
         type: 'text' 
     });
 
     // Make sure we can insert records
-    await kernel.data.createOne(ObjectType.User, {
+    await kernel.data.createOne(ObjectType.Test, {
         name: 'username',
-        something: 'this is some type of value'
+        username: 'example@example.com'
     });
 
     // Check using direct knex
-    let select = await kernel.data.driverTo(ObjectType.User).select().first();
+    let select = await kernel.data.driverTo(ObjectType.Test).select().first();
 
     chai.expect(select).a('object');
     chai.expect(select).property('id').string;
-    chai.expect(select).property('something');
+    chai.expect(select).property('username');
 });
 

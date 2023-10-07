@@ -27,7 +27,7 @@ export default class extends Action {
 
     async run(signal: Signal): Promise<void> {
         return signal.kernel.data
-            .driverTo(signal.object.name, 'meta')
+            .driverTo(signal.object.object_name, 'meta')
             .whereIn('id', _.map(signal.change_data, 'id'))
             .update({
                 deleted_at: signal.kernel.time,

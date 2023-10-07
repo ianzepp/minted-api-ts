@@ -83,21 +83,6 @@ export class Kernel {
         return this.time.toISOString();
     }
 
-    //
-    // Switch into or out of another user
-    //
-
-    sudoRoot() {
-        this.sudo_chain.push(Kernel.ID);
-    }
-
-    sudoUser(user_id: string) {
-        this.sudo_chain.push(user_id);
-    }
-
-    sudoExit() {
-        this.sudo_chain.pop();
-    }
 
     //
     // User ID, NS, and namespaces
@@ -116,6 +101,22 @@ export class Kernel {
     }
 
     //
+    //
+    // Switch into or out of another user
+
+    sudoRoot() {
+        this.sudo_chain.push(Kernel.ID);
+    }
+
+    sudoUser(user_id: string) {
+        this.sudo_chain.push(user_id);
+    }
+
+    sudoExit() {
+        this.sudo_chain.pop();
+    }
+
+    //
     // Test helpers
     //
 
@@ -123,3 +124,8 @@ export class Kernel {
         return 'test_' + Math.floor(Math.random() * 1000000);
     }
 }
+
+//
+// Kernel Test User
+//
+
