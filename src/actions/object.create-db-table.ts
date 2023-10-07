@@ -1,14 +1,19 @@
 import _ from 'lodash';
+import chai from 'chai';
+import { Knex } from 'knex';
 
 // Classes
-import { AutoInstall } from '@classes/autoinstall';
 import { Action } from '@root/src/classes/action';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
+import { Object } from '@classes/object';
 
 // Typedefs
 import { ActionRing } from '@root/src/typedefs/action';
 import { ObjectType } from '@typedefs/object';
+
+// Knex functions
+import { createTable } from '@classes/knex';
 
 export default class extends Action {
     toName(): string {
@@ -23,7 +28,7 @@ export default class extends Action {
         return ActionRing.Post;
     }
 
-    onDelete(): boolean {
+    onCreate(): boolean {
         return true;
     }
 
@@ -32,19 +37,13 @@ export default class extends Action {
     }
 
     async one(signal: Signal, record: Record) {
+        // Setup
         let object_name = record.data.name;
-        let object_type = record.data.type;
-        let auto = new AutoInstall(signal.kernel);
 
-        // Only delete objects that are marked as `database` types
-        if (object_type !== 'database') {
-            return;
-        }
+        // Create the empty table with no default columns
+        await createTable(signal.kernel.data.driver, object_name, t => {});
 
-        // Drop the table
-        await auto.deleteTable(object_name);
-
-        // Remove from kernel metadata
-        signal.kernel.meta.objects.delete(object_name);
+        // Add to kernel metadata
+        signal.kernel.meta.objects.set(object_name, Object.from(record.data));
     }
 }
