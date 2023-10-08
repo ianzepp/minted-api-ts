@@ -144,9 +144,19 @@ export class Signal {
                     chai.assert(this.failures.length === 0, action.toFileName() + ': ' + this.failures.join(' / '));
                 }
 
-                // Run the full cycle
+                // Startup the action
                 await action.startup(this).then(sanity);
-                await action.run(this).then(sanity);
+
+                // Which method do we use?
+                if (action.isParallel()) {
+                    await Promise.all(this.change.map((r, i) => action.one(this, r, i))).then(sanity);
+                }
+
+                else {
+                    await action.run(this).then(sanity);
+                }
+
+                // Cleanup the action
                 await action.cleanup(this).then(sanity);
 
                 // If we get here we are good.
