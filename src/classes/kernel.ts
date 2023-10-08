@@ -11,6 +11,7 @@ import { KernelBulk } from '@classes/kernel-bulk';
 import { KernelData } from '@classes/kernel-data';
 import { KernelMeta } from '@classes/kernel-meta';
 import { KernelUser } from '@classes/kernel-user';
+import { KernelSmtp } from '@classes/kernel-smtp';
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
@@ -28,6 +29,7 @@ export class Kernel {
     public readonly data = new KernelData(this);
     public readonly meta = new KernelMeta(this);
     public readonly user = new KernelUser(this);
+    public readonly smtp = new KernelSmtp(this);
 
     // Kernel constants
     public readonly time = new Date();
@@ -44,6 +46,7 @@ export class Kernel {
         await this.meta.startup();
         await this.bulk.startup();
         await this.user.startup();
+        await this.smtp.startup();
     }
 
     async cleanup(): Promise<void> {
@@ -51,6 +54,7 @@ export class Kernel {
         await this.data.cleanup();
         await this.bulk.cleanup();
         await this.user.cleanup();
+        await this.smtp.cleanup();
     }
 
     async refresh(): Promise<void> {

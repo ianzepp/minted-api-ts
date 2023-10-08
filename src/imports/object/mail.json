@@ -1,0 +1,8 @@
+{
+    "type": "object",
+    "data": {
+        "ns": "system",
+        "name": "mail",
+        "description": "Represents a mail message that was imported from an IMAP server"
+    }
+}

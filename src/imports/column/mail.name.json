@@ -1,0 +1,10 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "mail.name",
+        "type": "text",
+        "description": "The subject line of the mail message",
+        "required": true
+    }
+}
