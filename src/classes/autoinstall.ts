@@ -103,6 +103,10 @@ export class AutoInstall {
                 && _.get(json, 'data.name', '').startsWith(object_name + '.');
         }) as RecordJson[];
 
+        let record_json = _.filter(MetadataImports, json => {
+            return _.get(json, 'type') === object_name;
+        }) as RecordJson[];
+
         if (object_json === undefined) {
             console.error(`!! object '${ object_name }' not found in MetadataImports`);
             return;
@@ -110,10 +114,14 @@ export class AutoInstall {
 
         // Show columns
         console.warn('- with columns:', column_json.map(c => c.data.name));
+        console.warn('- with records:', record_json.map(c => c.data.name));
 
         // Insert the object
         await this.kernel.data.createOne(ObjectType.Object, object_json);
         await this.kernel.data.createAll(ObjectType.Column, column_json);
+
+        // Insert the object records
+        await this.kernel.data.createAll(object_name, record_json);
     }
     
     async up() {
@@ -141,10 +149,8 @@ export class AutoInstall {
             // Install testing support
             await this.importObject('test');
 
-            console.warn('isRoot()', this.kernel.isRoot());
-
-            // Install the root user
-            await this.kernel.data.createOne('user', { ns: 'system', id: Kernel.ID, name: 'root' });
+            // Install mail message support
+            await this.importObject('mail');
 
             // Commit the transaction
             await this.knex.raw('COMMIT;');

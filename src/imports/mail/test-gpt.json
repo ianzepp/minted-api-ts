@@ -1,0 +1,31 @@
+{
+    "type": "mail",
+    "data": {
+        "name": "Test GPT question",
+        "from": "sample@example.org",
+        "body": "",
+        "head": {
+            "content-type": "multipart/mixed; boundary=54a8382b9c6f622dc854f4b064946f42dde37f7cbd05a294d5313f2d49a8ed61",
+            "date": "Sun, 08 Oct 2023 14:49:38 +0000",
+            "delivered-to": "gpt@mintedgeek.us",
+            "from": "\"Ian Zepp\" <ian.zepp@protonmail.com>",
+            "message-id": "<AgueyLMCGTyjfG4UsVXnJjT96KakH5qLzeSti_NoSa6PCMJV0mZgFENgZcjry2eW93n1wC-wSYScyHH7M_WXiU1XfK-SlH15oVz6D3g3CNg=@protonmail.com>",
+            "mime-version": "1.0",
+            "received": "from mail.protonmail.ch by mail.protonmail.ch; Sun, 08 Oct 2023 14:49:49 +0000",
+            "references": "<IjCXcCsYx2DRWqIM143dSJQb1JE78mfknb6Bt1Yd-0JvIGAAcNe3Du7L7-yWH0UUNR-8lxcm1Ayi-kSyp1nR9w==@protonmail.internalid>",
+            "reply-to": "\"Ian Zepp\" <ian.zepp@protonmail.com>",
+            "return-path": "<ian.zepp@protonmail.com>",
+            "subject": "Marketing question",
+            "to": "\"gpt@mintedgeek.us\" <gpt@mintedgeek.us>",
+            "x-attached": "publickey - ian.zepp@protonmail.com - 0x864AEEBE.asc",
+            "x-original-to": "gpt@mintedgeek.us",
+            "x-pm-content-encryption": "end-to-end",
+            "x-pm-date": "Sun, 08 Oct 2023 14:49:38 +0000",
+            "x-pm-external-id": "<AgueyLMCGTyjfG4UsVXnJjT96KakH5qLzeSti_NoSa6PCMJV0mZgFENgZcjry2eW93n1wC-wSYScyHH7M_WXiU1XfK-SlH15oVz6D3g3CNg=@protonmail.com>",
+            "x-pm-gluon-id": "da640b82-637b-41b5-a8dd-b6c71f53a4cd",
+            "x-pm-internal-id": "IjCXcCsYx2DRWqIM143dSJQb1JE78mfknb6Bt1Yd-0JvIGAAcNe3Du7L7-yWH0UUNR-8lxcm1Ayi-kSyp1nR9w==",
+            "x-pm-origin": "internal",
+            "x-pm-spamscore": "0"
+          }
+    }
+}
