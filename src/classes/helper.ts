@@ -20,3 +20,7 @@ export function toNull(obj: Object, paths: string[]) {
         }
     });
 }
+
+export function extractEmail(input: string): string | null {
+    return (input.match(/<([^>]+)>/) || [])[1] || null;
+}
