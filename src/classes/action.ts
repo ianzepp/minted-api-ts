@@ -36,6 +36,7 @@ export class Action {
             'on_delete': this.onDelete(),
             'is_failable': this.isFailable(),
             'is_parallel': this.isParallel(),
+            'is_detached': this.isDetached(),
         };
     }
 
@@ -186,4 +187,13 @@ export class Action {
     isParallel(): boolean {
         return false;
     }
+
+    /**
+     * Returns `true` when we don't need to block the rest of the promises, even if this fails.
+     * @returns {boolean}
+     */
+    isDetached(): boolean {
+        return false;
+    }
+
 }

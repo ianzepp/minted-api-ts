@@ -8,6 +8,7 @@ import { Record } from '@classes/record';
 // Typedefs
 import { ActionRing } from '@root/src/typedefs/action';
 import { RecordFlat } from '@typedefs/record';
+import { sign } from 'jsonwebtoken';
 
 export default class extends Action {
     toName(): string {
@@ -19,7 +20,7 @@ export default class extends Action {
     }
 
     onRing(): ActionRing {
-        return ActionRing.Cascade;
+        return ActionRing.Callout;
     }
 
     onCreate(): boolean {
@@ -30,7 +31,35 @@ export default class extends Action {
         return true;
     }
 
+    isDetached(): boolean {
+        return true;
+    }
+
     async one(signal: Signal, record: Record): Promise<void> {
-        return signal.kernel.smtp.send(record.data.mail);
+        let interval = 60;
+
+        // Try to send the mail. If that fails, then wait 60n seconds and try again.
+        try {
+            await signal.kernel.smtp.send(record.data.mail);
+        }
+
+        catch (error) {
+            console.trace(error);
+            console.warn('Trying again in %d seconds', interval);
+
+            setTimeout(() => {
+                console.warn('Retrying SMTP message');
+                this.one(signal, record);
+            }, 1000 * interval);
+
+            // Bump the interval
+            interval = interval * 2;
+
+            // Nothing else to do now. We wait.
+            return;
+        }
+
+        // Expire the message now that it is sent.
+        await signal.kernel.data.expireOne(record.object, record);
     }
 }

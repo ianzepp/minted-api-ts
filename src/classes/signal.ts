@@ -147,13 +147,22 @@ export class Signal {
                 // Startup the action
                 await action.startup(this).then(sanity);
 
+                // Setup the result
+                let result: Promise<any>;
+
                 // Which method do we use?
                 if (action.isParallel()) {
-                    await Promise.all(this.change.map((r, i) => action.one(this, r, i))).then(sanity);
+                    result = Promise.all(this.change.map((r, i) => action.one(this, r, i))).then(sanity);
                 }
 
                 else {
-                    await action.run(this).then(sanity);
+                    result = action.run(this).then(sanity);
+                }
+
+                // If we are not detached, then wait for the result. Not that we care about the result, 
+                // just that it needs to finish executing.
+                if (action.isDetached() === false) {
+                    await result;
                 }
 
                 // Cleanup the action
