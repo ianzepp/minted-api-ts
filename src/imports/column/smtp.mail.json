@@ -1,0 +1,10 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "smtp.mail",
+        "type": "json",
+        "description": "The mail message to send",
+        "required": true
+    }
+}

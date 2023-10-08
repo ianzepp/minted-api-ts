@@ -117,11 +117,18 @@ export class AutoInstall {
         console.warn('- with records:', record_json.map(c => c.data.name));
 
         // Insert the object
-        await this.kernel.data.createOne(ObjectType.Object, object_json);
-        await this.kernel.data.createAll(ObjectType.Column, column_json);
+        if (object_json) {
+            await this.kernel.data.createOne(ObjectType.Object, object_json);
+        }
+
+        if (column_json.length) {
+            await this.kernel.data.createAll(ObjectType.Column, column_json);
+        }
 
         // Insert the object records
-        await this.kernel.data.createAll(object_name, record_json);
+        if (record_json.length) {
+            await this.kernel.data.createAll(object_name, record_json);
+        }
     }
     
     async up() {
@@ -151,6 +158,7 @@ export class AutoInstall {
 
             // Install mail message support
             await this.importObject('mail');
+            await this.importObject('smtp');
 
             // Commit the transaction
             await this.knex.raw('COMMIT;');
