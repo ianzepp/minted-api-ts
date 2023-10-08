@@ -72,7 +72,7 @@ export class Action {
      * @returns {ActionRing} - The action ring
      */
     onRing(): ActionRing {
-        return ActionRing.Work;
+        return ActionRing.Transform;
     }
 
     /**

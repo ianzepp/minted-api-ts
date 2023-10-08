@@ -25,7 +25,7 @@ export default class extends Action {
     }
 
     onRing(): ActionRing {
-        return ActionRing.Flow;
+        return ActionRing.Cascade;
     }
 
     onCreate(): boolean {
