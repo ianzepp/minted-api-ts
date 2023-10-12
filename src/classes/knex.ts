@@ -7,6 +7,8 @@ export const KnexDriverFn = () => knex(KnexConfig);
 export const KnexDriver = KnexDriverFn();
 
 export async function createTable(driver: Knex, object_name: string, createFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
+    console.warn('createTable():', object_name);
+
     // Data table
     await driver.schema.createTable(object_name, (table) => {
         table.string('id').notNullable().primary();
@@ -60,6 +62,8 @@ export async function deleteTable(driver: Knex, object_name: string): Promise<vo
 }
 
 export async function insertAll(driver: Knex, object_name: string, record_rows: _.Dictionary<any>[]) {
+    console.warn('insertAll():', object_name);
+
     // Process
     for(let record_data of record_rows) {
         console.warn('+', JSON.stringify(record_data));

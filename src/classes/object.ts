@@ -82,6 +82,10 @@ export class Object {
     // Getters/Setters
     //
 
+    get system_name() {
+        return this.data.ns + '::' + this.data.name;
+    }
+
     get object_name() {
         return this.data.name;
     }
