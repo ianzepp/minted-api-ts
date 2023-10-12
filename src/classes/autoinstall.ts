@@ -55,6 +55,7 @@ export class AutoInstall {
 
             // Package: Open AI
             await this.import('openai');
+            await this.import('openai.personas');
 
             // Commit the transaction
             await this.knex.raw('COMMIT;');
@@ -145,7 +146,7 @@ export class AutoInstall {
     }
 
     async import(import_name: string) {
-        console.info('import():', import_name);
+        console.info('import(): src/ packages/', import_name);
 
         const import_list = klaw(path.join(__dirname, '../packages', import_name), {
             nodir: true,
@@ -177,10 +178,10 @@ export class AutoInstall {
     }
 
     async importObject(imports: any[], object_json: RecordJson) {
-        console.info(`- object "${ object_json.data.name }"`);
-
         let object = Object.from(object_json.data);
         let object_name = object_json.data.name;
+
+        console.info(`- object "${ object.system_name }"`);
 
         let column_json = _.filter(imports, json => {
             return _.get(json, 'type') === 'column'
@@ -193,7 +194,7 @@ export class AutoInstall {
         }) as RecordJson[];
 
         if (object_json === undefined) {
-            console.error(`!! object '${ object_name }' not found in imports`);
+            console.error(`!! object '${ object.system_name }' not found in imports`);
             return;
         }
 
@@ -210,7 +211,7 @@ export class AutoInstall {
         // Insert the object records
         if (record_json.length) {
             console.warn('  - with records:', record_json.map(c => c.data.name));
-            await this.kernel.data.createAll(object_name, record_json);
+            await this.kernel.data.createAll(object.system_name, record_json);
         }
     }
     
