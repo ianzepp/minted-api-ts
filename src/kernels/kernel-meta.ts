@@ -17,17 +17,25 @@ import { assertReturn } from '@classes/helper';
 export const KernelObjectTypes = _.values(ObjectType) as string[];
 
 // Object map does automatic case management
+function toSystemName(object_name: string) {
+    if (object_name && object_name.includes('::') === false) {
+        object_name = 'system::' + object_name;
+    }
+
+    return toLower(object_name);
+}
+
 class ObjectMap extends Map<string, Object> {
     get(object_name: string) {
-        return super.get(toLower(object_name));
+        return super.get(toSystemName(object_name));
     }
 
     set(object_name: string, object: Object) {
-        return super.set(toLower(object_name), object);
+        return super.set(toSystemName(object_name), object);
     }
 
     delete(object_name: string) {
-        return super.delete(toLower(object_name));
+        return super.delete(toSystemName(object_name));
     }
 }
 
@@ -47,8 +55,8 @@ export class KernelMeta {
 
     async startup(): Promise<void> {
         // Select the raw objects and columns
-        let object_list = await this.kernel.knex.selectTo(ObjectType.Object);
-        let column_list = await this.kernel.knex.selectTo(ObjectType.Column);
+        let object_list = await this.kernel.knex.selectTo('system::object');
+        let column_list = await this.kernel.knex.selectTo('system::column');
 
         // Process objects
         _.each(object_list, object_data => this.addObject(object_data));
@@ -70,12 +78,12 @@ export class KernelMeta {
         let object = Object.from(object_data);
 
         // Save to map
-        this.objects_map.set(object.object_name, object);    
+        this.objects_map.set(object.system_name, object);    
     }
 
     addColumn(column_data: _.Dictionary<any>) {
         let column = Column.from(column_data);
-        let object = this.objects_map.get(column.object_name);
+        let object = this.get(column.object_name);
 
         // Save to object
         object.add(column);

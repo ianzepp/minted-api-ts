@@ -71,11 +71,11 @@ export default class extends Action {
 
     async run(signal: Signal): Promise<void> {
         let creates_data = await signal.kernel.knex
-            .driverTo(signal.object.object_name, 'data')
+            .driverTo(signal.object.system_name, 'data')
             .insert(signal.change_data);
 
         let creates_meta = await signal.kernel.knex
-            .driverTo(signal.object.object_name, 'meta')
+            .driverTo(signal.object.system_name, 'meta')
             .insert(signal.change_meta);
     }
 }
