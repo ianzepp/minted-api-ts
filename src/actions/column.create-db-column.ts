@@ -41,50 +41,57 @@ export default class extends Action {
         record.expect('name').contains('.');
         record.expect('type').oneOf(ColumnTypeKeys);
 
-        // Create temporary refs
-        let [object_name, column_name] = record.data.name.split('.');
+        // Find the parent object
+        let column = Column.from(record.data);
+        let object = signal.kernel.meta.lookup(column.object_name);
 
-        await signal.kernel.knex.updateTable(object_name, t => {
-            let column_type = record.data.type;
-            let column;
+        // Process the new column
+        await signal.kernel.knex.updateTable(object.system_name, t => {
+            let column_name = column.system_name;
+            let column_type = column.type;
+            let change;
 
             if (column_type === ColumnType.Text) {
-                column = t.text(column_name);
+                change = t.text(column_name);
             }
             
             else if (column_type === ColumnType.TextArray) {
-                column = t.specificType(column_name, 'text ARRAY');
+                change = t.specificType(column_name, 'text ARRAY');
             }
             
             else if (column_type === ColumnType.Boolean) {
-                column = t.boolean(column_name);
+                change = t.boolean(column_name);
             }
             
             else if (column_type === ColumnType.Decimal) {
-                column = t.decimal(column_name);
+                change = t.decimal(column_name);
             }
             
             else if (column_type === ColumnType.Integer) {
-                column = t.integer(column_name);
+                change = t.integer(column_name);
             }
 
             else if (column_type === ColumnType.Json) {
-                column = t.jsonb(column_name);
+                change = t.jsonb(column_name);
             }
 
             else if (column_type === ColumnType.Enum) {
-                column = t.specificType(column_name, 'text ARRAY');
+                change = t.specificType(column_name, 'text ARRAY');
             }
 
             else if (column_type === ColumnType.Uuid) {
-                column = t.specificType(column_name, 'uuid');
+                change = t.specificType(column_name, 'uuid');
             }
 
             else {
                 throw new Error('Unknown column type: ' + column_type);
             }
 
-            // Invalid column type
+            // Is the column required?
+            // TODO
+
+            // Is the column indexed or unique?
+            // TODO
         });
 
         // Add the column data to kernel meta

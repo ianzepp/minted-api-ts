@@ -8,7 +8,8 @@ import klaw from 'klaw-sync';
 
 // Local imports
 import { Kernel } from '@kernels/kernel';
-import { ObjectType } from '@typedefs/object';
+import { Object } from '@classes/object';
+import { Column } from '@classes/column';
 
 // Import table functions
 import { createTable, deleteTable, insertAll } from './knex';
@@ -34,7 +35,7 @@ export class AutoInstall {
 
     async createSystem() {
         // Create table `object`
-        await createTable(this.knex, ObjectType.Object, (table) => {
+        await createTable(this.knex, 'system::object', (table) => {
             table.string('type').notNullable().defaultTo('database');
             table.string('description');
 
@@ -46,7 +47,7 @@ export class AutoInstall {
         });
 
         // Create table `column`
-        await createTable(this.knex, ObjectType.Column, table => {
+        await createTable(this.knex, 'system::column', table => {
             table.string('type').notNullable().defaultTo('text');
             table.string('description');
 
@@ -66,33 +67,33 @@ export class AutoInstall {
         });
 
         // Add system data for `object`
-        await insertAll(this.knex, ObjectType.Object, [
-            { ns: 'system', name: ObjectType.Object, metadata: true },
-            { ns: 'system', name: ObjectType.Column, metadata: true },
+        await insertAll(this.knex, 'system::object', [
+            { ns: 'system', name: 'object', metadata: true },
+            { ns: 'system', name: 'column', metadata: true },
         ]);    
 
-        await insertAll(this.knex, ObjectType.Column, [
+        await insertAll(this.knex, 'system::column', [
            // Columns for 'object'
-           { ns: 'system', name: ObjectType.Object + '.name', required: true, immutable: true, indexed: true  },
-           { ns: 'system', name: ObjectType.Object + '.description' },
-           { ns: 'system', name: ObjectType.Object + '.external', type: 'boolean' },
-           { ns: 'system', name: ObjectType.Object + '.metadata', type: 'boolean' },
+           { ns: 'system', name: 'object.name', required: true, immutable: true, indexed: true  },
+           { ns: 'system', name: 'object.description' },
+           { ns: 'system', name: 'object.external', type: 'boolean' },
+           { ns: 'system', name: 'object.metadata', type: 'boolean' },
 
            // Columns for 'column'
-           { ns: 'system', name: ObjectType.Column + '.name', required: true, immutable: true, indexed: true },
-           { ns: 'system', name: ObjectType.Column + '.type', required: true },
-           { ns: 'system', name: ObjectType.Column + '.description' },
+           { ns: 'system', name: 'column.name', required: true, immutable: true, indexed: true },
+           { ns: 'system', name: 'column.type', required: true },
+           { ns: 'system', name: 'column.description' },
 
-           { ns: 'system', name: ObjectType.Column + '.audited', type: 'boolean' },
-           { ns: 'system', name: ObjectType.Column + '.immutable', type: 'boolean' },
-           { ns: 'system', name: ObjectType.Column + '.indexed', type: 'boolean' },
-           { ns: 'system', name: ObjectType.Column + '.internal', type: 'boolean' },
-           { ns: 'system', name: ObjectType.Column + '.required', type: 'boolean' },
-           { ns: 'system', name: ObjectType.Column + '.unique', type: 'boolean' },
+           { ns: 'system', name: 'column.audited', type: 'boolean' },
+           { ns: 'system', name: 'column.immutable', type: 'boolean' },
+           { ns: 'system', name: 'column.indexed', type: 'boolean' },
+           { ns: 'system', name: 'column.internal', type: 'boolean' },
+           { ns: 'system', name: 'column.required', type: 'boolean' },
+           { ns: 'system', name: 'column.unique', type: 'boolean' },
 
-           { ns: 'system', name: ObjectType.Column + '.minimum', type: 'integer' },
-           { ns: 'system', name: ObjectType.Column + '.maximum', type: 'integer' },
-           { ns: 'system', name: ObjectType.Column + '.precision', type: 'integer' },
+           { ns: 'system', name: 'column.minimum', type: 'integer' },
+           { ns: 'system', name: 'column.maximum', type: 'integer' },
+           { ns: 'system', name: 'column.precision', type: 'integer' },
        ]);
     }
 
@@ -131,15 +132,17 @@ export class AutoInstall {
     async importObject(imports: any[], object_json: RecordJson) {
         console.info(`- object "${ object_json.data.name }"`);
 
+        let object = Object.from(object_json.data);
         let object_name = object_json.data.name;
 
         let column_json = _.filter(imports, json => {
             return _.get(json, 'type') === 'column'
-                && _.get(json, 'data.name', '').startsWith(object_name + '.');
+                && _.get(json, 'data.name', '').startsWith(object.object_name + '.');
         }) as RecordJson[];
 
         let record_json = _.filter(imports, json => {
-            return _.get(json, 'type') === object_name;
+            return _.get(json, 'type') === object.system_name
+                || _.get(json, 'type') === object.object_name
         }) as RecordJson[];
 
         if (object_json === undefined) {
@@ -147,21 +150,19 @@ export class AutoInstall {
             return;
         }
 
-        // Show columns
-        console.warn('  - with columns:', column_json.map(c => c.data.name));
-        console.warn('  - with records:', record_json.map(c => c.data.name));
-
         // Insert the object
         if (object_json) {
-            await this.kernel.data.createOne(ObjectType.Object, object_json);
+            await this.kernel.data.createOne('object', object_json);
         }
 
         if (column_json.length) {
-            await this.kernel.data.createAll(ObjectType.Column, column_json);
+            console.warn('  - with columns:', column_json.map(c => c.data.name));
+            await this.kernel.data.createAll('column', column_json);
         }
 
         // Insert the object records
         if (record_json.length) {
+            console.warn('  - with records:', record_json.map(c => c.data.name));
             await this.kernel.data.createAll(object_name, record_json);
         }
     }

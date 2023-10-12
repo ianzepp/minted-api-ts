@@ -60,7 +60,7 @@ export class Column {
 
     /**
      * Returns only the `object_name` portion of the full name property. For example, if the column's name
-     * property is set to `system:domain#name`, then `object_name` returns `system:domain`.
+     * property is set to `system::domain.name`, then `object_name` returns `system::domain`.
      */
     get object_name() {
         return _.head(this.name.split('.'));
@@ -68,10 +68,14 @@ export class Column {
 
     /**
      * Returns only the `column_name` portion of the full name property. For example, if the column's name
-     * property is set to `system:domain#name`, then `column_name` returns `name`.
+     * property is set to `system::domain.name`, then `column_name` returns `name`.
      */
     get column_name() {
         return _.last(this.name.split('.'));
+    }
+
+    get system_name() {
+        return this.column_name; // TODO add a namespace
     }
 
     //

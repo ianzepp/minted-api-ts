@@ -128,7 +128,7 @@ export class Record {
     }
 
     get object_name() {
-        return this.object.object_name;
+        return this.object.system_name;
     }
 
     get reference() {

@@ -82,6 +82,10 @@ export class Object {
     // Getters/Setters
     //
 
+    get system_name() {
+        return this.data.ns + '::' + this.data.name;
+    }
+
     get object_name() {
         return this.data.name;
     }
@@ -202,7 +206,6 @@ export class Object {
         }
 
         else if (source instanceof Record) {
-            chai.expect(record.type, 'record.type').equals(source.type);
             _.assign(record.data, source.data);
             _.assign(record.prev, source.prev);
             _.assign(record.meta, source.meta);
@@ -210,7 +213,6 @@ export class Object {
         }
 
         else if (Object.isRecordJson(source)) {
-            chai.expect(record.type, 'record.type').equals(source.type);
             _.assign(record.data, source.data);
             _.assign(record.meta, source.meta);
             _.assign(record.acls, source.acls);

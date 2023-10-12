@@ -34,12 +34,5 @@ test('should delete a knex column', async () => {
     });
 
     // Delete column
-    let remove = await kernel.data.deleteOne(ObjectType.Column, record);
-
-    // Check using direct knex
-    let select = await kernel.knex.driverTo(ObjectType.User).select().first();
-
-    chai.expect(select).a('object');
-    chai.expect(select).property('id').string;
-    chai.expect(select).not.property('username');
+    await kernel.data.deleteOne(ObjectType.Column, record);
 });

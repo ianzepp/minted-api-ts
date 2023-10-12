@@ -1,9 +1,9 @@
 import _ from 'lodash';
 
 // Classes
-import { AutoInstall } from '@classes/autoinstall';
 import { Action } from '@classes/action';
 import { Signal } from '@classes/signal';
+import { Object } from '@classes/object';
 import { Record } from '@classes/record';
 
 // Typedefs
@@ -36,17 +36,20 @@ export default class extends Action {
         record.expect('name').a('string');
         record.expect('name').not.contains('.');
 
-        // Setup
-        let object_name = record.data.name;
+        // Create the object
+        let object = Object.from(record.data);
 
         // Delete related columns
         await signal.kernel.data.deleteAny(ObjectType.Column, {
             where: {
-                name: `${ object_name }.%`
+                $or: [
+                    { name: `${ object.system_name }.%` },
+                    { name: `${ object.object_name }.%` },
+                ]
             }
         });
 
         // Create the empty table with no default columns
-        await signal.kernel.knex.deleteTable(object_name);
+        await signal.kernel.knex.deleteTable(object.system_name);
     }
 }
