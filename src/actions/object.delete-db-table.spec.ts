@@ -36,7 +36,7 @@ test('should delete a knex table', async () => {
     });
 
     // Make sure the object was inserted
-    let object = kernel.meta.objects.get(object_name);
+    let object = kernel.meta.lookup(object_name);
     let column = object.get(column_name);
 
     chai.expect(object).instanceOf(Object);

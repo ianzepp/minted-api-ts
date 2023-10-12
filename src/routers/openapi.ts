@@ -27,8 +27,8 @@ export default class extends Router {
         };
 
         // Process components
-        for(let [object_name, object] of this.kernel.meta.objects) {
-            openapi.components.schemas[object_name] = this.toComponent(object_name, object);
+        for(let object of this.kernel.meta.objects) {
+            openapi.components.schemas[object.object_name] = this.toComponent(object.object_name, object);
         }
 
         // Sort the routers so the generated OpenAPI are more presentable
@@ -114,7 +114,7 @@ export default class extends Router {
                 'description': 'The object name',
                 'schema': {
                     'type': 'string',
-                    'enum': this.kernel.meta.object_names,
+                    'enum': this.kernel.meta.object_keys,
                 }
             });
         }

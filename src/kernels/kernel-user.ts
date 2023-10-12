@@ -15,7 +15,7 @@ export class KernelUser {
         }
 
         // If the user object doesn't exist, we might as well be running as root
-        if (this.kernel.meta.objects.has(ObjectType.User) === false) {
+        if (this.kernel.meta.exists(ObjectType.User) === false) {
             return;
         }
 

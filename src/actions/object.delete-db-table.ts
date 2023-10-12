@@ -27,8 +27,8 @@ export default class extends Action {
         return true;
     }
 
-    async run(signal: Signal): Promise<void> {
-        await Promise.all(signal.change.map(record => this.one(signal, record)));
+    isParallel(): boolean {
+        return true;
     }
 
     async one(signal: Signal, record: Record) {
@@ -38,7 +38,6 @@ export default class extends Action {
 
         // Setup
         let object_name = record.data.name;
-        let object = signal.kernel.meta.objects.get(object_name);
 
         // Delete related columns
         await signal.kernel.data.deleteAny(ObjectType.Column, {
@@ -49,8 +48,5 @@ export default class extends Action {
 
         // Create the empty table with no default columns
         await signal.kernel.knex.deleteTable(object_name);
-
-        // Remove from kernel metadata
-        signal.kernel.meta.objects.delete(object_name);
     }
 }
