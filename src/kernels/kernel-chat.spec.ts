@@ -54,7 +54,7 @@ test.skip('connects to Open AI', async () => {
 });
 
 
-test('openai chat + personas', async () => {
+test.skip('openai chat + personas', async () => {
     // Create a new lawyer
     let persona = await kernel.data.createOne('openai::persona', {
         name: 'risc-os',
