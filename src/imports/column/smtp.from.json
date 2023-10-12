@@ -1,0 +1,10 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "smtp.from",
+        "type": "text",
+        "description": "The email `from` address",
+        "required": true
+    }
+}

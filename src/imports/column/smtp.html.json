@@ -1,0 +1,10 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "smtp.html",
+        "type": "text",
+        "description": "The `html` data for the email body",
+        "required": false
+    }
+}

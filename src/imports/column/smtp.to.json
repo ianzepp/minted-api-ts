@@ -1,0 +1,10 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "smtp.to",
+        "type": "text[]",
+        "description": "The list of `to` email addresses",
+        "required": true
+    }
+}
