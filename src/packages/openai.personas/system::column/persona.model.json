@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "openai",
+        "name": "persona.model",
+        "type": "text",
+        "required": true
+    }
+}

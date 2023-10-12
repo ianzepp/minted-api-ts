@@ -53,3 +53,27 @@ test.skip('connects to Open AI', async () => {
 
 });
 
+
+test.skip('openai chat + personas', async () => {
+    // Create a new lawyer
+    let persona = await kernel.data.createOne('openai::persona', {
+        name: 'risc-os',
+        model: 'gpt-4',
+        setup: 'You are a RISC CPU. Respond in byte code. Do not exceed 100 instructions.'
+    });
+
+    // Start a chat with the person
+    let chat_id = await kernel.chat.chat_persona(persona.data.name);
+
+    // Ask to explain the second amendment
+    await kernel.chat.user(chat_id, 'Can you explain the second amendment to me?');
+
+    // Listen to the answer
+    let answer = await kernel.chat.sync(chat_id);
+
+    console.warn('GPT answer:');
+    console.warn('');
+    console.warn(answer);
+    
+});
+

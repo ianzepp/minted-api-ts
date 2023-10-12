@@ -12,6 +12,19 @@ export class KernelChat {
     async startup() {}
     async cleanup() {}
 
+    async chat_persona(persona_name: string) {
+        let persona = await this.kernel.data.search404('openai::persona', { name: persona_name });
+
+        // Create the chat ID
+        let chat_id = await this.chat(persona.data.model, persona.data.temperature);
+
+        // Add the system messages using the personas setup info
+        await this.completion(chat_id, persona.data.setup, 'system');
+
+        // Done
+        return chat_id;
+    }
+
     async chat(model: string = 'gpt-3.5-turbo', temperature: number = 0.7): Promise<string> {
         let parent = await this.kernel.data.createOne('openai::chat', {
             model: model,
