@@ -27,6 +27,10 @@ export default class extends Action {
         return true;
     }
 
+    isRunnable(): boolean {
+        return Bun.env.SMTP_TYPE === 'smtp' && !!Bun.env.SMTP_HOST && !!Bun.env.SMTP_USER;
+    }
+
     isParallel(): boolean {
         return true;
     }
@@ -40,7 +44,7 @@ export default class extends Action {
 
         // Try to send the mail. If that fails, then wait 60n seconds and try again.
         try {
-            await signal.kernel.smtp.send(record.data.mail);
+            await signal.kernel.smtp.send(record.data);
         }
 
         catch (error) {
