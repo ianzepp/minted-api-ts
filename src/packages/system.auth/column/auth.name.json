@@ -1,0 +1,10 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "auth.name",
+        "type": "text",
+        "description": "The friendly name for the authentication bearer token",
+        "required": true
+    }
+}

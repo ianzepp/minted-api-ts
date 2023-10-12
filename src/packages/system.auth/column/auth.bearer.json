@@ -1,0 +1,10 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "auth.bearer",
+        "type": "text",
+        "description": "The bearer authentication token, often a JWT",
+        "required": true
+    }
+}
