@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "mail.body",
+        "type": "text",
+        "description": "The raw body data of the entire mail message"
+    }
+}

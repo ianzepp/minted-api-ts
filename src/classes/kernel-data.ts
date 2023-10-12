@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
+import Debug from 'debug';
 
 // Knex stuff
 import { KnexDriver, KnexDriverFn } from '@classes/knex';
@@ -29,6 +30,9 @@ export class RecordColumnRequiredError extends DataError {};
 // Import knex config and driver
 import KnexConfig from '@root/knexconfig';
 import { toJSON } from './helper';
+
+// Debug messages
+const debug = Debug('minted:kernel-data');
 
 // Local helper
 function headOne<T>(result: T[]): T | undefined {
@@ -166,7 +170,7 @@ export class KernelData {
     //
 
     async createTable(object_name: string, createFn: (table: Knex.CreateTableBuilder) => void): Promise<void> {
-        console.warn('+ createTable', object_name);
+        debug('createTable():', object_name);
 
         // Data table
         await this.schema.createTable(object_name, (table) => {
@@ -206,7 +210,7 @@ export class KernelData {
     }
     
     async updateTable(object_name: string, updateFn: (table: Knex.AlterTableBuilder) => void): Promise<void> {
-        console.warn('+ updateTable', object_name);
+        debug('updateTable():', object_name);
 
         await this.schema.alterTable(object_name, (table) => {
             updateFn(table);
@@ -214,7 +218,7 @@ export class KernelData {
     }
     
     async deleteTable(object_name: string): Promise<void> {
-        console.warn('+ deleteTable', object_name);
+        debug('deleteTable():', object_name);
 
         await this.schema.dropTableIfExists(object_name + '::acls');
         await this.schema.dropTableIfExists(object_name + '::meta');
@@ -226,9 +230,7 @@ export class KernelData {
     //
 
     async run(object_name: Object | ObjectName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: SignalOp): Promise<Record[]> {
-        if (Bun.env.POSTGRES_DEBUG === 'true') {
-            console.debug(`KernelData.run(): op="${op}" object_name="${object_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
-        }
+        debug(`run(): op="${op}" object_name="${object_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
 
         this.kernel.expect(change_data, 'change_data').an('array');
         this.kernel.expect(filter_data, 'filter_data').an('object');

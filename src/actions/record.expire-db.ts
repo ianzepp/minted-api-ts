@@ -18,7 +18,7 @@ export default class extends Action {
     }
 
     onRing(): ActionRing {
-        return ActionRing.Knex;
+        return ActionRing.Database;
     }
 
     onExpire(): boolean {

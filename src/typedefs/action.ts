@@ -15,16 +15,16 @@ export enum ActionRank {
 
 /** The levels of operations for an action. */
 export enum ActionRing {
-    Init = 0, // Kernel init
+    Startup = 0, // Action startup
     Prep = 1, // Logic prep
     Load = 2, // Load in any data dependencies
-    Work = 3, // Run logic
+    Transform = 3, // Run logic
     Test = 4, // Validations
-    Knex = 5, // Database changes
+    Database = 5, // Database changes
     Post = 6, // Post-db changes
-    Flow = 7, // Cascade to workflow operations
-    Http = 8, // External HTTP updates, non-blocking
-    Done = 9, // Kernel cleanup
+    Cascade = 7, // Cascade to other operations
+    Callout = 8, // Network callouts
+    Cleanup = 9, // Action cleanup
 }
 
 

@@ -61,6 +61,11 @@ export class Server {
             return newResponse();
         }
 
+        // Does the route start with `/api`? If not, ignore it and return a 404
+        if (request_url.pathname.startsWith('/api') === false) {
+            return new Response('404');
+        }
+
         // Find a router that matches the request
         let router = _.find(Routers, router => router.is(httpReq.verb, httpReq.path));
 

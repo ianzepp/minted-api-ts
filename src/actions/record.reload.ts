@@ -22,7 +22,7 @@ export default class extends Action {
     }
 
     onRing(): ActionRing {
-        return ActionRing.Init;
+        return ActionRing.Load;
     }
 
     onUpdate(): boolean {

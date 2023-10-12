@@ -2,6 +2,7 @@ import path from 'path';
 
 // Classes
 import { Signal } from '@classes/signal';
+import { Record } from '@classes/record';
 
 // Typedefs
 import { ActionRank } from '@root/src/typedefs/action';
@@ -16,6 +17,7 @@ export class Action {
 
     async startup(signal: Signal): Promise<any> {}
     async run(signal: Signal): Promise<any> {}
+    async one(signal: Signal, record: Record, index?: number): Promise<any> {}
     async cleanup(signal: Signal): Promise<any> {}
 
     toJSON(): Object {
@@ -32,6 +34,9 @@ export class Action {
             'on_upsert': this.onUpsert(),
             'on_expire': this.onExpire(),
             'on_delete': this.onDelete(),
+            'is_failable': this.isFailable(),
+            'is_parallel': this.isParallel(),
+            'is_detached': this.isDetached(),
         };
     }
 
@@ -68,7 +73,7 @@ export class Action {
      * @returns {ActionRing} - The action ring
      */
     onRing(): ActionRing {
-        return ActionRing.Work;
+        return ActionRing.Transform;
     }
 
     /**
@@ -174,4 +179,21 @@ export class Action {
     isFailable(): boolean {
         return false;
     }
+
+    /**
+     * If the records can be processed all at once in parallel, then set this method to `true`
+     * @returns {boolean}
+     */
+    isParallel(): boolean {
+        return false;
+    }
+
+    /**
+     * Returns `true` when we don't need to block the rest of the promises, even if this fails.
+     * @returns {boolean}
+     */
+    isDetached(): boolean {
+        return false;
+    }
+
 }

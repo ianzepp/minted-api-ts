@@ -144,9 +144,28 @@ export class Signal {
                     chai.assert(this.failures.length === 0, action.toFileName() + ': ' + this.failures.join(' / '));
                 }
 
-                // Run the full cycle
+                // Startup the action
                 await action.startup(this).then(sanity);
-                await action.run(this).then(sanity);
+
+                // Setup the result
+                let result: Promise<any>;
+
+                // Which method do we use?
+                if (action.isParallel()) {
+                    result = Promise.all(this.change.map((r, i) => action.one(this, r, i))).then(sanity);
+                }
+
+                else {
+                    result = action.run(this).then(sanity);
+                }
+
+                // If we are not detached, then wait for the result. Not that we care about the result, 
+                // just that it needs to finish executing.
+                if (action.isDetached() === false) {
+                    await result;
+                }
+
+                // Cleanup the action
                 await action.cleanup(this).then(sanity);
 
                 // If we get here we are good.
