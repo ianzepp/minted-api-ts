@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export function assertReturn<T>(v: T, message: any = 500): T {
+export function assertReturn<T = any>(v: T, message: any = 500): T {
     if (v === undefined) {
         throw message;
     }

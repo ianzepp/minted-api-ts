@@ -25,8 +25,11 @@ test('should create a knex table', async () => {
         name: object_name
     });
 
+    // Refresh the metadata
+    await kernel.meta.refresh();
+
     // Make sure the object was inserted
-    let object = kernel.meta.objects.get(object_name);
+    let object = kernel.meta.lookup(object_name);
 
     // Make sure we can insert records
     let create = await kernel.data.createOne(object, {});

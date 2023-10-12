@@ -124,14 +124,6 @@ export class Signal {
         });
 
         for(let action of actions) {
-            // console.info(util.format('Signal: object=%j op=%j ring=%j rank=%j action=%j', 
-            //     this.object.name, 
-            //     this.op, 
-            //     action.onRing(),
-            //     action.onRank(),
-            //     action.toFileName()
-            // ));
-
             // Switch to root?
             try {
                 // Switch into root?
@@ -152,12 +144,21 @@ export class Signal {
 
                 // Which method do we use?
                 if (action.isParallel()) {
-                    result = Promise.all(this.change.map((r, i) => action.one(this, r, i))).then(sanity);
+                    result = Promise.all(this.change.map((r, i) => action.one(this, r, i)));
+                }
+
+                else if (action.isSeries()) {
+                    for(let i = 0; i < this.change.length; ++i) {
+                        await action.one(this, this.change[i], i);
+                    }
                 }
 
                 else {
-                    result = action.run(this).then(sanity);
+                    result = action.run(this);
                 }
+
+                // Check sanity function
+                sanity();
 
                 // If we are not detached, then wait for the result. Not that we care about the result, 
                 // just that it needs to finish executing.

@@ -28,33 +28,21 @@ export default class extends Action {
         return true;
     }
 
-    async run(signal: Signal): Promise<void> {
-        for(let record of signal.change) {
-            // Sanity
-            record.expect('name').a('string');
-            record.expect('name').contains('.');
+    isSeries(): boolean {
+        return true;
+    }
 
-            // Create temporary refs
-            let [object_name, column_name] = record.data.name.split('.');
+    async one(signal: Signal, record: Record): Promise<void> {
+        // Sanity
+        record.expect('name').a('string');
+        record.expect('name').contains('.');
 
-            // Verify object exists
-            let object = signal.kernel.meta.objects.get(object_name);
-            let column = object.columns[column_name];
+        // Create temporary refs
+        let [object_name, column_name] = record.data.name.split('.');
 
-            if (column === undefined) {
-                throw new Error(`Object '${ object_name }' column '${ column_name }' does not exist or is not visible.`)
-            }
-
-            // Run
-            await signal.kernel.knex.updateTable(object_name, t => {
-                t.dropColumn(column_name);
-            });
-
-            // Delete the column data from the parent object
-            object.remove(column_name);
-
-            // Delete the column data from the kernel metadata
-            signal.kernel.meta.columns.delete(record.data.name);
-        }
+        // Drop column
+        await signal.kernel.knex.updateTable(object_name, t => {
+            t.dropColumn(column_name);
+        });
     }
 }

@@ -1,77 +1,64 @@
+// lodash
 import _ from 'lodash';
+import { toLower } from 'lodash';
+
+// Kernels
+import { Kernel } from '@kernels/kernel';
 
 // Classes
-import { Filter } from '@classes/filter';
-import { Object } from '@classes/object';
 import { Column } from '@classes/column';
-import { Record } from '@classes/record';
-import { Kernel } from '@kernels/kernel';
-import { toJSON } from '@classes/helper';
-
-// Typedefs
-import { RecordFlat } from '@typedefs/record';
+import { Object } from '@classes/object';
 import { ObjectType } from '@typedefs/object';
 
+// Helpers
+import { assertReturn } from '@classes/helper';
 
 // Extract the predefined list of object names
 export const KernelObjectTypes = _.values(ObjectType) as string[];
 
+// Object map does automatic case management
+class ObjectMap extends Map<string, Object> {
+    get(object_name: string) {
+        return super.get(toLower(object_name));
+    }
+
+    set(object_name: string, object: Object) {
+        return super.set(toLower(object_name), object);
+    }
+
+    delete(object_name: string) {
+        return super.delete(toLower(object_name));
+    }
+}
+
 // Implementation
 export class KernelMeta {
-    // Source data for known object and column names
-    public readonly sources: Map<string, RecordFlat[]> = new Map();
-    public readonly objects: MapObjects;
-    public readonly columns: MapColumns;
+    private readonly objects_map = new ObjectMap();
 
-    constructor(private readonly kernel: Kernel) {
-        this.objects = new MapObjects(kernel);
-        this.columns = new MapColumns(kernel);
+    constructor(private readonly kernel: Kernel) {}
+
+    get objects() {
+        return Array.from(this.objects_map.values());
     }
 
-    get object_names() {
-        return Array.from(this.objects.keys());
+    get object_keys() {
+        return Array.from(this.objects_map.keys());
     }
-
-    get column_names() {
-        return Array.from(this.columns.keys());
-    }
-
-    /**
-     * The `startup` method loads all the core metadata from the DB into a local
-     * service cache. At present, it does the following:
-     * 
-     * 1. Load all `system.object` records
-     * 2. Load all `system.column` records
-     * 
-     * Once the data is here, we store it in the metadata cache.
-     */
 
     async startup(): Promise<void> {
-        // Instantiate
-        for(let source of await this.load(ObjectType.Object)) {
-            let object = Object.from(source);
+        // Select the raw objects and columns
+        let object_list = await this.kernel.knex.selectTo(ObjectType.Object);
+        let column_list = await this.kernel.knex.selectTo(ObjectType.Column);
 
-            // Install
-            this.objects.set(source.name, object);
-        }
+        // Process objects
+        _.each(object_list, object_data => this.addObject(object_data));
 
-        // Instantiate
-        for(let source of await this.load(ObjectType.Column)) {
-            let column = Column.from(source);
-            let object = this.objects.get(column.object_name);
-
-            // Install
-            this.columns.set(column.name, column);
-
-            // Cross reference
-            object.insert(column);
-        }
+        // Process columns for each object
+        _.each(column_list, column_data => this.addColumn(column_data));
     }
     
     async cleanup(): Promise<void> {
-        this.sources.clear();
-        this.objects.clear();
-        this.columns.clear();
+        this.objects_map.clear();
     }
 
     async refresh() {
@@ -79,78 +66,47 @@ export class KernelMeta {
         await this.startup();
     }
 
-    async describe() {
-        
+    addObject(object_data: _.Dictionary<any>) {
+        let object = Object.from(object_data);
+
+        // Save to map
+        this.objects_map.set(object.object_name, object);    
     }
 
-    //
-    // Metadata source helper
-    //
+    addColumn(column_data: _.Dictionary<any>) {
+        let column = Column.from(column_data);
+        let object = this.objects_map.get(column.object_name);
 
-    async load(object_path: string) {
-        let sources = await this.kernel.knex
-            .selectTo(object_path)
-            .whereNull('meta.expired_at')
-            .whereNull('meta.deleted_at')
-            .select();
-
-        // Save the results
-        this.sources.set(object_path, sources);
-
-        // Done
-        return sources;
-    }
+        // Save to object
+        object.add(column);
     
-
-    find_source(object_path: string, match: string, k: string = 'name') {
-        return _.find(this.sources.get(object_path), source => {
-            return source[k] === match;
-        });
     }
 
-    //
-    // Helpers
-    //
-
-}
-
-//
-// Proxy for mapping objects
-//
-
-export class MapObjects extends Map<string, Object> {
-    constructor(private kernel: Kernel) {
-        super();
+    exists(object_name: string) {
+        return this.get(object_name) !== undefined;
     }
 
-    get(object_name: Object | string) {
-        // Already a Object instance? Nothing needed..
-        if (object_name instanceof Object) {
-            return object_name;
+    get(object_name: string): Object | undefined {
+        return this.objects_map.get(object_name);
+    }
+
+    delete(object_name: string) {
+        return this.objects_map.delete(object_name);
+    }
+
+    lookup(object: Object | string): Object {
+        let object_name: string;
+
+        if (object instanceof Object) {
+            return object;
         }
 
-        // It must be at least a string
-        if (typeof object_name !== 'string') {
-            throw new Error(`Object '${ object_name }' is not a valid string type`);
+        if (typeof object === 'string') {
+            object_name = object;
+            object = this.get(object_name);
         }
-
-        // Convert the string to lower-case and clean it up
-        object_name = object_name.toLowerCase().trim();
-
-        // Try to find a fully-qualified name
-        let object = super.get(object_name);
-
-        if (object === undefined) {
-            console.trace('objects', this);
-            throw new Error(`Object '${ object_name }' was not found or is not visible`);
-        }
-
-        return object;        
+        
+        return assertReturn(object, `Object "${ object_name }" not found or is not visible`);
     }
-}
 
-export class MapColumns extends Map<string, Column> {
-    constructor(private kernel: Kernel) {
-        super();
-    }
 }

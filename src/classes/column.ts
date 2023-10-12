@@ -31,7 +31,7 @@ export class Column {
      * @param {_.Dictionary<any>} flat - The flat data to generate the column from.
      * @returns {Column} Returns a new `Column` instance.
      */
-    static from(flat: _.Dictionary<any>): Column {
+    public static from(flat: _.Dictionary<any>): Column {
         let forms: ColumnForm[] = _.filter(ColumnForm, form => !!_.get(flat, form, false));
         
         return new Column(
@@ -45,7 +45,7 @@ export class Column {
         );
     }
 
-    constructor(
+    private constructor(
         public readonly id: string,
         public readonly ns: string,
         public readonly name: ColumnName,

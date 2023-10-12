@@ -57,21 +57,26 @@ export class Object {
      * @param {_.Dictionary<any>} flat - The flat data to generate the object from.
      * @returns {Object} Returns a new `Object` instance.
      */
-    static from(flat: _.Dictionary<any>): Object {
-        return new Object(flat);
-    }
-
-    // Properties
-    constructor(flat: _.Dictionary<any>) {
+    public static from(flat: _.Dictionary<any>): Object {
+        // Check inputs
         chai.expect(flat).property('name').string;
         chai.expect(flat).property('name').matches(/^[a-zA-Z][a-zA-Z0-9_]*$/i);
+
+        // Generate the instance
+        let object = new Object();
 
         // Extract only the valid properties
         flat = _.pick(flat, ['id', 'ns', 'name', 'description']);
 
         // Save to the internal data
-        _.assign(this.data, flat);
+        _.assign(object.data, flat);
+
+        // Done
+        return object;
     }
+
+    // Private constructor
+    private constructor() {}
 
     //
     // Getters/Setters
@@ -79,6 +84,14 @@ export class Object {
 
     get object_name() {
         return this.data.name;
+    }
+
+    exists(column_name: string) {
+        return this.columns[column_name] !== undefined;
+    }
+
+    add(column: Column) {
+        _.set(this.columns, column.column_name, column);
     }
 
     /**

@@ -31,68 +31,63 @@ export default class extends Action {
         return true;
     }
 
-    async run(signal: Signal): Promise<void> {
-        for(let record of signal.change) {
-            // Sanity
-            record.expect('name').a('string');
-            record.expect('name').contains('.');
-            record.expect('type').oneOf(ColumnTypeKeys);    
+    isSeries(): boolean {
+        return true;
+    }
 
-            // Create temporary refs
-            let [object_name, column_name] = record.data.name.split('.');
+    async one(signal: Signal, record: Record): Promise<void> {
+        // Sanity
+        record.expect('name').a('string');
+        record.expect('name').contains('.');
+        record.expect('type').oneOf(ColumnTypeKeys);
 
-            await signal.kernel.knex.updateTable(object_name, t => {
-                let column_type = record.data.type;
-                let column;
+        // Create temporary refs
+        let [object_name, column_name] = record.data.name.split('.');
 
-                if (column_type === ColumnType.Text) {
-                    column = t.text(column_name);
-                }
-                
-                else if (column_type === ColumnType.TextArray) {
-                    column = t.specificType(column_name, 'text ARRAY');
-                }
-                
-                else if (column_type === ColumnType.Boolean) {
-                    column = t.boolean(column_name);
-                }
-                
-                else if (column_type === ColumnType.Decimal) {
-                    column = t.decimal(column_name);
-                }
-                
-                else if (column_type === ColumnType.Integer) {
-                    column = t.integer(column_name);
-                }
+        await signal.kernel.knex.updateTable(object_name, t => {
+            let column_type = record.data.type;
+            let column;
 
-                else if (column_type === ColumnType.Json) {
-                    column = t.jsonb(column_name);
-                }
+            if (column_type === ColumnType.Text) {
+                column = t.text(column_name);
+            }
+            
+            else if (column_type === ColumnType.TextArray) {
+                column = t.specificType(column_name, 'text ARRAY');
+            }
+            
+            else if (column_type === ColumnType.Boolean) {
+                column = t.boolean(column_name);
+            }
+            
+            else if (column_type === ColumnType.Decimal) {
+                column = t.decimal(column_name);
+            }
+            
+            else if (column_type === ColumnType.Integer) {
+                column = t.integer(column_name);
+            }
 
-                else if (column_type === ColumnType.Enum) {
-                    column = t.specificType(column_name, 'text ARRAY');
-                }
+            else if (column_type === ColumnType.Json) {
+                column = t.jsonb(column_name);
+            }
 
-                else if (column_type === ColumnType.Uuid) {
-                    column = t.specificType(column_name, 'uuid');
-                }
+            else if (column_type === ColumnType.Enum) {
+                column = t.specificType(column_name, 'text ARRAY');
+            }
 
-                else {
-                    throw new Error('Unknown column type: ' + column_type);
-                }
+            else if (column_type === ColumnType.Uuid) {
+                column = t.specificType(column_name, 'uuid');
+            }
 
-                // Invalid column type
-            });
+            else {
+                throw new Error('Unknown column type: ' + column_type);
+            }
 
-            // Setup
-            let object = signal.kernel.meta.objects.get(object_name);
-            let column = Column.from(record.data);
+            // Invalid column type
+        });
 
-            // Save the column to the parent object
-            object.insert(column);
-
-            // Add the column data to the kernel metadata
-            signal.kernel.meta.columns.set(column.name, column);
-        }
+        // Add the column data to kernel meta
+        signal.kernel.meta.addColumn(record.data);
     }
 }

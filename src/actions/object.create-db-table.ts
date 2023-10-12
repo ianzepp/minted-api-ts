@@ -29,8 +29,8 @@ export default class extends Action {
         return true;
     }
 
-    async run(signal: Signal): Promise<void> {
-        await Promise.all(signal.change.map(record => this.one(signal, record)));
+    isSeries(): boolean {
+        return true;
     }
 
     async one(signal: Signal, record: Record) {
@@ -38,14 +38,10 @@ export default class extends Action {
         record.expect('name').a('string');
         record.expect('name').not.contains('.');
 
-        // Setup
-        let object_name = record.data.name;
-        let object = Object.from(record.data);
-
         // Create the empty table with no default columns
-        await signal.kernel.knex.createTable(object_name, t => {});
+        await signal.kernel.knex.createTable(record.data.name, t => {});
 
-        // Add to kernel metadata
-        signal.kernel.meta.objects.set(object_name, object);
+        // Add the object data to kernel meta
+        signal.kernel.meta.addObject(record.data);
     }
 }

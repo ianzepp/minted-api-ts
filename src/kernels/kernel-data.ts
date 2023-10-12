@@ -74,7 +74,7 @@ export class KernelData {
         this.kernel.expect(filter_data, 'filter_data').an('object');
         this.kernel.expect(op, 'op').a('string');
 
-        let object = this.kernel.meta.objects.get(object_name);
+        let object = this.kernel.meta.lookup(object_name);
         let filter = new Filter(filter_data);
 
         // Is this something other than a select op, and the change data is empty?
@@ -102,7 +102,7 @@ export class KernelData {
     //
 
     async selectAll(object_name: Object | ObjectName, source_data: ChangeData[]): Promise<Record[]> {
-        let object = this.kernel.meta.objects.get(object_name);
+        let object = this.kernel.meta.lookup(object_name);
         let source = source_data.map(change => object.toRecord(change).data.id);
 
         return this.selectIds(object, _.uniq(_.compact(source)));
