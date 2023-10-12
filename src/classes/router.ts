@@ -3,7 +3,7 @@ import chai from 'chai';
 import { pathToRegexp, match } from 'path-to-regexp';
 
 // Classes
-import { Kernel } from '@classes/kernel';
+import { Kernel } from '@kernels/kernel';
 
 // Typedefs
 import { RouterReq } from '@typedefs/router-req';

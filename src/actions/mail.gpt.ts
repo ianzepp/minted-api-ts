@@ -5,13 +5,13 @@ import { simpleParser } from 'mailparser';
 import { marked } from 'marked';
 
 // Classes
-import { DataError } from '@classes/kernel-data';
-import { Action } from '@root/src/classes/action';
+import { DataError } from '@kernels/kernel-data';
+import { Action } from '@classes/action';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
-import { ActionRing } from '@root/src/typedefs/action';
+import { ActionRing } from '@typedefs/action';
 import { ObjectType } from '@typedefs/object';
 import { extractEmail } from '../classes/helper';
 

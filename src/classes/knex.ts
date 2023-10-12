@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import knex, { Knex } from 'knex';
 import KnexConfig from '@root/knexconfig';
-import { Kernel } from './kernel';
+import { Kernel } from '@kernels/kernel';
 
 export const KnexDriverFn = () => knex(KnexConfig);
 export const KnexDriver = KnexDriverFn();

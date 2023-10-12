@@ -4,7 +4,7 @@ import UrlParse from 'url-parse';
 // Classes
 import { RouterReq } from '@typedefs/router-req';
 import { RouterRes } from '@typedefs/router-res';
-import { Kernel } from '@classes/kernel';
+import { Kernel } from '@kernels/kernel';
 import { toJSON } from '@classes/helper';
 
 // Import pre-loaded routers

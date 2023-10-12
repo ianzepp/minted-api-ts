@@ -12,7 +12,7 @@ import { toJSON } from '@classes/helper';
 
 // Router for testing
 import RouterTest from '@routers/data-update-all';
-import { Kernel } from '../classes/kernel';
+import { Kernel } from '../kernels/kernel';
 
 let kernel = new Kernel();
 

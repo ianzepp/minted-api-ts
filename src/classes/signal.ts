@@ -6,8 +6,8 @@ import { expect } from 'chai';
 
 // Classes
 import { Filter } from '@classes/filter';
-import { Kernel } from '@classes/kernel';
-import { Action } from '@root/src/classes/action';
+import { Kernel } from '@kernels/kernel';
+import { Action } from '@classes/action';
 import { Record } from '@classes/record';
 import { Object } from '@classes/object';
 

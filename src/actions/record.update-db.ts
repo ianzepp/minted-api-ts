@@ -1,13 +1,13 @@
 import _ from 'lodash';
 
 // Classes
-import { Action } from '@root/src/classes/action';
+import { Action } from '@classes/action';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
-import { ActionRing } from '@root/src/typedefs/action';
-import { DataError } from '@classes/kernel-data';
+import { ActionRing } from '@typedefs/action';
+import { DataError } from '@kernels/kernel-data';
 
 
 export default class extends Action {

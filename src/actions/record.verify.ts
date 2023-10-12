@@ -2,14 +2,14 @@ import _ from 'lodash';
 
 // Classes
 import { Column } from '@classes/column';
-import { Action } from '@root/src/classes/action';
+import { Action } from '@classes/action';
 import { Record } from '@classes/record';
 import { Signal } from '@classes/signal';
 
 // Typedefs
 import { ColumnsMeta } from '@typedefs/column';
-import { DataError } from '@classes/kernel-data';
-import { ActionRing } from '@root/src/typedefs/action';
+import { DataError } from '@kernels/kernel-data';
+import { ActionRing } from '@typedefs/action';
 
 /**
  * This action performs all the record prechecks/validations. This is done in one file

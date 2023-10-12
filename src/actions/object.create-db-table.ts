@@ -3,13 +3,13 @@ import chai from 'chai';
 import { Knex } from 'knex';
 
 // Classes
-import { Action } from '@root/src/classes/action';
+import { Action } from '@classes/action';
 import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 import { Object } from '@classes/object';
 
 // Typedefs
-import { ActionRing } from '@root/src/typedefs/action';
+import { ActionRing } from '@typedefs/action';
 import { ObjectType } from '@typedefs/object';
 
 export default class extends Action {

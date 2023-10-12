@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // API
 import { Router } from '@classes/router';
-import { UUID_REGEX } from '@classes/kernel';
+import { UUID_REGEX } from '@kernels/kernel';
 import { ObjectType } from '@typedefs/object';
 
 // Implementation

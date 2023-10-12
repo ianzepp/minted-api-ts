@@ -5,7 +5,7 @@ import { Filter } from '@classes/filter';
 import { Object } from '@classes/object';
 import { Column } from '@classes/column';
 import { Record } from '@classes/record';
-import { Kernel } from '@classes/kernel';
+import { Kernel } from '@kernels/kernel';
 import { toJSON } from '@classes/helper';
 
 // Typedefs

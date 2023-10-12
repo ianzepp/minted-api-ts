@@ -3,8 +3,7 @@ import chai from 'chai';
 import nodemailer from 'nodemailer';
 
 // Classes
-import { Kernel } from '@classes/kernel';
-import { ObjectType } from '../typedefs/object';
+import { Kernel } from '@kernels/kernel';
 
 // SMTP 
 const transporter = nodemailer.createTransport({
