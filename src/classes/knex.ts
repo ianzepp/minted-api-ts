@@ -11,7 +11,7 @@ export async function createTable(driver: Knex, object_name: string, createFn: (
 
     // Data table
     await driver.schema.createTable(object_name, (table) => {
-        table.string('id').notNullable().primary();
+        table.uuid('id').notNullable().primary();
         table.string('ns').notNullable();
 
         // Every table always gets a default name column. Can be null.
@@ -22,24 +22,24 @@ export async function createTable(driver: Knex, object_name: string, createFn: (
     });
 
     await driver.schema.createTable(object_name + '::meta', (table) => {
-        table.string('id').notNullable().primary();
+        table.uuid('id').notNullable().primary();
         table.string('ns').notNullable();
 
         table.timestamp('created_at').index();
-        table.string('created_by').index();
+        table.uuid('created_by').index();
 
         table.timestamp('updated_at').index();
-        table.string('updated_by').index();
+        table.uuid('updated_by').index();
 
         table.timestamp('expired_at').index();
-        table.string('expired_by').index();
+        table.uuid('expired_by').index();
 
         table.timestamp('deleted_at').index();
-        table.string('deleted_by').index();
+        table.uuid('deleted_by').index();
     });
 
     await driver.schema.createTable(object_name + '::acls', (table) => {
-        table.string('id').notNullable().primary();
+        table.uuid('id').notNullable().primary();
         table.string('ns').notNullable();
 
         table.specificType('access_full', 'text ARRAY');
