@@ -41,7 +41,7 @@ export default class extends Action {
             // Create temporary refs
             let [object_name, column_name] = record.data.name.split('.');
 
-            await signal.kernel.data.updateTable(object_name, t => {
+            await signal.kernel.knex.updateTable(object_name, t => {
                 let column_type = record.data.type;
                 let column;
 

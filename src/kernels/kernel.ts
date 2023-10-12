@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 
 // Classes
 import { KernelBulk } from '@kernels/kernel-bulk';
+import { KernelKnex } from '@kernels/kernel-knex';
 import { KernelData } from '@kernels/kernel-data';
 import { KernelMeta } from '@kernels/kernel-meta';
 import { KernelUser } from '@kernels/kernel-user';
@@ -27,6 +28,7 @@ export class Kernel {
     // Services
     public readonly bulk = new KernelBulk(this);
     public readonly data = new KernelData(this);
+    public readonly knex = new KernelKnex(this);
     public readonly meta = new KernelMeta(this);
     public readonly user = new KernelUser(this);
     public readonly smtp = new KernelSmtp(this);
@@ -42,10 +44,16 @@ export class Kernel {
     //
 
     async startup(): Promise<void> {
+        // Knex has to load first
+        await this.knex.startup();
+
+        // Startup the rest
         await this.data.startup();
         await this.meta.startup();
-        await this.bulk.startup();
         await this.user.startup();
+
+        // These don't care
+        await this.bulk.startup();
         await this.smtp.startup();
     }
 
@@ -55,6 +63,9 @@ export class Kernel {
         await this.bulk.cleanup();
         await this.user.cleanup();
         await this.smtp.cleanup();
+
+        // Unload knex last
+        await this.knex.cleanup();
     }
 
     async refresh(): Promise<void> {
@@ -128,8 +139,3 @@ export class Kernel {
         return 'test_' + Math.floor(Math.random() * 1000000);
     }
 }
-
-//
-// Kernel Test User
-//
-

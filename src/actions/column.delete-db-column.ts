@@ -46,7 +46,7 @@ export default class extends Action {
             }
 
             // Run
-            await signal.kernel.data.updateTable(object_name, t => {
+            await signal.kernel.knex.updateTable(object_name, t => {
                 t.dropColumn(column_name);
             });
 

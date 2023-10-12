@@ -31,7 +31,7 @@ export default class extends Action {
 
     async run(signal: Signal): Promise<void> {
         let object = signal.object;
-        let knex = signal.kernel.data.selectTo(object.object_name);
+        let knex = signal.kernel.knex.selectTo(object.object_name);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');
