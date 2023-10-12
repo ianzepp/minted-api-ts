@@ -73,6 +73,10 @@ export default class extends Action {
                     column = t.specificType(column_name, 'text ARRAY');
                 }
 
+                else if (column_type === ColumnType.Uuid) {
+                    column = t.specificType(column_name, 'uuid');
+                }
+
                 else {
                     throw new Error('Unknown column type: ' + column_type);
                 }

@@ -3,7 +3,7 @@
     "data": {
         "ns": "system",
         "name": "auth.name",
-        "type": "auth",
+        "type": "text",
         "description": "The friendly name for the authentication bearer token",
         "required": true
     }

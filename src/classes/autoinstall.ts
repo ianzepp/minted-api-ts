@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import { Knex } from 'knex';
 
+// For importing packages
+import fs from 'fs-extra';
+import path from 'path';
+import klaw from 'klaw-sync';
+
+// Local imports
 import { Kernel } from '@classes/kernel';
 import { ObjectType } from '@typedefs/object';
 
@@ -90,31 +96,60 @@ export class AutoInstall {
        ]);
     }
 
-    async importObject(object_name: string) {
-        console.info(`importObject(${ object_name })..`);
+    async import(import_name: string) {
+        console.info('import():', import_name);
 
-        let object_json = _.find(MetadataImports, json => {
+        const import_list = klaw(path.join(__dirname, '../packages', import_name), {
+            nodir: true,
+            traverseAll: true
+        });
+
+        // Build the list of imports
+        let imports = _.chain(import_list)
+            // Convert the klaw format into a simple path
+            .map(preload_info => preload_info.path)
+
+            // Only include JSON files
+            .filter(preload_path => preload_path.endsWith('.json'))
+
+            // Read the JSON
+            .map(preload_path => fs.readJsonSync(preload_path))
+
+            // Done
+            .value();
+
+        // For each object in the package, import it individually
+        let object_list = _.filter(imports, json => {
             return _.get(json, 'type') === 'object'
-                && _.get(json, 'data.name') === object_name;
-        }) as RecordJson;
+        }) as RecordJson[];
 
-        let column_json = _.filter(MetadataImports, json => {
+        for(let object_json of object_list) {
+            await this.importObject(imports, object_json);
+        }
+    }
+
+    async importObject(imports: any[], object_json: RecordJson) {
+        console.info(`- object "${ object_json.data.name }"`);
+
+        let object_name = object_json.data.name;
+
+        let column_json = _.filter(imports, json => {
             return _.get(json, 'type') === 'column'
                 && _.get(json, 'data.name', '').startsWith(object_name + '.');
         }) as RecordJson[];
 
-        let record_json = _.filter(MetadataImports, json => {
+        let record_json = _.filter(imports, json => {
             return _.get(json, 'type') === object_name;
         }) as RecordJson[];
 
         if (object_json === undefined) {
-            console.error(`!! object '${ object_name }' not found in MetadataImports`);
+            console.error(`!! object '${ object_name }' not found in imports`);
             return;
         }
 
         // Show columns
-        console.warn('- with columns:', column_json.map(c => c.data.name));
-        console.warn('- with records:', record_json.map(c => c.data.name));
+        console.warn('  - with columns:', column_json.map(c => c.data.name));
+        console.warn('  - with records:', record_json.map(c => c.data.name));
 
         // Insert the object
         if (object_json) {
@@ -148,17 +183,17 @@ export class AutoInstall {
             // Startup the kernel so we have basic data structures
             await this.kernel.startup();
 
-            // Install module: domain & user
-            await this.importObject('domain');
-            await this.importObject('user');
-            await this.importObject('config');
+            // Install packages
+            await this.import('system');
+
+            // Install authentication
+            await this.import('system.auth');
+
+            // Install IMAP/SMTP and generic mail support
+            await this.import('system.mail');
 
             // Install testing support
-            await this.importObject('test');
-
-            // Install mail message support
-            await this.importObject('mail');
-            await this.importObject('smtp');
+            await this.import('system.test');
 
             // Commit the transaction
             await this.knex.raw('COMMIT;');

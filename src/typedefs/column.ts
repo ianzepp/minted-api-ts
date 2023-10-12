@@ -61,7 +61,8 @@ export enum ColumnType {
     Integer = 'integer', // The column is of integer type
     Json = 'json', // The column is of JSON type
     Text = 'text', // The column is of text type
-    TextArray = 'text[]'
+    TextArray = 'text[]',
+    Uuid = 'uuid',
 }
 
 export const ColumnTypeKeys = _.values(ColumnType).map(_.toLower);
