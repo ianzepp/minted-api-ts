@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 // Classes
-import { Kernel } from '@classes/kernel';
-import { ObjectType } from '../typedefs/object';
+import { Kernel } from '@kernels/kernel';
+import { ObjectType } from '@typedefs/object';
 
 // Implementation
 export class KernelUser {

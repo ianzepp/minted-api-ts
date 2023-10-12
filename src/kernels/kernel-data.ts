@@ -8,7 +8,7 @@ import { Knex } from 'knex';
 
 // Classes
 import { Filter } from '@classes/filter';
-import { Kernel } from '@classes/kernel';
+import { Kernel } from '@kernels/kernel';
 import { Record } from '@classes/record';
 import { Object } from '@classes/object';
 import { Signal } from '@classes/signal';
@@ -16,7 +16,7 @@ import { Signal } from '@classes/signal';
 // Typedefs
 import { ChangeData } from '@typedefs/record';
 import { FilterJson } from '@typedefs/filter';
-import { ActionRing } from '@root/src/typedefs/action';
+import { ActionRing } from '@typedefs/action';
 import { ObjectName } from '@typedefs/object';
 import { SignalOp } from '@typedefs/signal';
 
@@ -29,7 +29,7 @@ export class RecordColumnRequiredError extends DataError {};
 
 // Import knex config and driver
 import KnexConfig from '@root/knexconfig';
-import { toJSON } from './helper';
+import { toJSON } from '@classes/helper';
 
 // Debug messages
 const debug = Debug('minted:kernel-data');

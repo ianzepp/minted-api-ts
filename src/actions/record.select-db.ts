@@ -2,14 +2,14 @@ import _, { cond } from 'lodash';
 import { Knex } from 'knex';
 
 // Classes
-import { Action } from '@root/src/classes/action';
+import { Action } from '@classes/action';
 import { Signal } from '@classes/signal';
 import { Filter } from '@classes/filter';
 
 // Typedefs
-import { ActionRing } from '@root/src/typedefs/action';
+import { ActionRing } from '@typedefs/action';
 import { Object } from '@classes/object';
-import { Kernel } from '@classes/kernel';
+import { Kernel } from '@kernels/kernel';
 
 
 export default class extends Action {

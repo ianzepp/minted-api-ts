@@ -1,11 +1,11 @@
 import _ from 'lodash';
 
 // Classes
-import { Action } from '@root/src/classes/action';
+import { Action } from '@classes/action';
 import { Signal } from '@classes/signal';
 
 // Typedefs
-import { ActionRing } from '@root/src/typedefs/action';
+import { ActionRing } from '@typedefs/action';
 
 
 export default class extends Action {

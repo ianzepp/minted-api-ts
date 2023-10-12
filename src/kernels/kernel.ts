@@ -7,11 +7,11 @@ import debug from 'debug';
 import { v4 as uuid } from 'uuid';
 
 // Classes
-import { KernelBulk } from '@classes/kernel-bulk';
-import { KernelData } from '@classes/kernel-data';
-import { KernelMeta } from '@classes/kernel-meta';
-import { KernelUser } from '@classes/kernel-user';
-import { KernelSmtp } from '@classes/kernel-smtp';
+import { KernelBulk } from '@kernels/kernel-bulk';
+import { KernelData } from '@kernels/kernel-data';
+import { KernelMeta } from '@kernels/kernel-meta';
+import { KernelUser } from '@kernels/kernel-user';
+import { KernelSmtp } from '@kernels/kernel-smtp';
 
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 

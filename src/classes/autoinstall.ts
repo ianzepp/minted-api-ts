@@ -7,7 +7,7 @@ import path from 'path';
 import klaw from 'klaw-sync';
 
 // Local imports
-import { Kernel } from '@classes/kernel';
+import { Kernel } from '@kernels/kernel';
 import { ObjectType } from '@typedefs/object';
 
 // Import table functions

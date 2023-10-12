@@ -3,8 +3,8 @@ import chai from 'chai';
 
 import { ChangeData } from "@typedefs/record";
 import { FilterJson } from "@typedefs/filter";
-import { Kernel } from "@classes/kernel";
-import { toJSON } from "./helper";
+import { Kernel } from "@kernels/kernel";
+import { toJSON } from "@classes/helper";
 
 // Bulk request payload
 export interface BulkOp {

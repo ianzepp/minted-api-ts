@@ -5,7 +5,7 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { Kernel } from '@classes/kernel';
+import { Kernel } from '@root/src/kernels/kernel';
 import { Record } from '@classes/record';
 import { ObjectType } from '@typedefs/object';
 import { Column } from '../classes/column';

@@ -18,6 +18,7 @@
         "paths": {
             "@root/*": ["./*"],
             "@classes/*": ["./src/classes/*"],
+            "@kernels/*": ["./src/kernels/*"],
             "@loaders/*": ["./src/loaders/*"],
             "@routers/*": ["./src/routers/*"],
             "@typedefs/*": ["./src/typedefs/*"]

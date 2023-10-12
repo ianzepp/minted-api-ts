@@ -5,8 +5,8 @@ import { Signal } from '@classes/signal';
 import { Record } from '@classes/record';
 
 // Typedefs
-import { ActionRank } from '@root/src/typedefs/action';
-import { ActionRing } from '@root/src/typedefs/action';
+import { ActionRank } from '@typedefs/action';
+import { ActionRing } from '@typedefs/action';
 
 export class Action {
     // Re-export aliases

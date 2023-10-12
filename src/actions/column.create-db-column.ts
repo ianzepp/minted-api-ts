@@ -2,9 +2,9 @@ import _ from 'lodash';
 
 // Classes
 import { Column } from '@classes/column';
-import { Action } from '@root/src/classes/action';
+import { Action } from '@classes/action';
 import { Signal } from '@classes/signal';
-import { ActionRing } from '@root/src/typedefs/action';
+import { ActionRing } from '@typedefs/action';
 import { Record } from '@classes/record';
 
 // Typedefs

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
-import { Kernel } from '@classes/kernel';
+import { Kernel } from '@root/src/kernels/kernel';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
