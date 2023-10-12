@@ -88,7 +88,7 @@ export class KernelMeta {
     //
 
     async load(object_path: string) {
-        let sources = await this.kernel.data
+        let sources = await this.kernel.knex
             .selectTo(object_path)
             .whereNull('meta.expired_at')
             .whereNull('meta.deleted_at')

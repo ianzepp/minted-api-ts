@@ -48,7 +48,7 @@ export default class extends Action {
         });
 
         // Create the empty table with no default columns
-        await signal.kernel.data.deleteTable(object_name);
+        await signal.kernel.knex.deleteTable(object_name);
 
         // Remove from kernel metadata
         signal.kernel.meta.objects.delete(object_name);

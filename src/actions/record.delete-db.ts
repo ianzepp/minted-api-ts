@@ -26,7 +26,7 @@ export default class extends Action {
     }
 
     async run(signal: Signal): Promise<void> {
-        return signal.kernel.data
+        return signal.kernel.knex
             .driverTo(signal.object.object_name, 'meta')
             .whereIn('id', _.map(signal.change_data, 'id'))
             .update({

@@ -96,7 +96,7 @@ export class Server {
             await kernel.startup();
 
             // Startup a transaction
-            await kernel.data.transaction();
+            await kernel.knex.transaction();
 
             // Start a transaction
 
@@ -115,7 +115,7 @@ export class Server {
             httpRes.result = result;
 
             // Commit the transaction
-            await kernel.data.commit();
+            await kernel.knex.commit();
 
             // Done
             return newResponse(JSON.stringify(result));
@@ -125,7 +125,7 @@ export class Server {
             console.error(error.stack);
 
             // Revert the transaction
-            await kernel.data.revert();
+            await kernel.knex.revert();
 
             // Cleanup any misc data
             await kernel.cleanup();

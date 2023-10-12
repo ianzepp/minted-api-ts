@@ -43,7 +43,7 @@ export default class extends Action {
         let object = Object.from(record.data);
 
         // Create the empty table with no default columns
-        await signal.kernel.data.createTable(object_name, t => {});
+        await signal.kernel.knex.createTable(object_name, t => {});
 
         // Add to kernel metadata
         signal.kernel.meta.objects.set(object_name, object);

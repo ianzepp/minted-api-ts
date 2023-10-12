@@ -21,7 +21,7 @@ export class AutoInstall {
     constructor(public readonly kernel: Kernel = new Kernel()) {}
 
     get knex() {
-        return this.kernel.data.driver;
+        return this.kernel.knex.driver;
     }
 
     async deleteAll() {
