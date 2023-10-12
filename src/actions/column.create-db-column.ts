@@ -36,7 +36,7 @@ export default class extends Action {
             // Sanity
             record.expect('name').a('string');
             record.expect('name').contains('.');
-            record.expect('type').oneOf(ColumnTypeKeys);        
+            record.expect('type').oneOf(ColumnTypeKeys);    
 
             // Create temporary refs
             let [object_name, column_name] = record.data.name.split('.');
@@ -47,6 +47,10 @@ export default class extends Action {
 
                 if (column_type === ColumnType.Text) {
                     column = t.text(column_name);
+                }
+                
+                else if (column_type === ColumnType.TextArray) {
+                    column = t.specificType(column_name, 'text ARRAY');
                 }
                 
                 else if (column_type === ColumnType.Boolean) {
@@ -66,7 +70,7 @@ export default class extends Action {
                 }
 
                 else if (column_type === ColumnType.Enum) {
-                    column = t.specificType(column_name, 'string ARRAY');
+                    column = t.specificType(column_name, 'text ARRAY');
                 }
 
                 else {

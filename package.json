@@ -9,7 +9,6 @@
     "build": "bash ./scripts/build.sh",
     "clean": "bash ./scripts/clean.sh",
     "start": "bash ./scripts/start.sh",
-    "start:dst": "bun ./dst/src/start.js",
     "test": "bash ./scripts/test.sh",
     "test:clean": "bash ./scripts/test-clean.sh"
   },
@@ -36,6 +35,7 @@
     "path-to-regexp": "^6.2.1",
     "pg": "^8.11.3",
     "pg-promise": "^11.5.4",
+    "quoted-printable": "^1.0.1",
     "sqlite3": "^5.1.6",
     "url-parse": "^1.5.10",
     "util": "^0.12.5",
@@ -44,9 +44,11 @@
   "devDependencies": {
     "@types/chai": "^4.3.5",
     "@types/fs-extra": "^11.0.1",
+    "@types/htmlparser2": "^3.10.4",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/klaw-sync": "^6.0.1",
     "@types/lodash": "^4.14.197",
+    "@types/quoted-printable": "^1.0.0",
     "@types/url-parse": "^1.4.9",
     "@types/uuid": "^9.0.2",
     "bun-types": "^1.0.1",

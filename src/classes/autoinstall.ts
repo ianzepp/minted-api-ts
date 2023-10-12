@@ -169,7 +169,7 @@ export class AutoInstall {
             await this.knex.raw('ROLLBACK;');
 
             // Trace the error
-            console.trace(error.stack);
+            console.trace(error.stack || error);
 
             // Return as an error
             process.exit(1);

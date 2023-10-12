@@ -1,0 +1,10 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "smtp.cc",
+        "type": "text[]",
+        "description": "The list of `cc` email addresses",
+        "required": false
+    }
+}
