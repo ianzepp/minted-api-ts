@@ -160,21 +160,26 @@ export class KernelData {
     // Search ops. Basically a `select` but with a filter to support a slightly different API
     // 
 
-    async searchAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
-        return this.selectAny(object_name, filter_data);
+    async searchAny(object_name: Object | ObjectName, where?: _.Dictionary<any>, order?: _.Dictionary<string>, limit?: number): Promise<Record[]> {
+        return this.selectAny(object_name, { where: where, order: order, limit: limit });
     }
 
-    async searchOne(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<Record | undefined> {
-        return this.selectAny(object_name, filter_data).then(headOne);
+    async searchOne(object_name: Object | ObjectName, where?: _.Dictionary<any>, order?: _.Dictionary<string>): Promise<Record | undefined> {
+        return this.selectAny(object_name, { where: where, order: order, limit: 1 }).then(headOne);
     }
 
-    async search404(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<Record> {
-        return this.selectAny(object_name, filter_data).then(head404);
+    async search404(object_name: Object | ObjectName, where?: _.Dictionary<any>, order?: _.Dictionary<string>): Promise<Record> {
+        return this.selectAny(object_name, { where: where, order: order, limit: 1 }).then(head404);
     }
 
-    async searchNot(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<void> {
-        return this.selectAny(object_name, filter_data).then(headNot);
+    async searchNot(object_name: Object | ObjectName, where?: _.Dictionary<any>, order?: _.Dictionary<string>, limit?: number): Promise<void> {
+        return this.selectAny(object_name, { where: where, order: order, limit: limit }).then(headNot);
     }
+
+    async searchNew(object_name: Object | ObjectName, created_at: string): Promise<Record[]> {
+        return this.searchAny(object_name, { created_at: { $gt: created_at }}, { created_at: 'asc' });
+    }
+
 
     //
     // Filter + Change ops

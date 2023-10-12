@@ -7,7 +7,7 @@ import { ObjectType } from '@typedefs/object';
 // Implementation
 export default class extends Router {
     async run() {
-        return this.kernel.data.search404(this.params.object, { where: { name: this.params.record_name }});
+        return this.kernel.data.search404(this.params.object, { name: this.params.record_name });
     }
 
     onRouterVerb() {

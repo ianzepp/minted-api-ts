@@ -100,25 +100,25 @@ export class KernelBulk {
             if (bulk.method === BulkMethod.SearchAny) {
                 this.expect(bulk).property('filter').a('object');
                 this.expect(bulk).not.property('inputs');
-                bulk.result = await this.kernel.data.searchAny(bulk.object, bulk.filter);
+                bulk.result = await this.kernel.data.searchAny(bulk.object, bulk.filter.where, bulk.filter.order, bulk.filter.limit);
             }
             
             if (bulk.method === BulkMethod.SelectOne) {
                 this.expect(bulk).property('filter').a('object');
                 this.expect(bulk).not.property('inputs');
-                bulk.result = await this.kernel.data.searchOne(bulk.object, bulk.filter);
+                bulk.result = await this.kernel.data.searchOne(bulk.object, bulk.filter.where, bulk.filter.order);
             }
 
             if (bulk.method === BulkMethod.Select404) {
                 this.expect(bulk).property('filter').a('object');
                 this.expect(bulk).not.property('inputs');
-                bulk.result = await this.kernel.data.search404(bulk.object, bulk.filter);
+                bulk.result = await this.kernel.data.search404(bulk.object, bulk.filter.where, bulk.filter.order);
             }
 
             if (bulk.method === BulkMethod.SearchNot) {
                 this.expect(bulk).property('filter').a('object');
                 this.expect(bulk).not.property('inputs');
-                bulk.result = await this.kernel.data.searchNot(bulk.object, bulk.filter);
+                bulk.result = await this.kernel.data.searchNot(bulk.object, bulk.filter.where, bulk.filter.order);
             }
 
             //

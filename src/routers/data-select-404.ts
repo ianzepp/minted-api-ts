@@ -13,11 +13,11 @@ export default class extends Router {
         }
 
         else if (this.params.record.includes('%')) {
-            return this.kernel.data.search404(this.params.object, { where: { name: { $find: this.params.record }}});
+            return this.kernel.data.search404(this.params.object, { name: { $find: this.params.record }});
         }
 
         else {
-            return this.kernel.data.search404(this.params.object, { where: { name: this.params.record }});
+            return this.kernel.data.search404(this.params.object, { name: this.params.record });
         }
     }
 

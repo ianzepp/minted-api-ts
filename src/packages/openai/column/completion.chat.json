@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "openai",
+        "name": "completion.chat",
+        "type": "uuid",
+        "required": true
+    }
+}

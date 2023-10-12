@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Knex } from 'knex';
 
 // Classes
 import { Column } from '@classes/column';
@@ -49,7 +50,7 @@ export default class extends Action {
         await signal.kernel.knex.updateTable(object.system_name, t => {
             let column_name = column.system_name;
             let column_type = column.type;
-            let change;
+            let change: Knex.ColumnBuilder;
 
             if (column_type === ColumnType.Text) {
                 change = t.text(column_name);
@@ -88,7 +89,13 @@ export default class extends Action {
             }
 
             // Is the column required?
-            // TODO
+            if (record.data.required) {
+                change = change.notNullable();
+            }
+
+            else {
+                change = change.nullable();
+            }
 
             // Is the column indexed or unique?
             // TODO

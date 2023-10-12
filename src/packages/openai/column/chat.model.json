@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "openai",
+        "name": "chat.model",
+        "type": "text",
+        "required": true
+    }
+}
