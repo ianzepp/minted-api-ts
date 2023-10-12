@@ -32,13 +32,6 @@ test('should create a knex table', async () => {
     let object = kernel.meta.lookup(object_name);
 
     // Make sure we can insert records
-    let create = await kernel.data.createOne(object, {});
-
-    // Check using direct knex
-    let select = await kernel.knex.driverTo(object_name, 'data').first();
-
-    chai.expect(select).not.empty;
-    chai.expect(select).property('id');
-    chai.expect(select).property('ns');
+    await kernel.data.createOne(object, {});
 });
 

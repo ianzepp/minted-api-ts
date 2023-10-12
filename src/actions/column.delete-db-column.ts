@@ -37,12 +37,13 @@ export default class extends Action {
         record.expect('name').a('string');
         record.expect('name').contains('.');
 
-        // Create temporary refs
-        let [object_name, column_name] = record.data.name.split('.');
+        // Find the parent object
+        let column = Column.from(record.data);
+        let object = signal.kernel.meta.lookup(column.object_name);
 
         // Drop column
-        await signal.kernel.knex.updateTable(object_name, t => {
-            t.dropColumn(column_name);
+        await signal.kernel.knex.updateTable(object.system_name, t => {
+            t.dropColumn(column.system_name);
         });
     }
 }
