@@ -11,6 +11,8 @@ import { ActionRing } from '@typedefs/action';
 import { Object } from '@classes/object';
 import { Kernel } from '@kernels/kernel';
 
+// Meta columns
+import { ColumnsMeta } from '@typedefs/column';
 
 export default class extends Action {
     toName(): string {
@@ -118,10 +120,22 @@ export default class extends Action {
         }
 
         //
-        // Start checking simple cases
+        // Establish if this is a `data` or `meta` column
         //
 
-        let column_name = 'data.' + name;
+        let column_name: string;
+        
+        if (ColumnsMeta.includes(name)) {
+            column_name = 'meta.' + name;
+        }
+
+        else {
+            column_name = 'data.' + name;
+        }
+
+        //
+        // Start checking simple cases
+        //
 
         if (data === null) {
             return knex.whereNull(column_name);

@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "openai",
+        "name": "completion.role",
+        "type": "text",
+        "required": true
+    }
+}

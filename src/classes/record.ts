@@ -172,6 +172,10 @@ export class Record {
         };
     }
 
+    toData() {
+        return this.data;
+    }
+
     is(object_name: ObjectName) {
         return this.object.is(object_name);
     }

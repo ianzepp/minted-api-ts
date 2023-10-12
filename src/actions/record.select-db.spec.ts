@@ -164,6 +164,11 @@ test('"order" has multiple columns with mixed sort', async () => {
     chai.expect(result).an('array').not.empty;
 });
 
+test('"order" can sort $asc on `created_at`', async () => {
+    let result = await selectOrder({ created_at: 'asc' });
+    chai.expect(result).an('array').not.empty;
+});
+
 //
 // Limit
 //

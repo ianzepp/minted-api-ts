@@ -4,4 +4,4 @@
 export NODE_ENV="test"
 
 # Start tests
-bun test $1
+bun test --timeout 60000 $1

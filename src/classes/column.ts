@@ -63,7 +63,13 @@ export class Column {
      * property is set to `system::domain.name`, then `object_name` returns `system::domain`.
      */
     get object_name() {
-        return _.head(this.name.split('.'));
+        let object_name = _.head(this.name.split('.')) || '';
+
+        if (object_name.includes('::') === false) {
+            object_name = this.ns + '::' + object_name;
+        }
+
+        return object_name;
     }
 
     /**

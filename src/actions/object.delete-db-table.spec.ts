@@ -50,8 +50,8 @@ test('should delete a knex table', async () => {
     await kernel.data.deleteOne(ObjectType.Object, object_data);
 
     // Verify the object and columns are gone
-    let verify_object = await kernel.data.searchAny(ObjectType.Object, { where: { name: object_name }});
-    let verify_column = await kernel.data.searchAny(ObjectType.Object, { where: { name: column_name }});
+    let verify_object = await kernel.data.searchAny(ObjectType.Object, { name: object_name });
+    let verify_column = await kernel.data.searchAny(ObjectType.Object, { name: column_name });
 
     chai.expect(verify_object).a('array').length(0);
     chai.expect(verify_column).a('array').length(0);

@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 
 // Classes
 import { KernelBulk } from '@kernels/kernel-bulk';
+import { KernelChat } from '@kernels/kernel-chat';
 import { KernelKnex } from '@kernels/kernel-knex';
 import { KernelData } from '@kernels/kernel-data';
 import { KernelMeta } from '@kernels/kernel-meta';
@@ -27,6 +28,7 @@ export class Kernel {
 
     // Services
     public readonly bulk = new KernelBulk(this);
+    public readonly chat = new KernelChat(this);
     public readonly data = new KernelData(this);
     public readonly knex = new KernelKnex(this);
     public readonly meta = new KernelMeta(this);
@@ -54,15 +56,18 @@ export class Kernel {
 
         // These don't care
         await this.bulk.startup();
+        await this.chat.startup();
         await this.smtp.startup();
     }
 
     async cleanup(): Promise<void> {
+        await this.bulk.cleanup();
+        await this.chat.cleanup();
+        await this.smtp.cleanup();
+
         await this.meta.cleanup();
         await this.data.cleanup();
-        await this.bulk.cleanup();
         await this.user.cleanup();
-        await this.smtp.cleanup();
 
         // Unload knex last
         await this.knex.cleanup();

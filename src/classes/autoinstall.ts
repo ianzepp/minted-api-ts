@@ -15,7 +15,6 @@ import { Column } from '@classes/column';
 import { createTable, deleteTable, insertAll } from './knex';
 
 // Import preloads
-import MetadataImports from '@loaders/imports';
 import { RecordJson } from '../typedefs/record';
 
 export class AutoInstall {
@@ -25,6 +24,54 @@ export class AutoInstall {
         return this.kernel.knex.driver;
     }
 
+    async up() {
+        try {
+            // Current database name
+            let dn = this.knex.client.config.connection.database;
+
+            // Start the tx
+            await this.knex.raw('BEGIN TRANSACTION;');
+
+            // Reset any existing DB contents
+            await this.deleteAll();
+        
+            // Install the core system data?
+            await this.createSystem();
+
+            // Startup the kernel so we have basic data structures
+            await this.kernel.startup();
+
+            // Install packages
+            await this.import('system');
+
+            // Install authentication
+            await this.import('system.auth');
+
+            // Install IMAP/SMTP and generic mail support
+            await this.import('system.mail');
+
+            // Install testing support
+            await this.import('system.test');
+
+            // Package: Open AI
+            await this.import('openai');
+
+            // Commit the transaction
+            await this.knex.raw('COMMIT;');
+        }
+
+        catch (error) {
+            // Rollback the transaction
+            await this.knex.raw('ROLLBACK;');
+
+            // Trace the error
+            console.trace(error.stack || error);
+
+            // Return as an error
+            process.exit(1);
+        }
+    }
+    
     async deleteAll() {
         const tables = await this.knex.raw("SELECT tablename FROM pg_tables WHERE schemaname='public';");
 
@@ -167,48 +214,4 @@ export class AutoInstall {
         }
     }
     
-    async up() {
-        try {
-            // Current database name
-            let dn = this.knex.client.config.connection.database;
-
-            // Start the tx
-            await this.knex.raw('BEGIN TRANSACTION;');
-
-            // Reset any existing DB contents
-            await this.deleteAll();
-        
-            // Install the core system data?
-            await this.createSystem();
-
-            // Startup the kernel so we have basic data structures
-            await this.kernel.startup();
-
-            // Install packages
-            await this.import('system');
-
-            // Install authentication
-            await this.import('system.auth');
-
-            // Install IMAP/SMTP and generic mail support
-            await this.import('system.mail');
-
-            // Install testing support
-            await this.import('system.test');
-
-            // Commit the transaction
-            await this.knex.raw('COMMIT;');
-        }
-
-        catch (error) {
-            // Rollback the transaction
-            await this.knex.raw('ROLLBACK;');
-
-            // Trace the error
-            console.trace(error.stack || error);
-
-            // Return as an error
-            process.exit(1);
-        }
-    }
 }
