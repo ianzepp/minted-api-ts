@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 const config = {
     useNullAsDefault: true,
-    debug: process.env.DEBUG === 'true',
+    debug: process.env.DEBUG === 'true' || process.env.KNEX_DEBUG === 'true',
     client: process.env.KNEX_CLIENT,
     connection: {
         host:     process.env.KNEX_HOST,

@@ -31,7 +31,7 @@ export default class extends Action {
         return true;
     }
 
-    isParallel(): boolean {
+    isSeries(): boolean {
         return true;
     }
 
@@ -86,5 +86,8 @@ export default class extends Action {
 
             // Invalid column type
         });
+
+        // Add the column data to kernel meta
+        signal.kernel.meta.addColumn(record.data);
     }
 }

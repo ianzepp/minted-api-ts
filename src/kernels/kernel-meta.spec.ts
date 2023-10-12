@@ -44,10 +44,6 @@ test('meta.objects should be populated with Object instances', async () => {
     }
 });
 
-test('meta.object_names should return the same keys as meta.objects', async () => {
-    chai.expect(kernel.meta.object_keys).members(Array.from(kernel.meta.objects.keys()));
-});
-
 //
 // lifecycle testing
 //

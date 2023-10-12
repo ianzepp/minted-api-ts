@@ -51,21 +51,10 @@ export class KernelMeta {
         let column_list = await this.kernel.knex.selectTo(ObjectType.Column);
 
         // Process objects
-        for(let object_flat of object_list) {
-            let object = Object.from(object_flat);
-
-            // Save to map
-            this.objects_map.set(object.object_name, object);
-        }
+        _.each(object_list, object_data => this.addObject(object_data));
 
         // Process columns for each object
-        for(let column_flat of column_list) {
-            let column = Column.from(column_flat);
-            let object = this.objects_map.get(column.object_name);
-
-            // Save to object
-            object.add(column);
-        }
+        _.each(column_list, column_data => this.addColumn(column_data));
     }
     
     async cleanup(): Promise<void> {
@@ -75,6 +64,22 @@ export class KernelMeta {
     async refresh() {
         await this.cleanup();
         await this.startup();
+    }
+
+    addObject(object_data: _.Dictionary<any>) {
+        let object = Object.from(object_data);
+
+        // Save to map
+        this.objects_map.set(object.object_name, object);    
+    }
+
+    addColumn(column_data: _.Dictionary<any>) {
+        let column = Column.from(column_data);
+        let object = this.objects_map.get(column.object_name);
+
+        // Save to object
+        object.add(column);
+    
     }
 
     exists(object_name: string) {
@@ -89,13 +94,19 @@ export class KernelMeta {
         return this.objects_map.delete(object_name);
     }
 
-    lookup(target: Object | string): Object {
-        // If we are passed an object, re-resolve it to ensure it isn't a stale cache hit
-        if (target instanceof Object) {
-            target = target.object_name;
+    lookup(object: Object | string): Object {
+        let object_name: string;
+
+        if (object instanceof Object) {
+            return object;
+        }
+
+        if (typeof object === 'string') {
+            object_name = object;
+            object = this.get(object_name);
         }
         
-        return assertReturn<any>(target, `404: Object "${ target }" not found or is not visible`);
+        return assertReturn(object, `Object "${ object_name }" not found or is not visible`);
     }
 
 }

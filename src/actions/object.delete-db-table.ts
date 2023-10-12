@@ -27,7 +27,7 @@ export default class extends Action {
         return true;
     }
 
-    isParallel(): boolean {
+    isSeries(): boolean {
         return true;
     }
 

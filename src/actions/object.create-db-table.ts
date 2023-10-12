@@ -29,7 +29,7 @@ export default class extends Action {
         return true;
     }
 
-    isParallel(): boolean {
+    isSeries(): boolean {
         return true;
     }
 
@@ -40,5 +40,8 @@ export default class extends Action {
 
         // Create the empty table with no default columns
         await signal.kernel.knex.createTable(record.data.name, t => {});
+
+        // Add the object data to kernel meta
+        signal.kernel.meta.addObject(record.data);
     }
 }

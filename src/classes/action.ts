@@ -34,8 +34,9 @@ export class Action {
             'on_upsert': this.onUpsert(),
             'on_expire': this.onExpire(),
             'on_delete': this.onDelete(),
-            'is_failable': this.isFailable(),
+            'is_series': this.isSeries(),
             'is_parallel': this.isParallel(),
+            'is_failable': this.isFailable(),
             'is_detached': this.isDetached(),
         };
     }
@@ -177,6 +178,14 @@ export class Action {
      * @returns {boolean} - True if the action can fail with errors (that will be ignored)
      */
     isFailable(): boolean {
+        return false;
+    }
+
+    /**
+     * If the records should be processed one by one, each time passed to the `one(signal, record)` method.
+     * @returns {boolean}
+     */
+    isSeries(): boolean {
         return false;
     }
 
