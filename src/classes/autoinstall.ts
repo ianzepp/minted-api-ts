@@ -8,7 +8,8 @@ import klaw from 'klaw-sync';
 
 // Local imports
 import { Kernel } from '@kernels/kernel';
-import { ObjectType } from '@typedefs/object';
+import { Object } from '@classes/object';
+import { Column } from '@classes/column';
 
 // Import table functions
 import { createTable, deleteTable, insertAll } from './knex';
@@ -131,15 +132,17 @@ export class AutoInstall {
     async importObject(imports: any[], object_json: RecordJson) {
         console.info(`- object "${ object_json.data.name }"`);
 
+        let object = Object.from(object_json.data);
         let object_name = object_json.data.name;
 
         let column_json = _.filter(imports, json => {
             return _.get(json, 'type') === 'column'
-                && _.get(json, 'data.name', '').startsWith(object_name + '.');
+                && _.get(json, 'data.name', '').startsWith(object.object_name + '.');
         }) as RecordJson[];
 
         let record_json = _.filter(imports, json => {
-            return _.get(json, 'type') === object_name;
+            return _.get(json, 'type') === object.system_name
+                || _.get(json, 'type') === object.object_name
         }) as RecordJson[];
 
         if (object_json === undefined) {
@@ -147,21 +150,19 @@ export class AutoInstall {
             return;
         }
 
-        // Show columns
-        console.warn('  - with columns:', column_json.map(c => c.data.name));
-        console.warn('  - with records:', record_json.map(c => c.data.name));
-
         // Insert the object
         if (object_json) {
             await this.kernel.data.createOne('object', object_json);
         }
 
         if (column_json.length) {
+            console.warn('  - with columns:', column_json.map(c => c.data.name));
             await this.kernel.data.createAll('column', column_json);
         }
 
         // Insert the object records
         if (record_json.length) {
+            console.warn('  - with records:', record_json.map(c => c.data.name));
             await this.kernel.data.createAll(object_name, record_json);
         }
     }

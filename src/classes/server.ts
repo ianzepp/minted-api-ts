@@ -109,6 +109,21 @@ export class Server {
             // Convert to plain objects
             result = toJSON(result);
 
+            // Omit `meta` for records?
+            if (result instanceof Array && httpReq.search.meta !== 'true') {
+                result = _.map(result, r => _.omit(r, 'meta'));
+            }
+
+            // Omit `acls` for records?
+            if (result instanceof Array && httpReq.search.acls !== 'true') {
+                result = _.map(result, r => _.omit(r, 'acls'));
+            }
+
+            // Flatten result?
+            if (result instanceof Array && httpReq.search.flat === 'true') {
+                result = _.map(result, r => _.merge({}, r.data, r.meta, r.acls));
+            }
+
             // Save the results
             httpRes.status = 200;
             httpRes.length = _.isArray(result) ? _.size(result) : 1;

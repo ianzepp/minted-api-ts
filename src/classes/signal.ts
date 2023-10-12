@@ -77,7 +77,7 @@ export class Signal {
             }
 
             // Wrong object name?
-            if (action.onObject() != '*' && action.onObject() !== this.object.object_name) {
+            if (action.onObject() != '*' && action.onObject() !== this.object.system_name) {
                 return false;
             }
 
