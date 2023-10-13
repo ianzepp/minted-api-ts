@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "imap.text",
+        "type": "text",
+        "description": "The text body portion of the mail message"
+    }
+}

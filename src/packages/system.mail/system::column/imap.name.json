@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "imap.name",
+        "type": "text",
+        "description": "The unique `Message-ID` of the mail message"
+    }
+}

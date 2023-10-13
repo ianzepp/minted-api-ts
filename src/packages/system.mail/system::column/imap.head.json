@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "imap.head",
+        "type": "json",
+        "description": "The IMAP mail message headers"
+    }
+}
