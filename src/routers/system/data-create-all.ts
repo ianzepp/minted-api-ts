@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // API
 import { Router } from '@classes/router';
-import { ChangeData } from '../typedefs/record';
+import { ChangeData } from '@typedefs/record';
 
 // Implementation
 export default class extends Router {
