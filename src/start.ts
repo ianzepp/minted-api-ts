@@ -1,5 +1,5 @@
 // Servers
-import { Server } from '@classes/server';
+import { Server } from '@system/classes/server';
 
 // Create the http server
 Bun.serve({

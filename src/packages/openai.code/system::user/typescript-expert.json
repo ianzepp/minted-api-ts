@@ -1,9 +1,0 @@
-{
-    "type": "openai::persona",
-    "data": {
-        "name": "typescript-expert",
-        "model": "gpt-4",
-        "temperature": 0.2,
-        "setup": "You are an expert typescript programmer."
-    }
-}
