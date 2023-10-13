@@ -46,6 +46,11 @@ export default class extends Action {
         let column = Column.from(record.data);
         let object = signal.kernel.meta.lookup(column.object_name);
 
+        // No changes allowed to the base `system::record` object
+        if (object.system_name === 'system::record') {
+            return;
+        }
+
         // Process the new column
         await signal.kernel.knex.updateTable(object.system_name, t => {
             let column_name = column.system_name;

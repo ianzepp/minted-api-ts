@@ -12,6 +12,7 @@ import { ObjectType } from '@typedefs/object';
 
 // Helpers
 import { assertReturn } from '@classes/helper';
+import { ColumnForm, ColumnType } from '../typedefs/column';
 
 // Extract the predefined list of object names
 export const KernelObjectTypes = _.values(ObjectType) as string[];
@@ -117,4 +118,25 @@ export class KernelMeta {
         return assertReturn(object, `Object "${ object_name }" not found or is not visible`);
     }
 
+    interface(object_name: string) {
+        let object = this.lookup(object_name);
+
+        // Define inner column text
+        let column_text = _.map(object.columns, column => {
+            let opt = column.of(ColumnForm.Required) ? '' : '?';
+
+            return `\t${ column.column_name }${ opt }: ${ column.type };\n`;
+        }).join('');
+
+        // Define outer object text
+        let object_text = [
+            `// ${ object.data.description ?? '' }\n`,
+            `interface ${ object.system_name }{\n`,
+            column_text,
+            `}\n`
+        ];
+
+        // Done
+        return object_text.join('');
+    }
 }

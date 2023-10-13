@@ -45,6 +45,17 @@ test('meta.objects should be populated with Object instances', async () => {
 });
 
 //
+// interface
+//
+
+test('can export an object to an interface', async () => {
+    let typedefs = kernel.meta.object_keys.map(name => kernel.meta.interface(name));
+    let typedefs_text = typedefs.join('\n');
+
+    console.warn(typedefs_text);
+});
+
+//
 // lifecycle testing
 //
 
