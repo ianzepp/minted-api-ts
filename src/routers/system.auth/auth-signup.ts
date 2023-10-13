@@ -14,6 +14,6 @@ export default class extends Router {
     }
 
     onRouterPath() {
-        return '/auth/signup';
+        return '/api/auth/signup';
     }
 }
