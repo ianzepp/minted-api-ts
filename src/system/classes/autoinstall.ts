@@ -10,14 +10,12 @@ import { sync as globSync } from 'glob';
 // Local imports
 import { Kernel } from '@system/kernels/kernel';
 import { Object } from '@system/classes/object';
-import { Column } from '@system/classes/column';
+import { RecordJson } from '@system/typedefs/record';
 
 // Import table functions
 import { createTable, deleteTable, insertAll } from './knex';
 
-// Import preloads
-import { RecordJson } from '../typedefs/record';
-
+// Implementation
 export class AutoInstall {
     constructor(public readonly kernel: Kernel = new Kernel()) {}
 
@@ -44,19 +42,8 @@ export class AutoInstall {
 
             // Install packages
             await this.import('system');
-
-            // Install authentication
-            await this.import('system.auth');
-
-            // Install IMAP/SMTP and generic mail support
-            await this.import('system.mail');
-
-            // Install testing support
-            await this.import('system.test');
-
-            // Package: Open AI
+            await this.import('system.*');
             await this.import('openai');
-            await this.import('openai.*');
 
             // Commit the transaction
             await this.knex.raw('COMMIT;');
@@ -147,10 +134,10 @@ export class AutoInstall {
     }
 
     async import(import_name: string) {
-        console.info('import(): src/ packages/', import_name);
+        console.info('import():', import_name);
 
         // Use glob to get all directories that match the wildcard
-        const directories = globSync(path.join(__dirname, '../packages', import_name));
+        const directories = globSync(path.join('./src', import_name, 'imports'));
 
         // Use klaw to get all files in each directory
         const import_list = directories.flatMap(directory => klaw(directory, {

@@ -2,14 +2,19 @@ import _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
 import klaw from 'klaw-sync';
+import { sync as globSync } from 'glob';
 
 // Import base router class definition
 import { Router } from '@system/classes/router';
 
-const preload_files = klaw(path.join(__dirname, '../routers'), {
+// Use glob to get all directories that match the wildcard
+const directories = globSync('./src/*/routers');
+
+// Use klaw to get all files in each directory
+const preload_files = directories.flatMap(directory => klaw(directory, {
     nodir: true,
     traverseAll: true
-});
+}));
 
 // Build the list of routers
 let preloads = _.chain(preload_files)

@@ -2,13 +2,17 @@ import _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
 import klaw from 'klaw-sync';
-
+import { sync as globSync } from 'glob';
 import { Action } from '@system/classes/action';
 
-const preload_files = klaw(path.join(__dirname, '../actions'), {
+// Use glob to get all directories that match the wildcard
+const directories = globSync('./src/*/actions');
+
+// Use klaw to get all files in each directory
+const preload_files = directories.flatMap(directory => klaw(directory, {
     nodir: true,
     traverseAll: true
-});
+}));
 
 // Instantiate all of the default actions, sort by ring priority and then group by object
 let preloads = _.chain(preload_files)

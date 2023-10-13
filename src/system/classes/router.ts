@@ -73,9 +73,6 @@ export class Router {
         // Set the params
         this.__req.params = _.get(match(this.onRouterPath())(req.path), 'params');
 
-        console.warn(this.onRouterVerb(), this.onRouterPath());
-        console.warn();
-
         // Done
         return this.run();
     }
