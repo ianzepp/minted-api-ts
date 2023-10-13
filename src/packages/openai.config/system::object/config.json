@@ -2,6 +2,6 @@
     "type": "object",
     "data": {
         "ns": "openai",
-        "name": "persona"
+        "name": "config"
     }
 }

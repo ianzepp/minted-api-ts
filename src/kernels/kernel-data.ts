@@ -180,6 +180,21 @@ export class KernelData {
         return this.searchAny(object_name, { created_at: { $gt: created_at }}, { created_at: 'asc' });
     }
 
+    //
+    // Lookup a record by the record name
+    // 
+
+    async lookupAny(object_name: Object | ObjectName, record_name: string, limit?: number): Promise<Record[]> {
+        return this.selectAny(object_name, { where: { name: record_name }, limit: limit });
+    }
+
+    async lookupOne(object_name: Object | ObjectName, record_name: string): Promise<Record | undefined> {
+        return this.selectAny(object_name, { where: { name: record_name }, limit: 1 }).then(headOne);
+    }
+
+    async lookup404(object_name: Object | ObjectName, record_name: string): Promise<Record> {
+        return this.selectAny(object_name, { where: { name: record_name }, limit: 1 }).then(head404);
+    }
 
     //
     // Filter + Change ops

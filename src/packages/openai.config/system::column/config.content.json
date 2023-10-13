@@ -2,7 +2,7 @@
     "type": "column",
     "data": {
         "ns": "openai",
-        "name": "persona.temperature",
-        "type": "decimal"
+        "name": "config.content",
+        "type": "text"
     }
 }

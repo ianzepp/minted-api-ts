@@ -24,3 +24,11 @@ export function toNull(obj: Object, paths: string[]) {
 export function extractEmail(input: string): string | null {
     return (input.match(/<([^>]+)>/) || [])[1] || null;
 }
+
+export function toTypeCase(text: string) {
+    text = text.replace(/::/g, ' ');
+    text = _.toLower(text);
+    text = _.startCase(text);
+    text = text.replace(/ /g, '');
+    return text;
+}

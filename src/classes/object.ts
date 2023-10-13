@@ -5,6 +5,7 @@ import chai from 'chai';
 import { Column } from '@classes/column';
 import { Record } from '@classes/record';
 import { toJSON } from '@classes/helper';
+import { toTypeCase } from '@classes/helper';
 
 // Typedefs
 import { ColumnsAcls, ColumnsMeta } from '@typedefs/column';
@@ -278,5 +279,29 @@ export class Object {
             && _.has(source, 'access_edit')
             && _.has(source, 'access_read')
             && _.has(source, 'access_deny');
+    }
+
+    //
+    // Convert the object to a typedef representation
+    //
+
+    toTypedefs() {
+        let column_text = _.map(this.columns, c => {
+            return `  ${ c.column_name }: ${ c.type };\n`;
+        });
+
+        let object_text = [
+            `// @description ${ this.data.description || '' }\n`,
+            `// @ns ${ this.data.ns }\n`,
+            `interface ${ toTypeCase(this.system_name) } {\n`,
+            column_text.join(''),
+            `}\n`
+        ];
+
+        return object_text.join('');
+    }
+
+    toGraphQL() {
+        
     }
 }

@@ -12,6 +12,7 @@ import { ObjectType } from '@typedefs/object';
 
 // Helpers
 import { assertReturn } from '@classes/helper';
+import { ColumnForm, ColumnType } from '../typedefs/column';
 
 // Extract the predefined list of object names
 export const KernelObjectTypes = _.values(ObjectType) as string[];
@@ -116,5 +117,4 @@ export class KernelMeta {
         
         return assertReturn(object, `Object "${ object_name }" not found or is not visible`);
     }
-
 }

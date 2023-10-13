@@ -1,0 +1,8 @@
+{
+    "type": "object",
+    "data": {
+        "ns": "system",
+        "name": "record",
+        "description": "The base interface of all other object definitions"
+    }
+}

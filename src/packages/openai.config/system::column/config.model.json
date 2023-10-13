@@ -2,7 +2,7 @@
     "type": "column",
     "data": {
         "ns": "openai",
-        "name": "persona.model",
+        "name": "config.model",
         "type": "text",
         "required": true
     }

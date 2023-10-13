@@ -5,6 +5,7 @@ import { Knex } from 'knex';
 import fs from 'fs-extra';
 import path from 'path';
 import klaw from 'klaw-sync';
+import { sync as globSync } from 'glob';
 
 // Local imports
 import { Kernel } from '@kernels/kernel';
@@ -55,7 +56,7 @@ export class AutoInstall {
 
             // Package: Open AI
             await this.import('openai');
-            await this.import('openai.personas');
+            await this.import('openai.*');
 
             // Commit the transaction
             await this.knex.raw('COMMIT;');
@@ -148,10 +149,14 @@ export class AutoInstall {
     async import(import_name: string) {
         console.info('import(): src/ packages/', import_name);
 
-        const import_list = klaw(path.join(__dirname, '../packages', import_name), {
+        // Use glob to get all directories that match the wildcard
+        const directories = globSync(path.join(__dirname, '../packages', import_name));
+
+        // Use klaw to get all files in each directory
+        const import_list = directories.flatMap(directory => klaw(directory, {
             nodir: true,
             traverseAll: true
-        });
+        }));
 
         // Build the list of imports
         let imports = _.chain(import_list)
