@@ -1,0 +1,9 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "imap.mail",
+        "type": "text",
+        "description": "The entire mail message in raw format"
+    }
+}

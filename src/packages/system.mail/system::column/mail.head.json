@@ -1,9 +1,0 @@
-{
-    "type": "column",
-    "data": {
-        "ns": "system",
-        "name": "mail.head",
-        "type": "json",
-        "description": "The mail headers, represented as an JSON object"
-    }
-}
