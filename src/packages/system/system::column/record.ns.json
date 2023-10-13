@@ -1,0 +1,8 @@
+{
+    "type": "column",
+    "data": {
+        "ns": "system",
+        "name": "record.ns",
+        "type": "text"
+    }
+}
