@@ -12,9 +12,6 @@ import { Record } from '@classes/record';
 import { ColumnType, ColumnTypeKeys } from '@typedefs/column';
 import { ObjectType } from '@typedefs/object';
 
-// Table operations
-import { sign } from 'jsonwebtoken';
-
 export default class extends Action {
     toName(): string {
         return __filename;

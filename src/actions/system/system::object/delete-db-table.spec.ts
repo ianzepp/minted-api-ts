@@ -8,8 +8,8 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 import { Kernel } from '@root/src/kernels/kernel';
 import { Record } from '@classes/record';
 import { ObjectType } from '@typedefs/object';
-import { Column } from '../classes/column';
-import { Object } from '../classes/object';
+import { Column } from '@classes/column';
+import { Object } from '@classes/object';
 
 let kernel = new Kernel();
 

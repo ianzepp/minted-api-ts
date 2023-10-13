@@ -13,7 +13,7 @@ import { Record } from '@classes/record';
 // Typedefs
 import { ActionRing } from '@typedefs/action';
 import { ObjectType } from '@typedefs/object';
-import { extractEmail } from '../classes/helper';
+import { extractEmail } from '@classes/helper';
 
 export default class extends Action {
     toName(): string {
