@@ -16,12 +16,13 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "paths": {
-            "@root/*": ["./*"],
-            "@classes/*": ["./src/classes/*"],
-            "@kernels/*": ["./src/kernels/*"],
-            "@loaders/*": ["./src/loaders/*"],
-            "@routers/*": ["./src/routers/*"],
-            "@typedefs/*": ["./src/typedefs/*"]
+            "@src/*": ["./src/*"],
+            "@system/*": ["./src/system/*"],
+            "@system.auth/*": ["./src/system.auth/*"],
+            "@system.bulk/*": ["./src/system.bulk/*"],
+            "@system.mail/*": ["./src/system.mail/*"],
+            "@system.test/*": ["./src/system.test/*"],
+            "@openai/*": ["./src/openai/*"]
         }
     },
     "include": [
