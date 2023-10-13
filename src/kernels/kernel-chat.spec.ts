@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import chai from 'chai';
+import vm from 'vm';
 
 // Classes
 import { Kernel } from '@kernels/kernel';
-
+import { toJSON } from '@classes/helper';
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
@@ -17,63 +18,126 @@ afterEach(async () => {
     await kernel.cleanup();
 });
 
-test.skip('connects to Open AI', async () => {
-    let chat_id = await kernel.chat.chat('gpt-4');
-
-    // Setup some instructions
-    await kernel.chat.system(chat_id, 'You are a coin flipper. Answer exclusively with "heads" or "tails"');
-
-    // Add a completion
-    await kernel.chat.user(chat_id, 'Flip a coin, please!');
-
-    // Sync and get the response.
-    let recv1: string = await kernel.chat.sync(chat_id);
-
-    console.warn('recv1', recv1);
-
-    if (recv1.match(/tails/i)) {
-        // Ask more questions
-        await kernel.chat.user(chat_id, 'Sorry to hear. Flip again?');
-
-        // Sync and get the response.
-        let recv2 = await kernel.chat.sync(chat_id);
-
-        console.warn('recv2', recv2);
-    }
-
-    if (recv1.match(/heads/i)) {
-        // Ask more questions
-        await kernel.chat.user(chat_id, 'Thats great. Flip again?');
-
-        // Sync and get the response.
-        let recv2 = await kernel.chat.sync(chat_id);
-
-        console.warn('recv2', recv2);
-    }
-
+test.skip('ping', async () => {
+    console.info(await kernel.chat.send('Reply with "pong"'));
 });
 
+test.skip('summarize records from the database', async () => {
+    let chat = await kernel.chat.chat('default', 'You are an expert in JSON and database architecture');
 
-test.skip('openai chat + personas', async () => {
-    // Create a new lawyer
-    let persona = await kernel.data.createOne('openai::persona', {
-        name: 'risc-os',
-        model: 'gpt-4',
-        setup: 'You are a RISC CPU. Respond in byte code. Do not exceed 100 instructions.'
-    });
+    chat.send(await kernel.data.selectAny('object'));
+    chat.send(await kernel.data.selectAny('column'));
+    chat.send('Review the JSON, and send back a short summary.');
 
-    // Start a chat with the person
-    let chat_id = await kernel.chat.chat_persona(persona.data.name);
+    let summary = await chat.sync();
+    console.info('summary', summary);
+});
 
-    // Ask to explain the second amendment
-    await kernel.chat.user(chat_id, 'Can you explain the second amendment to me?');
+test.skip('summarize a local file (package.json)', async () => {
+    let chat = await kernel.chat.chat('default', 'You are an expert in Node JS');
 
-    // Listen to the answer
-    let answer = await kernel.chat.sync(chat_id);
+    chat.send_file('./package.json');
+    chat.send('Review the JSON, and send back a short summary.');
 
-    console.warn('GPT answer:');
-    console.warn('');
-    console.warn(answer);
+    let summary = await chat.sync();
+    console.info('summary', summary);
+});
+
+test.skip('summarize the result of an HTTP GET call', async () => {
+    let chat = await kernel.chat.chat('default');
+
+    chat.send_http('https://bitcoin.org/en/');
+    chat.send('Review the webpage, and send back a short summary.');
+
+    let summary = await chat.sync();
+    console.info('summary', summary);
+});
+
+test.skip('evaluate code files and add comments', async () => {
+    let chat = await kernel.chat.chat('default', 'You are an expert Typescript programmer');
+
+    chat.send_file('./src/classes/signal.ts');
+    chat.send_file('./src/classes/action.ts');
+    chat.send('Review the code, and then send back a commented version of the Signal class');
+
+    let summary = await chat.sync();
+    console.info('summary', summary);
+});
+
+test.skip('write and execute code', async () => {
+    // TODO
+});
+
+// test('use the "typescript-expert" persona to write code', async () => {
+//     // Start a chat with the persona
+//     let runner = await kernel.chat.chat('typescript-expert');
+
+//     // Train
+//     runner.system(`
+//         You have the following database functions available:
+
+//         // Find all records of an object
+//         searchAny(object_name: string): Record[];
+
+//         // Find a record of an object by record ID. Throws an error if the record cannot be found.
+//         search404(object_name: string, record_id: string): Record;
+//     `);
+
+//     // Train
+//     runner.system('You should respond with the code only. The entire response should be a code block and nothing else.');
+//     runner.system('Only return javascript code suitable for executing in a Node VM sandbox. Do not return typescript.');
+
+//     // What is the goal?
+//     runner.user('Please select all records of the "system::user" type, and return the result.');
+
+//     async function vmFn(code: string) {
+//         let sandbox = { 
+//             console: console,
+//             searchAny: (object_name: string) => kernel.data.searchAny(object_name).then(toJSON),
+//             search404: (object_name: string, record_id: string) => kernel.data.search404(object_name, { id: record_id }).then(toJSON),
+//         };
+
+//         // Wrap the code in a function
+//         code = `function sandboxFn() {\n${ code }\n}\n\nsandboxFn();`
+
+//         console.warn('code', code);
+
+//         // Create the VM
+//         vm.createContext(sandbox); // Contextify the sandbox.
+
+//         try {
+//             return vm.runInContext(code, sandbox);
+//         } 
+        
+//         catch (err) {
+//             console.error('Failed to execute script.', err);
+//         }
+//     }
+
+//     // Run it
+//     let result = await runner.sync();
+//     // let result = `\`\`\`typescript
+//     // let records: Record[];
     
-});
+//     // try {
+//     //     records = await searchAny("system::user");
+//     // } catch (error) {
+//     //     console.log("Error while fetching records: ", error);
+//     //     throw error;
+//     // }
+    
+//     // return records;
+//     // \`\`\``;
+
+//     let result_code = result.substring("```javascript\n".length, result.length - "\n```".length);
+//     // let result_code = _.last(result.match(/^```typescript\n([\s\S]+)\n```$/i)) as string || '';
+
+//     console.warn('result', result);
+//     console.warn('result_code', result_code);
+
+//     // execute it
+//     let output = await vmFn(result_code);
+
+//     console.warn('output:', output);
+// });
 
