@@ -11,8 +11,8 @@ import { RouterRes } from '@typedefs/router-res';
 import { toJSON } from '@classes/helper';
 
 // Router for testing
-import RouterTest from '@routers/data-expire-all';
-import { Kernel } from '../kernels/kernel';
+import RouterTest from '@routers/system/data-expire-all';
+import { Kernel } from '@kernels/kernel';
 
 let kernel = new Kernel();
 

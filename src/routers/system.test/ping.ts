@@ -6,7 +6,7 @@ import { Router } from '@classes/router';
 // Implementation
 export default class extends Router {
     async run() {
-
+        return {  pong: new Date().toISOString() }
     }
 
     onRouterVerb() {
@@ -14,6 +14,6 @@ export default class extends Router {
     }
 
     onRouterPath() {
-        return '/api/test/:name';
+        return '/api/test/ping';
     }
 }
