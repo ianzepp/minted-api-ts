@@ -64,7 +64,7 @@ test.skip('evaluate code files and add comments', async () => {
     console.info('summary', summary);
 });
 
-test('evaluate the typedefs for the system', async () => {
+test.skip('evaluate the typedefs for the system', async () => {
     let typedefs = kernel.meta.objects.map(object => object.toTypedefs());
     let typedefs_text = typedefs.join('\n');
     
@@ -77,79 +77,34 @@ test('evaluate the typedefs for the system', async () => {
 });
 
 test.skip('write and execute code', async () => {
-    // TODO
+    let chat = await kernel.chat.chat('default', 'You are an expert javascript programmer');
+    
+    chat.send(kernel.data.selectAny('system::user').then(toJSON));
+    chat.send('Process the provided data and extract a unique set of user names. Write javascript that will execute inside of a Node VM content.');
+    chat.send('Return an array of string values as the result. You have the lodash library available as `_`.')
+
+    console.info('result:', await chat.exec());
 });
 
-// test('use the "typescript-expert" persona to write code', async () => {
-//     // Start a chat with the persona
-//     let runner = await kernel.chat.chat('typescript-expert');
+test.skip('generate fizz buzz program', async () => {
+    let manager = await kernel.chat.chat('default', 'You are an expert project manager, skilled in thinking step-by-step through problems and designing tasks to solve the problem.');
 
-//     // Train
-//     runner.system(`
-//         You have the following database functions available:
+    manager.system('The user will present you with a problem/project. Your job is to act as project manager. Think carefully and come up with a set of steps that will help you reach the goal.');
+    manager.system('Respond exclusively in raw JSON, in the following data structure: `[{ "role": "task", "content": "<your task or goal here>" }, ...]`');
+    manager.system('Always return an array of these tasks, or an empty array if you have no more tasks to pursue.');
 
-//         // Find all records of an object
-//         searchAny(object_name: string): Record[];
+    // Define the problem
+    manager.send('Create a program in javascript that runs the Fizz Buzz problem. Think step by step.');
 
-//         // Find a record of an object by record ID. Throws an error if the record cannot be found.
-//         search404(object_name: string, record_id: string): Record;
-//     `);
+    // Get the results
+    let chat = await kernel.chat.chat('default', 'You are a software engineer, skilled at executing granular tasks.');
 
-//     // Train
-//     runner.system('You should respond with the code only. The entire response should be a code block and nothing else.');
-//     runner.system('Only return javascript code suitable for executing in a Node VM sandbox. Do not return typescript.');
+    for(let task of JSON.parse(await manager.sync())) {
+        chat.send('Your next task is as follows:');
+        chat.send(task.content);
 
-//     // What is the goal?
-//     runner.user('Please select all records of the "system::user" type, and return the result.');
-
-//     async function vmFn(code: string) {
-//         let sandbox = { 
-//             console: console,
-//             searchAny: (object_name: string) => kernel.data.searchAny(object_name).then(toJSON),
-//             search404: (object_name: string, record_id: string) => kernel.data.search404(object_name, { id: record_id }).then(toJSON),
-//         };
-
-//         // Wrap the code in a function
-//         code = `function sandboxFn() {\n${ code }\n}\n\nsandboxFn();`
-
-//         console.warn('code', code);
-
-//         // Create the VM
-//         vm.createContext(sandbox); // Contextify the sandbox.
-
-//         try {
-//             return vm.runInContext(code, sandbox);
-//         } 
-        
-//         catch (err) {
-//             console.error('Failed to execute script.', err);
-//         }
-//     }
-
-//     // Run it
-//     let result = await runner.sync();
-//     // let result = `\`\`\`typescript
-//     // let records: Record[];
-    
-//     // try {
-//     //     records = await searchAny("system::user");
-//     // } catch (error) {
-//     //     console.log("Error while fetching records: ", error);
-//     //     throw error;
-//     // }
-    
-//     // return records;
-//     // \`\`\``;
-
-//     let result_code = result.substring("```javascript\n".length, result.length - "\n```".length);
-//     // let result_code = _.last(result.match(/^```typescript\n([\s\S]+)\n```$/i)) as string || '';
-
-//     console.warn('result', result);
-//     console.warn('result_code', result_code);
-
-//     // execute it
-//     let output = await vmFn(result_code);
-
-//     console.warn('output:', output);
-// });
+        // Run the sync
+        await chat.sync();
+    }
+});
 

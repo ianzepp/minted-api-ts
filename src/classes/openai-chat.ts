@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import axios from 'axios';
 import Debug from 'debug';
+import vm from 'vm';
 
 // Debug
 const debug = Debug('minted:openai-chat');
@@ -68,13 +69,17 @@ export class OpenAiChat {
     //
 
     completion(role: 'system' | 'user', content: string) {
-        this.queued.push({ role: role, content: content });
+        this.queued.push({ role, content });
         return this;
+    }
+
+    system(content: string) {
+        this.queued.push({ role: 'system', content })
     }
 
     send(... content_args: any) {
         content_args.forEach(content => {
-            this.queued.push({ role: 'user', content: content });  
+            this.queued.push({ role: 'user', content });  
         });
 
         return this;
@@ -167,5 +172,52 @@ export class OpenAiChat {
 
         // Return the result content
         return result.content;
+    }
+
+    async exec() {
+        // Build the vm function
+        async function vmFn(code: string) {
+            let requireFn = (name: string) => {
+                if (name === 'lodash') return _;
+                return undefined;
+            };
+
+            let sandbox = { 
+                require: requireFn,
+                console: console,
+                searchAny: (object_name: string) => this.kernel.data.searchAny(object_name).then(toJSON),
+                search404: (object_name: string, record_id: string) => this.kernel.data.search404(object_name, { id: record_id }).then(toJSON),
+            };
+
+            // Wrap the code in a function
+            code = `function sandboxFn() {\n${ code }\n}\n\nsandboxFn();`
+
+            console.warn('Executing:');
+            console.warn(code);
+            console.warn();
+
+            // Create the VM
+            vm.createContext(sandbox); // Contextify the sandbox.
+
+            try {
+                return vm.runInContext(code, sandbox);
+            } 
+            
+            catch (err) {
+                console.error('Failed to execute script.', err);
+            }
+        }
+        
+        // Run the sync process to get the generated code
+        let result: string = await this.sync();
+
+        // Match the code blocks
+        let pattern = /```javascript([\s\S]*?)```/g;
+        let matches;
+
+        while ((matches = pattern.exec(result)) !== null) {
+            let data = await vmFn(matches[1]);
+            console.warn('exec result:', data);
+        }
     }
 }
