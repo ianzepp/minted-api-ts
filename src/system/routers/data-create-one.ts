@@ -6,14 +6,18 @@ import { Router, RouterInit } from '@system/classes/router';
 // Implementation
 export default class extends Router {
     async run({ kernel, params, body }: RouterInit) {
-        return kernel.data.search404('system::imap', { name: params.record });
+        return kernel.data.createOne(params.object, body);
     }
 
     onRouterVerb() {
-        return 'GET';
+        return 'POST';
     }
 
     onRouterPath() {
-        return '/api/imap/:message';
+        return '/api/data/:object';
+    }
+
+    isRouterBody(body: unknown) {
+        return typeof body === 'object';
     }
 }

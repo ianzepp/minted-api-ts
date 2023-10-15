@@ -1,16 +1,16 @@
 import _ from 'lodash';
 
 // API
-import { Router } from '@system/classes/router';
+import { Router, RouterInit } from '@system/classes/router';
 
 // Implementation
 export default class extends Router {
-    async run() {
-        return this.kernel.data.expireIds(this.req.params.object, [this.req.params.record]);
+    async run({ kernel, params, body }: RouterInit) {
+        return kernel.data.expireIds(params.object, [params.record]);
     }
 
     onRouterVerb() {
-        return Router.Verb.Delete;
+        return 'DELETE';
     }
 
     onRouterPath() {

@@ -28,31 +28,32 @@ export default class extends Action {
         return true;
     }
 
-    async startup(signal: Signal): Promise<void> {
-        let created_at = new Date().toISOString();
-        let created_by = signal.kernel.uuid();
+    async run({ kernel, object, change }: Signal) {
+        let created_at = kernel.time;
+        let created_by = kernel.user_id;
 
-        // Set ID and namespace. It is possible they are already set, if we are running as root and
-        // the root user supplied the IDs. 
-        //
-        // See the testing / precheck login in `test-create.ts`.
-        let is_root = signal.kernel.isRoot();
+        // Track change `data` and `meta` for the eventual insert op
+        let record_data = [];
+        let record_meta = [];
 
-        signal.change.forEach(record => {
+        // If running as root, set the default user
+        let is_root = kernel.isRoot();
+
+        change.forEach(record => {
             if (is_root) {
-                record.data.id = record.data.id ?? signal.kernel.uuid();
-                record.data.ns = record.data.ns ?? signal.kernel.user_ns;
+                record.data.id = record.data.id ?? kernel.uuid();
+                record.data.ns = record.data.ns ?? kernel.user_ns;
 
                 // Created info may already exist
                 record.meta.created_at = record.meta.created_at ?? created_at;
                 record.meta.created_by = record.meta.created_by ?? created_by;
 
-                // The other meta tpyes may or may not be passed in by root
+                // The other meta types may or may not be passed in by root
             }
 
             else {
-                record.data.id = signal.kernel.uuid();
-                record.data.ns = signal.kernel.user_ns;
+                record.data.id = kernel.uuid();
+                record.data.ns = kernel.user_ns;
 
                 // Standard timestamps
                 record.meta.created_at = created_at;
@@ -63,19 +64,23 @@ export default class extends Action {
                 record.meta.updated_by = null;
                 record.meta.expired_at = null;
                 record.meta.expired_by = null;
-                record.meta.deleted_at = null;
-                record.meta.deleted_by = null;
+                record.meta.created_at = null;
+                record.meta.created_by = null;
             }
+
+            // Add to the lists
+            record_data.push(_.assign({}, record.data));
+            record_meta.push(_.assign({}, record.meta, { id: record.data.id, ns: record.data.ns }));
         });
-    }
 
-    async run(signal: Signal): Promise<void> {
-        let creates_data = await signal.kernel.knex
-            .driverTo(signal.object.system_name, 'data')
-            .insert(signal.change_data);
+        // Create `data`
+        let creates_data = await kernel.knex
+            .driverTo(object.system_name, 'data')
+            .insert(record_data);
 
-        let creates_meta = await signal.kernel.knex
-            .driverTo(signal.object.system_name, 'meta')
-            .insert(signal.change_meta);
+        // Create `meta`
+        let creates_meta = await kernel.knex
+            .driverTo(object.system_name, 'meta')
+            .insert(record_meta);        
     }
 }

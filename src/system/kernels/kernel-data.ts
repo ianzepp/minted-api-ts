@@ -14,6 +14,7 @@ import { FilterJson } from '@system/typedefs/filter';
 import { ActionRing } from '@system/typedefs/action';
 import { ObjectName } from '@system/typedefs/object';
 import { SignalOp } from '@system/typedefs/signal';
+import { SignalRunner } from '@src/system/classes/signal';
 
 // Data API errors
 export class DataError extends Error {};
@@ -85,16 +86,11 @@ export class KernelData {
         // Convert the raw change data into records
         let change = change_data.map(change => object.toRecord(change));
 
-        // Build the signal
-        let signal = new Signal(this.kernel, object, change, filter, op);
+        // Broadcast the signal
+        let runner = new SignalRunner();
 
-        // Cycle through rings 0 - 9
-        for (let ring = 0 as ActionRing; ring <= 9; ring++) {
-            await signal.run(ring);
-        }
-
-        // Done
-        return signal.change;
+        // Run and return the set of changes
+        return runner.run({ kernel: this.kernel, object, change, filter, op });
     }
     
     //

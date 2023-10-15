@@ -10,7 +10,7 @@ export default class extends Router {
     }
 
     onRouterVerb() {
-        return Router.Verb.Get;
+        return 'GET';
     }
 
     onRouterPath() {

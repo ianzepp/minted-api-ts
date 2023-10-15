@@ -1,13 +1,14 @@
 import _ from 'lodash';
+import chai from 'chai';
 
 // Classes
 import { Action } from '@system/classes/action';
 import { Signal } from '@system/classes/signal';
+import { Record } from '@src/system/classes/record';
 
 // Typedefs
 import { ActionRing } from '@system/typedefs/action';
 import { ObjectType } from '@system/typedefs/object';
-
 
 export default class extends Action {
     toName(): string {
@@ -34,12 +35,12 @@ export default class extends Action {
         return true;
     }
 
-    async run(signal: Signal): Promise<void> {
-        for(let record of signal.change) {
-            let object_name = record.data.name;
+    isSeries(): boolean {
+        return true;
+    }
 
-            signal.expect(object_name, `object_name '${object_name}'`).match(/^[a-z_0-9]+$/i);
-            signal.expect(object_name, `object_name '${object_name}'`).not.match(/^[_0-9]/i);
-        }
+    async one(signal: Signal, record: Record) {
+        record.expect('name').match(/^[a-z_0-9]+$/i);
+        record.expect('name').not.match(/^[_0-9]/i);
     }
 }

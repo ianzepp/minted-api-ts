@@ -1,7 +1,7 @@
 import path from 'path';
 
 // Classes
-import { Signal } from '@system/classes/signal';
+import { Signal } from '@src/system/classes/signal';
 import { Record } from '@system/classes/record';
 
 // Typedefs

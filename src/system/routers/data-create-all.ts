@@ -1,26 +1,23 @@
 import _ from 'lodash';
 
 // API
-import { Router } from '@system/classes/router';
-import { ChangeData } from '@system/typedefs/record';
+import { Router, RouterInit } from '@system/classes/router';
 
 // Implementation
 export default class extends Router {
-    async run() {
-        if (this.req.body instanceof Array) {
-            return this.kernel.data.createAll(this.req.params.object, this.req.body);
-        }
-
-        else {
-            return this.kernel.data.createOne(this.req.params.object, this.req.body);        
-        }
+    async run({ kernel, params, body }: RouterInit) {
+        return kernel.data.createAll(params.object, body);
     }
 
     onRouterVerb() {
-        return Router.Verb.Post;
+        return 'POST';
     }
 
     onRouterPath() {
         return '/api/data/:object';
+    }
+
+    isRouterBody(body: unknown) {
+        return body instanceof Array;
     }
 }

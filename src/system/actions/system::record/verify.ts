@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import chai from 'chai';
 
 // Classes
 import { Column } from '@system/classes/column';
@@ -35,7 +36,6 @@ export default class extends Action {
     }
 
     async run(signal: Signal): Promise<void> {
-
         for(let record of signal.change) {
             //
             // Per record
@@ -77,7 +77,7 @@ export default class extends Action {
             return;
         }
 
-        signal.failures.push(`E_ID_EXISTS: A record should not have an ID when being created: found '${ record.data.id }'.`);
+        chai.assert.fail(`E_ID_EXISTS: A record should not have an ID when being created: found '${ record.data.id }'.`);
     }
 
     test_data_ns(signal: Signal, record: Record) {
@@ -93,7 +93,7 @@ export default class extends Action {
             return;
         }
 
-        signal.failures.push(`E_NS_EXISTS: On create: a record should not have an namespace. Found '${ record.data.ns }'.`);
+        chai.assert.fail(`E_NS_EXISTS: On create: a record should not have an namespace. Found '${ record.data.ns }'.`);
     }
 
     test_data_required(signal: Signal, record: Record, column: Column) {
@@ -107,7 +107,7 @@ export default class extends Action {
             return;
         }
 
-        signal.failures.push(`E_DATA_REQUIRED: A record of type '${ column.object_name }' requires a value in '${ column.column_name }'`);
+        chai.assert.fail(`E_DATA_REQUIRED: A record of type '${ column.object_name }' requires a value in '${ column.column_name }'`);
     }
 
     test_data_minimum(signal: Signal, record: Record, column: Column) {
@@ -125,7 +125,7 @@ export default class extends Action {
             return;
         }
 
-        signal.failures.push(`On create: a record of type '${ column.object_name}' with a value in '${ column.column_name }' must have a value greater-or-equal to '${ column.minimum }'`);
+        chai.assert.fail(`On create: a record of type '${ column.object_name}' with a value in '${ column.column_name }' must have a value greater-or-equal to '${ column.minimum }'`);
     }
 
     test_data_maximum(signal: Signal, record: Record, column: Column) {
@@ -143,6 +143,6 @@ export default class extends Action {
             return;
         }
 
-        signal.failures.push(`On create: a record of type '${ column.object_name}' with a value in '${ column.column_name }' must have a value less-or-equal to '${ column.maximum }'`);
+        chai.assert.fail(`On create: a record of type '${ column.object_name}' with a value in '${ column.column_name }' must have a value less-or-equal to '${ column.maximum }'`);
     }
 }

@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import util from 'util';
 import chai from 'chai';
-import debug from 'debug';
 
 // UUID is a common requirement
 import { v4 as uuid } from 'uuid';
@@ -15,6 +14,15 @@ import { KernelMeta } from '@system/kernels/kernel-meta';
 import { KernelUser } from '@system/kernels/kernel-user';
 import { KernelSmtp } from '@system/kernels/kernel-smtp';
 
+// Preloader
+import { Action } from '@system/classes/action';
+import { Router } from '@system/classes/router';
+import { Preloader } from '@system/classes/preloader';
+
+export const KernelActions = Preloader.from<Action>('./src/*/actions/*.ts');
+export const KernelRouters = Preloader.from<Router>('./src/*/routers/*.ts');
+
+// Match UUIDs
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
 export class Kernel {
@@ -79,12 +87,61 @@ export class Kernel {
     }
 
     //
-    // Methods
+    // Route an API request
     //
 
-    emit(cn, fn, ... messages) {
-        debug(cn + ':' + fn)(util.format(... messages));
+    async route(req: Request) {
+        // Read the body data
+        let request_type = (req.headers.get('Content-Type') || '').split(';');
+        let request_body: any = undefined;
+
+        try {
+            if (request_type.includes('application/json')) {
+                request_body = await req.json();
+            }
+
+            if (request_type.includes('text/plain')) {
+                request_body = await req.text();
+            }
+
+            if (request_type.includes('multipart/form-data')) {
+                request_body = await req.formData();
+            }        
+        }
+
+        catch (error) {
+            return new Response(error.message, { status: 500 });
+        }
+
+        // 
+        // Find and execute the right router. The `router.try()` method is already wrapped in
+        // an internal try/catch block, so we should never have to handle an error here.
+        //
+
+        try {
+            let router_url = new URL(req.url);
+            let router = KernelRouters.find(r => r.is(req.method, router_url.pathname, request_body));
+
+            // Router not found?
+            if (router === undefined) {
+                return new Response(router_url.pathname, { status: 404 });
+            }
+
+            return router.try(this, req, request_body);
+        }
+
+        catch (error) {
+            console.error('Error executing the selected router for:', req.method, req.url);
+            console.error(error.stack || error);
+
+            // Done
+            return new Response(error.stack || error.message || error, { status: 500 });
+        }
     }
+
+    //
+    // Methods
+    //
 
     isRoot(): boolean {
         return this.sudo_chain.length === 0 

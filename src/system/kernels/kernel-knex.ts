@@ -23,13 +23,11 @@ export class KernelKnex {
     async startup(): Promise<void> {
         if (this.kernel.isNodeTest()) {
             this.db = KnexDriverFn();
-            await this.transaction();
         }
     }
 
     async cleanup(): Promise<void> {
         if (this.kernel.isNodeTest()) {
-            await this.revert();
             await this.db.destroy();
         }
     }
@@ -39,23 +37,42 @@ export class KernelKnex {
     //
 
     async transaction() {
-        if (this.tx !== undefined) {
-            throw new Error('Transaction already started!');
+        if (this.tx === undefined) {
+            this.tx = await this.db.transaction();
         }
-
-        this.tx = await this.db.transaction();
     }
 
     async commit() {
-        if (this.tx && this.tx.isCompleted() === false) {
+        if (this.tx === undefined) {
+            // nothing to do
+        }
+        
+        else if (this.tx.isCompleted()) {
+            // Nothing to do
+        }
+
+        else if (this.kernel.isNodeTest()) {
+            await this.tx.rollback();
+        }
+
+        else {
             await this.tx.commit();
         }
 
+        // Reset
         this.tx = undefined;
     }
 
     async revert() {
-        if (this.tx && this.tx.isCompleted() === false) {
+        if (this.tx === undefined) {
+            // nothing to do
+        }
+        
+        else if (this.tx.isCompleted()) {
+            // Nothing to do
+        }
+
+        else {
             await this.tx.rollback();
         }
 
@@ -82,7 +99,7 @@ export class KernelKnex {
     // Direct DB/TX methods
     //
 
-    driverTo(object_name: string, type: 'data' | 'meta' | 'acls '= 'data') {
+    driverTo(object_name: string, type: 'data' | 'meta' | 'acls '= 'data', record_ids?: string[]) {
         let knex: Knex.QueryBuilder;
 
         if (type === 'data') {
@@ -96,6 +113,11 @@ export class KernelKnex {
         // Apply namespace visibility
         if (this.kernel.isRoot() === false) {
             knex = knex.whereIn(`${ type }.ns`, this.kernel.namespaces);
+        }
+
+        // Apply specific record IDs?
+        if (record_ids && record_ids.length) {
+            knex = knex.whereIn('id', record_ids);
         }
 
         // Done
