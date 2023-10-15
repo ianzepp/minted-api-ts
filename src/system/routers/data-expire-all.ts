@@ -16,4 +16,8 @@ export default class extends Router {
     onRouterPath() {
         return '/api/data/:object';
     }
+
+    isRouterBody(body: unknown) {
+        return _.isArray(body);
+    }
 }

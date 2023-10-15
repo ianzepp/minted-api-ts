@@ -6,14 +6,14 @@ import { Router, RouterInit } from '@system/classes/router';
 // Implementation
 export default class extends Router {
     async run({ kernel, params, body }: RouterInit) {
-        return kernel.data.selectAny(params.object, body);
+        return kernel.data.expireOne(params.object, { id: params.record });
     }
 
     onRouterVerb() {
-        return 'GET';
+        return 'DELETE';
     }
 
     onRouterPath() {
-        return '/api/data/:object';
+        return '/api/data/:object/:record';
     }
 }

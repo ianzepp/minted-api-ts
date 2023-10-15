@@ -9,7 +9,7 @@ export class Preloader {
 
         // Build the list of routers
         return _.chain(export_list)
-            // Ignore test cases
+            // Ignore things
             .reject(filename => filename.endsWith('.spec.ts'))
 
             // Load the file

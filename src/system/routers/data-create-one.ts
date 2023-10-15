@@ -18,6 +18,6 @@ export default class extends Router {
     }
 
     isRouterBody(body: unknown) {
-        return typeof body === 'object';
+        return _.isPlainObject(body);
     }
 }

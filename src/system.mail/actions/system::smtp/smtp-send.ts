@@ -49,7 +49,7 @@ export default class extends Action {
     // Execute one record
     //
 
-    async one(signal: Signal, record: Record): Promise<void> {
+    async one({ kernel }: Signal, record: Record): Promise<void> {
         debug('sending for record ID', record.data.id);
 
         let mail = {
@@ -67,6 +67,6 @@ export default class extends Action {
         debug('mail sent', info);
 
         // Delete the message now that it is sent.
-        await signal.kernel.data.deleteOne(record.object.system_name, record);
+        await kernel.data.deleteOne(record.object.system_name, record);
     }
 }

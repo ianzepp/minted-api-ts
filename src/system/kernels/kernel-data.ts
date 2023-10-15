@@ -20,8 +20,6 @@ import { SignalRunner } from '@src/system/classes/signal';
 export class DataError extends Error {};
 export class RecordFoundError extends DataError {};
 export class RecordNotFoundError extends DataError {};
-export class RecordColumnImmutableError extends DataError {};
-export class RecordColumnRequiredError extends DataError {};
 
 // Debug messages
 const debug = Debug('minted:kernel-data');
@@ -36,21 +34,11 @@ function head404<T>(result: T[]): T {
     let r = _.head(result);
 
     if (r === undefined) {
-        throw new RecordNotFoundError();
+        throw new Error('404');
     }
 
     return r;
 }
-
-// Opposite of `head404`. Throws an error if a result is found
-function headNot<T>(result: T[]): void {
-    let r = _.head(result);
-
-    if (r !== undefined) {
-        throw new RecordFoundError();
-    }
-}
-
 
 // Implementation
 export class KernelData {
@@ -86,7 +74,7 @@ export class KernelData {
         // Convert the raw change data into records
         let change = change_data.map(change => object.toRecord(change));
 
-        // Broadcast the signal
+        // Broadcast
         let runner = new SignalRunner();
 
         // Run and return the set of changes
@@ -97,6 +85,7 @@ export class KernelData {
     // Collection record methods
     //
 
+    /** Reselect all records by passing in an existing list of records */
     async selectAll(object_name: Object | ObjectName, source_data: ChangeData[]): Promise<Record[]> {
         let object = this.kernel.meta.lookup(object_name);
         let source = source_data.map(change => object.toRecord(change).data.id);
@@ -128,6 +117,7 @@ export class KernelData {
     // Single record methods
     //
 
+    /** Reselect one record by passing in an existing record */
     async selectOne(object_name: Object | ObjectName, source_data: ChangeData): Promise<Record | undefined> {
         return this.selectAll(object_name, [source_data]).then(headOne<Record>);
     }
@@ -166,10 +156,6 @@ export class KernelData {
 
     async search404(object_name: Object | ObjectName, where?: _.Dictionary<any>, order?: _.Dictionary<string>): Promise<Record> {
         return this.selectAny(object_name, { where: where, order: order, limit: 1 }).then(head404);
-    }
-
-    async searchNot(object_name: Object | ObjectName, where?: _.Dictionary<any>, order?: _.Dictionary<string>, limit?: number): Promise<void> {
-        return this.selectAny(object_name, { where: where, order: order, limit: limit }).then(headNot);
     }
 
     async searchNew(object_name: Object | ObjectName, created_at: string): Promise<Record[]> {

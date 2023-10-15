@@ -7,6 +7,8 @@ import UrlParse from 'url-parse';
 import { Kernel } from '@system/kernels/kernel';
 import { ResponseCORS } from '@system/classes/response-cors';
 import { ResponseStatusText } from '@system/classes/response-status-text';
+import { toJSON } from './helper';
+import { RecordNotFoundError } from '../kernels/kernel-data';
 
 export interface RouterInit {
     kernel: Kernel,
@@ -15,19 +17,25 @@ export interface RouterInit {
     body: any;
 }
 
+export interface RouterDone {
+    code: number;
+    body: any;
+}
+
 export class Router {
     async try(kernel: Kernel, req: Request, body: any): Promise<Response> {
-        let result_code: number;
-        let result_data: any;
-        let result_type: string = this.toContentType();
+        let router_done: RouterDone = {
+            code: 0,
+            body: null
+        };
 
-        console.warn('router.try():', req.method, req.url);
+        // Parse the URL
+        let url = new UrlParse(req.url, true);
+
+        // console.warn('router.try():', req.method, req.url, url.query);
 
         // Start processing
         try {
-            // Parse the URL
-            let url = new UrlParse(req.url, true);
-
             // Build the router runtime config
             let config = {
                 kernel: kernel,
@@ -43,8 +51,8 @@ export class Router {
             await kernel.knex.transaction();
 
             // Run
-            result_data = await this.run(config);
-            result_code = 200;
+            router_done.body = await this.run(config);
+            router_done.code = 200;
 
             // Commit or revert the transaction?
             await kernel.knex.commit();
@@ -54,12 +62,18 @@ export class Router {
             // Rollback the transaction
             await kernel.knex.revert();
 
-            // Set the error response
-            result_data = { error: error.stack || error.message || error };
-            result_code = 500;
+            console.error(error);
 
-            // Testing?
-            console.error(result_data.error);
+            // Set the error response
+            if (error instanceof Error && error.message && error.message.match(/^[0-9]{3}$/)) {
+                router_done.code = parseInt(error.message); // 300, or 404, or 500, or ...
+                router_done.body = error;
+            }
+
+            else {
+                router_done.code = 500;
+                router_done.body = error;
+            }
         }
 
         finally {
@@ -67,24 +81,9 @@ export class Router {
             await kernel.cleanup();
         }
 
-        // Stringify the response data?
-        try {
-            if (result_type === 'application/json') {
-                result_data = JSON.stringify(result_data);
-            }
-        }
-
-        catch (error) {
-            result_data = 'Error when executing "JSON.stringify" on the original response. Error details: ' + error;
-            result_code = 500;
-            result_type = 'text/plain';
-        }
-
         // Return
-        return new ResponseCORS(JSON.stringify(result_data), {
-            status: result_code,
-            statusText: ResponseStatusText[result_code],
-            headers: { 'Content-Type': result_type }
+        return ResponseCORS.from(200, JSON.stringify(router_done), { 
+            headers: { 'Content-Type': 'application/json' }
         });
 }
 

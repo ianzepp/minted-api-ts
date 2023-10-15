@@ -31,7 +31,7 @@ export default class extends Action {
         return true;
     }
 
-    async one(signal: Signal, record: Record) {
+    async one({ kernel }: Signal, record: Record) {
         // Sanity
         record.expect('name').a('string');
         record.expect('name').not.contains('.');
@@ -40,7 +40,7 @@ export default class extends Action {
         let object = Object.from(record.data);
 
         // Delete related columns
-        await signal.kernel.data.deleteAny(ObjectType.Column, {
+        await kernel.data.deleteAny(ObjectType.Column, {
             where: {
                 $or: [
                     { name: `${ object.system_name }.%` },
@@ -50,6 +50,6 @@ export default class extends Action {
         });
 
         // Create the empty table with no default columns
-        await signal.kernel.knex.deleteTable(object.system_name);
+        await kernel.knex.deleteTable(object.system_name);
     }
 }

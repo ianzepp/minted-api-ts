@@ -18,6 +18,7 @@ import { KernelSmtp } from '@system/kernels/kernel-smtp';
 import { Action } from '@system/classes/action';
 import { Router } from '@system/classes/router';
 import { Preloader } from '@system/classes/preloader';
+import { ResponseCORS } from '../classes/response-cors';
 
 export const KernelActions = Preloader.from<Action>('./src/*/actions/*.ts');
 export const KernelRouters = Preloader.from<Router>('./src/*/routers/*.ts');
@@ -69,6 +70,7 @@ export class Kernel {
     }
 
     async cleanup(): Promise<void> {
+        // Shut down
         await this.bulk.cleanup();
         await this.chat.cleanup();
         await this.smtp.cleanup();
@@ -90,27 +92,40 @@ export class Kernel {
     // Route an API request
     //
 
+    async safe(promise: Promise<any>, defaultTo: any) {
+    }
+
     async route(req: Request) {
         // Read the body data
         let request_type = (req.headers.get('Content-Type') || '').split(';');
         let request_body: any = undefined;
 
         try {
-            if (request_type.includes('application/json')) {
+            if (req.method === 'GET') {
+                // no body processing for GET requests
+            }
+            
+            else if (request_type.includes('application/json')) {
                 request_body = await req.json();
             }
 
-            if (request_type.includes('text/plain')) {
+            else if (request_type.includes('text/plain')) {
                 request_body = await req.text();
             }
 
-            if (request_type.includes('multipart/form-data')) {
+            else if (request_type.includes('multipart/form-data')) {
                 request_body = await req.formData();
-            }        
+            }
         }
 
         catch (error) {
-            return new Response(error.message, { status: 500 });
+            console.error(error);
+
+            if (error instanceof SyntaxError && req.method === 'GET') {
+                return ResponseCORS.from(400, error.message + ': Did you include a "Content-Type" with a "GET" request?');
+            }
+
+            return ResponseCORS.from(400, error.message);
         }
 
         // 
@@ -124,7 +139,7 @@ export class Kernel {
 
             // Router not found?
             if (router === undefined) {
-                return new Response(router_url.pathname, { status: 404 });
+                return ResponseCORS.from(404, router_url.pathname);
             }
 
             return router.try(this, req, request_body);
@@ -135,7 +150,7 @@ export class Kernel {
             console.error(error.stack || error);
 
             // Done
-            return new Response(error.stack || error.message || error, { status: 500 });
+            return ResponseCORS.from(500, error.stack || error.message || error);
         }
     }
 

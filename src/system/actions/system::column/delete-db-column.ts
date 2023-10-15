@@ -32,17 +32,17 @@ export default class extends Action {
         return true;
     }
 
-    async one(signal: Signal, record: Record): Promise<void> {
+    async one({ kernel }: Signal, record: Record): Promise<void> {
         // Sanity
         record.expect('name').a('string');
         record.expect('name').contains('.');
 
         // Find the parent object
         let column = Column.from(record.data);
-        let object = signal.kernel.meta.lookup(column.object_name);
+        let object = kernel.meta.lookup(column.object_name);
 
         // Drop column
-        await signal.kernel.knex.updateTable(object.system_name, t => {
+        await kernel.knex.updateTable(object.system_name, t => {
             t.dropColumn(column.system_name);
         });
     }

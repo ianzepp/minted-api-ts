@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import chai from 'chai';
+import chai, { AssertionError } from 'chai';
 
 // Bun:test
 import { beforeEach, afterEach, test } from "bun:test";
@@ -203,7 +203,7 @@ test('selectIds() with invalid IDs', async () => {
 test('select404() with null ID should fail !!', async () => {
     let select = await kernel.data.select404(object_type, null)
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error).instanceOf(RecordNotFoundError));
+        .catch(error => chai.expect(error).property('message', '404'));
 });
 
 test('select404() with valid ID', async () => {
@@ -215,7 +215,7 @@ test('select404() with valid ID', async () => {
 test('select404() with invalid ID should fail !!', async () => {
     let select = await kernel.data.select404(object_type, kernel.uuid())
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error).instanceOf(RecordNotFoundError));
+        .catch(error => chai.expect(error).property('message', '404'));
 });
 
 // create
@@ -315,7 +315,7 @@ test('updateOne() with sources', async () => {
 test('updateOne() with an empty object should fail !!', async () => {
     await kernel.data.updateOne(object_type, {})
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error).instanceOf(DataError));
+        .catch(error => chai.expect(error).instanceOf(AssertionError));
 });
 
 test('updateAny() with a valid filter and change data', async () => {

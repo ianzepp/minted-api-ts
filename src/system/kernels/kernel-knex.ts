@@ -23,11 +23,13 @@ export class KernelKnex {
     async startup(): Promise<void> {
         if (this.kernel.isNodeTest()) {
             this.db = KnexDriverFn();
+            this.tx = await this.db.transaction();
         }
     }
 
     async cleanup(): Promise<void> {
         if (this.kernel.isNodeTest()) {
+            await this.revert();
             await this.db.destroy();
         }
     }
@@ -37,42 +39,19 @@ export class KernelKnex {
     //
 
     async transaction() {
-        if (this.tx === undefined) {
-            this.tx = await this.db.transaction();
-        }
+        this.tx = await this.db.transaction();
     }
 
     async commit() {
-        if (this.tx === undefined) {
-            // nothing to do
-        }
-        
-        else if (this.tx.isCompleted()) {
-            // Nothing to do
-        }
-
-        else if (this.kernel.isNodeTest()) {
-            await this.tx.rollback();
-        }
-
-        else {
+        if (this.tx && this.tx.isCompleted() === false) {
             await this.tx.commit();
         }
 
-        // Reset
         this.tx = undefined;
     }
 
     async revert() {
-        if (this.tx === undefined) {
-            // nothing to do
-        }
-        
-        else if (this.tx.isCompleted()) {
-            // Nothing to do
-        }
-
-        else {
+        if (this.tx && this.tx.isCompleted() === false) {
             await this.tx.rollback();
         }
 
