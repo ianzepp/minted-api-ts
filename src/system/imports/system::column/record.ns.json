@@ -1,5 +1,5 @@
 {
-    "type": "column",
+    "type": "system::column",
     "data": {
         "ns": "system",
         "name": "record.ns",

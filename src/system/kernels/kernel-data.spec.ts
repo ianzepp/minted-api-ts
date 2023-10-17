@@ -246,7 +246,7 @@ test('createAll() missing required data should fail !!', async () => {
     let source = _.assign({}, _.omit(source_data[0], 'name'));
     let result = await kernel.data.createAll(object_type, [source])
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error.message).includes('E_DATA_REQUIRED'));
+        .catch(error => chai.expect(error.message).includes("to have property 'name'"));
 });
 
 test('createAll() with unknown columns should fail !!', async () => {
@@ -273,7 +273,7 @@ test('createOne() missing required data should fail !!', async () => {
     let source = _.assign({}, _.omit(source_data[0], 'name'));
     let result = await kernel.data.createOne(object_type, source)
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error.message).includes('E_DATA_REQUIRED'));
+        .catch(error => chai.expect(error.message).includes("to have property 'name'"));
 });
 
 test('createOne() with unknown columns should fail !!', async () => {

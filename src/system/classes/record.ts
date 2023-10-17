@@ -42,31 +42,20 @@ function createProxy(object: Object, source_type: 'data' | 'meta' | 'acls') {
     }
 
     let assertFn = (column_name: string, op: 'get' | 'set') => {
-        if (source_type === 'data' && column_name === 'id') {
-            return;
+        if (source_type === 'data') {
+            if (['id', 'ns', 'name'].includes(column_name)) return;
+            if (object.exists(column_name)) return;
         }
 
-        if (source_type === 'data' && column_name === 'ns') {
-            return;
+        if (source_type === 'meta') {
+            if (ColumnsMeta.includes(column_name)) return;
         }
 
-        if (source_type === 'data' && column_name === 'name') {
-            return;
+        if (source_type === 'acls') { 
+            if (ColumnsAcls.includes(column_name)) return;
         }
 
-        if (source_type === 'data' && object.has(column_name)) {
-            return;
-        }
-
-        if (source_type === 'meta' && ColumnsMeta.includes(column_name)) {
-            return;
-        }
-
-        if (source_type === 'acls' && ColumnsAcls.includes(column_name)) {
-            return;
-        }
-
-        throw new Error(`Object '${object.object_name}' accessor '${ op }' on column '${column_name}' is invalid for 'record.${source_type}'`);
+        throw new Error(`Column name "${ column_name }" is invalid for the object type "${ object.system_name }" on "record.${ source_type }"`);
     }
 
     // Build and return the new Proxy
@@ -197,7 +186,11 @@ export class Record {
         return this.data[column.column_name] = data;
     }
 
-    expect(column_name: string, accessor: 'data' | 'meta' | 'acls' = 'data') {
-        return chai.expect(this[accessor], this.reference + `: property '${ column_name }'`).property(column_name);
+    expect(column: Column | string, accessor: 'data' | 'meta' | 'acls' = 'data') {
+        if (column instanceof Column) {
+            column = column.column_name;
+        }
+
+        return chai.expect(this[accessor], this.reference + `: property '${ column }'`).property(column);
     }
 }

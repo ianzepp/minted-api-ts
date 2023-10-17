@@ -78,6 +78,9 @@ export interface RecordAcls {
 
 /** Represents the record's JSON representation in object format. */
 export interface RecordJson {
+    /** The string value of the parent object type */
+    type: string;
+    
     /** Accessor to the key/value mapping of record properties with their values. */
     data: RecordData;
 

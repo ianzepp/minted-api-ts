@@ -1,5 +1,8 @@
 import _ from 'lodash';
-import chai from 'chai';
+import Debug from 'debug';
+
+// Debugger
+const debug = Debug('minted:system:signal-runner');
 
 // Classes
 import { Action } from "./action";
@@ -8,6 +11,7 @@ import { Preloader } from "./preloader";
 import { Kernel } from '../kernels/kernel';
 import { Object } from './object';
 import { Filter } from './filter';
+import { sign } from 'jsonwebtoken';
 
 // Build the preloaded actions
 const Actions = Preloader.from<Action>('./src/*/actions/**/*.ts');
@@ -39,18 +43,8 @@ export class SignalRunner {
             // Negative checks
             //
 
-            // Wrong client namespace?
-            if (action.onDomain() != '*' && action.onDomain() !== signal.kernel.user_ns) {
-                return false;
-            }
-
-            // Wrong object name?
-            if (action.onObject() != '*' && action.onObject() !== signal.object.system_name) {
-                return false;
-            }
-
-            // Don't run for test cases?
-            if (action.onTest() === false && signal.kernel.isNodeTest()) {
+            // Action object does not match the signal object?
+            if (signal.object.inherits(action.onObject()) === false) {
                 return false;
             }
 
@@ -58,27 +52,27 @@ export class SignalRunner {
             // Positive checks
             //
 
-            if (action.onSelect() && signal.op == SignalOp.Select) {
+            if (signal.op == SignalOp.Select && action.onSelect()) {
                 return true;
             }
 
-            if (action.onCreate() && signal.op == SignalOp.Create) {
+            if (signal.op == SignalOp.Create && action.onCreate()) {
                 return true;
             }
 
-            if (action.onUpdate() && signal.op == SignalOp.Update) {
+            if (signal.op == SignalOp.Update && action.onUpdate()) {
                 return true;
             }
 
-            if (action.onUpsert() && signal.op == SignalOp.Upsert) {
+            if (signal.op == SignalOp.Upsert && action.onUpsert()) {
                 return true;
             }
 
-            if (action.onExpire() && signal.op == SignalOp.Expire) {
+            if (signal.op == SignalOp.Expire && action.onExpire()) {
                 return true;
             }
 
-            if (action.onDelete() && signal.op == SignalOp.Delete) {
+            if (signal.op == SignalOp.Delete && action.onDelete()) {
                 return true;
             }
 
@@ -86,8 +80,11 @@ export class SignalRunner {
             return false;
         });
 
-        // Group the matching actions by ring
-        let actions_ring = _.groupBy(actions, a => a.onRing());
+        // Sort by rank
+        let actions_rank = _.sortBy(actions, a => a.onRank());
+
+        // Group by ring
+        let actions_ring = _.groupBy(actions_rank, a => a.onRing());
 
         // Iterate rings, then actions in those rings
         for(let ring of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
@@ -103,6 +100,10 @@ export class SignalRunner {
     }
 
     async try(signal: Signal, action: Action) {
+        if (process.env.DEBUG) {
+            debug(`try action: op="${ signal.op }" ring="${ action.onRing() }" rank="${ action.onRank() }" action="${ action.toPackageName() }"`);
+        }
+
         try {
             // Switch into root?
             if (action.asRoot()) {

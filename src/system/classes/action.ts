@@ -1,7 +1,7 @@
 import path from 'path';
 
 // Classes
-import { Signal } from '@src/system/classes/signal';
+import { Signal } from '@system/classes/signal';
 import { Record } from '@system/classes/record';
 
 // Typedefs
@@ -27,7 +27,6 @@ export class Action {
             'on_ring': this.onRing(),
             'on_rank': this.onRank(),
             'on_root': this.onRoot(),
-            'on_test': this.onTest(),
             'on_select': this.onSelect(),
             'on_create': this.onCreate(),
             'on_update': this.onUpdate(),
@@ -49,8 +48,8 @@ export class Action {
         return '<undefined>';
     }
 
-    toFileName(): string {
-        return path.basename(this.toName());
+    toPackageName(): string {
+        return this.toName().replace(path.resolve('./src') + '/', '@');
     }
 
     /**
@@ -90,14 +89,6 @@ export class Action {
      * @returns {boolean} - True by default
      */
     onRoot(): boolean {
-        return true;
-    }
-
-    /**
-     * Method to get if the action should run when `test` is executing
-     * @returns {boolean} - True by default
-     */
-    onTest(): boolean {
         return true;
     }
 

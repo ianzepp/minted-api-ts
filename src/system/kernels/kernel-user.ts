@@ -6,6 +6,8 @@ import { ObjectType } from '@system/typedefs/object';
 
 // Implementation
 export class KernelUser {
+    private readonly data: _.Dictionary<any> = {};
+
     constructor(private readonly kernel: Kernel) {}
 
     async startup() {
@@ -28,11 +30,24 @@ export class KernelUser {
         }
 
         // Done for now
+        _.assign(this.data, user.data);
     }
 
     async cleanup() {
         if (this.kernel.isRoot()) {
             return; // nothing to do.
         }
+    }
+
+    //
+    // User data
+    //
+
+    get id() {
+        return this.data.id || Kernel.ID;
+    }
+
+    get ns() {
+        return this.data.ns || Kernel.NS;
     }
 }

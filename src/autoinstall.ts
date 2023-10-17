@@ -1,5 +1,5 @@
 // Servers
-import { AutoInstall } from '@system/classes/autoinstall';
+import { AutoInstall } from '@src/autoinstall/classes/autoinstall';
 
 // Install the core tables
 new AutoInstall().up()

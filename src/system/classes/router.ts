@@ -6,9 +6,6 @@ import UrlParse from 'url-parse';
 // Classes
 import { Kernel } from '@system/kernels/kernel';
 import { ResponseCORS } from '@system/classes/response-cors';
-import { ResponseStatusText } from '@system/classes/response-status-text';
-import { toJSON } from './helper';
-import { RecordNotFoundError } from '../kernels/kernel-data';
 
 export interface RouterInit {
     kernel: Kernel,
@@ -31,8 +28,6 @@ export class Router {
 
         // Parse the URL
         let url = new UrlParse(req.url, true);
-
-        // console.warn('router.try():', req.method, req.url, url.query);
 
         // Start processing
         try {

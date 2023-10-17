@@ -31,6 +31,7 @@ export default class extends Action {
     async run({ kernel, object, change }: Signal) {
         let created_at = kernel.time;
         let created_by = kernel.user_id;
+        let created_ns = kernel.user_ns;
 
         // Track change `data` and `meta` for the eventual insert op
         let record_data = [];
@@ -39,38 +40,38 @@ export default class extends Action {
         // If running as root, set the default user
         let is_root = kernel.isRoot();
 
-        change.forEach(record => {
+        change.forEach(({ data, meta }: Record) => {
             if (is_root) {
-                record.data.id = record.data.id ?? kernel.uuid();
-                record.data.ns = record.data.ns ?? kernel.user_ns;
+                data.id = data.id ?? kernel.uuid();
+                data.ns = data.ns ?? created_ns;
 
                 // Created info may already exist
-                record.meta.created_at = record.meta.created_at ?? created_at;
-                record.meta.created_by = record.meta.created_by ?? created_by;
+                meta.created_at = meta.created_at ?? created_at;
+                meta.created_by = meta.created_by ?? created_by;
 
                 // The other meta types may or may not be passed in by root
             }
 
             else {
-                record.data.id = kernel.uuid();
-                record.data.ns = kernel.user_ns;
+                data.id = kernel.uuid();
+                data.ns = created_ns;
 
                 // Standard timestamps
-                record.meta.created_at = created_at;
-                record.meta.created_by = created_by;
+                meta.created_at = created_at;
+                meta.created_by = created_by;
 
                 // meta properties that can't be set by the user
-                record.meta.updated_at = null;
-                record.meta.updated_by = null;
-                record.meta.expired_at = null;
-                record.meta.expired_by = null;
-                record.meta.created_at = null;
-                record.meta.created_by = null;
+                meta.updated_at = null;
+                meta.updated_by = null;
+                meta.expired_at = null;
+                meta.expired_by = null;
+                meta.deleted_at = null;
+                meta.deleted_by = null;
             }
 
             // Add to the lists
-            record_data.push(_.assign({}, record.data));
-            record_meta.push(_.assign({}, record.meta, { id: record.data.id, ns: record.data.ns }));
+            record_data.push(_.assign({}, data));
+            record_meta.push(_.assign({}, meta, { id: data.id, ns: data.ns }));
         });
 
         // Create `data`
