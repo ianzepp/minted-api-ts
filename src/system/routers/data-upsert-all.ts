@@ -9,6 +9,10 @@ export default class extends Router {
         return kernel.data.upsertAll(params.object, body);
     }
 
+    toName(): string {
+        return 'system/routers/data-upsert-all';
+    }
+    
     onRouterVerb() {
         return 'PUT';
     }

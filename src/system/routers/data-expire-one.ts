@@ -9,6 +9,10 @@ export default class extends Router {
         return kernel.data.expireOne(params.object, { id: params.record });
     }
 
+    toName(): string {
+        return 'system/routers/data-expire-one';
+    }
+
     onRouterVerb() {
         return 'DELETE';
     }

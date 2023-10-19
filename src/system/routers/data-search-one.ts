@@ -9,6 +9,10 @@ export default class extends Router {
         return kernel.data.searchOne(params.object, { id: params.record });
     }
 
+    toName(): string {
+        return 'system/routers/data-search-one';
+    }
+
     onRouterVerb() {
         return 'GET';
     }

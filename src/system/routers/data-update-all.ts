@@ -9,6 +9,10 @@ export default class extends Router {
         return kernel.data.updateAll(params.object, body);
     }
 
+    toName(): string {
+        return 'system/routers/data-update-all';
+    }
+
     onRouterVerb() {
         return 'PATCH';
     }

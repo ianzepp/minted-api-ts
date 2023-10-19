@@ -105,6 +105,9 @@ export class SignalRunner {
         }
 
         try {
+            // Stat bump
+            signal.kernel.statbump(action.toPackageName());
+
             // Switch into root?
             if (action.asRoot()) {
                 signal.kernel.sudoRoot();

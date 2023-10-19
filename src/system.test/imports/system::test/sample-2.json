@@ -1,0 +1,10 @@
+{
+    "type": "system::test",
+    "data": {
+        "ns": "system",
+        "name": "sample-1",
+        "boolean": true,
+        "decimal": 0.1,
+        "integer": 100
+    }
+}

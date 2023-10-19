@@ -5,12 +5,12 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { Kernel } from '@system/kernels/kernel';
+import { Tester } from '@system/classes/tester';
 
 // Typedefs
 import { ObjectType } from '@system/typedefs/object';
 
-let kernel = new Kernel();
+let kernel = new Tester();
 
 beforeEach(async () => {
     await kernel.startup();
@@ -22,7 +22,7 @@ afterEach(async () => {
 
 // FIXME:
 test('should create a knex column', async () => {
-    let record = await kernel.data.createOne(ObjectType.Column, { 
+    await kernel.data.createOne(ObjectType.Column, { 
         name: 'test.username', 
         type: 'text' 
     });

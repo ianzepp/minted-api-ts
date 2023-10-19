@@ -1,6 +1,9 @@
 import _ from 'lodash';
-import util from 'util';
+import Debug from 'debug';
 import chai from 'chai';
+
+// Debugging
+const debug = Debug('minted:system:kernel');
 
 // UUID is a common requirement
 import { v4 as uuid } from 'uuid';
@@ -13,15 +16,6 @@ import { KernelData } from '@system/kernels/kernel-data';
 import { KernelMeta } from '@system/kernels/kernel-meta';
 import { KernelUser } from '@system/kernels/kernel-user';
 import { KernelSmtp } from '@system/kernels/kernel-smtp';
-
-// Preloader
-import { Action } from '@system/classes/action';
-import { Router } from '@system/classes/router';
-import { Preloader } from '@system/classes/preloader';
-import { ResponseCORS } from '../classes/response-cors';
-
-export const KernelActions = Preloader.from<Action>('./src/*/actions/*.ts');
-export const KernelRouters = Preloader.from<Router>('./src/*/routers/*.ts');
 
 // Match UUIDs
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
@@ -50,11 +44,16 @@ export class Kernel {
     // Sudo root
     private sudo_chain: string[] = [];
 
+    // Track kernel status
+    private readonly statinfo: _.Dictionary<number> = {};
+
     //
     // Service Methods
     //
 
-    async startup(): Promise<void> {
+    async startup() {
+        debug('startup() starting');
+
         // Knex has to load first
         await this.knex.startup();
 
@@ -67,9 +66,13 @@ export class Kernel {
         await this.bulk.startup();
         await this.chat.startup();
         await this.smtp.startup();
+
+        debug('startup() done');
     }
 
-    async cleanup(): Promise<void> {
+    async cleanup() {
+        debug('cleanup() starting');
+
         // Shut down
         await this.bulk.cleanup();
         await this.chat.cleanup();
@@ -81,77 +84,13 @@ export class Kernel {
 
         // Unload knex last
         await this.knex.cleanup();
+
+        debug('cleanup() done');
     }
 
     async refresh(): Promise<void> {
         await this.cleanup();
         await this.startup();
-    }
-
-    //
-    // Route an API request
-    //
-
-    async safe(promise: Promise<any>, defaultTo: any) {
-    }
-
-    async route(req: Request) {
-        // Read the body data
-        let request_type = (req.headers.get('Content-Type') || '').split(';');
-        let request_body: any = undefined;
-
-        try {
-            if (req.method === 'GET') {
-                // no body processing for GET requests
-            }
-            
-            else if (request_type.includes('application/json')) {
-                request_body = await req.json();
-            }
-
-            else if (request_type.includes('text/plain')) {
-                request_body = await req.text();
-            }
-
-            else if (request_type.includes('multipart/form-data')) {
-                request_body = await req.formData();
-            }
-        }
-
-        catch (error) {
-            console.error(error);
-
-            if (error instanceof SyntaxError && req.method === 'GET') {
-                return ResponseCORS.from(400, error.message + ': Did you include a "Content-Type" with a "GET" request?');
-            }
-
-            return ResponseCORS.from(400, error.message);
-        }
-
-        // 
-        // Find and execute the right router. The `router.try()` method is already wrapped in
-        // an internal try/catch block, so we should never have to handle an error here.
-        //
-
-        try {
-            let router_url = new URL(req.url);
-            let router = KernelRouters.find(r => r.is(req.method, router_url.pathname, request_body));
-
-            // Router not found?
-            if (router === undefined) {
-                return ResponseCORS.from(404, router_url.pathname);
-            }
-
-            return router.try(this, req, request_body);
-        }
-
-        catch (error) {
-            console.error('Error executing the selected router for:', req.method, req.url);
-            console.error(error.stack || error);
-
-            // Done
-            return ResponseCORS.from(500, error.stack || error.message || error);
-        }
     }
 
     //
@@ -214,5 +153,17 @@ export class Kernel {
 
     toTestName() {
         return 'test_' + Math.floor(Math.random() * 1000000);
+    }
+
+    //
+    // Kernel stats tracking
+    //
+
+    stats() {
+        return _.assign({}, this.statinfo);
+    }
+
+    statbump(name: string, incr: number = 1) {
+        this.statinfo[name] = incr + (this.statinfo[name] || 0);
     }
 }

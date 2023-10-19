@@ -1,3 +1,4 @@
+import { KnexDriver } from "./system/classes/knex";
 import { beforeAll, afterAll } from "bun:test";
 
 beforeAll(async () => {
@@ -6,4 +7,5 @@ beforeAll(async () => {
 
 afterAll(async () => {
     // global teardown
+    await KnexDriver.destroy();
 });

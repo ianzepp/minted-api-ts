@@ -82,6 +82,6 @@ export default class extends Action {
         // Create `meta`
         let creates_meta = await kernel.knex
             .driverTo(object.system_name, 'meta')
-            .insert(record_meta);        
+            .insert(record_meta);  
     }
 }
