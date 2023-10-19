@@ -1,0 +1,8 @@
+{
+    "type": "system::object",
+    "data": {
+        "ns": "system",
+        "name": "filter",
+        "description": "A stored filter that can be used in other operations"
+    }
+}

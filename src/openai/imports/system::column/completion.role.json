@@ -1,5 +1,5 @@
 {
-    "type": "column",
+    "type": "system::column",
     "data": {
         "ns": "openai",
         "name": "completion.role",

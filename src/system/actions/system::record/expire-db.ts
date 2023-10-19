@@ -25,20 +25,21 @@ export default class extends Action {
         return true;
     }
 
-    async run(signal: Signal): Promise<void> {
-        return signal.kernel.knex
-            .driverTo(signal.object.system_name, 'meta')
-            .whereIn('id', _.map(signal.change_data, 'id'))
-            .update({
-                expired_at: signal.kernel.time,
-                expired_by: signal.kernel.user_id
-            });
-    }
+    async run({ kernel, object, change }: Signal) {
+        let record_ids = change.map(record => record.data.id);
+        let expired_at = kernel.time;
+        let expired_by = kernel.user_id;
 
-    async cleanup(signal: Signal) {
-        signal.change.forEach(record => {
-            record.meta.expired_at = signal.kernel.time;
-            record.meta.expired_by = signal.kernel.user_id;
-        })
+        // Run the change
+        await kernel.knex.driverTo(object.system_name, 'meta', record_ids).update({
+            expired_at: kernel.time,
+            expired_by: kernel.user_id
+        });
+        
+        // Change the record data to reflect it
+        change.forEach(record => {
+            record.meta.expired_at = expired_at;
+            record.meta.expired_by = expired_by;
+        });
     }
 }

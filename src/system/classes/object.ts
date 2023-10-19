@@ -91,6 +91,10 @@ export class Object {
         return this.data.name;
     }
 
+    get column_keys() {
+        return _.keys(this.columns);
+    }
+
     exists(column_name: string) {
         return this.columns[column_name] !== undefined;
     }
@@ -138,6 +142,10 @@ export class Object {
      */
     is(name: ObjectName) {
         return this.data.name === name;
+    }
+
+    inherits(object_name: string) {
+        return this.system_name === object_name || object_name === '*' || object_name === 'system::record';
     }
 
     /**

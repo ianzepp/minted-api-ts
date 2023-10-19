@@ -3,20 +3,19 @@ import chai from 'chai';
 import { simpleParser } from 'mailparser';
 
 // API
-import { Router } from '@system/classes/router';
-import { ChangeData } from '@system/typedefs/record';
+import { Router, RouterInit } from '@system/classes/router';
 
 // Implementation
 export default class extends Router {
-    async run() {
+    async run({ kernel, params, body }: RouterInit) {
         // Parse the mail
-        let mail = await simpleParser(this.req.body);
+        let mail = await simpleParser(body);
 
         // Remap the headers to a dictionary
         let headers = this.toMailHeaders(mail.headers);
 
         // Build and return
-        return this.kernel.data.createOne('system::imap', {
+        return kernel.data.createOne('system::imap', {
             name: headers['message-id'],
             head: headers,
             html: mail.html || mail.textAsHtml,
@@ -25,7 +24,7 @@ export default class extends Router {
     }
 
     onRouterVerb() {
-        return Router.Verb.Post;
+        return 'POST';
     }
 
     onRouterPath() {

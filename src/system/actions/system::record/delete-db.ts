@@ -25,20 +25,21 @@ export default class extends Action {
         return true;
     }
 
-    async run(signal: Signal): Promise<void> {
-        return signal.kernel.knex
-            .driverTo(signal.object.system_name, 'meta')
-            .whereIn('id', _.map(signal.change_data, 'id'))
-            .update({
-                deleted_at: signal.kernel.time,
-                deleted_by: signal.kernel.user_id
-            });
-    }
+    async run({ kernel, object, change }: Signal) {
+        let record_ids = change.map(record => record.data.id);
+        let deleted_at = kernel.time;
+        let deleted_by = kernel.user_id;
 
-    async cleanup(signal: Signal) {
-        signal.change.forEach(record => {
-            record.meta.deleted_at = signal.kernel.time;
-            record.meta.deleted_by = signal.kernel.user_id;
-        })
+        // Run the change
+        await kernel.knex.driverTo(object.system_name, 'meta', record_ids).update({
+            deleted_at: kernel.time,
+            deleted_by: kernel.user_id
+        });
+        
+        // Change the record data to reflect it
+        change.forEach(record => {
+            record.meta.deleted_at = deleted_at;
+            record.meta.deleted_by = deleted_by;
+        });
     }
 }

@@ -1,7 +1,9 @@
 import _ from 'lodash';
-import util from 'util';
+import Debug from 'debug';
 import chai from 'chai';
-import debug from 'debug';
+
+// Debugging
+const debug = Debug('minted:system:kernel');
 
 // UUID is a common requirement
 import { v4 as uuid } from 'uuid';
@@ -15,6 +17,7 @@ import { KernelMeta } from '@system/kernels/kernel-meta';
 import { KernelUser } from '@system/kernels/kernel-user';
 import { KernelSmtp } from '@system/kernels/kernel-smtp';
 
+// Match UUIDs
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
 
 export class Kernel {
@@ -41,11 +44,16 @@ export class Kernel {
     // Sudo root
     private sudo_chain: string[] = [];
 
+    // Track kernel status
+    private readonly statinfo: _.Dictionary<number> = {};
+
     //
     // Service Methods
     //
 
-    async startup(): Promise<void> {
+    async startup() {
+        debug('startup() starting');
+
         // Knex has to load first
         await this.knex.startup();
 
@@ -58,9 +66,14 @@ export class Kernel {
         await this.bulk.startup();
         await this.chat.startup();
         await this.smtp.startup();
+
+        debug('startup() done');
     }
 
-    async cleanup(): Promise<void> {
+    async cleanup() {
+        debug('cleanup() starting');
+
+        // Shut down
         await this.bulk.cleanup();
         await this.chat.cleanup();
         await this.smtp.cleanup();
@@ -71,6 +84,8 @@ export class Kernel {
 
         // Unload knex last
         await this.knex.cleanup();
+
+        debug('cleanup() done');
     }
 
     async refresh(): Promise<void> {
@@ -81,10 +96,6 @@ export class Kernel {
     //
     // Methods
     //
-
-    emit(cn, fn, ... messages) {
-        debug(cn + ':' + fn)(util.format(... messages));
-    }
 
     isRoot(): boolean {
         return this.sudo_chain.length === 0 
@@ -142,5 +153,17 @@ export class Kernel {
 
     toTestName() {
         return 'test_' + Math.floor(Math.random() * 1000000);
+    }
+
+    //
+    // Kernel stats tracking
+    //
+
+    stats() {
+        return _.assign({}, this.statinfo);
+    }
+
+    statbump(name: string, incr: number = 1) {
+        this.statinfo[name] = incr + (this.statinfo[name] || 0);
     }
 }

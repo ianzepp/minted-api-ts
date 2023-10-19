@@ -1,93 +1,50 @@
 import _ from 'lodash';
-import fs from 'fs-extra';
-import util from 'util';
-import chai from 'chai';
-import { expect } from 'chai';
+import Debug from 'debug';
+
+// Debugger
+const debug = Debug('minted:system:signal-runner');
 
 // Classes
-import { Filter } from '@system/classes/filter';
-import { Kernel } from '@system/kernels/kernel';
-import { Action } from '@system/classes/action';
-import { Record } from '@system/classes/record';
-import { Object } from '@system/classes/object';
+import { Action } from "./action";
+import { Record } from "./record";
+import { Preloader } from "./preloader";
+import { Kernel } from '../kernels/kernel';
+import { Object } from './object';
+import { Filter } from './filter';
+import { sign } from 'jsonwebtoken';
 
-// Typedefs
-import { SignalOp } from '@system/typedefs/signal';
+// Build the preloaded actions
+const Actions = Preloader.from<Action>('./src/*/actions/**/*.ts');
+const ActionsByObject = _.groupBy(Actions, a => a.onObject());
 
-// Import pre-loaded routers
-import Actions from '../loaders/actions';
+export interface Signal {
+    kernel: Kernel;
+    object: Object;
+    change: Record[];
+    filter: Filter;
+    op: SignalOp;
+}
 
+export enum SignalOp {
+    Create = 'create',
+    Delete = 'delete',
+    Expire = 'expire',
+    Select = 'select',
+    Update = 'update',
+    Upsert = 'upsert',
+}
 
-export class Signal {
-    readonly expect = chai.expect;
-    readonly failures: string[] = [];
-
-    constructor(
-        readonly kernel: Kernel,
-        readonly object: Object,
-        readonly change: Record[],
-        readonly filter: Filter,
-        readonly op: SignalOp) {}
-
-    get change_data() {
-        return _.map(this.change, record => _.assign({}, record.data));
-
-    }
-
-    get change_meta() {
-        return _.map(this.change, record => _.assign({}, record.meta, { id: record.data.id, ns: record.data.ns }));
-    }
-
-    isSelect() {
-        return this.op === SignalOp.Select;
-    }
-
-    isCreate() {
-        return this.op === SignalOp.Create;
-    }
-
-    isUpdate() {
-        return this.op === SignalOp.Update;
-    }
-
-    isUpsert() {
-        return this.op === SignalOp.Upsert;
-    }
-
-    isExpire() {
-        return this.op === SignalOp.Expire;
-    }
-
-    isDelete() {
-        return this.op === SignalOp.Delete;
-    }
-
-    async run(ring: number): Promise<void> {
-        let actions = Actions[ring] || [];
-
-        // Filter in a single loop
-        actions = actions.filter(action => {
+// Implementation
+export class SignalRunner {
+    async run(signal: Signal): Promise<Record[]> {
+        // Filter primary actions in a single loop
+        let actions = Actions.filter(action => {
             //
-            // Negetive checks
+            // Negative checks
             //
 
-            // Wrong client namespace?
-            if (action.onDomain() != '*' && action.onDomain() !== this.kernel.user_ns) {
-                return false;
-            }
-
-            // Wrong object name?
-            if (action.onObject() != '*' && action.onObject() !== this.object.system_name) {
-                return false;
-            }
-
-            // // Don't run for root?
-            // if (action.onRoot() === false && this.kernel.isRoot()) {
-            //     return false;
-            // }
-
-            // Don't run for test cases?
-            if (action.onTest() === false && this.kernel.isNodeTest()) {
+            // Action object does not match the signal object?
+            if (signal.object.inherits(action.onObject()) === false) {
                 return false;
             }
 
@@ -95,27 +52,27 @@ export class Signal {
             // Positive checks
             //
 
-            if (action.onSelect() && this.op == SignalOp.Select) {
+            if (signal.op == SignalOp.Select && action.onSelect()) {
                 return true;
             }
 
-            if (action.onCreate() && this.op == SignalOp.Create) {
+            if (signal.op == SignalOp.Create && action.onCreate()) {
                 return true;
             }
 
-            if (action.onUpdate() && this.op == SignalOp.Update) {
+            if (signal.op == SignalOp.Update && action.onUpdate()) {
                 return true;
             }
 
-            if (action.onUpsert() && this.op == SignalOp.Upsert) {
+            if (signal.op == SignalOp.Upsert && action.onUpsert()) {
                 return true;
             }
 
-            if (action.onExpire() && this.op == SignalOp.Expire) {
+            if (signal.op == SignalOp.Expire && action.onExpire()) {
                 return true;
             }
 
-            if (action.onDelete() && this.op == SignalOp.Delete) {
+            if (signal.op == SignalOp.Delete && action.onDelete()) {
                 return true;
             }
 
@@ -123,60 +80,84 @@ export class Signal {
             return false;
         });
 
-        for(let action of actions) {
-            // Switch to root?
-            try {
-                // Switch into root?
-                if (action.asRoot()) {
-                    this.kernel.sudoRoot();
-                }
+        // Sort by rank
+        let actions_rank = _.sortBy(actions, a => a.onRank());
 
-                // There should be no error when tested
-                let sanity = () => {
-                    chai.assert(this.failures.length === 0, action.toFileName() + ': ' + this.failures.join(' / '));
-                }
+        // Group by ring
+        let actions_ring = _.groupBy(actions_rank, a => a.onRing());
 
-                // Startup the action
-                await action.startup(this).then(sanity);
+        // Iterate rings, then actions in those rings
+        for(let ring of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+            let list = actions_ring[ring] || [];
 
-                // Setup the result
-                let result: Promise<any>;
+            for(let action of list) {
+                await this.try(signal, action);
+            }
+        }
 
-                // Which method do we use?
-                if (action.isParallel()) {
-                    result = Promise.all(this.change.map((r, i) => action.one(this, r, i)));
-                }
+        // Done
+        return signal.change;
+    }
 
-                else if (action.isSeries()) {
-                    for(let i = 0; i < this.change.length; ++i) {
-                        await action.one(this, this.change[i], i);
-                    }
-                }
+    async try(signal: Signal, action: Action) {
+        if (process.env.DEBUG) {
+            debug(`try action: op="${ signal.op }" ring="${ action.onRing() }" rank="${ action.onRank() }" action="${ action.toPackageName() }"`);
+        }
 
-                else {
-                    result = action.run(this);
-                }
+        try {
+            // Stat bump
+            signal.kernel.statbump(action.toPackageName());
 
-                // Check sanity function
-                sanity();
-
-                // If we are not detached, then wait for the result. Not that we care about the result, 
-                // just that it needs to finish executing.
-                if (action.isDetached() === false) {
-                    await result;
-                }
-
-                // Cleanup the action
-                await action.cleanup(this).then(sanity);
-
-                // If we get here we are good.
+            // Switch into root?
+            if (action.asRoot()) {
+                signal.kernel.sudoRoot();
             }
 
-            finally {
-                // Switch out of root?
-                if (action.asRoot()) {
-                    this.kernel.sudoExit();
+            // Setup the result
+            let result: Promise<any>;
+
+            // Which method do we use?
+            if (action.isRunnable() === false) {
+                result = undefined;
+            }
+
+            else if (action.isParallel()) {
+                result = Promise.all(signal.change.map(record => action.one(signal, record)));
+            }
+
+            else if (action.isSeries()) {
+                for(let record of signal.change) {
+                    await action.one(signal, record);
                 }
+            }
+
+            else {
+                result = action.run(signal);
+            }
+
+            // Do we wait to result the result?
+            if (result instanceof Promise) {
+                result = await result;
+            }
+
+            // Finished with execution
+        }
+
+        catch (error) {
+            if (action.isFailable()) {
+                console.error('Action execution failed, but action `isFailable()` is true:');
+                console.error(error.stack || error.message || error);
+            }
+
+            else {
+                throw error;
+            }
+        }
+
+        finally {
+            // Switch out of root?
+            if (action.asRoot()) {
+                signal.kernel.sudoExit();
             }
         }
     }

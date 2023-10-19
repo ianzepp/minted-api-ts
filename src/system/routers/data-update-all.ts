@@ -1,16 +1,20 @@
 import _ from 'lodash';
 
 // API
-import { Router } from '@system/classes/router';
+import { Router, RouterInit } from '@system/classes/router';
 
 // Implementation
 export default class extends Router {
-    async run() {
-        return this.kernel.data.updateAll(this.req.params.object, this.req.body);
+    async run({ kernel, params, body }: RouterInit) {
+        return kernel.data.updateAll(params.object, body);
+    }
+
+    toName(): string {
+        return 'system/routers/data-update-all';
     }
 
     onRouterVerb() {
-        return Router.Verb.Patch;
+        return 'PATCH';
     }
 
     onRouterPath() {

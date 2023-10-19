@@ -33,7 +33,7 @@ export default class extends Action {
         return true;
     }
 
-    async one(signal: Signal, record: Record): Promise<void> {
+    async one({ kernel }: Signal, record: Record): Promise<void> {
         // Sanity
         record.expect('name').a('string');
         record.expect('name').contains('.');
@@ -41,7 +41,7 @@ export default class extends Action {
 
         // Find the parent object
         let column = Column.from(record.data);
-        let object = signal.kernel.meta.lookup(column.object_name);
+        let object = kernel.meta.lookup(column.object_name);
 
         // No changes allowed to the base `system::record` object
         if (object.system_name === 'system::record') {
@@ -49,7 +49,7 @@ export default class extends Action {
         }
 
         // Process the new column
-        await signal.kernel.knex.updateTable(object.system_name, t => {
+        await kernel.knex.updateTable(object.system_name, t => {
             let column_name = column.system_name;
             let column_type = column.type;
             let change: Knex.ColumnBuilder;
@@ -104,6 +104,6 @@ export default class extends Action {
         });
 
         // Add the column data to kernel meta
-        signal.kernel.meta.addColumn(record.data);
+        kernel.meta.addColumn(record.data);
     }
 }

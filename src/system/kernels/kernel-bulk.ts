@@ -27,7 +27,6 @@ export enum BulkMethod {
     SearchAny = 'search-any',
     SearchOne = 'search-one',
     Search404 = 'search-404',
-    SearchNot = 'search-not',
 
     // Create
     CreateAll = 'create-all',
@@ -113,12 +112,6 @@ export class KernelBulk {
                 this.expect(bulk).property('filter').a('object');
                 this.expect(bulk).not.property('inputs');
                 bulk.result = await this.kernel.data.search404(bulk.object, bulk.filter.where, bulk.filter.order);
-            }
-
-            if (bulk.method === BulkMethod.SearchNot) {
-                this.expect(bulk).property('filter').a('object');
-                this.expect(bulk).not.property('inputs');
-                bulk.result = await this.kernel.data.searchNot(bulk.object, bulk.filter.where, bulk.filter.order);
             }
 
             //

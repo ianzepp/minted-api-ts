@@ -1,5 +1,5 @@
 {
-    "type": "domain",
+    "type": "system::domain",
     "data": {
         "ns": "system",
         "name": "system"

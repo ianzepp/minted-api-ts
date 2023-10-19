@@ -4,9 +4,6 @@ import chai from 'chai';
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
-// Classes
-import { RecordColumnImmutableError } from '@system/kernels/kernel-data';
-
 // Typedefs
 import { ObjectType } from '@system/typedefs/object';
 import { Kernel } from '@system/kernels/kernel';

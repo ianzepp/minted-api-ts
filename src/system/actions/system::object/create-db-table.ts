@@ -33,7 +33,7 @@ export default class extends Action {
         return true;
     }
 
-    async one(signal: Signal, record: Record) {
+    async one({ kernel }: Signal, record: Record) {
         // Sanity
         record.expect('name').a('string');
         record.expect('name').not.contains('.');
@@ -43,9 +43,9 @@ export default class extends Action {
         let object = Object.from(record.data);
 
         // Create the empty table with no default columns
-        await signal.kernel.knex.createTable(object.system_name, t => {});
+        await kernel.knex.createTable(object.system_name, t => {});
 
         // Add the object data to kernel meta
-        signal.kernel.meta.addObject(record.data);
+        kernel.meta.addObject(record.data);
     }
 }

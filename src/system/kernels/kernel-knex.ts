@@ -10,7 +10,7 @@ import { Knex } from 'knex';
 import { Kernel } from '@system/kernels/kernel';
 
 // Debug messages
-const debug = Debug('minted:kernel-knex');
+const debug = Debug('minted:system:kernel-knex');
 
 // Implementation
 export class KernelKnex {
@@ -21,29 +21,39 @@ export class KernelKnex {
     constructor(private readonly kernel: Kernel) {}
 
     async startup(): Promise<void> {
+        debug('startup() starting');
+
+        // Running in a test environment?
         if (this.kernel.isNodeTest()) {
-            this.db = KnexDriverFn();
+            await this.isolate();
             await this.transaction();
         }
+
+        debug('startup() ok');
     }
 
     async cleanup(): Promise<void> {
+        debug('cleanup() starting');
+
+        // Running in a test environment?
         if (this.kernel.isNodeTest()) {
-            await this.revert();
-            await this.db.destroy();
+            await this.rollback();
+            await this.destroy();
         }
+
+        debug('cleanup() ok');
     }
 
     //
-    // Transaction support
+    // Transactions
     //
 
     async transaction() {
-        if (this.tx !== undefined) {
-            throw new Error('Transaction already started!');
+        if (this.tx === undefined || this.tx.isCompleted()) {
+            this.tx = await this.db.transaction();
         }
 
-        this.tx = await this.db.transaction();
+        return this.tx;
     }
 
     async commit() {
@@ -54,7 +64,7 @@ export class KernelKnex {
         this.tx = undefined;
     }
 
-    async revert() {
+    async rollback() {
         if (this.tx && this.tx.isCompleted() === false) {
             await this.tx.rollback();
         }
@@ -62,12 +72,20 @@ export class KernelKnex {
         this.tx = undefined;
     }
 
+    async isolate() {
+        return this.db = KnexDriverFn();
+    }
+
+    async destroy() {
+        await this.db.destroy();
+    }
+
     //
     // Direct access
     //
     
     get driver(): Knex {
-        return this.tx ?? this.db;
+        return this.tx || this.db || KnexDriver;
     }
 
     get schema(): Knex.SchemaBuilder {
@@ -82,7 +100,7 @@ export class KernelKnex {
     // Direct DB/TX methods
     //
 
-    driverTo(object_name: string, type: 'data' | 'meta' | 'acls '= 'data') {
+    driverTo(object_name: string, type: 'data' | 'meta' | 'acls '= 'data', record_ids?: string[]) {
         let knex: Knex.QueryBuilder;
 
         if (type === 'data') {
@@ -96,6 +114,11 @@ export class KernelKnex {
         // Apply namespace visibility
         if (this.kernel.isRoot() === false) {
             knex = knex.whereIn(`${ type }.ns`, this.kernel.namespaces);
+        }
+
+        // Apply specific record IDs?
+        if (record_ids && record_ids.length) {
+            knex = knex.whereIn('id', record_ids);
         }
 
         // Done

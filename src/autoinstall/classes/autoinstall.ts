@@ -10,10 +10,8 @@ import { sync as globSync } from 'glob';
 // Local imports
 import { Kernel } from '@system/kernels/kernel';
 import { Object } from '@system/classes/object';
-import { RecordJson } from '@system/typedefs/record';
-
-// Import table functions
-import { createTable, deleteTable, insertAll } from './knex';
+import { RecordFlat, RecordJson } from '@system/typedefs/record';
+import { ObjectType } from '@src/system/typedefs/object';
 
 // Implementation
 export class AutoInstall {
@@ -42,7 +40,13 @@ export class AutoInstall {
 
             // Install packages
             await this.import('system');
-            await this.import('system.*');
+            await this.import('system.auth');
+            await this.import('system.bulk');
+            await this.import('system.mail');
+            await this.import('system.openapi');
+            await this.import('system.test');
+
+            // Package: Open AI
             await this.import('openai');
 
             // Commit the transaction
@@ -54,7 +58,7 @@ export class AutoInstall {
             await this.knex.raw('ROLLBACK;');
 
             // Trace the error
-            console.trace(error.stack || error);
+            console.error(error);
 
             // Return as an error
             process.exit(1);
@@ -65,14 +69,14 @@ export class AutoInstall {
         const tables = await this.knex.raw("SELECT tablename FROM pg_tables WHERE schemaname='public';");
 
         for (let table of tables.rows) {
-            await deleteTable(this.knex, table.tablename);
+            await this.kernel.knex.deleteTable(table.tablename);
         }
     }
 
     async createSystem() {
         // Create table `object`
-        await createTable(this.knex, 'system::object', (table) => {
-            table.string('type').notNullable().defaultTo('database');
+        await this.kernel.knex.createTable('system::object', (table) => {
+            table.string('name').notNullable();
             table.string('description');
 
             table.boolean('external').defaultTo(false);
@@ -83,7 +87,8 @@ export class AutoInstall {
         });
 
         // Create table `column`
-        await createTable(this.knex, 'system::column', table => {
+        await this.kernel.knex.createTable('system::column', table => {
+            table.string('name').notNullable();
             table.string('type').notNullable().defaultTo('text');
             table.string('description');
 
@@ -103,12 +108,12 @@ export class AutoInstall {
         });
 
         // Add system data for `object`
-        await insertAll(this.knex, 'system::object', [
+        await this.insertAll('system::object', [
             { ns: 'system', name: 'object', metadata: true },
             { ns: 'system', name: 'column', metadata: true },
         ]);    
 
-        await insertAll(this.knex, 'system::column', [
+        await this.insertAll('system::column', [
            // Columns for 'object'
            { ns: 'system', name: 'object.name', required: true, immutable: true, indexed: true  },
            { ns: 'system', name: 'object.description' },
@@ -131,6 +136,29 @@ export class AutoInstall {
            { ns: 'system', name: 'column.maximum', type: 'integer' },
            { ns: 'system', name: 'column.precision', type: 'integer' },
        ]);
+    }
+
+    async insertAll(object_name: string, record_rows: RecordFlat[]) {
+        let created_at = this.kernel.time;
+        let created_by = Kernel.ID;
+
+        for(let record_data of record_rows) {
+            console.warn('+', JSON.stringify(record_data));
+    
+            // Assign UUID
+            record_data.id = this.kernel.uuid();
+    
+            // Insert record
+            await this.kernel.knex.driver(object_name).insert(record_data);
+    
+            // Insert record::meta
+            await this.kernel.knex.driver(object_name + '::meta').insert({
+                id: record_data.id,
+                ns: record_data.ns,
+                created_at: created_at,
+                created_by: created_by,
+            });
+        }    
     }
 
     async import(import_name: string) {
@@ -161,7 +189,7 @@ export class AutoInstall {
 
         // For each object in the package, import it individually
         let object_list = _.filter(imports, json => {
-            return _.get(json, 'type') === 'object'
+            return _.get(json, 'type') === ObjectType.Object
         }) as RecordJson[];
 
         for(let object_json of object_list) {
@@ -173,10 +201,10 @@ export class AutoInstall {
         let object = Object.from(object_json.data);
         let object_name = object_json.data.name;
 
-        console.info(`- object "${ object.system_name }"`);
+        console.info(`+ processing "${ object.system_name }" import..`);
 
         let column_json = _.filter(imports, json => {
-            return _.get(json, 'type') === 'column'
+            return _.get(json, 'type') === ObjectType.Column
                 && _.get(json, 'data.name', '').startsWith(object.object_name + '.');
         }) as RecordJson[];
 
@@ -192,17 +220,18 @@ export class AutoInstall {
 
         // Insert the object
         if (object_json) {
-            await this.kernel.data.createOne('object', object_json);
+            console.warn('  + object as type', [object_json.type]);
+            await this.kernel.data.createOne(ObjectType.Object, object_json);
         }
 
         if (column_json.length) {
-            console.warn('  - with columns:', column_json.map(c => c.data.name));
-            await this.kernel.data.createAll('column', column_json);
+            console.warn('  + columns:', column_json.map(c => c.data.name));
+            await this.kernel.data.createAll(ObjectType.Column, column_json);
         }
 
         // Insert the object records
         if (record_json.length) {
-            console.warn('  - with records:', record_json.map(c => c.data.name));
+            console.warn('  + records:', record_json.map(c => c.data.name));
             await this.kernel.data.createAll(object.system_name, record_json);
         }
     }

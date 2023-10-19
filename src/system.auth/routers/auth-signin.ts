@@ -1,16 +1,16 @@
 import _ from 'lodash';
 
 // API
-import { Router } from '@system/classes/router';
+import { Router, RouterInit } from '@system/classes/router';
 
 // Implementation
 export default class extends Router {
-    async run() {
+    async run({ kernel, params, body }: RouterInit) {
         // TODO
     }
 
     onRouterVerb() {
-        return Router.Verb.Post;
+        return 'POST';
     }
 
     onRouterPath() {

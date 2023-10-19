@@ -1,0 +1,9 @@
+{
+    "type": "system::column",
+    "data": {
+        "ns": "system",
+        "name": "filter.object",
+        "type": "text",
+        "required": true
+    }
+}

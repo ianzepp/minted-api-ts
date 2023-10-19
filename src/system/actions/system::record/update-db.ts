@@ -27,30 +27,30 @@ export default class extends Action {
         return true;
     }
 
-    async startup(signal: Signal) {
-        let exceptions = signal.change.filter(record => typeof record.data.id !== 'string');
+    async run({ kernel, object, change }: Signal) {
+        // Update `data` one a row-by-row basis.
+        await Promise.all(change.map(record => {
+            return kernel.knex
+                .driverTo(object.system_name, 'data')
+                .whereIn('data.id', [record.data.id])
+                .update(record.diff);
+        }));
 
-        if (exceptions.length) {
-            throw new DataError('One or more records are missing IDs');
-        }
-    }
+        // Setup `meta` change
+        let record_ids = change.map(record => record.data.id);
+        let updated_at = kernel.time;
+        let updated_by = kernel.user_id;
 
+        // Update `meta` all at once
+        await kernel.knex.driverTo(object.system_name, 'meta', record_ids).update({
+            updated_at: updated_at,
+            updated_by: updated_by
+        });
 
-    async run(signal: Signal) {
-        return Promise.all(signal.change.map(record => this.one(signal, record)));
-    }
-
-    async one(signal: Signal, record: Record) {
-        return signal.kernel.knex
-            .driverTo(signal.object.system_name, 'data')
-            .whereIn('data.id', [record.data.id])
-            .update(record.diff);
-    }
-
-    async cleanup(signal: Signal) {
-        signal.change.forEach(record => {
-            record.meta.updated_at = signal.kernel.time;
-            record.meta.updated_by = signal.kernel.user_id;
+        // Change the record data to reflect it
+        change.forEach(record => {
+            record.meta.updated_at = updated_at;
+            record.meta.updated_by = updated_by;
         });
     }
 }
