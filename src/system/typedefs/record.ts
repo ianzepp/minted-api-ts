@@ -1,9 +1,5 @@
 import _ from 'lodash';
 
-// Typedefs
-import { ObjectName } from './object';
-
-
 //
 // Types
 //

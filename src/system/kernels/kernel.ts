@@ -10,7 +10,6 @@ import { v4 as uuid } from 'uuid';
 
 // Classes
 import { KernelBulk } from '@system/kernels/kernel-bulk';
-import { KernelChat } from '@system/kernels/kernel-chat';
 import { KernelKnex } from '@system/kernels/kernel-knex';
 import { KernelData } from '@system/kernels/kernel-data';
 import { KernelMeta } from '@system/kernels/kernel-meta';
@@ -31,7 +30,6 @@ export class Kernel {
 
     // Services
     public readonly bulk = new KernelBulk(this);
-    public readonly chat = new KernelChat(this);
     public readonly data = new KernelData(this);
     public readonly knex = new KernelKnex(this);
     public readonly meta = new KernelMeta(this);
@@ -64,7 +62,6 @@ export class Kernel {
 
         // These don't care
         await this.bulk.startup();
-        await this.chat.startup();
         await this.smtp.startup();
 
         debug('startup() done');
@@ -75,7 +72,6 @@ export class Kernel {
 
         // Shut down
         await this.bulk.cleanup();
-        await this.chat.cleanup();
         await this.smtp.cleanup();
 
         await this.meta.cleanup();

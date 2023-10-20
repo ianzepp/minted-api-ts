@@ -12,8 +12,6 @@ import { ColumnsAcls, ColumnsMeta } from '@system/typedefs/column';
 import { ColumnName } from '@system/typedefs/column';
 import { ColumnForm } from '@system/typedefs/column';
 import { ColumnType } from '@system/typedefs/column';
-import { ObjectName } from '@system/typedefs/object';
-import { ObjectType } from '@system/typedefs/object';
 
 export interface ObjectData {
     name: string;
@@ -24,6 +22,15 @@ export interface ColumnData {
     name: string;
     description: string | null;
 }
+
+export enum ObjectType {
+    Config = 'system::config',
+    Domain = 'system::domain',
+    Object = 'system::object',
+    Column = 'system::column',
+    Test = 'system::test',
+    User = 'system::user',
+};
 
 /**
  * The `Object` class represents a object in the database.
@@ -137,10 +144,10 @@ export class Object {
     /**
      * Checks if the object name matches the provided name.
      * 
-     * @param {ObjectName} name - The name to check against the object name.
+     * @param {string} name - The name to check against the object name.
      * @returns {boolean} Returns true if the provided name matches the object name, false otherwise.
      */
-    is(name: ObjectName) {
+    is(name: string) {
         return this.data.name === name;
     }
 

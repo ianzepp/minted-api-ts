@@ -6,15 +6,12 @@ import { Filter } from '@system/classes/filter';
 import { Kernel } from '@system/kernels/kernel';
 import { Record } from '@system/classes/record';
 import { Object } from '@system/classes/object';
-import { Signal } from '@system/classes/signal';
+import { SignalOp } from '@system/classes/signal';
+import { SignalRunner } from '@src/system/classes/signal';
 
 // Typedefs
 import { ChangeData } from '@system/typedefs/record';
 import { FilterJson } from '@system/typedefs/filter';
-import { ActionRing } from '@system/typedefs/action';
-import { ObjectName } from '@system/typedefs/object';
-import { SignalOp } from '@system/typedefs/signal';
-import { SignalRunner } from '@src/system/classes/signal';
 
 // Data API errors
 export class DataError extends Error {};
@@ -40,7 +37,6 @@ function head404<T>(result: T[]): T {
     return r;
 }
 
-// Implementation
 export class KernelData {
     constructor(private readonly kernel: Kernel) {}
 
@@ -56,7 +52,7 @@ export class KernelData {
     // Core runtime
     //
 
-    async run(object_name: Object | ObjectName, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: SignalOp): Promise<Record[]> {
+    async run(object_name: Object | string, change_data: ChangeData[], filter_data: Partial<FilterJson>, op: SignalOp): Promise<Record[]> {
         debug(`run(): op="${op}" object_name="${object_name}" change_data.length="${change_data.length}" with filter:`, filter_data);
 
         this.kernel.expect(change_data, 'change_data').an('array');
@@ -85,31 +81,30 @@ export class KernelData {
     // Collection record methods
     //
 
-    /** Reselect all records by passing in an existing list of records */
-    async selectAll(object_name: Object | ObjectName, source_data: ChangeData[]): Promise<Record[]> {
+    async selectAll(object_name: Object | string, source_data: ChangeData[]): Promise<Record[]> {
         let object = this.kernel.meta.lookup(object_name);
         let source = source_data.map(change => object.toRecord(change).data.id);
 
         return this.selectIds(object, _.uniq(_.compact(source)));
     }
 
-    async createAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+    async createAll(object_name: Object | string, change_data: ChangeData[]): Promise<Record[]> {
         return this.run(object_name, change_data, {}, SignalOp.Create);
     }
 
-    async updateAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+    async updateAll(object_name: Object | string, change_data: ChangeData[]): Promise<Record[]> {
         return this.run(object_name, change_data, {}, SignalOp.Update);
     }
 
-    async upsertAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+    async upsertAll(object_name: Object | string, change_data: ChangeData[]): Promise<Record[]> {
         return this.run(object_name, change_data, {}, SignalOp.Upsert);
     }
 
-    async expireAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+    async expireAll(object_name: Object | string, change_data: ChangeData[]): Promise<Record[]> {
         return this.run(object_name, change_data, {}, SignalOp.Expire);
     }
 
-    async deleteAll(object_name: Object | ObjectName, change_data: ChangeData[]): Promise<Record[]> {
+    async deleteAll(object_name: Object | string, change_data: ChangeData[]): Promise<Record[]> {
         return this.run(object_name, change_data, {}, SignalOp.Delete);
     }
 
@@ -117,28 +112,27 @@ export class KernelData {
     // Single record methods
     //
 
-    /** Reselect one record by passing in an existing record */
-    async selectOne(object_name: Object | ObjectName, source_data: ChangeData): Promise<Record | undefined> {
+    async selectOne(object_name: Object | string, source_data: ChangeData): Promise<Record | undefined> {
         return this.selectAll(object_name, [source_data]).then(headOne<Record>);
     }
 
-    async createOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+    async createOne(object_name: Object | string, change_data: ChangeData): Promise<Record> {
         return this.createAll(object_name, [change_data]).then(headOne<Record>);
     }
 
-    async updateOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+    async updateOne(object_name: Object | string, change_data: ChangeData): Promise<Record> {
         return this.updateAll(object_name, [change_data]).then(headOne<Record>);
     }
 
-    async upsertOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+    async upsertOne(object_name: Object | string, change_data: ChangeData): Promise<Record> {
         return this.upsertAll(object_name, [change_data]).then(headOne<Record>);
     }
 
-    async expireOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+    async expireOne(object_name: Object | string, change_data: ChangeData): Promise<Record> {
         return this.expireAll(object_name, [change_data]).then(headOne<Record>);
     }
 
-    async deleteOne(object_name: Object | ObjectName, change_data: ChangeData): Promise<Record> {
+    async deleteOne(object_name: Object | string, change_data: ChangeData): Promise<Record> {
         return this.deleteAll(object_name, [change_data]).then(headOne<Record>);
     }
 
@@ -146,19 +140,19 @@ export class KernelData {
     // Search ops. Basically a `select` but with a filter to support a slightly different API
     // 
 
-    async searchAny(object_name: Object | ObjectName, where?: _.Dictionary<any>, order?: _.Dictionary<string>, limit?: number): Promise<Record[]> {
+    async searchAny(object_name: Object | string, where?: _.Dictionary<any>, order?: _.Dictionary<string>, limit?: number): Promise<Record[]> {
         return this.selectAny(object_name, { where: where, order: order, limit: limit });
     }
 
-    async searchOne(object_name: Object | ObjectName, where?: _.Dictionary<any>, order?: _.Dictionary<string>): Promise<Record | undefined> {
+    async searchOne(object_name: Object | string, where?: _.Dictionary<any>, order?: _.Dictionary<string>): Promise<Record | undefined> {
         return this.selectAny(object_name, { where: where, order: order, limit: 1 }).then(headOne);
     }
 
-    async search404(object_name: Object | ObjectName, where?: _.Dictionary<any>, order?: _.Dictionary<string>): Promise<Record> {
+    async search404(object_name: Object | string, where?: _.Dictionary<any>, order?: _.Dictionary<string>): Promise<Record> {
         return this.selectAny(object_name, { where: where, order: order, limit: 1 }).then(head404);
     }
 
-    async searchNew(object_name: Object | ObjectName, created_at: string): Promise<Record[]> {
+    async searchNew(object_name: Object | string, created_at: string): Promise<Record[]> {
         return this.searchAny(object_name, { created_at: { $gt: created_at }}, { created_at: 'asc' });
     }
 
@@ -166,15 +160,15 @@ export class KernelData {
     // Lookup a record by the record name
     // 
 
-    async lookupAny(object_name: Object | ObjectName, record_name: string, limit?: number): Promise<Record[]> {
+    async lookupAny(object_name: Object | string, record_name: string, limit?: number): Promise<Record[]> {
         return this.selectAny(object_name, { where: { name: record_name }, limit: limit });
     }
 
-    async lookupOne(object_name: Object | ObjectName, record_name: string): Promise<Record | undefined> {
+    async lookupOne(object_name: Object | string, record_name: string): Promise<Record | undefined> {
         return this.selectAny(object_name, { where: { name: record_name }, limit: 1 }).then(headOne);
     }
 
-    async lookup404(object_name: Object | ObjectName, record_name: string): Promise<Record> {
+    async lookup404(object_name: Object | string, record_name: string): Promise<Record> {
         return this.selectAny(object_name, { where: { name: record_name }, limit: 1 }).then(head404);
     }
 
@@ -182,46 +176,62 @@ export class KernelData {
     // Filter + Change ops
     //
 
-    async selectAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
+    async selectAny(object_name: Object | string, filter_data: Partial<FilterJson> = {}): Promise<Record[]> {
         return this.run(object_name, [], filter_data, SignalOp.Select);
     }
 
-    async updateAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {
+    async updateAny(object_name: Object | string, filter_data: Partial<FilterJson>, change_data: ChangeData): Promise<Record[]> {
         return this.selectAny(object_name, filter_data).then(result => {
             result.forEach(record => _.assign(record.data, change_data));
             return this.updateAll(object_name, result);
         });
     }
 
-    async expireAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson>): Promise<Record[]> {
+    async expireAny(object_name: Object | string, filter_data: Partial<FilterJson>): Promise<Record[]> {
         return this.selectAny(object_name, filter_data).then(result => this.expireAll(object_name, result));
     }
 
-    async deleteAny(object_name: Object | ObjectName, filter_data: Partial<FilterJson>): Promise<Record[]> {
+    async deleteAny(object_name: Object | string, filter_data: Partial<FilterJson>): Promise<Record[]> {
         return this.selectAny(object_name, filter_data).then(result => this.deleteAll(object_name, result));
     }
 
     //
-    // By ID or IDs
+    // By a single record ID
     //
 
-    async select404(object_name: Object | ObjectName, record_one: string): Promise<Record> {
-        return this.selectAny(object_name, { where: { id: record_one }}).then(head404<Record>);
+    async select404(object_name: Object | string, record_one: string): Promise<Record> {
+        return this.selectIds(object_name, [record_one]).then(head404<Record>);
     }
 
-    async selectIds(object_name: Object | ObjectName, record_ids: string[]): Promise<Record[]> {
+    async update404(object_name: Object | string, record_one: string, change_data: ChangeData): Promise<Record> {
+        throw new Error('Unimplemented');
+    }
+
+    async expire404(object_name: Object | string, record_one: string): Promise<Record> {
+        return this.select404(object_name, record_one).then(result => this.expireOne(object_name, result));
+    }
+
+    async delete404(object_name: Object | string, record_one: string): Promise<Record> {
+        return this.select404(object_name, record_one).then(result => this.deleteOne(object_name, result));
+    }
+
+    //
+    // By an array of record IDs
+    //
+
+    async selectIds(object_name: Object | string, record_ids: string[]): Promise<Record[]> {
         return this.selectAny(object_name, { where: { id: record_ids }});
     }
 
-    async updateIds(object_name: Object | ObjectName, record_ids: string[], change_data: ChangeData): Promise<Record[]> {
+    async updateIds(object_name: Object | string, record_ids: string[], change_data: ChangeData): Promise<Record[]> {
         return this.updateAny(object_name, { where: { id: record_ids }}, change_data);
     }
 
-    async expireIds(object_name: Object | ObjectName, record_ids: string[]): Promise<Record[]> {
+    async expireIds(object_name: Object | string, record_ids: string[]): Promise<Record[]> {
         return this.expireAny(object_name, { where: { id: record_ids }});
     }
 
-    async deleteIds(object_name: Object | ObjectName, record_ids: string[]): Promise<Record[]> {
+    async deleteIds(object_name: Object | string, record_ids: string[]): Promise<Record[]> {
         return this.deleteAny(object_name, { where: { id: record_ids }});
     }
 }

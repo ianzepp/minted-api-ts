@@ -8,7 +8,7 @@ import { Kernel } from '@system/kernels/kernel';
 // Classes
 import { Column } from '@system/classes/column';
 import { Object } from '@system/classes/object';
-import { ObjectType } from '@system/typedefs/object';
+import { ObjectType } from '@system/classes/object';
 
 // Helpers
 import { assertReturn } from '@system/classes/helper';
