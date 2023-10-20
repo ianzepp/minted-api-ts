@@ -6,13 +6,13 @@ import { Tester } from '@system/classes/tester';
 
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";
-test('GET "data/whoops::test" returns error', async () => {
+test('GET invalid object type returns error', async () => {
     let errors = await Tester.expectErrors('GET', 'data/whoops::test');
     chai.expect(errors).a('array').not.empty;
     chai.expect(errors[0]).includes('not found or is not visible');
 });
 
-test('GET "data/system::test" returns ok with records', async () => {
+test('GET returns ok with records', async () => {
     let result = await Tester.expectResult('GET', 'data/system::test');
     chai.expect(result).a('array').not.empty;
 });

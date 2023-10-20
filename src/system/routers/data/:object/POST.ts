@@ -5,6 +5,10 @@ import { Router, RouterInit } from '@system/classes/router';
 
 // Implementation
 export default class extends Router {
+    constructor() { 
+        super(__filename);
+    }
+
     async run({ kernel, params, body }: RouterInit) {    
         if (body === undefined) {
             throw new Error('Request body is missing');
@@ -23,17 +27,5 @@ export default class extends Router {
         }
 
         throw new Error(`Unsupport request body type "${ typeof body }"`);
-    }
-
-    toName(): string {
-        return 'system/routers/data-create-all';
-    }
-
-    onRouterVerb() {
-        return 'POST';
-    }
-
-    onRouterPath() {
-        return '/api/data/:object';
     }
 }

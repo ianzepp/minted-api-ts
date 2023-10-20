@@ -7,6 +7,10 @@ import { Router, RouterInit } from '@system/classes/router';
 
 // Implementation
 export default class extends Router {
+    constructor() { 
+        super(__filename);
+    }
+
     async run({ kernel, params, body }: RouterInit) {
         // Parse the mail
         let mail = await simpleParser(body);
@@ -21,14 +25,6 @@ export default class extends Router {
             html: mail.html || mail.textAsHtml,
             text: mail.text,
         }).then(r => r.data.name);
-    }
-
-    onRouterVerb() {
-        return 'POST';
-    }
-
-    onRouterPath() {
-        return '/api/imap';
     }
 
     //
