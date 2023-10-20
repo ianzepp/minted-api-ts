@@ -13,30 +13,15 @@ import { ActionRing } from '@system/typedefs/action';
 import { ObjectType } from '@system/typedefs/object';
 
 export default class extends Action {
-    toName(): string {
-        return __filename;
-    }
-    
-    onObject(): string {
-        return ObjectType.Object;
-    }
-
-    onRing(): ActionRing {
-        return ActionRing.Post;
-    }
-
-    onCreate(): boolean {
-        return true;
-    }
-
-    isSeries(): boolean {
-        return true;
+    constructor() {
+        super(__filename, { series: true });
     }
 
     async one({ kernel }: Signal, record: Record) {
         // Sanity
         record.expect('name').a('string');
-        record.expect('name').not.contains('.');
+        record.expect('name').match(/^[a-z_0-9]+$/i);
+        record.expect('name').not.match(/^[_0-9]/i);
         record.expect('ns').a('string');
 
         // Create the object
@@ -45,6 +30,8 @@ export default class extends Action {
         // Create the empty table with no default columns
         await kernel.knex.createTable(object.system_name, t => {});
 
+        console.warn('adding object:', record.data);
+        
         // Add the object data to kernel meta
         kernel.meta.addObject(record.data);
     }

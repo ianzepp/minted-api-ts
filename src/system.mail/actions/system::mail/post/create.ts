@@ -16,31 +16,16 @@ import { ObjectType } from '@system/typedefs/object';
 import { extractEmail } from '@system/classes/helper';
 
 export default class extends Action {
-    toName(): string {
-        return __filename;
-    }
-    
-    onObject(): string {
-        return 'mail';
-    }
-
-    onRing(): ActionRing {
-        return ActionRing.Cascade;
-    }
-
-    onCreate(): boolean {
-        return true;
-    }
-
-    isRunnable(): boolean {
-        return typeof Bun.env.SMTP_USER === 'string';
-    }
-
-    isParallel(): boolean {
-        return true;
+    constructor() {
+        super(__filename, { parallel: true });
     }
 
     async one(signal: Signal, record: Record): Promise<void> {
+        // Not runnable?
+        if (typeof Bun.env.SMTP_USER !== 'string') {
+            return;
+        }
+
         // Process the raw email body into something useful
         let mail = await simpleParser(record.data.body);
 

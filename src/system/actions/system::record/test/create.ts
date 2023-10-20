@@ -7,11 +7,6 @@ import { Action } from '@system/classes/action';
 import { Record } from '@system/classes/record';
 import { Signal } from '@system/classes/signal';
 
-// Typedefs
-import { ColumnsMeta } from '@system/typedefs/column';
-import { DataError } from '@system/kernels/kernel-data';
-import { ActionRing } from '@system/typedefs/action';
-
 /**
  * This action performs all the record prechecks/validations. This is done in one file
  * so that we don't have many small files doing duplicate loops over the same data.
@@ -19,50 +14,36 @@ import { ActionRing } from '@system/typedefs/action';
  * @event KernelVerb.Create
  */
 export default class extends Action {
-    toName(): string {
-        return __filename;
+    constructor() {
+        super(__filename, { series: true });
     }
     
-    onObject(): string {
-        return '*';
-    }
+    async one(signal: Signal, record: Record): Promise<void> {
+        //
+        // Per record, excluding root
+        //
 
-    onRing(): ActionRing {
-        return ActionRing.Test;
-    }
+        if (signal.kernel.isRoot() === false) {
+            // Record should not have an ID already assigned
+            this.test_data_id(signal, record);
 
-    onCreate(): boolean {
-        return true;
-    }
+            // Record should either not have a namespace, or the namespace should match the user.
+            this.test_data_ns(signal, record);
+        }
 
-    async run(signal: Signal): Promise<void> {
-        for(let record of signal.change) {
-            //
-            // Per record, excluding root
-            //
+        //
+        // Per Record, per Column, including root
+        //
 
-            if (signal.kernel.isRoot() === false) {
-                // Record should not have an ID already assigned
-                this.test_data_id(signal, record);
+        for(let column of _.values(signal.object.columns)) {
+            // Columns marked as `required=true` must have a value set
+            this.test_data_required(signal, record, column);
 
-                // Record should either not have a namespace, or the namespace should match the user.
-                this.test_data_ns(signal, record);
-            }
+            // Columns marked as `minimum`, if not `null`, must have a value greater-or-equal to the value
+            this.test_data_minimum(signal, record, column);
 
-            //
-            // Per Record, per Column, including root
-            //
-
-            for(let column of _.values(signal.object.columns)) {
-                // Columns marked as `required=true` must have a value set
-                this.test_data_required(signal, record, column);
-
-                // Columns marked as `minimum`, if not `null`, must have a value greater-or-equal to the value
-                this.test_data_minimum(signal, record, column);
-
-                // Columns marked as `maximum`, if not `null`, must have a value less-than-or-equal to the value
-                this.test_data_maximum(signal, record, column);
-            }
+            // Columns marked as `maximum`, if not `null`, must have a value less-than-or-equal to the value
+            this.test_data_maximum(signal, record, column);
         }
     }
 

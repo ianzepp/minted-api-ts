@@ -11,24 +11,8 @@ import { ActionRing } from '@system/typedefs/action';
 import { ObjectType } from '@system/typedefs/object';
 
 export default class extends Action {
-    toName(): string {
-        return __filename;
-    }
-    
-    onObject(): string {
-        return ObjectType.Object;
-    }
-
-    onRing(): ActionRing {
-        return ActionRing.Post;
-    }
-
-    onDelete(): boolean {
-        return true;
-    }
-
-    isSeries(): boolean {
-        return true;
+    constructor() {
+        super(__filename, { series: true });
     }
 
     async one({ kernel }: Signal, record: Record) {

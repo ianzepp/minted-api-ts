@@ -15,57 +15,44 @@ import { Kernel } from '@system/kernels/kernel';
 import { ColumnsMeta } from '@system/typedefs/column';
 
 export default class extends Action {
-    toName(): string {
-        return __filename;
+    constructor() {
+        super(__filename);
     }
     
-    onObject(): string {
-        return '*';
-    }
-
-    onRing(): ActionRing {
-        return ActionRing.Database;
-    }
-
-    onSelect(): boolean {
-        return true;
-    }
-
-    async run(signal: Signal): Promise<void> {
-        let object = signal.object;
-        let knex = signal.kernel.knex.selectTo(object.system_name);
+    async run({ kernel, object, filter, change}: Signal): Promise<void> {
+        let knex = kernel.knex.selectTo(object.system_name);
 
         // Filter out expired and deleted records
         knex = knex.whereNull('meta.expired_at');
         knex = knex.whereNull('meta.deleted_at');
         
         // Build `filter.where` conditions
-        knex = this.whereOne(knex, signal.filter.where);
+        knex = this.whereOne(knex, filter.where);
 
         // Add the ACL conditions
-        // knex = this.whereAcl(knex, signal.kernel);
+        // knex = this.whereAcl(knex, kernel);
 
         // Build `filter.order` conditions
-        knex = this.order(knex, signal.filter.order);
+        knex = this.order(knex, filter.order);
 
         // Build `filter.limit`
-        knex = this.limit(knex, signal.filter.limit);
+        knex = this.limit(knex, filter.limit);
 
         // Build the list of columns. Based on internal visibility
-        knex = this.columns(knex, signal.object);
+        knex = this.columns(knex, object);
 
         // Wait for the result
         let result = await knex;
 
         // Convert the raw results into records
-        let select = _.map(result, record_flat => signal.object.toRecord(record_flat));
+        let select = _.map(result, record_flat => object.toRecord(record_flat));
 
         // Reset change list and add to results
-        signal.change.length = 0;
-        signal.change.push(... select);
+        change.length = 0;
+        change.push(... select);
     }
 
-    private whereAll(knex: Knex.QueryBuilder, conditions: _.Dictionary<any>[] = [], group: '$and' | '$or' = '$and') {
+    whereAll(knex: Knex.QueryBuilder, conditions: _.Dictionary<any>[] = [], group: '$and' | '$or' = '$and') {
         // console.warn('this.whereAll()', group, conditions);
         let self = this;
 
@@ -92,7 +79,7 @@ export default class extends Action {
         });
     }
 
-    private whereOne(knex: Knex.QueryBuilder, clause: _.Dictionary<any> = {}) {
+    whereOne(knex: Knex.QueryBuilder, clause: _.Dictionary<any> = {}) {
         // console.warn('this.where()', clause);
 
         for(let name in clause) {
@@ -104,7 +91,7 @@ export default class extends Action {
         return knex;
     }
 
-    private whereOp(knex: Knex.QueryBuilder, name: string, data: any) {
+    whereOp(knex: Knex.QueryBuilder, name: string, data: any) {
         // console.warn('this.whereOp()', name, data);
 
         if (name == Filter.Group.And) {
@@ -228,7 +215,7 @@ export default class extends Action {
         throw 'Unknown filter "where" operator: ' + op;
     }
 
-    private whereAcl(knex: Knex.QueryBuilder, kernel: Kernel) {
+    whereAcl(knex: Knex.QueryBuilder, kernel: Kernel) {
         //
         // NOTE: This was moved to RLS in PG directly. See `Autoinstall`
         //
@@ -277,7 +264,7 @@ export default class extends Action {
         // return knex;
     }
 
-    private order(knex: Knex.QueryBuilder, clauses: _.Dictionary<any> = {}) {
+    order(knex: Knex.QueryBuilder, clauses: _.Dictionary<any> = {}) {
         _.each(clauses, (sort, column_name) => {
             sort = sort || '';
             sort = sort.toLowerCase().trim();
@@ -290,7 +277,7 @@ export default class extends Action {
         return knex;
     }
 
-    private limit(knex: Knex.QueryBuilder, limit: number | undefined) {
+    limit(knex: Knex.QueryBuilder, limit: number | undefined) {
         if (limit === undefined) {
             limit = Filter.LimitDefault;
         }
@@ -306,7 +293,7 @@ export default class extends Action {
         return knex.limit(limit);
     }
 
-    private columns(knex: Knex.QueryBuilder, object: Object) {
+    columns(knex: Knex.QueryBuilder, object: Object) {
         // Required columns
         knex = knex.column(['data.id', 'data.ns']);
 

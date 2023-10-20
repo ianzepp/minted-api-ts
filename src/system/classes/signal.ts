@@ -5,17 +5,17 @@ import Debug from 'debug';
 const debug = Debug('minted:system:signal-runner');
 
 // Classes
-import { Action } from "./action";
-import { Record } from "./record";
-import { Preloader } from "./preloader";
-import { Kernel } from '../kernels/kernel';
-import { Object } from './object';
-import { Filter } from './filter';
-import { sign } from 'jsonwebtoken';
+import { Action, ActionRingKeys } from "@system/classes/action";
+import { Record } from "@system/classes/record";
+import { Kernel } from '@system/kernels/kernel';
+import { Object } from '@system/classes/object';
+import { Filter } from '@system/classes/filter';
+import { Preloader } from '@system/classes/preloader';
+import { toJSON } from './helper';
 
 // Build the preloaded actions
-const Actions = Preloader.from<Action>('./src/*/actions/**/*.ts');
-const ActionsByObject = _.groupBy(Actions, a => a.onObject());
+export const Actions = Preloader.from<Action>('./src/*/actions/**/*.ts');
+export const ActionsByObject = _.groupBy(Action, action => action.onObject());
 
 export interface Signal {
     kernel: Kernel;
@@ -37,58 +37,25 @@ export enum SignalOp {
 // Implementation
 export class SignalRunner {
     async run(signal: Signal): Promise<Record[]> {
-        // Filter primary actions in a single loop
-        let actions = Actions.filter(action => {
-            //
-            // Negative checks
-            //
+        let actions = _.chain(Actions)
+            .filter(action => signal.object.inherits(action.onObject()))
+            .filter(action => action.onMethod() === signal.op)
+            .value();
 
-            // Action object does not match the signal object?
-            if (signal.object.inherits(action.onObject()) === false) {
-                return false;
-            }
-
-            //
-            // Positive checks
-            //
-
-            if (signal.op == SignalOp.Select && action.onSelect()) {
-                return true;
-            }
-
-            if (signal.op == SignalOp.Create && action.onCreate()) {
-                return true;
-            }
-
-            if (signal.op == SignalOp.Update && action.onUpdate()) {
-                return true;
-            }
-
-            if (signal.op == SignalOp.Upsert && action.onUpsert()) {
-                return true;
-            }
-
-            if (signal.op == SignalOp.Expire && action.onExpire()) {
-                return true;
-            }
-
-            if (signal.op == SignalOp.Delete && action.onDelete()) {
-                return true;
-            }
-
-            // No acceptable matches.
-            return false;
-        });
-
-        // Sort by rank
-        let actions_rank = _.sortBy(actions, a => a.onRank());
+        debug(`signal object "${ signal.object.system_name }" op "${ signal.op }" has ${ actions.length } total actions..`);
 
         // Group by ring
-        let actions_ring = _.groupBy(actions_rank, a => a.onRing());
+        let actions_ring = _.groupBy(actions, action => action.onRing());
 
         // Iterate rings, then actions in those rings
-        for(let ring of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-            let list = actions_ring[ring] || [];
+        for(let ring of ['init', 'test', 'knex', 'post', 'done']) {
+            let list = _.get(actions_ring, ring, []);
+
+            if (list.length === 0) {
+                continue;
+            }
+
+            debug(`signal ring "${ ring }" has "${ list.length }" matching actions..`);
 
             for(let action of list) {
                 await this.try(signal, action);
@@ -101,7 +68,7 @@ export class SignalRunner {
 
     async try(signal: Signal, action: Action) {
         if (process.env.DEBUG) {
-            debug(`try action: op="${ signal.op }" ring="${ action.onRing() }" rank="${ action.onRank() }" action="${ action.toPackageName() }"`);
+            debug(`action: action="${ action.toPackageName() }" option=%j`, action.option);
         }
 
         try {
@@ -109,7 +76,8 @@ export class SignalRunner {
             signal.kernel.statbump(action.toPackageName());
 
             // Switch into root?
-            if (action.asRoot()) {
+            if (action.option.elevated) {
+                debug(`action is elevated: switching to sudoRoot()!`);
                 signal.kernel.sudoRoot();
             }
 
@@ -117,15 +85,11 @@ export class SignalRunner {
             let result: Promise<any>;
 
             // Which method do we use?
-            if (action.isRunnable() === false) {
-                result = undefined;
-            }
-
-            else if (action.isParallel()) {
+            if (action.option.parallel) {
                 result = Promise.all(signal.change.map(record => action.one(signal, record)));
             }
 
-            else if (action.isSeries()) {
+            if (action.option.series) {
                 for(let record of signal.change) {
                     await action.one(signal, record);
                 }
@@ -144,7 +108,7 @@ export class SignalRunner {
         }
 
         catch (error) {
-            if (action.isFailable()) {
+            if (action.option.failable) {
                 console.error('Action execution failed, but action `isFailable()` is true:');
                 console.error(error.stack || error.message || error);
             }
@@ -156,7 +120,8 @@ export class SignalRunner {
 
         finally {
             // Switch out of root?
-            if (action.asRoot()) {
+            if (action.option.elevated) {
+                debug(`action is elevated: reverting to sudoExit()!`);
                 signal.kernel.sudoExit();
             }
         }

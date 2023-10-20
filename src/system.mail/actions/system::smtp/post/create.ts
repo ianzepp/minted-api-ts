@@ -25,24 +25,8 @@ import { Record } from '@system/classes/record';
 import { ActionRing } from '@system/typedefs/action';
 
 export default class extends Action {
-    toName(): string {
-        return __filename;
-    }
-    
-    onObject(): string {
-        return 'system::smtp';
-    }
-
-    onRing(): ActionRing {
-        return ActionRing.Callout;
-    }
-
-    onCreate(): boolean {
-        return true;
-    }
-
-    isSeries(): boolean {
-        return true;
+    constructor() {
+        super(__filename, { series: true });
     }
 
     //

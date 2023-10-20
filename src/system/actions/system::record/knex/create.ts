@@ -12,22 +12,10 @@ import { sign } from 'jsonwebtoken';
 
 
 export default class extends Action {
-    toName(): string {
-        return __filename;
+    constructor() {
+        super(__filename);
     }
     
-    onObject(): string {
-        return '*';
-    }
-
-    onRing(): ActionRing {
-        return ActionRing.Database;
-    }
-
-    onCreate(): boolean {
-        return true;
-    }
-
     async run({ kernel, object, change }: Signal) {
         let created_at = kernel.time;
         let created_by = kernel.user_id;

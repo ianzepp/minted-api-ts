@@ -5,35 +5,17 @@ import { Knex } from 'knex';
 import { Column } from '@system/classes/column';
 import { Action } from '@system/classes/action';
 import { Signal } from '@system/classes/signal';
-import { ActionRing } from '@system/typedefs/action';
 import { Record } from '@system/classes/record';
 
 // Typedefs
 import { ColumnType, ColumnTypeKeys } from '@system/typedefs/column';
-import { ObjectType } from '@system/typedefs/object';
 
 export default class extends Action {
-    toName(): string {
-        return __filename;
-    }
-    
-    onObject(): string {
-        return ObjectType.Column;
+    constructor() {
+        super(__filename, { series: true });
     }
 
-    onRing(): ActionRing {
-        return ActionRing.Post;
-    }
-
-    onCreate(): boolean {
-        return true;
-    }
-
-    isSeries(): boolean {
-        return true;
-    }
-
-    async one({ kernel }: Signal, record: Record): Promise<void> {
+    async one({ kernel }: Signal, record: Record) {
         // Sanity
         record.expect('name').a('string');
         record.expect('name').contains('.');

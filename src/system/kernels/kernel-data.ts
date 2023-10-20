@@ -6,15 +6,13 @@ import { Filter } from '@system/classes/filter';
 import { Kernel } from '@system/kernels/kernel';
 import { Record } from '@system/classes/record';
 import { Object } from '@system/classes/object';
-import { Signal } from '@system/classes/signal';
+import { SignalOp } from '@system/classes/signal';
+import { SignalRunner } from '@src/system/classes/signal';
 
 // Typedefs
 import { ChangeData } from '@system/typedefs/record';
 import { FilterJson } from '@system/typedefs/filter';
-import { ActionRing } from '@system/typedefs/action';
 import { ObjectName } from '@system/typedefs/object';
-import { SignalOp } from '@system/typedefs/signal';
-import { SignalRunner } from '@src/system/classes/signal';
 
 // Data API errors
 export class DataError extends Error {};
