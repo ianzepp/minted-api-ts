@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // Classes
 import { Kernel } from '@system/kernels/kernel';
-import { ObjectType } from '@system/typedefs/object';
+import { ObjectType } from '@system/classes/object';
 
 // Implementation
 export class KernelUser {

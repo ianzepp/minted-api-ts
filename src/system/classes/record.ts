@@ -9,7 +9,6 @@ import { Object } from '@system/classes/object';
 // Typedefs
 import { ColumnsAcls } from '@system/typedefs/column';
 import { ColumnsMeta } from '@system/typedefs/column';
-import { ObjectName } from '@system/typedefs/object';
 
 //
 // Record proxies. Wizard stuff.
@@ -165,7 +164,7 @@ export class Record {
         return this.data;
     }
 
-    is(object_name: ObjectName) {
+    is(object_name: string) {
         return this.object.is(object_name);
     }
 

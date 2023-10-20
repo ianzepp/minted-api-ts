@@ -10,7 +10,7 @@ import { Record } from '@system/classes/record';
 import { Object } from '@system/classes/object';
 
 // Typedefs
-import { ObjectType } from '@system/typedefs/object';
+import { ObjectType } from '@system/classes/object';
 import { Kernel } from '@system/kernels/kernel';
 
 let kernel = new Kernel();

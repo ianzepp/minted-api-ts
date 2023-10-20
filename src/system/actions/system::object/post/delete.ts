@@ -7,7 +7,7 @@ import { Object } from '@system/classes/object';
 import { Record } from '@system/classes/record';
 
 // Typedefs
-import { ObjectType } from '@system/typedefs/object';
+import { ObjectType } from '@system/classes/object';
 
 export default class extends Action {
     constructor() {

@@ -7,7 +7,7 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 // Classes
 import { Kernel } from '@system/kernels/kernel';
 import { Record } from '@system/classes/record';
-import { ObjectType } from '@system/typedefs/object';
+import { ObjectType } from '@system/classes/object';
 import { Column } from '@system/classes/column';
 import { Object } from '@system/classes/object';
 

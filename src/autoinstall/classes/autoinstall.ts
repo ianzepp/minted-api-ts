@@ -11,7 +11,7 @@ import { sync as globSync } from 'glob';
 import { Kernel } from '@system/kernels/kernel';
 import { Object } from '@system/classes/object';
 import { RecordFlat, RecordJson } from '@system/typedefs/record';
-import { ObjectType } from '@src/system/typedefs/object';
+import { ObjectType } from '@system/classes/object';
 
 // Implementation
 export class AutoInstall {

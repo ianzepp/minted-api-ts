@@ -10,7 +10,7 @@ import { DataError } from '@system/kernels/kernel-data';
 import { RecordNotFoundError } from '@system/kernels/kernel-data';
 
 // Typedefs
-import { ObjectType } from '@system/typedefs/object';
+import { ObjectType } from '@system/classes/object';
 import { Kernel } from './kernel';
 
 function expectRecordSet(result_set: any[], length?: number) {
