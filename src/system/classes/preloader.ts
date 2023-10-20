@@ -12,6 +12,9 @@ export class Preloader {
             // Ignore things
             .reject(filename => filename.endsWith('.spec.ts'))
 
+            // Reverse sort
+            .orderBy([], ['desc'])
+
             // Load the file
             .map(filename => require(filename).default)
 

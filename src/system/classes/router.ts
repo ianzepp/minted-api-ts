@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Debug from 'debug';
+import path from 'path';
 import { pathToRegexp, match } from 'path-to-regexp';
 import UrlParse from 'url-parse';
 
@@ -7,13 +8,12 @@ import UrlParse from 'url-parse';
 import { Kernel } from '@system/kernels/kernel';
 import { Preloader } from '@system/classes/preloader';
 import { ResponseCORS } from './response-cors';
-import { ResponseStatusText } from './response-status-text';
 
 // Create debugger
 const debug = Debug('minted:system:router');
 
 // Preload the routers
-export const Routers = Preloader.from<Router>('./src/*/routers/*.ts');
+export const Routers = Preloader.from<Router>('./src/*/routers/**/*.ts');
 
 export class RouterError extends Error {
     public readonly errors: string[] = [];
@@ -38,6 +38,44 @@ export interface RouterEnvelope {
 }
 
 export class Router {
+    // What is the API path prefix
+    public static ROUTER_PATH_PREFIX = '/api/';
+
+    // Store the router params as derived from the constructor
+    public readonly router_file: string;
+    public readonly router_verb: string;
+    public readonly router_path: string;
+    public readonly router_path_regexp: RegExp;
+
+    // Protected constructor
+    protected constructor(private readonly filename = __filename) {
+        // Normalize path to use forward slashes
+        let normalizedPath = path.normalize(filename).replace(/\\/g, '/');
+
+        // Use a regular expression to extract the <path> portion
+        let match = normalizedPath.match(/\/src\/.*?\/routers\/(.*)/);
+
+        if (match === null) {
+            debug('Router implementation is outside of the expected filename pattern!');
+            return;
+        }
+
+        // If a match was found, extract the <path> portion, otherwise use an empty string
+        this.router_file = match[1];
+
+        // Assign the filename path (without the extension) to the router_verb variable
+        this.router_verb = path.basename(this.router_file, path.extname(this.router_file));
+
+        // Assign the path portion (without trailing directory slashes) to the router_path variable
+        this.router_path = Router.ROUTER_PATH_PREFIX + path.dirname(this.router_file);
+        this.router_path_regexp = pathToRegexp(this.router_path);
+
+        debug('router:', filename);
+        debug('- router_verb', this.router_verb);
+        debug('- router_path', this.router_path);
+     }
+
+    // Route a request
     public static async route(req: Request): Promise<Response> {
         // Setup
         let kernel = new Kernel();
@@ -71,11 +109,11 @@ export class Router {
 
             // No router matches?
             if (router === undefined) {
-                throw new RouterError(404, `Unroutable request "${ req.method } ${ router_url.pathname }`);
+                throw new RouterError(404, `Unroutable request "${ req.method } ${ router_url.pathname }"`);
             }
 
             // Process the router params
-            router_init.params = _.get(match(router.onRouterPath())(router_url.pathname), 'params') || {};
+            router_init.params = _.get(match(router.router_path)(router_url.pathname), 'params') || {};
             router_init.search = router_url.query;
 
             // Startup the kernel
@@ -136,7 +174,7 @@ export class Router {
     }
 
     async try(req: Request, router_init: RouterInit) {
-        debug('router.try() "%s %s" with params=%j search=%j', this.onRouterVerb(), this.onRouterPath(), router_init.params, router_init.search);
+        debug('router.try() "%s %s" with params=%j search=%j', this.router_verb, this.router_path, router_init.params, router_init.search);
 
         // Redirect content type processing failures
         // Extract the body data
@@ -177,7 +215,7 @@ export class Router {
 
         // Try to process the router
         debug('router.try(): with body data length', (router_init.body || '').length);
-        debug('router.try(): with router:', this.toName());
+        debug('router.try(): with router:', this.filename);
         return this.run(router_init);
     }
 
@@ -185,31 +223,8 @@ export class Router {
         return undefined;
     }
 
-    toName(): string {
-        return '';
-    }
-
-    toContentType() {
-        return 'application/json';
-    }
-
-    onRouterVerb(): string {
-        return '';
-    }
-
-    onRouterPath(): string {
-        return '';
-    }
-
-    isRouterVerb(verb: string): boolean {
-        return verb == this.onRouterVerb();
-    }
-
-    isRouterPath(path: string): boolean {
-        return pathToRegexp(this.onRouterPath()).exec(path ?? '/') !== null;
-    }
-
-    is(verb: string, path: string): boolean {
-        return this.isRouterVerb(verb) && this.isRouterPath(path);
+    is(verb: string, path: string = '/'): boolean {
+        debug('is() testing:', verb, path, 'vs', this.router_verb, this.router_path);
+        return verb == this.router_verb && this.router_path_regexp.exec(path) !== null;
     }
 }
