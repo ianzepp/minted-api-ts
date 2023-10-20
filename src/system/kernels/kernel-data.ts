@@ -40,7 +40,6 @@ function head404<T>(result: T[]): T {
     return r;
 }
 
-// Implementation
 export class KernelData {
     constructor(private readonly kernel: Kernel) {}
 
@@ -85,7 +84,6 @@ export class KernelData {
     // Collection record methods
     //
 
-    /** Reselect all records by passing in an existing list of records */
     async selectAll(object_name: Object | ObjectName, source_data: ChangeData[]): Promise<Record[]> {
         let object = this.kernel.meta.lookup(object_name);
         let source = source_data.map(change => object.toRecord(change).data.id);
@@ -117,7 +115,6 @@ export class KernelData {
     // Single record methods
     //
 
-    /** Reselect one record by passing in an existing record */
     async selectOne(object_name: Object | ObjectName, source_data: ChangeData): Promise<Record | undefined> {
         return this.selectAll(object_name, [source_data]).then(headOne<Record>);
     }
@@ -202,12 +199,28 @@ export class KernelData {
     }
 
     //
-    // By ID or IDs
+    // By a single record ID
     //
 
     async select404(object_name: Object | ObjectName, record_one: string): Promise<Record> {
-        return this.selectAny(object_name, { where: { id: record_one }}).then(head404<Record>);
+        return this.selectIds(object_name, [record_one]).then(head404<Record>);
     }
+
+    async update404(object_name: Object | ObjectName, record_one: string, change_data: ChangeData): Promise<Record> {
+        throw new Error('Unimplemented');
+    }
+
+    async expire404(object_name: Object | ObjectName, record_one: string): Promise<Record> {
+        return this.select404(object_name, record_one).then(result => this.expireOne(object_name, result));
+    }
+
+    async delete404(object_name: Object | ObjectName, record_one: string): Promise<Record> {
+        return this.select404(object_name, record_one).then(result => this.deleteOne(object_name, result));
+    }
+
+    //
+    // By an array of record IDs
+    //
 
     async selectIds(object_name: Object | ObjectName, record_ids: string[]): Promise<Record[]> {
         return this.selectAny(object_name, { where: { id: record_ids }});
