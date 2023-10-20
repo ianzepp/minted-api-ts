@@ -9,7 +9,7 @@ const debug = Debug('minted:openai-chat');
 // Classes
 import { Kernel } from '@system/kernels/kernel';
 import { Record } from '@system/classes/record';
-import { toJSON } from './helper';
+import { toJSON } from '../../system/classes/helper';
 
 // Interface for the queued completion messages
 export interface Completion {
@@ -62,6 +62,12 @@ export class OpenAiChat {
 
         // Done
         return self;
+    }
+
+    public static async send(kernel: Kernel, ... content: string[]) {
+        return OpenAiChat.from(kernel)
+            .then(ai => ai.send(... content))
+            .then(ai => ai.sync());
     }
 
     //

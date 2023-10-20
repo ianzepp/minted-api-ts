@@ -9,6 +9,7 @@ import { Column } from '@system/classes/column';
 import { Action } from '@system/classes/action';
 import { Record } from '@system/classes/record';
 import { Signal } from '@system/classes/signal';
+import { OpenAiChat } from '@src/openai/classes/openai-chat';
 
 export default class extends Action {
     constructor() {
@@ -25,7 +26,7 @@ export default class extends Action {
         debug('- from:', record.data.head.from);
         debug('- subject:', record.data.head.subject);
 
-        let gpt = await signal.kernel.chat.chat('gpt-3.5-turbo');
+        let gpt = await OpenAiChat.from(signal.kernel, 'gpt-3.5-turbo');
         gpt.system('You are an email assistant. You read emails and try to respond appropriately.');
         gpt.system('The email below is from a user, addressing you directly with a request. Read the entire email (and the email thread if needed) before deciding how to repy.');
         gpt.send(record.data.text || record.data.html);
