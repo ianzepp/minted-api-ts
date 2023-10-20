@@ -10,35 +10,10 @@ import { Action } from '@system/classes/action';
 import { Record } from '@system/classes/record';
 import { Signal } from '@system/classes/signal';
 
-// Typedefs
-import { ColumnsMeta } from '@system/typedefs/column';
-import { DataError } from '@system/kernels/kernel-data';
-import { ActionRing } from '@system/typedefs/action';
-
 export default class extends Action {
-    toName(): string {
-        return __filename;
+    constructor() {
+        super(__filename, { series: true });
     }
-    
-    onObject(): string {
-        return 'system::imap';
-    }
-
-    onRing(): ActionRing {
-        return ActionRing.Callout;
-    }
-
-    onCreate(): boolean {
-        return true;
-    }
-
-    isSeries(): boolean {
-        return true;
-    }
-
-    //
-    // Process one record
-    //
 
     async one(signal: Signal, record: Record) {
         // Do any of the `to` emails match our SMTP configuration?

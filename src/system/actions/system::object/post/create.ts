@@ -8,10 +8,6 @@ import { Signal } from '@system/classes/signal';
 import { Record } from '@system/classes/record';
 import { Object } from '@system/classes/object';
 
-// Typedefs
-import { ActionRing } from '@system/typedefs/action';
-import { ObjectType } from '@system/typedefs/object';
-
 export default class extends Action {
     constructor() {
         super(__filename, { series: true });

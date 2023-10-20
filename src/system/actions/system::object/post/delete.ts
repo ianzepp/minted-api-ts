@@ -7,7 +7,6 @@ import { Object } from '@system/classes/object';
 import { Record } from '@system/classes/record';
 
 // Typedefs
-import { ActionRing } from '@system/typedefs/action';
 import { ObjectType } from '@system/typedefs/object';
 
 export default class extends Action {

@@ -4,10 +4,6 @@ import _ from 'lodash';
 import { Action } from '@system/classes/action';
 import { Signal } from '@system/classes/signal';
 
-// Typedefs
-import { ActionRing } from '@system/typedefs/action';
-
-
 export default class extends Action {
     constructor() {
         super(__filename);
