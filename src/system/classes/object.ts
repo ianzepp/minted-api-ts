@@ -110,6 +110,13 @@ export class Object {
         _.set(this.columns, column.column_name, column);
     }
 
+    toJSON() {
+        return {
+            type: ObjectType.Object,
+            data: this.data
+        };
+    }
+
     /**
      * Retrieves the names of all columns in the object.
      * 
