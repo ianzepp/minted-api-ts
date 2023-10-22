@@ -16,13 +16,13 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "paths": {
+            "@root/*": ["./*"],
             "@src/*": ["./src/*"],
             "@system/*": ["./src/system/*"],
             "@system.auth/*": ["./src/system.auth/*"],
             "@system.bulk/*": ["./src/system.bulk/*"],
             "@system.mail/*": ["./src/system.mail/*"],
-            "@system.test/*": ["./src/system.test/*"],
-            "@openai/*": ["./src/openai/*"]
+            "@system.test/*": ["./src/system.test/*"]
         }
     },
     "include": [
