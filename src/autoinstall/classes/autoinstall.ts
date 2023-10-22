@@ -43,11 +43,13 @@ export class AutoInstall {
             await this.import('system.auth');
             await this.import('system.bulk');
             await this.import('system.mail');
-            await this.import('system.openapi');
             await this.import('system.test');
 
             // Package: Open AI
             await this.import('openai');
+
+            // Packagge Open API
+            await this.import('openapi');
 
             // Commit the transaction
             await this.knex.raw('COMMIT;');
