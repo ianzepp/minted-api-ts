@@ -51,7 +51,7 @@ export class KernelMeta {
     }
 
     get object_keys() {
-        return Array.from(this.objects_map.keys());
+        return Array.from(this.objects_map.keys()).sort();
     }
 
     async startup(): Promise<void> {

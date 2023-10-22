@@ -131,10 +131,19 @@ export class Router {
             // Cleanup
             await kernel.cleanup();
 
-            // Set the response
+            // Did the router return a raw Response object?
+            if (result instanceof Response) {
+                return result;
+            }
+
+            // Process as a normal API response
             router_done.status = 'ok';
+            router_done.hrtime = process.hrtime(hrtime);
             router_done.result = result;
             router_done.errors = undefined;
+
+            // Done
+            return ResponseCORS.from(200, router_done);
         }
 
         catch (error: any) {
@@ -149,6 +158,7 @@ export class Router {
 
             // Handle
             router_done.status = 'errors';
+            router_done.hrtime = process.hrtime(hrtime);
             router_done.result = undefined;
             router_done.errors = [];
 
@@ -163,14 +173,10 @@ export class Router {
             else {
                 router_done.errors.push(error.stack || error);
             }
-        }
 
-        finally {
-            router_done.hrtime = process.hrtime(hrtime);
+            // Done
+            return ResponseCORS.from(200, router_done);
         }
-
-        // Done
-        return ResponseCORS.from(200, router_done);
     }
 
     async try(req: Request, router_init: RouterInit) {
