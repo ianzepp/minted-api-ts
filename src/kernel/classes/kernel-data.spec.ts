@@ -6,8 +6,8 @@ import { beforeEach, afterEach, test } from "bun:test";
 
 // Classes
 import { Record } from '@system/classes/record';
-import { DataError } from '@system/kernels/kernel-data';
-import { RecordNotFoundError } from '@system/kernels/kernel-data';
+import { DataError } from '@kernel/classes/kernel-data';
+import { RecordNotFoundError } from '@kernel/classes/kernel-data';
 
 // Typedefs
 import { ObjectType } from '@system/classes/object';

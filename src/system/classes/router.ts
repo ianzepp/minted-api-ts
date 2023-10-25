@@ -5,7 +5,7 @@ import { pathToRegexp, match } from 'path-to-regexp';
 import UrlParse from 'url-parse';
 
 // Classes
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 import { Preloader } from '@system/classes/preloader';
 import { ResponseCORS } from './response-cors';
 

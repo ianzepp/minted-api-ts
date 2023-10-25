@@ -16,13 +16,10 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "paths": {
-            "@root/*": ["./*"],
+            "@prj/*": ["./*"],
             "@src/*": ["./src/*"],
+            "@kernel/*": ["./src/kernel/*"],
             "@system/*": ["./src/system/*"],
-            "@system.auth/*": ["./src/system.auth/*"],
-            "@system.bulk/*": ["./src/system.bulk/*"],
-            "@system.mail/*": ["./src/system.mail/*"],
-            "@system.test/*": ["./src/system.test/*"]
         }
     },
     "include": [

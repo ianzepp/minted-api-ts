@@ -3,7 +3,7 @@ import Debug from 'debug';
 
 // Classes
 import { Filter } from '@system/classes/filter';
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 import { Record } from '@system/classes/record';
 import { Object } from '@system/classes/object';
 import { SignalOp } from '@system/classes/signal';

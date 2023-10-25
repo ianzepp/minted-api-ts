@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 // Classes
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 import { ObjectType } from '@system/classes/object';
 
 // Implementation

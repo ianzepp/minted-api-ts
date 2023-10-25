@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { toLower } from 'lodash';
 
 // Kernels
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 
 // Classes
 import { Column } from '@system/classes/column';
@@ -12,7 +12,6 @@ import { ObjectType } from '@system/classes/object';
 
 // Helpers
 import { assertReturn } from '@system/classes/helper';
-import { ColumnForm, ColumnType } from '../typedefs/column';
 
 // Extract the predefined list of object names
 export const KernelObjectTypes = _.values(ObjectType) as string[];

@@ -1,15 +1,15 @@
 import _ from 'lodash';
-import project from '@root/package.json';
+import project from '@prj/package.json';
 
 // Classes
-import { Kernel } from "@system/kernels/kernel";
+import { Kernel } from "@kernel/classes/kernel";
 import { Router } from '@system/classes/router';
 import { Object } from '@system/classes/object';
 import { Column } from '@system/classes/column';
 
 // Preload
 import { Routers } from '@system/classes/router';
-import { ResponseCORS } from '@root/src/system/classes/response-cors';
+import { ResponseCORS } from '@system/classes/response-cors';
 
 // Result interface
 export interface OpenApiInfo {

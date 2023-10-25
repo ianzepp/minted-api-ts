@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { Knex } from 'knex';
 
 // For importing packages
 import fs from 'fs-extra';
@@ -8,7 +7,7 @@ import klaw from 'klaw-sync';
 import { sync as globSync } from 'glob';
 
 // Local imports
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 import { Object } from '@system/classes/object';
 import { RecordFlat, RecordJson } from '@system/typedefs/record';
 import { ObjectType } from '@system/classes/object';
@@ -37,6 +36,9 @@ export class AutoInstall {
 
             // Startup the kernel so we have basic data structures
             await this.kernel.startup();
+
+            // Core kernel
+            await this.import('kernel');
 
             // Install packages
             await this.import('system');
@@ -101,6 +103,7 @@ export class AutoInstall {
             table.boolean('required').defaultTo(false);
             table.boolean('unique').defaultTo(false);
 
+            // Size constraints
             table.integer('minimum');
             table.integer('maximum');
             table.integer('precision');

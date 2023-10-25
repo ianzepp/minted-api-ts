@@ -7,7 +7,7 @@ import vm from 'vm';
 const debug = Debug('minted:openai-chat');
 
 // Classes
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 import { Record } from '@system/classes/record';
 import { toJSON } from '../../system/classes/helper';
 

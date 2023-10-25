@@ -2,10 +2,10 @@ import _ from 'lodash';
 import fs from 'fs-extra';
 
 // Classes
-import { Kernel } from "./system/kernels/kernel";
-import { Object, ObjectType } from './system/classes/object';
-import { Column } from './system/classes/column';
-import { Record } from './system/classes/record';
+import { Kernel } from "@kernel/classes/kernel";
+import { Object, ObjectType } from '@system/classes/object';
+import { Column } from '@system/classes/column';
+import { Record } from '@system/classes/record';
 
 export class MetaExport {
     readonly kernel = new Kernel();

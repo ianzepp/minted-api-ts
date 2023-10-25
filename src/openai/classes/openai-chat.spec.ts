@@ -3,7 +3,7 @@ import chai from 'chai';
 import vm from 'vm';
 
 // Classes
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 import { toJSON } from '@system/classes/helper';
 // Bun:test
 import { beforeEach, afterEach, describe, test } from "bun:test";

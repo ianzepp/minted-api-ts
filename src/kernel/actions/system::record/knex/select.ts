@@ -8,7 +8,7 @@ import { Filter } from '@system/classes/filter';
 
 // Typedefs
 import { Object } from '@system/classes/object';
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 
 // Meta columns
 import { ColumnsMeta } from '@system/typedefs/column';

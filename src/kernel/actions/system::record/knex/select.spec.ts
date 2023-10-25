@@ -6,7 +6,7 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Typedefs
 import { ObjectType } from '@system/classes/object';
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 
 
 let kernel = new Kernel();

@@ -7,7 +7,7 @@ const debug = Debug('minted:system:signal-runner');
 // Classes
 import { Action, ActionRingKeys } from "@system/classes/action";
 import { Record } from "@system/classes/record";
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 import { Object } from '@system/classes/object';
 import { Filter } from '@system/classes/filter';
 import { Preloader } from '@system/classes/preloader';

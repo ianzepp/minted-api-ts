@@ -1,7 +1,7 @@
 import _ from "lodash";
 import chai from 'chai';
 
-import { Kernel } from "@system/kernels/kernel";
+import { Kernel } from "@kernel/classes/kernel";
 import { Router } from "./router";
 
 export interface RouteTest {

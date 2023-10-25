@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import chai from 'chai';
 
+import { Kernel } from "@kernel/classes/kernel";
 import { ChangeData } from "@system/typedefs/record";
 import { FilterJson } from "@system/typedefs/filter";
-import { Kernel } from "@system/kernels/kernel";
 import { toJSON } from "@system/classes/helper";
 
 // Bulk request payload

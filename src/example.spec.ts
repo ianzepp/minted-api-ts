@@ -2,7 +2,7 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 import { Tester } from '@system/classes/tester';
 import { KnexDriver } from './system/classes/knex';
 

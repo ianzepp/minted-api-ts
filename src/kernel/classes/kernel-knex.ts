@@ -7,7 +7,7 @@ import { KnexDriver, KnexDriverFn } from '@system/classes/knex';
 import { Knex } from 'knex';
 
 // Classes
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 
 // Debug messages
 const debug = Debug('minted:system:kernel-knex');

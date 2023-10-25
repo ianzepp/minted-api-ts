@@ -11,7 +11,7 @@ import { Object } from '@system/classes/object';
 
 // Typedefs
 import { ObjectType } from '@system/classes/object';
-import { Kernel } from '@system/kernels/kernel';
+import { Kernel } from '@kernel/classes/kernel';
 
 let kernel = new Kernel();
 
