@@ -13,7 +13,7 @@ export default class extends Action {
     async run({ kernel, object, change }: Signal) {
         let created_at = kernel.time;
         let created_by = kernel.user_id;
-        let created_ns = kernel.user_ns;
+        let created_ns = kernel.user.ns;
 
         // Track change `data` and `meta` for the eventual insert op
         let record_data = [];

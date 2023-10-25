@@ -10,7 +10,7 @@ import { Knex } from 'knex';
 import { Kernel } from '@kernel/classes/kernel';
 
 // Debug messages
-const debug = Debug('minted:system:kernel-knex');
+const debug = Debug('minted:kernel:kernel-knex');
 
 // Implementation
 export class KernelKnex {
@@ -113,7 +113,7 @@ export class KernelKnex {
 
         // Apply namespace visibility
         if (this.kernel.isRoot() === false) {
-            knex = knex.whereIn(`${ type }.ns`, this.kernel.namespaces);
+            knex = knex.whereIn(`${ type }.ns`, this.kernel.user.namespaces);
         }
 
         // Apply specific record IDs?
@@ -133,7 +133,7 @@ export class KernelKnex {
 
         // Apply namespace visibility
         if (this.kernel.isRoot() === false) {
-            knex = knex.whereIn(`data.ns`, this.kernel.namespaces);
+            knex = knex.whereIn(`data.ns`, this.kernel.user.namespaces);
         }
 
         // Done

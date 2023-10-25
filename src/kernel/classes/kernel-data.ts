@@ -19,7 +19,7 @@ export class RecordFoundError extends DataError {};
 export class RecordNotFoundError extends DataError {};
 
 // Debug messages
-const debug = Debug('minted:system:kernel-data');
+const debug = Debug('minted:kernel:kernel-data');
 
 // Local helper
 function headOne<T>(result: T[]): T | undefined {

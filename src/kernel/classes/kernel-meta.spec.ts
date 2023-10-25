@@ -68,7 +68,7 @@ test.skip('object => database table lifecycle', async () => {
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
     chai.expect(record.data).property('id').string;
-    chai.expect(record.data).property('ns', kernel.user_ns);
+    chai.expect(record.data).property('ns', kernel.user.ns);
     chai.expect(record.meta).property('created_at');
     chai.expect(record.meta).property('created_by', kernel.user_id);
     chai.expect(record.meta).property('expired_at').null;
@@ -81,7 +81,7 @@ test.skip('object => database table lifecycle', async () => {
     chai.expect(tested).instanceOf(Record);
     chai.expect(tested).property('data').a('object');
     chai.expect(tested.data).property('id').string;
-    chai.expect(tested.data).property('ns', kernel.user_ns);
+    chai.expect(tested.data).property('ns', kernel.user.ns);
     chai.expect(tested.meta).property('created_at').not.null;
     chai.expect(tested.meta).property('created_by', kernel.user_id);
     chai.expect(tested.meta).property('expired_at').null;
@@ -95,7 +95,7 @@ test.skip('object => database table lifecycle', async () => {
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
     chai.expect(record.data).property('id').string;
-    chai.expect(record.data).property('ns', kernel.user_ns);
+    chai.expect(record.data).property('ns', kernel.user.ns);
     chai.expect(record.meta).property('created_at').not.null;
     chai.expect(record.meta).property('created_by', kernel.user_id);
     chai.expect(record.meta).property('expired_at').not.null;
@@ -112,7 +112,7 @@ test.skip('object => database table lifecycle', async () => {
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
     chai.expect(record.data).property('id').string;
-    chai.expect(record.data).property('ns', kernel.user_ns);
+    chai.expect(record.data).property('ns', kernel.user.ns);
     chai.expect(record.meta).property('created_at').not.null;
     chai.expect(record.meta).property('created_by', kernel.user_id);
     chai.expect(record.meta).property('expired_at').not.null;
@@ -144,7 +144,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(parent).instanceOf(Record);
     chai.expect(parent).property('data').a('object');
     chai.expect(parent.data).property('id').string;
-    chai.expect(parent.data).property('ns', kernel.user_ns);
+    chai.expect(parent.data).property('ns', kernel.user.ns);
     chai.expect(parent.data).property('name', parent_data.name);
     chai.expect(parent.data).property('type', parent_data.type);
     chai.expect(parent.meta).property('created_at');
@@ -163,7 +163,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
     chai.expect(record.data).property('id').string;
-    chai.expect(record.data).property('ns', kernel.user_ns);
+    chai.expect(record.data).property('ns', kernel.user.ns);
     chai.expect(record.data).property('object_name', record_data.object_name);
     chai.expect(record.data).property('name', record_data.name);
     chai.expect(record.data).property('type', record_data.type);
@@ -185,7 +185,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(tested).instanceOf(Record);
     chai.expect(tested).property('data').a('object');
     chai.expect(tested.data).property('id').string;
-    chai.expect(tested.data).property('ns', kernel.user_ns);
+    chai.expect(tested.data).property('ns', kernel.user.ns);
     chai.expect(tested.data).property('test_text', 'this is a column');
     chai.expect(tested.meta).property('created_at').not.null;
     chai.expect(tested.meta).property('created_by', kernel.user_id);
@@ -200,7 +200,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(select).instanceOf(Record);
     chai.expect(select).property('data').a('object');
     chai.expect(select.data).property('id').string;
-    chai.expect(select.data).property('ns', kernel.user_ns);
+    chai.expect(select.data).property('ns', kernel.user.ns);
     chai.expect(select.data).property('test_text', 'this is a column');
     chai.expect(select.meta).property('created_at').not.null;
     chai.expect(select.meta).property('created_by', kernel.user_id);
@@ -215,7 +215,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
     chai.expect(record.data).property('id').string;
-    chai.expect(record.data).property('ns', kernel.user_ns);
+    chai.expect(record.data).property('ns', kernel.user.ns);
     chai.expect(record.meta).property('created_at').not.null;
     chai.expect(record.meta).property('created_by', kernel.user_id);
     chai.expect(record.meta).property('expired_at').not.null;
@@ -232,7 +232,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
     chai.expect(record.data).property('id').string;
-    chai.expect(record.data).property('ns', kernel.user_ns);
+    chai.expect(record.data).property('ns', kernel.user.ns);
     chai.expect(record.meta).property('created_at').not.null;
     chai.expect(record.meta).property('created_by', kernel.user_id);
     chai.expect(record.meta).property('expired_at').not.null;
@@ -250,7 +250,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(retest).instanceOf(Record);
     chai.expect(retest).property('data').a('object');
     chai.expect(retest.data).property('id').string;
-    chai.expect(retest.data).property('ns', kernel.user_ns);
+    chai.expect(retest.data).property('ns', kernel.user.ns);
     chai.expect(retest.data).not.property('test_text');
     chai.expect(retest.meta).property('created_at').not.null;
     chai.expect(retest.meta).property('created_by', kernel.user_id);

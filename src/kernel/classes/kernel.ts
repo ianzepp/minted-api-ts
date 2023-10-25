@@ -45,6 +45,9 @@ export class Kernel {
     // Track kernel status
     private readonly statinfo: _.Dictionary<number> = {};
 
+    // Constructor
+    public constructor(public readonly user_id: string = Kernel.ID) {}
+
     //
     // Service Methods
     //
@@ -94,7 +97,7 @@ export class Kernel {
     //
 
     isRoot(): boolean {
-        return this.sudo_chain.length === 0 
+        return this.user_id === Kernel.ID
             || this.sudo_chain[this.sudo_chain.length - 1] === Kernel.ID;
     }
 
@@ -110,22 +113,6 @@ export class Kernel {
         return this.time.toISOString();
     }
 
-
-    //
-    // User ID, NS, and namespaces
-    //
-
-    get user_id() {
-        return Kernel.ID;
-    }
-
-    get user_ns() {
-        return Kernel.NS;
-    }
-
-    get namespaces() {
-        return _.uniq(_.compact(['system', this.user_ns]));
-    }
 
     //
     //

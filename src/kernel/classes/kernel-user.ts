@@ -50,4 +50,8 @@ export class KernelUser {
     get ns() {
         return this.data.ns || Kernel.NS;
     }
+
+    get namespaces() {
+        return _.uniq(_.compact(['system', this.ns]));
+    }
 }

@@ -56,7 +56,7 @@ export default class extends Action {
     }
 
     test_data_ns({ kernel }: Signal, record: Record) {
-        record.expect('ns').oneOf([null, kernel.user_ns]);
+        record.expect('ns').oneOf([null, kernel.user.ns]);
     }
 
     test_data_required(signal: Signal, record: Record, column: Column) {
