@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { ColumnName } from '@system/typedefs/column';
 import { ColumnForm } from '@system/typedefs/column';
 import { ColumnType } from '@system/typedefs/column';
+import { ObjectType } from './object';
 
 
 /**
@@ -53,6 +54,22 @@ export class Column {
         public readonly forms: ColumnForm[],
         public readonly minimum: number | null,
         public readonly maximum: number | null) {}
+
+
+    toJSON() {
+        return {
+            type: ObjectType.Column,
+            data: {
+                id: this.id,
+                ns: this.ns,
+                name: this.name,
+                type: this.type,
+                audited: this.of(ColumnForm.Audited),
+                immutable: this.of(ColumnForm.Immutable),
+                required: this.of(ColumnForm.Required),
+            }
+        };
+    }
 
     //
     // Getters/Setters

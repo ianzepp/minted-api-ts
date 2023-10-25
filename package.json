@@ -8,6 +8,7 @@
     "autoinstall": "bash ./scripts/autoinstall.sh",
     "build": "bash ./scripts/build.sh",
     "clean": "bash ./scripts/clean.sh",
+    "meta:export": "bash ./scripts/meta-export.sh",
     "start": "bash ./scripts/start.sh",
     "test": "bash ./scripts/test.sh",
     "test:clean": "bash ./scripts/test-clean.sh"
