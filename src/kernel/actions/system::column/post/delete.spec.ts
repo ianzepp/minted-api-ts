@@ -7,9 +7,6 @@ import { beforeEach, afterEach, describe, test } from "bun:test";
 // Classes
 import { Kernel } from '@kernel/classes/kernel';
 
-// Typedefs
-import { ObjectType } from '@system/classes/object';
-
 let kernel = new Kernel();
 
 beforeEach(async () => {
@@ -22,17 +19,17 @@ afterEach(async () => {
 
 // FIXME:
 test('should delete a knex column', async () => {
-    let record = await kernel.data.createOne(ObjectType.Column, { 
+    let record = await kernel.data.createOne('system::column', { 
         name: 'test.username', 
         type: 'text' 
     });
 
     // Make sure we can insert records
-    await kernel.data.createOne(ObjectType.Test, {
+    await kernel.data.createOne('system::test', {
         name: 'username',
         username: 'example@example.com'
     });
 
     // Delete column
-    await kernel.data.deleteOne(ObjectType.Column, record);
+    await kernel.data.deleteOne('system::column', record);
 });

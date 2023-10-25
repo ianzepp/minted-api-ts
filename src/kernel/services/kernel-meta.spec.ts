@@ -5,12 +5,9 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { Column } from '@system/classes/column';
-import { Record } from '@system/classes/record';
-import { Object } from '@system/classes/object';
-
-// Typedefs
-import { ObjectType } from '@system/classes/object';
+import { Column } from '@kernel/classes/column';
+import { Record } from '@kernel/classes/record';
+import { Object } from '@kernel/classes/object';
 import { Kernel } from '@kernel/classes/kernel';
 
 let kernel = new Kernel();
@@ -48,10 +45,10 @@ test('meta.objects should be populated with Object instances', async () => {
 // interface
 //
 
-test('can export an object to an interface', async () => {
-    let typedefs = kernel.meta.objects.map(object => object.toTypedefs());
-    let typedefs_text = typedefs.join('\n');
-});
+// test('can export an object to an interface', async () => {
+//     let typedefs = kernel.meta.objects.map(object => object.toTypedefs());
+//     let typedefs_text = typedefs.join('\n');
+// });
 
 //
 // lifecycle testing
@@ -63,7 +60,7 @@ test.skip('object => database table lifecycle', async () => {
     let record: Record;
 
     // Insert the new object record
-    record = await kernel.data.createOne(ObjectType.Object, record_data);
+    record = await kernel.data.createOne('system::object', record_data);
 
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
@@ -90,7 +87,7 @@ test.skip('object => database table lifecycle', async () => {
     chai.expect(tested.meta).property('deleted_by').null;
 
     // Expire the object record.
-    record = await kernel.data.expireOne(ObjectType.Object, record);
+    record = await kernel.data.expireOne('system::object', record);
 
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
@@ -107,7 +104,7 @@ test.skip('object => database table lifecycle', async () => {
     await kernel.data.selectAny(tested_object, {});
 
     // Delete the object record.
-    record = await kernel.data.deleteOne(ObjectType.Object, record);
+    record = await kernel.data.deleteOne('system::object', record);
 
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
@@ -139,7 +136,7 @@ test.skip('column => database table lifecycle', async () => {
     let parent_data = { name: object_name, type: 'database' };
 
     // Insert the new object record
-    let parent = await kernel.data.createOne(ObjectType.Object, parent_data);
+    let parent = await kernel.data.createOne('system::object', parent_data);
 
     chai.expect(parent).instanceOf(Record);
     chai.expect(parent).property('data').a('object');
@@ -158,7 +155,7 @@ test.skip('column => database table lifecycle', async () => {
     let record_data = { object_name: parent.data.name, name: 'test_text', type: 'text' };
 
     // Insert the new column record
-    let record = await kernel.data.createOne(ObjectType.Column, record_data);
+    let record = await kernel.data.createOne('system::column', record_data);
 
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
@@ -210,7 +207,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(select.meta).property('deleted_by').null;
     
     // Expire the column record.
-    record = await kernel.data.expireOne(ObjectType.Column, record);
+    record = await kernel.data.expireOne('system::column', record);
 
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');
@@ -227,7 +224,7 @@ test.skip('column => database table lifecycle', async () => {
     await kernel.data.selectAny(tested_object, {});
 
     // Delete the object record.
-    record = await kernel.data.deleteOne(ObjectType.Column, record);
+    record = await kernel.data.deleteOne('system::column', record);
 
     chai.expect(record).instanceOf(Record);
     chai.expect(record).property('data').a('object');

@@ -3,9 +3,9 @@ import fs from 'fs-extra';
 
 // Classes
 import { Kernel } from "@kernel/classes/kernel";
-import { Object, ObjectType } from '@system/classes/object';
-import { Column } from '@system/classes/column';
-import { Record } from '@system/classes/record';
+import { Object } from '@kernel/classes/object';
+import { Column } from '@kernel/classes/column';
+import { Record } from '@kernel/classes/record';
 
 export class MetaExport {
     readonly kernel = new Kernel();
@@ -55,11 +55,11 @@ export class MetaExport {
 
     async exportRecordList(object: Object) {
         // Don't export records for the two core types
-        if (object.system_name === ObjectType.Object) {
+        if (object.inherits('system::object')) {
             return;
         }
 
-        if (object.system_name === ObjectType.Column) {
+        if (object.inherits('system::column')) {
             return;
         }
         

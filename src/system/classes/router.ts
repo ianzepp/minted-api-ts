@@ -6,14 +6,14 @@ import UrlParse from 'url-parse';
 
 // Classes
 import { Kernel } from '@kernel/classes/kernel';
-import { Preloader } from '@system/classes/preloader';
+import { Loader } from '@kernel/classes/loader';
 import { ResponseCORS } from './response-cors';
 
 // Create debugger
 const debug = Debug('minted:system:router');
 
 // Preload the routers
-export const Routers = Preloader.from<Router>('./src/*/routers/**/*.ts');
+export const Routers = Loader.glob<Router>('./src/*/routers/**/*.ts');
 
 export class RouterError extends Error {
     public readonly errors: string[] = [];

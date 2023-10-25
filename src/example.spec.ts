@@ -1,10 +1,7 @@
 import _ from 'lodash';
-import chai from 'chai';
 
 // Classes
-import { Kernel } from '@kernel/classes/kernel';
 import { Tester } from '@system/classes/tester';
-import { KnexDriver } from './system/classes/knex';
 
 // Bun:test
 import { beforeEach, afterEach, afterAll, test } from "bun:test";
@@ -20,7 +17,6 @@ afterEach(async () => {
 });
 
 test('runs', async () => {
-    await kernel.data.selectAny('system::object', {});
-    await kernel.data.selectAny('system::object', {});
+
 });
 

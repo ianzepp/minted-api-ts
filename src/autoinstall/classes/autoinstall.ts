@@ -8,9 +8,8 @@ import { sync as globSync } from 'glob';
 
 // Local imports
 import { Kernel } from '@kernel/classes/kernel';
-import { Object } from '@system/classes/object';
-import { RecordFlat, RecordJson } from '@system/typedefs/record';
-import { ObjectType } from '@system/classes/object';
+import { Object } from '@kernel/classes/object';
+import { RecordFlat, RecordJson } from '@kernel/classes/record';
 
 // Implementation
 export class AutoInstall {
@@ -194,7 +193,7 @@ export class AutoInstall {
 
         // For each object in the package, import it individually
         let object_list = _.filter(imports, json => {
-            return _.get(json, 'type') === ObjectType.Object
+            return _.get(json, 'type') === 'system::object'
         }) as RecordJson[];
 
         for(let object_json of object_list) {
@@ -209,7 +208,7 @@ export class AutoInstall {
         console.info(`+ processing "${ object.system_name }" import..`);
 
         let column_json = _.filter(imports, json => {
-            return _.get(json, 'type') === ObjectType.Column
+            return _.get(json, 'type') === 'system::column'
                 && _.get(json, 'data.name', '').startsWith(object.object_name + '.');
         }) as RecordJson[];
 
@@ -226,12 +225,12 @@ export class AutoInstall {
         // Insert the object
         if (object_json) {
             console.warn('  + object as type', [object_json.type]);
-            await this.kernel.data.createOne(ObjectType.Object, object_json);
+            await this.kernel.data.createOne('system::object', object_json);
         }
 
         if (column_json.length) {
             console.warn('  + columns:', column_json.map(c => c.data.name));
-            await this.kernel.data.createAll(ObjectType.Column, column_json);
+            await this.kernel.data.createAll('system::column', column_json);
         }
 
         // Insert the object records

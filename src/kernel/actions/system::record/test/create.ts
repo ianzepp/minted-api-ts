@@ -2,10 +2,10 @@ import _ from 'lodash';
 import chai from 'chai';
 
 // Classes
-import { Column } from '@system/classes/column';
-import { Action } from '@system/classes/action';
-import { Record } from '@system/classes/record';
-import { Signal } from '@system/classes/signal';
+import { Column } from '@kernel/classes/column';
+import { Action } from '@kernel/classes/action';
+import { Record } from '@kernel/classes/record';
+import { Signal } from '@kernel/classes/signal';
 
 /**
  * This action performs all the record prechecks/validations. This is done in one file

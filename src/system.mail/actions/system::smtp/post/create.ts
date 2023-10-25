@@ -17,9 +17,9 @@ const SMTP = nodemailer.createTransport({
 });
 
 // Classes
-import { Action } from '@system/classes/action';
-import { Signal } from '@system/classes/signal';
-import { Record } from '@system/classes/record';
+import { Action } from '@kernel/classes/action';
+import { Signal } from '@kernel/classes/signal';
+import { Record } from '@kernel/classes/record';
 
 export default class extends Action {
     constructor() {

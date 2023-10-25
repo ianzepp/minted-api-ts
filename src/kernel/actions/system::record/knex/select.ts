@@ -2,16 +2,14 @@ import _ from 'lodash';
 import { Knex } from 'knex';
 
 // Classes
-import { Action } from '@system/classes/action';
-import { Signal } from '@system/classes/signal';
-import { Filter } from '@system/classes/filter';
+import { Action } from '@kernel/classes/action';
+import { Signal } from '@kernel/classes/signal';
+import { Filter } from '@kernel/classes/filter';
 
 // Typedefs
-import { Object } from '@system/classes/object';
+import { Object } from '@kernel/classes/object';
 import { Kernel } from '@kernel/classes/kernel';
-
-// Meta columns
-import { ColumnsMeta } from '@system/typedefs/column';
+import { Record } from '@kernel/classes/record';
 
 export default class extends Action {
     constructor() {
@@ -44,7 +42,7 @@ export default class extends Action {
         let result = await knex;
 
         // Convert the raw results into records
-        let select = _.map(result, record_flat => object.toRecord(record_flat));
+        let select = _.map(result, record_flat => new Record(object, record_flat));
 
         // Reset change list and add to results
         change.length = 0;
@@ -111,7 +109,7 @@ export default class extends Action {
 
         let column_name: string;
         
-        if (ColumnsMeta.includes(name)) {
+        if (Object.ColumnsMeta.includes(name)) {
             column_name = 'meta.' + name;
         }
 
@@ -300,7 +298,7 @@ export default class extends Action {
         knex = knex.column(['meta.*']);
 
         // Object visible columns
-        knex = knex.column(object.keys('data'));
+        knex = knex.column(object.column_keys);
 
         // Done
         return knex;

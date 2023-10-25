@@ -3,10 +3,10 @@ import chai from 'chai';
 import { Knex } from 'knex';
 
 // Classes
-import { Action } from '@system/classes/action';
-import { Signal } from '@system/classes/signal';
-import { Record } from '@system/classes/record';
-import { Object } from '@system/classes/object';
+import { Action } from '@kernel/classes/action';
+import { Signal } from '@kernel/classes/signal';
+import { Record } from '@kernel/classes/record';
+import { Object } from '@kernel/classes/object';
 
 export default class extends Action {
     constructor() {

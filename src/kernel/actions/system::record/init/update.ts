@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 // Classes
-import { Action } from '@system/classes/action';
-import { Signal } from '@system/classes/signal';
+import { Action } from '@kernel/classes/action';
+import { Signal } from '@kernel/classes/signal';
 
 export default class extends Action {
     constructor() {

@@ -66,17 +66,17 @@ test.skip('evaluate code files and add comments', async () => {
     console.info('summary', summary);
 });
 
-test.skip('evaluate the typedefs for the system', async () => {
-    let typedefs = kernel.meta.objects.map(object => object.toTypedefs());
-    let typedefs_text = typedefs.join('\n');
+// test.skip('evaluate the typedefs for the system', async () => {
+//     let typedefs = kernel.meta.objects.map(object => object.toTypedefs());
+//     let typedefs_text = typedefs.join('\n');
     
-    let chat = await OpenAiChat.from(kernel, 'default', 'You are an expert Typescript programmer');
-    chat.send(typedefs);
-    chat.send('Review the interfaces and summarize the overall system.');
+//     let chat = await OpenAiChat.from(kernel, 'default', 'You are an expert Typescript programmer');
+//     chat.send(typedefs);
+//     chat.send('Review the interfaces and summarize the overall system.');
 
-    let summary = await chat.sync();
-    console.info('summary', summary);
-});
+//     let summary = await chat.sync();
+//     console.info('summary', summary);
+// });
 
 test.skip('write and execute code', async () => {
     let chat = await OpenAiChat.from(kernel, 'default', 'You are an expert javascript programmer');

@@ -2,15 +2,15 @@ import _ from 'lodash';
 import Debug from 'debug';
 
 // Classes
-import { Filter } from '@system/classes/filter';
+import { Filter } from '@kernel/classes/filter';
 import { Kernel } from '@kernel/classes/kernel';
-import { Record } from '@system/classes/record';
-import { Object } from '@system/classes/object';
-import { SignalOp } from '@system/classes/signal';
-import { SignalRunner } from '@src/system/classes/signal';
+import { Record } from '@kernel/classes/record';
+import { Object } from '@kernel/classes/object';
+import { SignalOp } from '@kernel/classes/signal';
+import { SignalRunner } from '@kernel/classes/signal';
 
 // Typedefs
-import { ChangeData } from '@system/typedefs/record';
+import { ChangeData } from '@kernel/classes/record';
 import { FilterJson } from '@system/typedefs/filter';
 
 // Data API errors
@@ -68,7 +68,7 @@ export class KernelData {
         }
 
         // Convert the raw change data into records
-        let change = change_data.map(change => object.toRecord(change));
+        let change = change_data.map(change => new Record(object, change));
 
         // Broadcast
         let runner = new SignalRunner();
@@ -83,7 +83,7 @@ export class KernelData {
 
     async selectAll(object_name: Object | string, source_data: ChangeData[]): Promise<Record[]> {
         let object = this.kernel.meta.lookup(object_name);
-        let source = source_data.map(change => object.toRecord(change).data.id);
+        let source = source_data.map(change => new Record(object, change).data.id); // TODO this is too expensive.
 
         return this.selectIds(object, _.uniq(_.compact(source)));
     }

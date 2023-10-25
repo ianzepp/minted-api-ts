@@ -5,7 +5,6 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Classes
-import { ObjectType } from '@system/classes/object';
 import { Kernel } from '@kernel/classes/kernel';
 
 
@@ -21,7 +20,7 @@ afterEach(async () => {
 
 test('should create a knex table', async () => {
     let object_name = kernel.toTestName();    
-    let object_data = await kernel.data.createOne(ObjectType.Object, {
+    let object_data = await kernel.data.createOne('system::object', {
         name: object_name
     });
 

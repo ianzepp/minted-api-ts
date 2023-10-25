@@ -5,16 +5,15 @@ import Debug from 'debug';
 const debug = Debug('minted:system:signal-runner');
 
 // Classes
-import { Action, ActionRingKeys } from "@system/classes/action";
-import { Record } from "@system/classes/record";
+import { Action, ActionRingKeys } from "@kernel/classes/action";
+import { Record } from "@kernel/classes/record";
 import { Kernel } from '@kernel/classes/kernel';
-import { Object } from '@system/classes/object';
-import { Filter } from '@system/classes/filter';
-import { Preloader } from '@system/classes/preloader';
-import { toJSON } from './helper';
+import { Object } from '@kernel/classes/object';
+import { Filter } from '@kernel/classes/filter';
+import { Loader } from '@kernel/classes/loader';
 
 // Build the preloaded actions
-export const Actions = Preloader.from<Action>('./src/*/actions/**/*.ts');
+export const Actions = Loader.glob<Action>('./src/*/actions/**/*.ts');
 export const ActionsByObject = _.groupBy(Action, action => action.onObject());
 
 export interface Signal {

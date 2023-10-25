@@ -2,10 +2,10 @@ import _ from 'lodash';
 import { Knex } from 'knex';
 
 // Classes
-import { Column } from '@system/classes/column';
-import { Action } from '@system/classes/action';
-import { Signal } from '@system/classes/signal';
-import { Record } from '@system/classes/record';
+import { Column } from '@kernel/classes/column';
+import { Action } from '@kernel/classes/action';
+import { Signal } from '@kernel/classes/signal';
+import { Record } from '@kernel/classes/record';
 
 // Typedefs
 import { ColumnType, ColumnTypeKeys } from '@system/typedefs/column';

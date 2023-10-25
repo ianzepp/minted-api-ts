@@ -6,15 +6,8 @@ import { toLower } from 'lodash';
 import { Kernel } from '@kernel/classes/kernel';
 
 // Classes
-import { Column } from '@system/classes/column';
-import { Object } from '@system/classes/object';
-import { ObjectType } from '@system/classes/object';
-
-// Helpers
-import { assertReturn } from '@system/classes/helper';
-
-// Extract the predefined list of object names
-export const KernelObjectTypes = _.values(ObjectType) as string[];
+import { Column } from '@kernel/classes/column';
+import { Object } from '@kernel/classes/object';
 
 // Object map does automatic case management
 function toSystemName(object_name: string) {
@@ -86,7 +79,7 @@ export class KernelMeta {
         let object = this.get(column.object_name);
 
         // Save to object
-        object.add(column);
+        object.columns[column.column_name] = column;
     
     }
 
@@ -114,6 +107,10 @@ export class KernelMeta {
             object = this.get(object_name);
         }
         
-        return assertReturn(object, `Object "${ object_name }" not found or is not visible`);
+        if (object ?? null === null) {
+            throw new Error(`Object "${ object_name }" not found or is not visible`);
+        }
+
+        return object;
     }
 }

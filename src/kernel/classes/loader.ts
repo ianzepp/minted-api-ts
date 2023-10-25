@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { sync as globSync } from 'glob';
 
 // Define the helper function
-export class Preloader {
-    public static from<T>(glob: string): T[] {
+export class Loader {
+    static glob<T>(glob: string): T[] {
         // Use glob to get all directories that match the wildcard
         let export_list = globSync(glob, { absolute: true });
 

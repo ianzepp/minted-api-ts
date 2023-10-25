@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 // Classes
 import { Kernel } from '@kernel/classes/kernel';
-import { ObjectType } from '@system/classes/object';
 
 // Implementation
 export class KernelUser {
@@ -17,12 +16,12 @@ export class KernelUser {
         }
 
         // If the user object doesn't exist, we might as well be running as root
-        if (this.kernel.meta.exists(ObjectType.User) === false) {
+        if (this.kernel.meta.exists('system::user') === false) {
             return;
         }
 
         // Find the user record
-        let user = await this.kernel.data.select404(ObjectType.User, this.kernel.user_id);
+        let user = await this.kernel.data.select404('system::user', this.kernel.user_id);
 
         // Is the user active?
         if (user.data.active !== true) {

@@ -2,8 +2,8 @@ import _ from 'lodash';
 import path from 'path';
 
 // Classes
-import { Signal } from '@system/classes/signal';
-import { Record } from '@system/classes/record';
+import { Signal } from '@kernel/classes/signal';
+import { Record } from '@kernel/classes/record';
 
 // Create debugger
 const debug = require('debug')('minted:system:action');

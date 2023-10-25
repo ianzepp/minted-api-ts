@@ -1,10 +1,39 @@
 import _ from 'lodash';
-import { v4 as uuid } from 'uuid';
 import Debug from 'debug';
+import knex, { Knex } from 'knex';
 
 // Knex stuff
-import { KnexDriver, KnexDriverFn } from '@system/classes/knex';
-import { Knex } from 'knex';
+const KnexConfig = {
+    useNullAsDefault: true,
+    debug: process.env.DEBUG === 'true' || process.env.KNEX_DEBUG === 'true',
+    client: process.env.KNEX_CLIENT,
+    connection: {
+        host:     process.env.KNEX_HOST,
+        port:     process.env.KNEX_PORT,
+        user:     process.env.KNEX_USER,
+        password: process.env.KNEX_PASSWORD,
+        database: process.env.KNEX_DATABASE,
+        filename: process.env.KNEX_FILENAME,
+        acquireConnectionTimeout: 10000,
+    },
+    pool: {
+        min: 0,
+        max: 10
+    },
+};
+
+// SSL required?
+if (process.env.KNEX_ENCRYPT === 'true' && process.env.KNEX_CLIENT === 'postgres') {
+    _.set(KnexConfig, 'connection.ssl', { rejectUnauthorized: false });
+}
+
+if (process.env.KNEX_ENCRYPT === 'true' && process.env.KNEX_CLIENT === 'mssql') {
+    _.set(KnexConfig, 'options.encrypt', true);
+}
+
+// Create the app-wide connection
+export const KnexDriverFn = () => knex(KnexConfig);
+export const KnexDriver = KnexDriverFn();
 
 // Classes
 import { Kernel } from '@kernel/classes/kernel';
@@ -16,7 +45,6 @@ const debug = Debug('minted:kernel:kernel-knex');
 export class KernelKnex {
     public db: Knex = KnexDriver;
     public tx: Knex.Transaction | undefined;
-    public readonly uuid = uuid;
 
     constructor(private readonly kernel: Kernel) {}
 

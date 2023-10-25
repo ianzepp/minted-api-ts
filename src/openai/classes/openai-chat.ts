@@ -8,7 +8,7 @@ const debug = Debug('minted:openai-chat');
 
 // Classes
 import { Kernel } from '@kernel/classes/kernel';
-import { Record } from '@system/classes/record';
+import { Record } from '@kernel/classes/record';
 import { toJSON } from '../../system/classes/helper';
 
 // Interface for the queued completion messages

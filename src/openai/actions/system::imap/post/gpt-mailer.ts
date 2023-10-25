@@ -5,10 +5,10 @@ import { marked } from 'marked';
 const debug = require('debug')('minted:actions:openai:gpt-mailer');
 
 // Classes
-import { Column } from '@system/classes/column';
-import { Action } from '@system/classes/action';
-import { Record } from '@system/classes/record';
-import { Signal } from '@system/classes/signal';
+import { Column } from '@kernel/classes/column';
+import { Action } from '@kernel/classes/action';
+import { Record } from '@kernel/classes/record';
+import { Signal } from '@kernel/classes/signal';
 import { OpenAiChat } from '@src/openai/classes/openai-chat';
 
 export default class extends Action {

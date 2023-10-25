@@ -2,7 +2,7 @@ import _ from 'lodash';
 import chai from 'chai';
 
 import { Kernel } from "@kernel/classes/kernel";
-import { ChangeData } from "@system/typedefs/record";
+import { ChangeData } from "@kernel/classes/record";
 import { FilterJson } from "@system/typedefs/filter";
 import { toJSON } from "@system/classes/helper";
 

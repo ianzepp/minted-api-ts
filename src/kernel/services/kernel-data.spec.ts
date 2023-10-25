@@ -5,13 +5,8 @@ import chai, { AssertionError } from 'chai';
 import { beforeEach, afterEach, test } from "bun:test";
 
 // Classes
-import { Record } from '@system/classes/record';
-import { DataError } from '@kernel/classes/kernel-data';
-import { RecordNotFoundError } from '@kernel/classes/kernel-data';
-
-// Typedefs
-import { ObjectType } from '@system/classes/object';
-import { Kernel } from './kernel';
+import { Record } from '@kernel/classes/record';
+import { Kernel } from '@kernel/classes/kernel';
 
 function expectRecordSet(result_set: any[], length?: number) {
     chai.expect(result_set).an('array');
@@ -42,11 +37,11 @@ function expectRecord(result: any) {
 
 // Test suite
 let kernel = new Kernel();
-let object_type = ObjectType.User;
+let object_type = 'system::test';
 let source_data = [
-    { name: 'test-user-0' },
-    { name: 'test-user-1' },
-    { name: 'test-user-2' },
+    { name: 'test-0' },
+    { name: 'test-1' },
+    { name: 'test-2' },
 ];
 
 let records: Record[] = [];

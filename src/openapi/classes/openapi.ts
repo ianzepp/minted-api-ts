@@ -4,8 +4,8 @@ import project from '@prj/package.json';
 // Classes
 import { Kernel } from "@kernel/classes/kernel";
 import { Router } from '@system/classes/router';
-import { Object } from '@system/classes/object';
-import { Column } from '@system/classes/column';
+import { Object } from '@kernel/classes/object';
+import { Column } from '@kernel/classes/column';
 
 // Preload
 import { Routers } from '@system/classes/router';

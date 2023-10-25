@@ -1,11 +1,37 @@
 import _ from 'lodash';
 
 // Typedefs
-import { ColumnName } from '@system/typedefs/column';
 import { ColumnForm } from '@system/typedefs/column';
 import { ColumnType } from '@system/typedefs/column';
-import { ObjectType } from './object';
 
+/**
+ * Represents the name of a column.
+ */
+export type ColumnName = string;
+
+/**
+ * Represents the column names in the meta.
+ */
+export const ColumnsMeta = [
+    'created_at',
+    'created_by',
+    'updated_at',
+    'updated_by',
+    'expired_at',
+    'expired_by',
+    'deleted_at',
+    'deleted_by',
+];
+
+/**
+ * Represents the column names in the acls.
+ */
+export const ColumnsAcls = [
+    'access_full',
+    'access_edit',
+    'access_read',
+    'access_deny',
+];
 
 /**
  * The `Column` class represents a column in a database table.
@@ -58,7 +84,7 @@ export class Column {
 
     toJSON() {
         return {
-            type: ObjectType.Column,
+            type: 'system::column',
             data: {
                 id: this.id,
                 ns: this.ns,

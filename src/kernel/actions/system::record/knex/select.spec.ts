@@ -5,7 +5,6 @@ import chai from 'chai';
 import { beforeEach, afterEach, describe, test } from "bun:test";
 
 // Typedefs
-import { ObjectType } from '@system/classes/object';
 import { Kernel } from '@kernel/classes/kernel';
 
 
@@ -20,7 +19,7 @@ afterEach(async () => {
 });
 
 function selectAny({ where, order, limit }) {
-    return kernel.data.selectAny(ObjectType.Column, {
+    return kernel.data.selectAny('system::column', {
         where: where,
         order: order,
         limit: limit,
@@ -90,22 +89,22 @@ test('"where" with 1 column using $ne', async () => {
 });
 
 test('"where" with 1 column using $gt', async () => {
-    let result = await selectWhere({ name: { $gt: ObjectType.Column }});
+    let result = await selectWhere({ name: { $gt: 'system::column' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $gte', async () => {
-    let result = await selectWhere({ name: { $gte: ObjectType.Column }});
+    let result = await selectWhere({ name: { $gte: 'system::column' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $lt', async () => {
-    let result = await selectWhere({ name: { $lt: ObjectType.Object }});
+    let result = await selectWhere({ name: { $lt: 'system::object' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $lte', async () => {
-    let result = await selectWhere({ name: { $lte: ObjectType.Object }});
+    let result = await selectWhere({ name: { $lte: 'system::object' }});
     chai.expect(result).an('array').not.empty;
 });
 
