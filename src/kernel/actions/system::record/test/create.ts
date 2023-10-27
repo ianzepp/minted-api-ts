@@ -60,7 +60,7 @@ export default class extends Action {
     }
 
     test_data_required(signal: Signal, record: Record, column: Column) {
-        if (column.of(Column.Form.Required) === false) {
+        if (column.data.required !== true) {
             return;
         }
 
@@ -68,7 +68,7 @@ export default class extends Action {
     }
 
     test_data_minimum(signal: Signal, record: Record, column: Column) {
-        if (column.minimum === null) {
+        if (typeof column.data.minimum !== 'number') {
             return;
         }
 
@@ -76,12 +76,11 @@ export default class extends Action {
             return;
         }
 
-        record.expect(column).not.null;
-        record.expect(column).greaterThanOrEqual(column.minimum);
+        record.expect(column).greaterThanOrEqual(column.data.minimum);
     }
 
     test_data_maximum(signal: Signal, record: Record, column: Column) {
-        if (column.maximum === null) {
+        if (typeof column.data.maximum !== 'number') {
             return;
         }
 
@@ -89,6 +88,6 @@ export default class extends Action {
             return;
         }
 
-        record.expect(column).lessThanOrEqual(column.maximum);
+        record.expect(column).lessThanOrEqual(column.data.maximum);
     }
 }

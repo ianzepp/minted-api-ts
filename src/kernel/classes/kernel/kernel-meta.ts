@@ -68,14 +68,14 @@ export class KernelMeta {
     }
 
     addObject(object_data: _.Dictionary<any>) {
-        let object = Object.from(object_data);
+        let object = new Object(object_data);
 
         // Save to map
         this.objects_map.set(object.system_name, object);    
     }
 
     addColumn(column_data: _.Dictionary<any>) {
-        let column = Column.from(column_data);
+        let column = new Column(column_data);
         let object = this.get(column.object_name);
 
         // Save to object

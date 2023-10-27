@@ -81,7 +81,6 @@ export class AutoInstall {
         await this.kernel.knex.createTable('system::object', (table) => {
             table.string('name').notNullable();
             table.string('description');
-
             table.boolean('external').defaultTo(false);
             table.boolean('metadata').defaultTo(false);
 
@@ -91,58 +90,55 @@ export class AutoInstall {
 
         // Create table `column`
         await this.kernel.knex.createTable('system::column', table => {
+            table.string('object').notNullable();
             table.string('name').notNullable();
             table.string('type').notNullable().defaultTo('text');
             table.string('description');
-
             table.boolean('audited').defaultTo(false);
             table.boolean('immutable').defaultTo(false);
             table.boolean('indexed').defaultTo(false);
             table.boolean('internal').defaultTo(false);
             table.boolean('required').defaultTo(false);
             table.boolean('unique').defaultTo(false);
-
-            // Size constraints
             table.integer('minimum');
             table.integer('maximum');
             table.integer('precision');
 
             // Compound index on (ns, name)
-            table.unique(['ns', 'name']);
+            table.unique(['object', 'ns', 'name']);
         });
 
         // Add system data for `object`
-        await this.insertAll('system::object', [
-            { ns: 'system', name: 'object', metadata: true },
-            { ns: 'system', name: 'column', metadata: true },
+        await this.insertAll('system::object', 'system', [
+            { name: 'object', metadata: true },
+            { name: 'column', metadata: true },
         ]);    
 
-        await this.insertAll('system::column', [
+        await this.insertAll('system::column', 'system', [
            // Columns for 'object'
-           { ns: 'system', name: 'object.name', required: true, immutable: true, indexed: true  },
-           { ns: 'system', name: 'object.description' },
-           { ns: 'system', name: 'object.external', type: 'boolean' },
-           { ns: 'system', name: 'object.metadata', type: 'boolean' },
+           { object: 'system::object', name: 'name', required: true, immutable: true, indexed: true  },
+           { object: 'system::object', name: 'description' },
+           { object: 'system::object', name: 'external', type: 'boolean' },
+           { object: 'system::object', name: 'metadata', type: 'boolean' },
 
            // Columns for 'column'
-           { ns: 'system', name: 'column.name', required: true, immutable: true, indexed: true },
-           { ns: 'system', name: 'column.type', required: true },
-           { ns: 'system', name: 'column.description' },
-
-           { ns: 'system', name: 'column.audited', type: 'boolean' },
-           { ns: 'system', name: 'column.immutable', type: 'boolean' },
-           { ns: 'system', name: 'column.indexed', type: 'boolean' },
-           { ns: 'system', name: 'column.internal', type: 'boolean' },
-           { ns: 'system', name: 'column.required', type: 'boolean' },
-           { ns: 'system', name: 'column.unique', type: 'boolean' },
-
-           { ns: 'system', name: 'column.minimum', type: 'integer' },
-           { ns: 'system', name: 'column.maximum', type: 'integer' },
-           { ns: 'system', name: 'column.precision', type: 'integer' },
+           { object: 'system::column', name: 'name', required: true, immutable: true, indexed: true },
+           { object: 'system::column', name: 'object', required: true, immutable: true, indexed: true },
+           { object: 'system::column', name: 'type', required: true },
+           { object: 'system::column', name: 'description' },
+           { object: 'system::column', name: 'audited', type: 'boolean' },
+           { object: 'system::column', name: 'immutable', type: 'boolean' },
+           { object: 'system::column', name: 'indexed', type: 'boolean' },
+           { object: 'system::column', name: 'internal', type: 'boolean' },
+           { object: 'system::column', name: 'required', type: 'boolean' },
+           { object: 'system::column', name: 'unique', type: 'boolean' },
+           { object: 'system::column', name: 'minimum', type: 'integer' },
+           { object: 'system::column', name: 'maximum', type: 'integer' },
+           { object: 'system::column', name: 'precision', type: 'integer' },
        ]);
     }
 
-    async insertAll(object_name: string, record_rows: RecordFlat[]) {
+    async insertAll(object_name: string, ns: string, record_rows: RecordFlat[]) {
         let created_at = this.kernel.time;
         let created_by = Kernel.ID;
 
@@ -151,6 +147,7 @@ export class AutoInstall {
     
             // Assign UUID
             record_data.id = this.kernel.uuid();
+            record_data.ns = ns;
     
             // Insert record
             await this.kernel.knex.driver(object_name).insert(record_data);
@@ -202,19 +199,17 @@ export class AutoInstall {
     }
 
     async importObject(imports: any[], object_json: RecordJson) {
-        let object = Object.from(object_json.data);
-        let object_name = object_json.data.name;
+        let object = new Object(object_json.data);
 
         console.info(`+ processing "${ object.system_name }" import..`);
 
         let column_json = _.filter(imports, json => {
             return _.get(json, 'type') === 'system::column'
-                && _.get(json, 'data.name', '').startsWith(object.object_name + '.');
+                && _.get(json, 'data.object', '') === object.system_name;
         }) as RecordJson[];
 
         let record_json = _.filter(imports, json => {
             return _.get(json, 'type') === object.system_name
-                || _.get(json, 'type') === object.object_name
         }) as RecordJson[];
 
         if (object_json === undefined) {

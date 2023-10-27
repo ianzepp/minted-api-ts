@@ -109,8 +109,12 @@ export default class extends Action {
 
         let column_name: string;
         
-        if (Object.ColumnsMeta.includes(name)) {
+        if (Record.isMetaColumn(name)) {
             column_name = 'meta.' + name;
+        }
+
+        else if (Record.isAclsColumn(name)) {
+            column_name = 'acls.' + name;
         }
 
         else {

@@ -9,7 +9,9 @@ import { Column } from '@kernel/classes/column';
 import { Action } from '@kernel/classes/action';
 import { Record } from '@kernel/classes/record';
 import { Signal } from '@kernel/classes/signal';
-import { OpenAiChat } from '@src/openai/classes/openai-chat';
+
+// Locals
+import { OpenAiChat } from '../../../classes/openai-chat';
 
 export default class extends Action {
     constructor() {

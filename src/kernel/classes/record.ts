@@ -81,8 +81,28 @@ export interface RecordJson {
     acls?: RecordAcls;
 }
 
+/** Defines the column names that apply to the `meta` record property */
+export const RecordMetaColumns = [
+    'created_at',
+    'created_by',
+    'updated_at',
+    'updated_by',
+    'expired_at',
+    'expired_by',
+    'deleted_at',
+    'deleted_by',
+];
+
+/** Defines the column names that apply to the `acls` record property */
+export const RecordAclsColumns = [
+    'access_full',
+    'access_edit',
+    'access_read',
+    'access_deny',
+];
+
 /** Defines the allowable types for database change operations. */
-export type ChangeData = RecordFlat | RecordData | RecordJson;
+export type ChangeData = Record | RecordFlat | RecordData | RecordJson;
 
 // Implementation
 export class Record {
@@ -132,6 +152,14 @@ export class Record {
 
             return _.set(diff, k, dv);
         }, { id: this.data.id } as _.Dictionary<any>);
+    }
+
+    static isMetaColumn(column_name: string) {
+        return RecordMetaColumns.includes(column_name);
+    }
+
+    static isAclsColumn(column_name: string) {
+        return RecordAclsColumns.includes(column_name);
     }
 
     import(source?: Record | ChangeData) {

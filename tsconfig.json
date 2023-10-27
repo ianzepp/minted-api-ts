@@ -16,10 +16,9 @@
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
         "paths": {
-            "@prj/*": ["./*"],
-            "@src/*": ["./src/*"],
             "@kernel/*": ["./src/kernel/*"],
             "@system/*": ["./src/system/*"],
+            "@minted/*": ["./*"],
         }
     },
     "include": [

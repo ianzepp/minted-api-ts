@@ -1,4 +1,4 @@
-import { KnexDriver } from "@kernel/services/kernel-knex";
+import { KnexDriver } from "@kernel/classes/kernel/kernel-knex";
 import { beforeAll, afterAll } from "bun:test";
 
 beforeAll(async () => {

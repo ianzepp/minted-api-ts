@@ -15,11 +15,13 @@ export default class extends Action {
     }
 
     async one({ kernel }: Signal, record: Record) {
+        // Sanity
+        record.expect('object').a('string').includes('::');
+        record.expect('ns').a('string');
         record.expect('name').a('string');
-        record.expect('name').contains('.');
 
         // Find the parent object
-        let column = Column.from(record.data);
+        let column = new Column(record.data);
         let object = kernel.meta.lookup(column.object_name);
 
         // Drop column

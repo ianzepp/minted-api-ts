@@ -1,11 +1,10 @@
 import _ from 'lodash';
-import project from '@prj/package.json';
+import project from '@minted/package.json';
 
 // Classes
 import { Kernel } from "@kernel/classes/kernel";
 import { Router } from '@system/classes/router';
 import { Object } from '@kernel/classes/object';
-import { Column } from '@kernel/classes/column';
 
 // Preload
 import { Routers } from '@system/classes/router';
@@ -108,12 +107,12 @@ export class OpenApi {
 
             // Add core column properties
             result.properties[column_name] = {
-                type: column.type,
+                type: column.data.type,
                 description: null,
             };
 
             // Is the column required?
-            if (column.of('required')) {
+            if (column.data.required) {
                 result.required.push(column_name);
             }
         }

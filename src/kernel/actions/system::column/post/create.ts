@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { includes } from 'lodash';
 import { Knex } from 'knex';
 
 // Classes
@@ -17,12 +17,13 @@ export default class extends Action {
 
     async one({ kernel }: Signal, record: Record) {
         // Sanity
+        record.expect('object').a('string').includes('::');
+        record.expect('ns').a('string');
         record.expect('name').a('string');
-        record.expect('name').contains('.');
         record.expect('type').oneOf(ColumnTypeKeys);
 
         // Find the parent object
-        let column = Column.from(record.data);
+        let column = new Column(record.data);
         let object = kernel.meta.lookup(column.object_name);
 
         // No changes allowed to the base `system::record` object
@@ -33,7 +34,7 @@ export default class extends Action {
         // Process the new column
         await kernel.knex.updateTable(object.system_name, t => {
             let column_name = column.system_name;
-            let column_type = column.type;
+            let column_type = column.data.type;
             let change: Knex.ColumnBuilder;
 
             if (column_type === ColumnType.Text) {

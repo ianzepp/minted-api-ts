@@ -15,19 +15,17 @@ export default class extends Action {
 
     async one({ kernel }: Signal, record: Record) {
         // Sanity
+        record.expect('ns').a('string');
         record.expect('name').a('string');
         record.expect('name').match(/^[a-z_0-9]+$/i);
         record.expect('name').not.match(/^[_0-9]/i);
-        record.expect('ns').a('string');
 
         // Create the object
-        let object = Object.from(record.data);
+        let object = new Object(record.data);
 
         // Create the empty table with no default columns
         await kernel.knex.createTable(object.system_name, t => {});
 
-        console.warn('adding object:', record.data);
-        
         // Add the object data to kernel meta
         kernel.meta.addObject(record.data);
     }

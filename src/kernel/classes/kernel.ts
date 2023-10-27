@@ -9,12 +9,12 @@ const debug = Debug('minted:system:kernel');
 import { v4 as uuid } from 'uuid';
 
 // Classes
-import { KernelBulk } from '@kernel/services/kernel-bulk';
-import { KernelKnex } from '@kernel/services/kernel-knex';
-import { KernelData } from '@kernel/services/kernel-data';
-import { KernelMeta } from '@kernel/services/kernel-meta';
-import { KernelUser } from '@kernel/services/kernel-user';
-import { KernelSmtp } from '@kernel/services/kernel-smtp';
+import { KernelBulk } from '@kernel/classes/kernel/kernel-bulk';
+import { KernelKnex } from '@kernel/classes/kernel/kernel-knex';
+import { KernelData } from '@kernel/classes/kernel/kernel-data';
+import { KernelMeta } from '@kernel/classes/kernel/kernel-meta';
+import { KernelUser } from '@kernel/classes/kernel/kernel-user';
+import { KernelSmtp } from '@kernel/classes/kernel/kernel-smtp';
 
 // Match UUIDs
 export const UUID_REGEX = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;

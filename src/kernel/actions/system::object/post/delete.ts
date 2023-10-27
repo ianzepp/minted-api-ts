@@ -13,19 +13,16 @@ export default class extends Action {
 
     async one({ kernel }: Signal, record: Record) {
         // Sanity
+        record.expect('ns').a('string');
         record.expect('name').a('string');
-        record.expect('name').not.contains('.');
 
-        // Create the object
-        let object = Object.from(record.data);
+        // Create a temp object for clarity
+        let object = new Object(record.data);
 
         // Delete related columns
         await kernel.data.deleteAny('system::column', {
             where: {
-                $or: [
-                    { name: `${ object.system_name }.%` },
-                    { name: `${ object.object_name }.%` },
-                ]
+                object: object.system_name
             }
         });
 
