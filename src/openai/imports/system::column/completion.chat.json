@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "openai",
-        "name": "completion.chat",
+        "rn": "completion.chat",
         "type": "uuid",
         "required": true
     }

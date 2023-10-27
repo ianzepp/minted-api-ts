@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "openai",
-        "name": "completion.role",
+        "rn": "completion.role",
         "type": "text",
         "required": true
     }

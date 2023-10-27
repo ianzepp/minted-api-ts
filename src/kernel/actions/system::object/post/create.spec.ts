@@ -21,7 +21,7 @@ afterEach(async () => {
 test('should create a knex table', async () => {
     let object_name = kernel.toTestName();    
     let object_data = await kernel.data.createOne('system::object', {
-        name: object_name
+        rn: object_name
     });
 
     // Refresh the metadata

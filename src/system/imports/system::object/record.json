@@ -2,7 +2,7 @@
     "type": "system::object",
     "data": {
         "ns": "system",
-        "name": "record",
+        "rn": "record",
         "description": "The base interface of all other object definitions"
     }
 }

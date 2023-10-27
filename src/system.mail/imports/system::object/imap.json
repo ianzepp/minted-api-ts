@@ -2,7 +2,7 @@
     "type": "system::object",
     "data": {
         "ns": "system",
-        "name": "imap",
+        "rn": "imap",
         "description": "Represents a mail message that was imported from an IMAP server"
     }
 }

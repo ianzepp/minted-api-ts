@@ -2,6 +2,6 @@
     "type": "system::domain",
     "data": {
         "ns": "system",
-        "name": "system"
+        "rn": "system"
    }
 }

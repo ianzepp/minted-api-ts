@@ -23,13 +23,13 @@ test('should delete a knex table', async () => {
     // Create object
     let object_name = kernel.toTestName();
     let object_data = await kernel.data.createOne('system::object', {
-        name: object_name,
+        rn: object_name,
     });
 
     // Create column
     let column_name = 'tested';
     let column_data = await kernel.data.createOne('system::column', {
-        name: object_name + '.' + column_name,
+        rn: object_name + '.' + column_name,
         type: 'text',
     });
 
@@ -48,8 +48,8 @@ test('should delete a knex table', async () => {
     await kernel.data.deleteOne('system::object', object_data);
 
     // Verify the object and columns are gone
-    let verify_object = await kernel.data.searchAny('system::object', { name: object_name });
-    let verify_column = await kernel.data.searchAny('system::object', { name: column_name });
+    let verify_object = await kernel.data.searchAny('system::object', { rn: object_name });
+    let verify_column = await kernel.data.searchAny('system::object', { rn: column_name });
 
     chai.expect(verify_object).a('array').length(0);
     chai.expect(verify_column).a('array').length(0);

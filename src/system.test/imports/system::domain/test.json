@@ -1,6 +1,6 @@
 {
     "type": "system::domain",
     "data": {
-        "name": "test"
+        "rn": "test"
     }
 }

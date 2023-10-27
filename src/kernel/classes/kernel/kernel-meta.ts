@@ -2,6 +2,9 @@
 import _ from 'lodash';
 import { toLower } from 'lodash';
 
+// Debugging
+const debug = require('debug')('minted:kernel:meta');
+
 // Kernels
 import { Kernel } from '@kernel/classes/kernel';
 
@@ -9,32 +12,28 @@ import { Kernel } from '@kernel/classes/kernel';
 import { Column } from '@kernel/classes/column';
 import { Object } from '@kernel/classes/object';
 
-// Object map does automatic case management
-function toSystemName(object_name: string) {
-    if (object_name && object_name.includes('::') === false) {
-        object_name = 'system::' + object_name;
+export class KernelMetaMap<T> extends Map<string, T> {
+    get(rn: string) {
+        return super.get(this.prefix(rn));
     }
 
-    return toLower(object_name);
-}
-
-class ObjectMap extends Map<string, Object> {
-    get(object_name: string) {
-        return super.get(toSystemName(object_name));
+    set(rn: string, data: T) {
+        return super.set(this.prefix(rn), data);
     }
 
-    set(object_name: string, object: Object) {
-        return super.set(toSystemName(object_name), object);
+    delete(rn: string) {
+        return super.delete(this.prefix(rn));
     }
 
-    delete(object_name: string) {
-        return super.delete(toSystemName(object_name));
+    prefix(rn: string) {
+        return toLower(/::/.test(rn) ? rn : `system::${ rn }`);
     }
 }
 
 // Implementation
 export class KernelMeta {
-    private readonly objects_map = new ObjectMap();
+    private readonly objects_map = new KernelMetaMap<Object>();
+    private readonly columns_map = new KernelMetaMap<Column[]>();
 
     constructor(private readonly kernel: Kernel) {}
 
@@ -46,20 +45,28 @@ export class KernelMeta {
         return Array.from(this.objects_map.keys()).sort();
     }
 
+    get columns() {
+        return _.flatten(Array.from(this.columns_map.values()));
+    }
+
     async startup(): Promise<void> {
         // Select the raw objects and columns
         let object_list = await this.kernel.knex.selectTo('system::object');
         let column_list = await this.kernel.knex.selectTo('system::column');
 
         // Process objects
-        _.each(object_list, object_data => this.addObject(object_data));
+        _.each(object_list, object_data => this.registerObject(object_data));
 
         // Process columns for each object
-        _.each(column_list, column_data => this.addColumn(column_data));
+        _.each(column_list, column_data => this.registerColumn(column_data));
+
+        // Done
+        debug('startup() done, registered:', this.object_keys);
     }
     
     async cleanup(): Promise<void> {
         this.objects_map.clear();
+        this.columns_map.clear();
     }
 
     async refresh() {
@@ -67,20 +74,27 @@ export class KernelMeta {
         await this.startup();
     }
 
-    addObject(object_data: _.Dictionary<any>) {
+    registerObject(object_data: _.Dictionary<any>) {
         let object = new Object(object_data);
 
-        // Save to map
-        this.objects_map.set(object.system_name, object);    
+        // Save to mapping
+        this.objects_map.set(object.system_name, object);
+        this.columns_map.set(object.system_name, []);
+
+        debug('registerObject()', object.system_name);
     }
 
-    addColumn(column_data: _.Dictionary<any>) {
+    registerColumn(column_data: _.Dictionary<any>) {
         let column = new Column(column_data);
         let object = this.get(column.object_name);
 
         // Save to object
         object.columns[column.column_name] = column;
-    
+
+        // Save to mapping
+        this.columns_map.get(object.system_name).push(column);
+
+        debug('registerColumn()', object.system_name, column.system_name);    
     }
 
     exists(object_name: string) {
@@ -98,19 +112,15 @@ export class KernelMeta {
     lookup(object: Object | string): Object {
         let object_name: string;
 
-        if (object instanceof Object) {
-            return object;
-        }
-
         if (typeof object === 'string') {
             object_name = object;
             object = this.get(object_name);
         }
-        
-        if (object ?? null === null) {
-            throw new Error(`Object "${ object_name }" not found or is not visible`);
+
+        if (object instanceof Object) {
+            return object;
         }
 
-        return object;
+        throw new Error(`Object "${ object_name }" not found or is not visible`);
     }
 }

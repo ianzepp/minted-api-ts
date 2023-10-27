@@ -2,6 +2,6 @@
     "type": "system::object",
     "data": {
         "ns": "openai",
-        "name": "chat"
+        "rn": "chat"
     }
 }

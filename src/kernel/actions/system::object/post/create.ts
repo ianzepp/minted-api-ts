@@ -16,9 +16,9 @@ export default class extends Action {
     async one({ kernel }: Signal, record: Record) {
         // Sanity
         record.expect('ns').a('string');
-        record.expect('name').a('string');
-        record.expect('name').match(/^[a-z_0-9]+$/i);
-        record.expect('name').not.match(/^[_0-9]/i);
+        record.expect('rn').a('string');
+        record.expect('rn').match(/^[a-z_0-9]+$/i);
+        record.expect('rn').not.match(/^[_0-9]/i);
 
         // Create the object
         let object = new Object(record.data);
@@ -27,6 +27,6 @@ export default class extends Action {
         await kernel.knex.createTable(object.system_name, t => {});
 
         // Add the object data to kernel meta
-        kernel.meta.addObject(record.data);
+        kernel.meta.registerObject(record.data);
     }
 }

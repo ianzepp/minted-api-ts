@@ -23,9 +23,9 @@ test('POST with an empty array returns error', async () => {
 
 test('POST with an array of records returns ok', async () => {
     let result = await Tester.expectResult('POST', 'data/system::test', [
-        { name: 'post-data-1' },
-        { name: 'post-data-2' },
-        { name: 'post-data-3' },
+        { rn: 'post-data-1' },
+        { rn: 'post-data-2' },
+        { rn: 'post-data-3' },
     ]);
 
     chai.expect(result).a('array').length(3);
@@ -41,26 +41,26 @@ test('POST with an empty object returns error', async () => {
 
 test('POST with a single record (type RecordFlat) returns ok', async () => {
     let result = await Tester.expectResult('POST', 'data/system::test', { 
-        name: 'post-data-1' 
+        rn: 'post-data-1' 
     });
 
     chai.expect(result).a('object');
     chai.expect(result).nested.property('type', 'system::test');
     chai.expect(result).nested.property('data.id');
-    chai.expect(result).nested.property('data.name', 'post-data-1');
+    chai.expect(result).nested.property('data.rn', 'post-data-1');
 });
 
 test('POST with a single record (type RecordJson) returns ok', async () => {
     let result = await Tester.expectResult('POST', 'data/system::test', { 
         type: 'system::test',
         data: {
-            name: 'post-data-1' 
+            rn: 'post-data-1' 
         }
     });
 
     chai.expect(result).a('object');
     chai.expect(result).nested.property('type', 'system::test');
     chai.expect(result).nested.property('data.id');
-    chai.expect(result).nested.property('data.name', 'post-data-1');
+    chai.expect(result).nested.property('data.rn', 'post-data-1');
 });
 

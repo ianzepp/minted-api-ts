@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "test.boolean",
+        "rn": "test.boolean",
         "type": "boolean"
     }
 }

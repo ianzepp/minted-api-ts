@@ -39,16 +39,16 @@ function expectRecord(result: any) {
 let kernel = new Kernel();
 let object_type = 'system::test';
 let source_data = [
-    { name: 'test-0' },
-    { name: 'test-1' },
-    { name: 'test-2' },
+    { rn: 'test-0' },
+    { rn: 'test-1' },
+    { rn: 'test-2' },
 ];
 
 let records: Record[] = [];
 
 function updateSamples() {
     return records.map(record => {
-        return { id: record.data.id, name: record.data.name + '-updated' };
+        return { id: record.data.id, rn: record.data.rn + '-updated' };
     });
 }
 
@@ -59,7 +59,7 @@ function testUpdateAll(result: Record[], length: number) {
 
 function testUpdateOne(record: Record) {
     chai.expect(record).instanceOf(Record);
-    chai.expect(record.data).property('name').includes('-updated');
+    chai.expect(record.data).property('rn').includes('-updated');
 }
 
 function testExpireAll(result: Record[], length: number) {
@@ -238,10 +238,10 @@ test.skip('createAll() with a single source and an ID should fail !!', async () 
 });
 
 test('createAll() missing required data should fail !!', async () => {
-    let source = _.assign({}, _.omit(source_data[0], 'name'));
+    let source = _.assign({}, _.omit(source_data[0], 'rn'));
     let result = await kernel.data.createAll(object_type, [source])
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error.message).includes("to have property 'name'"));
+        .catch(error => chai.expect(error.message).includes("to have property 'rn'"));
 });
 
 test('createAll() with unknown columns should fail !!', async () => {
@@ -265,10 +265,10 @@ test.skip('createOne() with an existing ID should fail !!', async () => {
 });
 
 test('createOne() missing required data should fail !!', async () => {
-    let source = _.assign({}, _.omit(source_data[0], 'name'));
+    let source = _.assign({}, _.omit(source_data[0], 'rn'));
     let result = await kernel.data.createOne(object_type, source)
         .then(() => chai.assert.fail('Test failed'))
-        .catch(error => chai.expect(error.message).includes("to have property 'name'"));
+        .catch(error => chai.expect(error.message).includes("to have property 'rn'"));
 });
 
 test('createOne() with unknown columns should fail !!', async () => {
@@ -316,7 +316,7 @@ test('updateOne() with an empty object should fail !!', async () => {
 test('updateAny() with a valid filter and change data', async () => {
     let source_data = updateSamples();
     let filter = { where: { id: _.map(source_data, 'id') }};
-    let change = { name: 'name-updated' };
+    let change = { rn: 'name-updated' };
 
     testUpdateAll(await kernel.data.updateAny(object_type, filter, change), source_data.length);
     testUpdateAll(await kernel.data.selectAll(object_type, source_data), source_data.length);
@@ -325,7 +325,7 @@ test('updateAny() with a valid filter and change data', async () => {
 test('updateIds() with valid IDs and change data', async () => {
     let source_data = updateSamples();
     let record_ids = _.map(source_data, 'id');
-    let change_data = { name: 'name-updated' };
+    let change_data = { rn: 'name-updated' };
 
     testUpdateAll(await kernel.data.updateIds(object_type, record_ids, change_data), source_data.length);
     testUpdateAll(await kernel.data.selectAll(object_type, source_data), source_data.length);

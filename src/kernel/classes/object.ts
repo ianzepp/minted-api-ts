@@ -11,15 +11,11 @@ export class Object {
 
     constructor(public readonly data: _.Dictionary<any>) {
         chai.expect(data).property('ns').string;
-        chai.expect(data).property('name').string;
-        chai.expect(data).property('name').matches(/^[a-zA-Z][a-zA-Z0-9_]*$/i);
+        chai.expect(data).property('rn').string;
+        chai.expect(data).property('rn').matches(/^[a-zA-Z][a-zA-Z0-9_]*$/i);
 
-        this.object_name = `${ data.name }`.toLowerCase();
-        this.system_name = `${ data.ns }::${ data.name }`.toLowerCase();
-
-        // Common columns
-        // this.columns['id'] = new Column({ ns: data.ns, name: 'id', type: 'uuid', required: true, immutable: true });
-        // this.columns['ns'] = new Column({ ns: data.ns, name: 'ns', type: 'text', required: true, immutable: true });
+        this.object_name = `${ data.rn }`.toLowerCase();
+        this.system_name = `${ data.ns }::${ data.rn }`.toLowerCase();
     }
 
     //

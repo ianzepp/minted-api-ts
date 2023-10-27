@@ -10,6 +10,6 @@ export default class extends Router {
     }
 
     async run({ kernel, params, body }: RouterInit) {
-        return kernel.data.search404('system::imap', { name: params.record });
+        return kernel.data.search404('system::imap', { rn: params.record });
     }
 }

@@ -2,7 +2,7 @@
     "type": "system::object",
     "data": {
         "ns": "system",
-        "name": "config",
+        "rn": "config",
         "description": "Represents stored configuration data (key/value pairs), similar to an environment value setting"
     }
 }

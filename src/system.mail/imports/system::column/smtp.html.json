@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "smtp.html",
+        "rn": "smtp.html",
         "type": "text",
         "description": "The `html` data for the email body",
         "required": false

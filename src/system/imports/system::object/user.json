@@ -2,7 +2,7 @@
     "type": "system::object",
     "data": {
         "ns": "system",
-        "name": "user",
+        "rn": "user",
         "description": "Represents a user configuration or access authorization"
     }
 }

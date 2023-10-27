@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "openai",
-        "name": "config.temperature",
+        "rn": "config.temperature",
         "type": "decimal"
     }
 }

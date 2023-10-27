@@ -179,6 +179,7 @@ export class KernelKnex {
         await this.schema.createTable(object_name, (table) => {
             table.string('id').notNullable().primary();
             table.string('ns').notNullable();
+            table.string('rn').notNullable();
     
             // Apply extra columns
             createFn(table);

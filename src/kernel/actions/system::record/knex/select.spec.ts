@@ -44,88 +44,88 @@ test('"where" empty search', async () => {
 });
 
 test('"where" with 1 column', async () => {
-    let result = await selectWhere({ name: 'column.required' });
+    let result = await selectWhere({ rn: 'column.required' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 3 columns', async () => {
-    let result = await selectWhere({ name: 'column.required', type: 'boolean' });
+    let result = await selectWhere({ rn: 'column.required', type: 'boolean' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 3 columns where 1 is incorrect', async () => {
-    let result = await selectWhere({ name: 'column.required', type: 'text' });
+    let result = await selectWhere({ rn: 'column.required', type: 'text' });
     chai.expect(result).an('array').empty;
 });
 
 test('"where" with 1 column using null', async () => {
-    let result = await selectWhere({ name: null});
+    let result = await selectWhere({ rn: null});
     chai.expect(result).an('array').empty;
 });
 
 test('"where" with 1 column using $not and null', async () => {
-    let result = await selectWhere({ name: { $not: null }});
+    let result = await selectWhere({ rn: { $not: null }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $eq and null', async () => {
-    let result = await selectWhere({ name: { $eq: null }});
+    let result = await selectWhere({ rn: { $eq: null }});
     chai.expect(result).an('array').empty;
 });
 
 test('"where" with 1 column using $eq', async () => {
-    let result = await selectWhere({ name: { $eq: 'column.required' }});
+    let result = await selectWhere({ rn: { $eq: 'column.required' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $ne and null', async () => {
-    let result = await selectWhere({ name: { $ne: null }});
+    let result = await selectWhere({ rn: { $ne: null }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $ne', async () => {
-    let result = await selectWhere({ name: { $ne: 'column.required' }});
+    let result = await selectWhere({ rn: { $ne: 'column.required' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $gt', async () => {
-    let result = await selectWhere({ name: { $gt: 'system::column' }});
+    let result = await selectWhere({ rn: { $gt: 'system::column' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $gte', async () => {
-    let result = await selectWhere({ name: { $gte: 'system::column' }});
+    let result = await selectWhere({ rn: { $gte: 'system::column' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $lt', async () => {
-    let result = await selectWhere({ name: { $lt: 'system::object' }});
+    let result = await selectWhere({ rn: { $lt: 'system::object' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $lte', async () => {
-    let result = await selectWhere({ name: { $lte: 'system::object' }});
+    let result = await selectWhere({ rn: { $lte: 'system::object' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $in', async () => {
-    let result = await selectWhere({ name: { $in: ['column.required'] }});
+    let result = await selectWhere({ rn: { $in: ['column.required'] }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $nin', async () => {
-    let result = await selectWhere({ name: { $nin: ['column.required'] }});
+    let result = await selectWhere({ rn: { $nin: ['column.required'] }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with 1 column using $find', async () => {
-    let result = await selectWhere({ name: { $find: '%object%' }});
+    let result = await selectWhere({ rn: { $find: '%object%' }});
     chai.expect(result).an('array').not.empty;
 });
 
 test('"where" with $and', async () => {
     let result = await selectWhere({ $and: [
-        { name: 'column.required' },
+        { rn: 'column.required' },
         { type: 'text' }
     ]});
 
@@ -134,8 +134,8 @@ test('"where" with $and', async () => {
 
 test('"where" with $or', async () => {
     let result = await selectWhere({ $or: [
-        { name: 'column.required' },
-        { name: 'object.indexed' }
+        { rn: 'column.required' },
+        { rn: 'object.indexed' }
     ]});
 
     chai.expect(result).an('array').not.empty;
@@ -151,12 +151,12 @@ test('"order" is empty', async () => {
 });
 
 test('"order" has 1 column with sort $asc', async () => {
-    let result = await selectOrder({ name: 'asc' });
+    let result = await selectOrder({ rn: 'asc' });
     chai.expect(result).an('array').not.empty;
 });
 
 test('"order" has multiple columns with mixed sort', async () => {
-    let result = await selectOrder({ name: 'asc', type: 'desc'});
+    let result = await selectOrder({ rn: 'asc', type: 'desc'});
     chai.expect(result).an('array').not.empty;
 });
 

@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "imap.head",
+        "rn": "imap.head",
         "type": "json",
         "description": "The IMAP mail message headers"
     }

@@ -161,15 +161,15 @@ export class KernelData {
     // 
 
     async lookupAny(object_name: Object | string, record_name: string, limit?: number): Promise<Record[]> {
-        return this.selectAny(object_name, { where: { name: record_name }, limit: limit });
+        return this.selectAny(object_name, { where: { rn: record_name }, limit: limit });
     }
 
     async lookupOne(object_name: Object | string, record_name: string): Promise<Record | undefined> {
-        return this.selectAny(object_name, { where: { name: record_name }, limit: 1 }).then(headOne);
+        return this.selectAny(object_name, { where: { rn: record_name }, limit: 1 }).then(headOne);
     }
 
     async lookup404(object_name: Object | string, record_name: string): Promise<Record> {
-        return this.selectAny(object_name, { where: { name: record_name }, limit: 1 }).then(head404);
+        return this.selectAny(object_name, { where: { rn: record_name }, limit: 1 }).then(head404);
     }
 
     //

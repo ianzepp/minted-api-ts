@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "auth.user",
+        "rn": "auth.user",
         "type": "uuid",
         "description": "The user ID for the authentication token",
         "required": true

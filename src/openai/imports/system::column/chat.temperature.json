@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "openai",
-        "name": "chat.temperature",
+        "rn": "chat.temperature",
         "type": "decimal",
         "minimum": 0,
         "maximum": 2

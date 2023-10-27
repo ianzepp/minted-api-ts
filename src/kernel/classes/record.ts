@@ -8,6 +8,7 @@ import { Object } from '@kernel/classes/object';
 // Typedefs
 import { ColumnsAcls } from '@system/typedefs/column';
 import { ColumnsMeta } from '@system/typedefs/column';
+import { ErrorTrace } from './errors';
 
 //
 // Typedefs
@@ -127,7 +128,7 @@ export class Record {
     }
 
     get reference() {
-        return this.object_name + '(name=' + this.data.name + ', id=' + this.data.id + ')';
+        return this.object_name + '(name=' + this.data.rn + ', id=' + this.data.id + ')';
     }
 
     get type() {
@@ -163,7 +164,9 @@ export class Record {
     }
 
     import(source?: Record | ChangeData) {
-        if (source ?? null === null) {
+        console.trace('import()', source);
+
+        if (source === undefined) {
             return;
         }
 
@@ -269,7 +272,7 @@ export function RecordProxy(object: Object, source_type: 'data' | 'meta' | 'acls
 
     let assertFn = (column_name: string, op: 'get' | 'set') => {
         if (source_type === 'data') {
-            if (['id', 'ns', 'name'].includes(column_name)) return;
+            if (['id', 'ns', 'rn'].includes(column_name)) return;
             if (_.has(object.columns, column_name)) return;
         }
 
@@ -281,7 +284,7 @@ export function RecordProxy(object: Object, source_type: 'data' | 'meta' | 'acls
             if (ColumnsAcls.includes(column_name)) return;
         }
 
-        throw new Error(`Column name "${ column_name }" is invalid for the object type "${ object.system_name }" on "record.${ source_type }"`);
+        throw new ErrorTrace(`Column name "${ column_name }" not found for object "${ object.system_name }": Valid "${ source_type }" columns are ${ JSON.stringify(object.column_keys) }`);
     }
 
     // Build and return the new Proxy
@@ -326,8 +329,6 @@ export function RecordProxy(object: Object, source_type: 'data' | 'meta' | 'acls
 export function isRecordJson(source: any) {
     return _.isPlainObject(source)
         && _.isPlainObject(source.data)
-        && _.isPlainObject(source.meta)
-        && _.isPlainObject(source.acls)
         && _.isString(source.type);
 }
 

@@ -20,11 +20,11 @@ export default class extends Router {
 
         // Build and return
         return kernel.data.createOne('system::imap', {
-            name: headers['message-id'],
+            rn: headers['message-id'],
             head: headers,
             html: mail.html || mail.textAsHtml,
             text: mail.text,
-        }).then(r => r.data.name);
+        }).then(r => r.data.rn);
     }
 
     //

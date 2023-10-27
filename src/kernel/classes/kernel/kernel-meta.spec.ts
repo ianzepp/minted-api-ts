@@ -33,7 +33,7 @@ test('meta.objects should be populated with Object instances', async () => {
         chai.expect(object).instanceOf(Object);
 
         // Check object properties
-        chai.expect(object).nested.property('data.name', object.object_name).string;
+        chai.expect(object).nested.property('data.rn', object.object_name).string;
         chai.expect(object).nested.property('data.description');
 
         // Check object references
@@ -56,7 +56,7 @@ test('meta.objects should be populated with Object instances', async () => {
 
 test.skip('object => database table lifecycle', async () => {
     let object_name = kernel.toTestName();
-    let record_data = { name: object_name, type: 'database' };
+    let record_data = { rn: object_name, type: 'database' };
     let record: Record;
 
     // Insert the new object record
@@ -133,7 +133,7 @@ test.skip('object => database table lifecycle', async () => {
 test.skip('column => database table lifecycle', async () => {
     // Setup the object
     let object_name = kernel.toTestName();
-    let parent_data = { name: object_name, type: 'database' };
+    let parent_data = { rn: object_name, type: 'database' };
 
     // Insert the new object record
     let parent = await kernel.data.createOne('system::object', parent_data);
@@ -142,7 +142,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(parent).property('data').a('object');
     chai.expect(parent.data).property('id').string;
     chai.expect(parent.data).property('ns', kernel.user.ns);
-    chai.expect(parent.data).property('name', parent_data.name);
+    chai.expect(parent.data).property('rn', parent_data.rn);
     chai.expect(parent.data).property('type', parent_data.type);
     chai.expect(parent.meta).property('created_at');
     chai.expect(parent.meta).property('created_by', kernel.user_id);
@@ -152,7 +152,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(parent.meta).property('deleted_by').null;
 
     // Setup the column
-    let record_data = { object_name: parent.data.name, name: 'test_text', type: 'text' };
+    let record_data = { object_name: parent.data.rn, rn: 'test_text', type: 'text' };
 
     // Insert the new column record
     let record = await kernel.data.createOne('system::column', record_data);
@@ -162,7 +162,7 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(record.data).property('id').string;
     chai.expect(record.data).property('ns', kernel.user.ns);
     chai.expect(record.data).property('object_name', record_data.object_name);
-    chai.expect(record.data).property('name', record_data.name);
+    chai.expect(record.data).property('rn', record_data.rn);
     chai.expect(record.data).property('type', record_data.type);
     chai.expect(record.meta).property('created_at');
     chai.expect(record.meta).property('created_by', kernel.user_id);
@@ -172,11 +172,11 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(record.meta).property('deleted_by').null;
 
     // Column should be present in the meta service
-    chai.expect(kernel.meta.objects).property(parent_data.name).instanceOf(Object);
-    chai.expect(kernel.meta.objects[parent_data.name].columns).property('test_text').instanceOf(Column);
+    chai.expect(kernel.meta.objects).property(parent_data.rn).instanceOf(Object);
+    chai.expect(kernel.meta.objects[parent_data.rn].columns).property('test_text').instanceOf(Column);
 
     // We should have the test object available
-    let tested_object = kernel.meta.objects[parent.data.name];
+    let tested_object = kernel.meta.objects[parent.data.rn];
     let tested = await kernel.data.createOne(tested_object, { test_text: 'this is a column' });
 
     chai.expect(tested).instanceOf(Record);
@@ -238,8 +238,8 @@ test.skip('column => database table lifecycle', async () => {
     chai.expect(record.meta).property('deleted_by', kernel.user_id);
 
     // Column should not be present in the meta service
-    chai.expect(kernel.meta.objects).property(parent_data.name).instanceOf(Object);
-    chai.expect(kernel.meta.objects[parent_data.name].columns).not.property('test_text');
+    chai.expect(kernel.meta.objects).property(parent_data.rn).instanceOf(Object);
+    chai.expect(kernel.meta.objects[parent_data.rn].columns).not.property('test_text');
 
     // Column should be deleted, so we shouldn't see the data when selected
     let [retest] = await kernel.data.selectAny(tested_object, { limit: 1 });

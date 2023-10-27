@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "config.name",
+        "rn": "config.name",
         "type": "text",
         "required": true
     }

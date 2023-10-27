@@ -16,7 +16,7 @@ export class Tester extends Kernel {
     }
 
     public static toRandomRecord() {
-        return { name: Tester.randomName() };
+        return { rn: Tester.randomName() };
     }
 
     public static toRandomRecordList() {

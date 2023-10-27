@@ -59,7 +59,7 @@ export default class extends Action {
 
         // Create the SMTP email
         await signal.kernel.data.createOne('system::smtp', {
-            name: `GPT response to "${ record.data.head.from }"`,
+            rn: `GPT response to "${ record.data.head.from }"`,
             to: this.toSmtpTo(record),
             cc: this.toSmtpCC(record),
             subject: this.toSmtpSubject(record),

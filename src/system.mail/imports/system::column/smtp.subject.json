@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "smtp.subject",
+        "rn": "smtp.subject",
         "type": "text",
         "description": "The email `subject`",
         "required": true

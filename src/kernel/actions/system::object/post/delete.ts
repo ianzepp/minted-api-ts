@@ -14,7 +14,7 @@ export default class extends Action {
     async one({ kernel }: Signal, record: Record) {
         // Sanity
         record.expect('ns').a('string');
-        record.expect('name').a('string');
+        record.expect('rn').a('string');
 
         // Create a temp object for clarity
         let object = new Object(record.data);

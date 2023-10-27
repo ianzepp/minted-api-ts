@@ -2,7 +2,7 @@
     "type": "system::object",
     "data": {
         "ns": "system",
-        "name": "test",
+        "rn": "test",
         "description": null
     }
 }

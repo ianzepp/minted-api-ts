@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "imap.mail",
+        "rn": "imap.mail",
         "type": "text",
         "description": "The entire mail message in raw format"
     }

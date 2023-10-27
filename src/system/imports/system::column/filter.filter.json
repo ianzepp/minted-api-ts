@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "filter.filter",
+        "rn": "filter.filter",
         "type": "json",
         "required": true
     }

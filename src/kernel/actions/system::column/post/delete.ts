@@ -18,7 +18,7 @@ export default class extends Action {
         // Sanity
         record.expect('object').a('string').includes('::');
         record.expect('ns').a('string');
-        record.expect('name').a('string');
+        record.expect('rn').a('string');
 
         // Find the parent object
         let column = new Column(record.data);

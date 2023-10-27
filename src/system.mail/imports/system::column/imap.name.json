@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "imap.name",
+        "rn": "imap.name",
         "type": "text",
         "description": "The unique `Message-ID` of the mail message"
     }

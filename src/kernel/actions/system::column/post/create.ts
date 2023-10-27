@@ -19,7 +19,7 @@ export default class extends Action {
         // Sanity
         record.expect('object').a('string').includes('::');
         record.expect('ns').a('string');
-        record.expect('name').a('string');
+        record.expect('rn').a('string');
         record.expect('type').oneOf(ColumnTypeKeys);
 
         // Find the parent object
@@ -87,6 +87,6 @@ export default class extends Action {
         });
 
         // Add the column data to kernel meta
-        kernel.meta.addColumn(record.data);
+        kernel.meta.registerColumn(record.data);
     }
 }

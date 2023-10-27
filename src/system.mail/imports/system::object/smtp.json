@@ -2,7 +2,7 @@
     "type": "system::object",
     "data": {
         "ns": "system",
-        "name": "smtp",
+        "rn": "smtp",
         "description": "Represents a outbound SMTP message"
     }
 }

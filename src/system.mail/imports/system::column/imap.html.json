@@ -2,7 +2,7 @@
     "type": "system::column",
     "data": {
         "ns": "system",
-        "name": "imap.html",
+        "rn": "imap.html",
         "type": "text",
         "description": "The HTML body portion of the mail message"
     }
